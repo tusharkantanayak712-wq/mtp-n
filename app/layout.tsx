@@ -59,7 +59,7 @@ export default function RootLayout({
               {/* <div/> */}
 
       </body>
-       <GoogleAnalytics gaId="G-9EN3WV0ES7" />
+       <GoogleAnalytics gaId="G-CKCKWLGJ9N" />
        {/* <script src="https://quge5.com/88/tag.min.js" data-zone="191906" async data-cfasync="false"></script> */}
     </html>
   );
