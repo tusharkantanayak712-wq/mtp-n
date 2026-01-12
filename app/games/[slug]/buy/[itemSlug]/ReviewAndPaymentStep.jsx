@@ -65,10 +65,8 @@ const handleProceed = async () => {
       playerId: reviewData.playerId,
       zoneId: reviewData.zoneId,
       paymentMethod,
-            price: totalPrice,
       email: userEmail || null,
       phone: storedPhone,
-      userId: userId || null,
       currency: "INR",
     };
 const token = sessionStorage.getItem("token");
