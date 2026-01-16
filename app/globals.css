@@ -419,7 +419,7 @@ html[data-theme="vanilla"] {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: var(--font-poppins), system-ui, sans-serif;
   transition: background 0.4s ease, color 0.4s ease;
 }
 

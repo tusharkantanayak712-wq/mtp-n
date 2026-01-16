@@ -5,6 +5,7 @@ import Footer from "@/components/Footer/Footer";
 import SocialFloat from "@/components/SocialFloat/SocialFloat";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ChristmasPopup from "@/components/Seasonal/ChristmasPopup";
+import { Poppins } from "next/font/google";
 
 export const metadata: Metadata = {
   title: {
@@ -37,13 +38,19 @@ export const metadata: Metadata = {
   },
 };
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={poppins.variable}>
       <body className="bg-black text-white">
           {/* <div className="snow" />
   <span className="big-snow"></span>

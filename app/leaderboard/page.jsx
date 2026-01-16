@@ -6,7 +6,7 @@ import AuthGuard from "@/components/AuthGuard";
 export default function LeaderboardPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState("all"); // all | weekly | monthly
+  const [range, setRange] = useState("weekly"); // default weekly
 
   const limit = 10;
 
@@ -30,102 +30,111 @@ export default function LeaderboardPage() {
 
   const rankBadge = (rank) => {
     if (rank === 1)
-      return "bg-yellow-400/20 text-yellow-400 border-yellow-400";
+      return "bg-yellow-400/20 text-yellow-300 border-yellow-400";
     if (rank === 2)
-      return "bg-gray-400/20 text-gray-300 border-gray-400";
+      return "bg-slate-400/20 text-slate-200 border-slate-400";
     if (rank === 3)
-      return "bg-orange-400/20 text-orange-400 border-orange-400";
+      return "bg-orange-400/20 text-orange-300 border-orange-400";
     return "bg-gray-800 text-gray-400 border-gray-700";
   };
 
   return (
     <AuthGuard>
-      <div className="max-w-4xl mx-auto px-4 py-10">
-        <h1 className="text-2xl font-bold mb-2 text-center">
-          🏆 Top 10 Spenders
-        </h1>
-        <p className="text-center text-gray-400 mb-6">
-          Climb the leaderboard by making purchases
-        </p>
+      <div className="max-w-5xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">
+            🏆 Top Spenders
+          </h1>
+          <p className="text-gray-400 mt-2">
+            Ranked by total purchase value
+          </p>
+        </div>
 
         {/* Range Toggle */}
-        <div className="flex justify-center gap-2 mb-6">
-          {["all", "weekly", "monthly"].map((r) => (
+        <div className="flex justify-center gap-3 mb-8">
+          {/* ALL TIME – DISABLED */}
+          <button
+            disabled
+            title="All-time leaderboard coming soon"
+            className="px-4 py-2 rounded-md text-sm font-semibold bg-gray-900 text-gray-600 cursor-not-allowed border border-gray-800"
+          >
+            All Time
+          </button>
+
+          {["weekly", "monthly"].map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
-              className={`px-4 py-2 rounded text-sm font-semibold ${
+              className={`px-5 py-2 rounded-md text-sm font-semibold transition ${
                 range === r
-                  ? "bg-blue-600 text-white"
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
                   : "bg-gray-800 text-gray-400 hover:bg-gray-700"
               }`}
             >
-              {r === "all"
-                ? "All Time"
-                : r === "weekly"
-                ? "This Week"
-                : "This Month"}
+              {r === "weekly" ? "This Week" : "This Month"}
             </button>
           ))}
         </div>
 
+        {/* Content */}
         {loading ? (
-          <p className="text-center text-gray-400">
-            Loading leaderboard...
-          </p>
+          <div className="text-center py-20 text-gray-400 animate-pulse">
+            Loading leaderboard…
+          </div>
         ) : data.length === 0 ? (
-          /* EMPTY STATE */
-          <div className="text-center py-16 border border-dashed border-gray-700 rounded-lg">
-            <p className="text-xl font-semibold mb-2">
-              🚀 Be the first to purchase!
+          /* Empty State */
+          <div className="text-center py-20 border border-dashed border-gray-700 rounded-xl bg-gray-900/40">
+            <p className="text-2xl font-semibold mb-2">
+              🚀 No entries yet
             </p>
-            <p className="text-gray-400 mb-4">
-              No players on the leaderboard yet.
+            <p className="text-gray-400 mb-3">
+              The leaderboard is waiting for its first champion.
             </p>
             <p className="text-sm text-gray-500">
-              Make a purchase and secure the #1 spot 🥇
+              Make a purchase and claim the #1 spot 🥇
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border border-gray-700 rounded-lg">
-              <thead className="bg-gray-900">
-                <tr>
-                  <th className="p-3 text-left">Rank</th>
-                  <th className="p-3 text-left">User ID</th>
-                  <th className="p-3 text-left">Name</th>
-                  <th className="p-3 text-left">Orders</th>
-                  <th className="p-3 text-left">Total Spent</th>
+          /* Table Card */
+          <div className="overflow-x-auto rounded-xl border border-gray-800 bg-gray-900/60 backdrop-blur">
+            <table className="w-full">
+              <thead className="bg-gray-950/70">
+                <tr className="text-gray-400 text-sm">
+                  <th className="p-4 text-left">Rank</th>
+                  <th className="p-4 text-left">User ID</th>
+                  <th className="p-4 text-left">Name</th>
+                  {/* <th className="p-4 text-left">Orders</th> */}
+                  <th className="p-4 text-left">Total Spent</th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((item, index) => {
                   const rank = index + 1;
-
                   return (
                     <tr
                       key={index}
-                      className="border-t border-gray-700 hover:bg-gray-800"
+                      className="border-t border-gray-800 hover:bg-gray-800/60 transition"
                     >
-                      <td className="p-3">
+                      <td className="p-4">
                         <span
-                          className={`px-3 py-1 rounded-full border text-sm font-bold ${rankBadge(
+                          className={`inline-flex min-w-[48px] justify-center px-3 py-1 rounded-full border text-sm font-bold ${rankBadge(
                             rank
                           )}`}
                         >
                           #{rank}
                         </span>
                       </td>
-                      <td className="p-3">
+                      <td className="p-4 text-gray-300">
                         {item.user?.userId || "—"}
                       </td>
-                      <td className="p-3">
+                      <td className="p-4">
                         {item.user?.name || "Anonymous"}
                       </td>
-                      <td className="p-3">
+                      {/* <td className="p-4">
                         {item.totalOrders}
-                      </td>
-                      <td className="p-3 font-semibold text-green-400">
+                      </td> */}
+                      <td className="p-4 font-semibold text-green-400">
                         ₹{item.totalSpent}
                       </td>
                     </tr>

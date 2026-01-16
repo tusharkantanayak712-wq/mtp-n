@@ -25,14 +25,13 @@ const storyData = [
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536006/WhatsApp_Image_2026-01-16_at_09.05.31_hqquhq.jpg",
     link: "/games/mlbb-double332",
   },
-    {
+  {
     id: 4,
     title: "MLBB Small",
     image:
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536112/WhatsApp_Image_2026-01-16_at_09.29.38_pli9ba.jpg",
     link: "/games/mlbb-smallphp638",
   },
-  
   {
     id: 5,
     title: "Membership",
@@ -40,20 +39,11 @@ const storyData = [
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
     link: "/games/membership/silver-membership",
   },
-  
 ];
 
 export default function StorySlider() {
   return (
     <section className="mt-1">
-      {/* SECTION TITLE */}
-      {/* <div className="flex items-center justify-between mb-3 px-2">
-        <h3 className="text-sm font-semibold text-white tracking-wide">
-          🔥 Hot Picks
-        </h3>
-      </div> */}
-
-      {/* STORIES */}
       <div
         className="flex gap-4 overflow-x-auto px-2 py-3
         [scrollbar-width:none]
@@ -65,21 +55,28 @@ export default function StorySlider() {
             href={item.link}
             className="flex flex-col items-center min-w-[80px]"
           >
-            {/* Gradient Ring */}
-            <div className="rounded-full p-[2px] bg-gradient-to-tr from-pink-500 via-purple-500 to-blue-500">
+            {/* SIMPLE GRADIENT RING */}
+            <div
+              className="rounded-full p-[2px]"
+              style={{
+                background:
+                  "linear-gradient(135deg, #ff5f6d, #d946ef, #3b82f6)",
+              }}
+            >
               <div className="rounded-full bg-black p-[2px]">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  width={70}
-                  height={70}
-                  className="rounded-full object-cover"
-                />
+                <div className="relative w-[70px] h-[70px] rounded-full overflow-hidden">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Title */}
-            <span className="mt-2 text-xs text-white text-center">
+            {/* TITLE */}
+            <span className="mt-2 text-xs text-[var(--foreground)] text-center">
               {item.title}
             </span>
           </Link>

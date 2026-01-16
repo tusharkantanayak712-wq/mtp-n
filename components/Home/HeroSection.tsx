@@ -7,6 +7,7 @@ import TrustHighlights from "./TrustHighlights";
 import TopNoticeBanner from "./TopNoticeBanner";
 import ScrollingNoticeBand from "./ScrollingNoticeBand";
 import StorySlider from "./StorySlider";
+import HomeQuickActions from "./HomeQuickActions";
 
 export default function HeroSection() {
 
@@ -15,6 +16,7 @@ export default function HeroSection() {
     <>
      <TopNoticeBanner/>
             <StorySlider/>
+            <HomeQuickActions/>
 
        <GameBannerCarousel/>
          {/* <ScrollingNoticeBand/> */}
