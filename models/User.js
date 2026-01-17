@@ -2,24 +2,78 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    userId: { type: String, unique: true },   // our generated ID
-    name: String,
-    email: { type: String, unique: true, sparse: true },
-    phone: { type: String, unique: true, sparse: true },
-    password: String,
-    wallet: { type: Number, default: 0 },
-    order: { type: Number, default: 0 },
+    /* ================= CORE IDS ================= */
+    userId: {
+      type: String,
+      unique: true,
+      required: true, // your generated userId
+    },
+
+    /* ================= BASIC INFO ================= */
+    name: {
+      type: String,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      unique: true,
+      sparse: true, // allows google-only users
+      lowercase: true,
+      trim: true,
+    },
+
+    phone: {
+      type: String,
+      unique: true,
+      sparse: true, // allows email-only users
+    },
+
+    /* ================= AUTH ================= */
+    password: {
+      type: String,
+      default: null, // 👈 important for Google users
+    },
+
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
+
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+
+    avatar: {
+      type: String, // Google profile image
+    },
+
+    /* ================= APP DATA ================= */
+    wallet: {
+      type: Number,
+      default: 0,
+    },
+
+    order: {
+      type: Number,
+      default: 0,
+    },
+
     userType: {
       type: String,
-      enum: ["user", "admin", "owner","member"],
+      enum: ["user", "admin", "owner", "member"],
       default: "user",
     },
-      // 🔐 Forget password fields
-  resetOtp: String,
-  resetOtpExpiry: Date,
 
+    /* ================= FORGOT PASSWORD ================= */
+    resetOtp: String,
+    resetOtpExpiry: Date,
   },
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default mongoose.models.User ||
+  mongoose.model("User", UserSchema);

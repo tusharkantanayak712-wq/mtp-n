@@ -6,6 +6,8 @@ import SocialFloat from "@/components/SocialFloat/SocialFloat";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ChristmasPopup from "@/components/Seasonal/ChristmasPopup";
 import { Poppins } from "next/font/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 export const metadata: Metadata = {
   title: {
@@ -52,6 +54,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <body className="bg-black text-white">
+                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+
           {/* <div className="snow" />
   <span className="big-snow"></span>
   <span className="big-snow"></span>
@@ -64,6 +68,7 @@ export default function RootLayout({
         <Footer/>
               <SocialFloat />
               {/* <div/> */}
+        </GoogleOAuthProvider>
 
       </body>
        <GoogleAnalytics gaId="G-CKCKWLGJ9N" />

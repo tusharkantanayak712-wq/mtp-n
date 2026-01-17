@@ -3,7 +3,7 @@ import User from "@/models/User";
 import { generateUserId } from "@/lib/generateUserId";
 import bcrypt from "bcryptjs";
 
-export async function POST(request) {
+export async function POST(request: Request) {
   try {
     await connectDB();
     const body = await request.json();
@@ -20,7 +20,7 @@ export async function POST(request) {
 
     /* ================= CHECK EXISTING USER ================= */
     const exists = await User.findOne({
-      $or: [{ email }, { phone }],
+      $or: [{ email: email.toLowerCase() }, { phone }],
     });
 
     if (exists) {
@@ -40,12 +40,13 @@ export async function POST(request) {
     await User.create({
       userId,
       name,
-      email,
+      email: email.toLowerCase(),
       phone,
-      password: hashedPassword, // 🔐 hashed
+      password: hashedPassword,
+      provider: "local", // 🔒 IMPORTANT
       wallet: 0,
       order: 0,
-      userType: "user", // 🔒 default role
+      userType: "user",
     });
 
     return Response.json(

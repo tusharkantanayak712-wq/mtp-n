@@ -52,11 +52,11 @@ const handleProceed = async () => {
     const userId = sessionStorage.getItem("userId");
     const storedPhone = userPhone || sessionStorage.getItem("phone");
 
-    if (!storedPhone) {
-      alert("Phone number missing. Please log in again.");
-      setIsRedirecting(false);
-      return;
-    }
+    // if (!storedPhone) {
+    //   alert("Phone number missing. Please log in again.");
+    //   setIsRedirecting(false);
+    //   return;
+    // }
 
     const orderPayload = {
       gameSlug: slug,

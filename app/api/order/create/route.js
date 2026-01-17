@@ -28,7 +28,7 @@ export async function POST(req) {
       );
     }
 
-    if (!email && !phone) {
+    if (!email ) {
       return Response.json(
         { success: false, message: "Provide either email or phone" },
         { status: 400 }

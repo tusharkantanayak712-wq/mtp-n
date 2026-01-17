@@ -3,13 +3,14 @@ import User from "@/models/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-export async function POST(request) {
+export async function POST(request: Request) {
   try {
     await connectDB();
     const body = await request.json();
 
     const { user, password } = body; // email or phone
 
+    /* ================= BASIC VALIDATION ================= */
     if (!user || !password) {
       return Response.json(
         { success: false, message: "Missing credentials" },
@@ -17,6 +18,7 @@ export async function POST(request) {
       );
     }
 
+    /* ================= FIND USER ================= */
     const foundUser = await User.findOne({
       $or: [{ email: user }, { phone: user }],
     });
@@ -28,8 +30,33 @@ export async function POST(request) {
       );
     }
 
+    /* ================= GOOGLE ACCOUNT BLOCK ================= */
+    if (foundUser.provider === "google") {
+      return Response.json(
+        {
+          success: false,
+          message: "This account uses Google login",
+        },
+        { status: 400 }
+      );
+    }
+
+    /* ================= PASSWORD EXISTS CHECK ================= */
+    if (!foundUser.password) {
+      return Response.json(
+        {
+          success: false,
+          message: "Password login not available for this account",
+        },
+        { status: 400 }
+      );
+    }
+
     /* ================= PASSWORD CHECK ================= */
-    const isMatch = await bcrypt.compare(password, foundUser.password);
+    const isMatch = await bcrypt.compare(
+      password,
+      foundUser.password
+    );
 
     if (!isMatch) {
       return Response.json(
@@ -44,7 +71,7 @@ export async function POST(request) {
         userId: foundUser._id,
         userType: foundUser.userType,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET!,
       { expiresIn: "7d" }
     );
 
@@ -53,14 +80,13 @@ export async function POST(request) {
       {
         success: true,
         message: "Login success",
-        token, // 🔐 frontend must use this
+        token,
         user: {
           name: foundUser.name,
           email: foundUser.email,
           phone: foundUser.phone,
           userId: foundUser.userId,
           userType: foundUser.userType,
-          // wallet/order intentionally excluded from authority
         },
       },
       { status: 200 }

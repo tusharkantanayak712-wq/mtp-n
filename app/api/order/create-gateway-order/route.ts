@@ -179,7 +179,7 @@ export async function POST(req: Request) {
       });
     }
 
-    if (!email && !phone) {
+    if (!email ) {
       return NextResponse.json({
         success: false,
         message: "Provide email or phone",
