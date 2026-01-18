@@ -66,7 +66,7 @@ const MEMBERSHIPS = [
 /* ================= API ================= */
 export async function GET() {
   try {
-    const response = await fetch("https://1gamestopup.com/api/v1/game", {
+    const response = await fetch("https://game-off-ten.vercel.app/api/v1/game", {
       method: "GET",
       headers: {
         "x-api-key": process.env.API_SECRET_KEY!,

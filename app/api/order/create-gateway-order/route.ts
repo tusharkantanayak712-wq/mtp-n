@@ -74,7 +74,7 @@ async function resolvePrice(
 
   // GAMES
   const resp = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE}/game/${gameSlug}`,
+    `https://game-off-ten.vercel.app/api/v1/game/${gameSlug}`,
     {
       headers: {
         "x-api-key": process.env.API_SECRET_KEY!,

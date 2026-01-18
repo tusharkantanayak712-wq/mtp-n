@@ -253,7 +253,7 @@ export async function GET(req, { params }) {
 
     /* ===== FETCH BASE GAME ===== */
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/game/${slug}`,
+      `https://game-off-ten.vercel.app/api/v1/game/${slug}`,
       {
         headers: { "x-api-key": process.env.API_SECRET_KEY },
       }
