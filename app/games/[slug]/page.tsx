@@ -131,7 +131,7 @@ const isWWM =
 const basePath = isBGMI
   ? `/games/pubg/${slug}/buy`
   : isGenshin
-  ? `/games/genshin/${slug}/buy`
+  ? `/games/gensin/${slug}/buy`
   : isHOK
   ? `/games/hok/${slug}/buy`
   : isWuwa

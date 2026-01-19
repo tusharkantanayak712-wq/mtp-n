@@ -43,22 +43,23 @@ const services = [
 
 export default function HomeServices() {
   return (
-    <section className="py-24 px-6 bg-[var(--background)] text-[var(--foreground)]">
+    <section className="py-14 sm:py-16 px-4 sm:px-6 bg-[var(--background)] text-[var(--foreground)]">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="mb-16 max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+        <div className="mb-10 sm:mb-12 max-w-3xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-3">
             Additional Services
           </h2>
-          <p className="text-[var(--muted)] text-lg leading-relaxed">
+
+          <p className="text-[var(--muted)] text-sm sm:text-base leading-relaxed">
             Planning to start or expand a game topup business?
             We provide reliable reseller programs and professional website solutions.
           </p>
         </div>
 
         {/* Services */}
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => {
             const Icon = service.icon;
 
@@ -66,32 +67,32 @@ export default function HomeServices() {
               <div
                 key={index}
                 className="
-                  rounded-2xl p-8
+                  rounded-2xl p-6 sm:p-7
                   bg-[var(--card)]
                   border border-[var(--border)]
                   transition-all duration-200
                   hover:border-[var(--accent)]
-                  hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]
+                  hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]
                 "
               >
                 {/* Icon */}
-                <div className="mb-6">
-                  <Icon className="text-xl text-[var(--accent)]" />
+                <div className="mb-4">
+                  <Icon className="text-lg text-[var(--accent)]" />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-medium mb-3">
+                <h3 className="text-lg font-medium mb-2">
                   {service.title}
                 </h3>
 
-                <p className="text-[var(--muted)] leading-relaxed mb-8">
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-6">
                   {service.description}
                 </p>
 
                 {/* Footer */}
                 <div className="flex items-center justify-between">
                   <span
-                    className={`text-xs px-3 py-1 rounded-full border ${service.badge.className}`}
+                    className={`text-[11px] px-3 py-1 rounded-full border ${service.badge.className}`}
                   >
                     {service.badge.text}
                   </span>
@@ -107,7 +108,7 @@ export default function HomeServices() {
                       hover:underline
                     "
                   >
-                    <FaWhatsapp />
+                    <FaWhatsapp className="text-sm" />
                     Contact
                   </a>
                 </div>
@@ -117,13 +118,11 @@ export default function HomeServices() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-20 border-t border-[var(--border)] pt-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <p className="text-[var(--muted)] max-w-xl">
+        <div className="mt-12 sm:mt-14 border-t border-[var(--border)] pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <p className="text-sm text-[var(--muted)] max-w-xl">
             Want to discuss pricing, customization, or reseller onboarding?
             Our team is available for direct consultation.
           </p>
-
-     
         </div>
 
       </div>

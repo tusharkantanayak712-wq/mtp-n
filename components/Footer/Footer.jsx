@@ -30,55 +30,43 @@ const FOOTER_LINKS = [
       { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Terms & Conditions", href: "/terms-and-conditions" },
       { label: "Contact Us", href: "/contact" },
-      {label: "Refund Policy", href: "/refund-policy" },
+      { label: "Refund Policy", href: "/refund-policy" },
     ],
   },
 ];
 
 const SOCIALS = [
-  {
-    label: "Instagram",
-    href: "https://instagram.com/zynx.v1",
-    icon: FaInstagram,
-  },
-  {
-    label: "Twitter",
-    href: "https://x.com/tk_dev_",
-    icon: FaXTwitter,
-  },
-  {
-    label: "YouTube",
-    href: "https://youtube.com",
-    icon: FaYoutube,
-  },
+  { label: "Instagram", href: "https://instagram.com/zynx.v1", icon: FaInstagram },
+  { label: "Twitter", href: "https://x.com/tk_dev_", icon: FaXTwitter },
+  { label: "YouTube", href: "https://youtube.com", icon: FaYoutube },
 ];
 
 /* ===================== COMPONENT ===================== */
 
 export default function Footer() {
   return (
-    <footer className="mt-16 bg-[var(--card)] text-[var(--muted)] border-t border-[var(--border)]">
-      
+    <footer className="mt-12 bg-[var(--card)] text-[var(--muted)] border-t border-[var(--border)]">
+
       {/* ================= MAIN ================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <h2 className="text-2xl font-extrabold mb-2 bg-gradient-to-r from-[var(--accent)] to-purple-500 bg-clip-text text-transparent">
+            <h2 className="text-xl font-extrabold mb-1 bg-gradient-to-r from-[var(--accent)] to-purple-500 bg-clip-text text-transparent">
               {BRAND}
             </h2>
 
-            <p className="text-xs leading-relaxed max-w-[240px] opacity-80">
+            <p className="text-[11px] leading-snug max-w-[220px] opacity-80">
               Instant game top-ups, secure payments, and automated delivery —
               available 24×7 for gamers ⚡
             </p>
           </div>
 
-          {/* Navigation Blocks */}
+          {/* Navigation */}
           {FOOTER_LINKS.map((section) => (
-            <div key={section.title} className="flex flex-col gap-2">
-              <h3 className="text-[var(--accent)] font-semibold text-xs sm:text-sm mb-1">
+            <div key={section.title} className="flex flex-col gap-1.5">
+              <h3 className="text-[var(--accent)] font-semibold text-xs mb-1">
                 {section.title}
               </h3>
 
@@ -86,7 +74,7 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs sm:text-sm opacity-80 hover:opacity-100 hover:text-[var(--accent)] transition"
+                  className="text-[11px] opacity-80 hover:opacity-100 hover:text-[var(--accent)] transition"
                 >
                   {link.label}
                 </Link>
@@ -96,11 +84,11 @@ export default function Footer() {
 
           {/* Socials (Desktop) */}
           <div className="hidden md:flex flex-col gap-2">
-            <h3 className="text-[var(--accent)] font-semibold text-xs sm:text-sm mb-1">
-              Connect With Us
+            <h3 className="text-[var(--accent)] font-semibold text-xs mb-1">
+              Connect
             </h3>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {SOCIALS.map(({ label, href, icon: Icon }) => (
                 <a
                   key={label}
@@ -120,9 +108,9 @@ export default function Footer() {
       </div>
 
       {/* ================= BOTTOM BAR ================= */}
-      <div className="border-t border-[var(--border)] py-4">
+      <div className="border-t border-[var(--border)] py-2.5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
 
             {/* Socials (Mobile) */}
             <div className="flex md:hidden gap-4">
@@ -141,7 +129,7 @@ export default function Footer() {
             </div>
 
             {/* Made With */}
-            <p className="text-[10px] sm:text-xs text-center">
+            <p className="text-[10px] sm:text-[11px] text-center">
               Made with{" "}
               <FaHeart className="inline w-3 h-3 text-[var(--accent)] mx-0.5 animate-pulse" />{" "}
               by{" "}
@@ -151,8 +139,8 @@ export default function Footer() {
             </p>
 
             {/* Copyright */}
-            <p className="text-[10px] sm:text-xs opacity-70">
-              © {new Date().getFullYear()} {BRAND}. All rights reserved.
+            <p className="text-[10px] sm:text-[11px] opacity-70">
+              © {new Date().getFullYear()} {BRAND}
             </p>
 
           </div>
