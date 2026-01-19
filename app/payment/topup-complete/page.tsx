@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import {
   FaCheckCircle,
-  FaTimesCircle,
   FaSpinner,
+  FaInfoCircle,
 } from "react-icons/fa";
+
 
 export default function TopupComplete() {
   const [status, setStatus] = useState("checking"); // checking | success | failed
@@ -66,9 +67,21 @@ export default function TopupComplete() {
           {status === "success" && (
             <FaCheckCircle className="text-5xl text-green-500" />
           )}
-          {status === "failed" && (
-            <FaTimesCircle className="text-5xl text-red-500" />
-          )}
+        {status === "failed" && (
+  <>
+    <p>
+      If the amount was deducted, your pack will be delivered automatically
+      within <strong>10–15 minutes</strong>.
+    </p>
+
+    <p className="mt-2">
+      If not received, please contact customer support:
+      <br />
+      <strong className="text-[var(--accent)]">📞 6372305866</strong>
+    </p>
+  </>
+)}
+
         </div>
 
         {/* MESSAGE */}
