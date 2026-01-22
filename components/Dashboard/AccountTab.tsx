@@ -160,7 +160,9 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
             </div>
 
             <button
-              disabled={loadingPass}
+              // disabled={loadingPass}
+                            disabled={true}
+
               onClick={handlePasswordUpdate}
               className="sm:min-w-[200px] px-6 py-3 rounded-xl
                          bg-[var(--accent)] text-white font-medium
