@@ -21,25 +21,37 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
 
     const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
-    const limit = Math.min(
-      parseInt(searchParams.get("limit") || "10"),
-      100
-    );
+    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
     const search = searchParams.get("search")?.trim();
+    const userType = searchParams.get("userType")?.trim();
+
+    const from = searchParams.get("from");
+    const to = searchParams.get("to");
 
     const skip = (page - 1) * limit;
 
-    /* ================= SEARCH FILTER ================= */
+    /* ================= FILTER ================= */
     let filter = {};
 
+    // 🔍 Text search
     if (search) {
-      filter = {
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-          { phone: { $regex: search, $options: "i" } },
-        ],
-      };
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // 👤 Filter by role
+    if (userType) {
+      filter.userType = userType;
+    }
+
+    // 📅 Filter by createdAt date range
+    if (from || to) {
+      filter.createdAt = {};
+      if (from) filter.createdAt.$gte = new Date(from);
+      if (to) filter.createdAt.$lte = new Date(to);
     }
 
     /* ================= QUERY ================= */
@@ -64,6 +76,7 @@ export async function GET(req) {
       },
     });
   } catch (err) {
+    console.error(err);
     return Response.json(
       { success: false, message: "Server error" },
       { status: 500 }

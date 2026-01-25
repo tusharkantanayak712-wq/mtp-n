@@ -19,13 +19,9 @@ import BannersTab from "@/components/admin/BannersTab";
 export default function AdminPanalPage() {
   const [activeTab, setActiveTab] = useState("users");
 
-  const [users, setUsers] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [transactions, setTransactions] = useState([]);
   const [queries, setQueries] = useState([]);
 
   const [balance, setBalance] = useState(null);
-  const [updatingUserId, setUpdatingUserId] = useState(null);
   const [banners, setBanners] = useState([]);
 
 
@@ -49,16 +45,6 @@ export default function AdminPanalPage() {
     setPage(1);
   };
 
-  const currentData =
-    activeTab === "users"
-      ? users
-      : activeTab === "orders"
-      ? orders
-      : activeTab === "transactions"
-      ? transactions
-      : activeTab === "queries"
-      ? queries
-      : [];
 
   /* ================= FETCH BALANCE ================= */
   const fetchBalance = async () => {
@@ -73,16 +59,7 @@ export default function AdminPanalPage() {
     }
   };
 
-  /* ================= FETCH USERS ================= */
-  const fetchUsers = async () => {
-    const token = sessionStorage.getItem("token");
-    const res = await fetch(
-      `/api/admin/users?page=${page}&limit=${limit}&search=${search}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    setUsers(data.data || []);
-  };
+
   const fetchBanners = async () => {
   const token = sessionStorage.getItem("token");
   const res = await fetch("/api/admin/banners/game-banners", {
@@ -93,64 +70,7 @@ export default function AdminPanalPage() {
 };
 
 
-  /* ================= FETCH ORDERS ================= */
-  const fetchOrders = async () => {
-    const token = sessionStorage.getItem("token");
-    const res = await fetch(
-      `/api/admin/orders?page=${page}&limit=${limit}&search=${search}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    setOrders(data.data || []);
-  };
 
-  /* ================= FETCH TRANSACTIONS ================= */
-  const fetchTransactions = async () => {
-    const token = sessionStorage.getItem("token");
-    const res = await fetch(
-      `/api/admin/transactions?page=${page}&limit=${limit}&search=${search}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    setTransactions(data.data || []);
-  };
-
-  /* ================= FETCH SUPPORT QUERIES ================= */
-  const fetchQueries = async () => {
-    const token = sessionStorage.getItem("token");
-    const res = await fetch(
-      `/api/admin/support-queries?page=${page}&limit=${limit}&search=${search}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    setQueries(data.data || []);
-  };
-
-  /* ================= CHANGE USER ROLE ================= */
-  const changeUserRole = async (userId, newUserType) => {
-    try {
-      setUpdatingUserId(userId);
-      const token = sessionStorage.getItem("token");
-
-      const res = await fetch("/api/admin/users/change-role", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ userId, newUserType }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        alert(data.message || "Failed");
-      }
-
-      fetchUsers();
-    } finally {
-      setUpdatingUserId(null);
-    }
-  };
 
   /* ================= FETCH PRICING ================= */
   const fetchPricing = async (type) => {
@@ -200,47 +120,7 @@ export default function AdminPanalPage() {
     }
   };
 
-  /* ================= UPDATE ORDER STATUS ================= */
-  const updateOrderStatus = async (orderId, status) => {
-    const token = sessionStorage.getItem("token");
-    const res = await fetch("/api/admin/orders", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ orderId, status }),
-    });
 
-    if (!res.ok) {
-      const data = await res.json();
-      alert(data.message || "Failed to update order");
-      return;
-    }
-
-    fetchOrders();
-  };
-
-  /* ================= UPDATE QUERY STATUS ================= */
-  const updateQueryStatus = async (id, status) => {
-    const token = sessionStorage.getItem("token");
-    const res = await fetch("/api/admin/support-queries/status", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ id, status }),
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      alert(data.message || "Failed to update status");
-      return;
-    }
-
-    fetchQueries();
-  };
 
   /* ================= EFFECTS ================= */
   useEffect(() => {
@@ -256,10 +136,7 @@ export default function AdminPanalPage() {
 
 
   useEffect(() => {
-    if (activeTab === "users") fetchUsers();
-    if (activeTab === "orders") fetchOrders();
-    if (activeTab === "transactions") fetchTransactions();
-    if (activeTab === "queries") fetchQueries();
+
     if (activeTab === "pricing") fetchPricing(pricingType);
   }, [activeTab, pricingType, page, search]);
 
@@ -369,70 +246,29 @@ export default function AdminPanalPage() {
   )}
 </div>
 
-       {/* SEARCH */}
-{["users", "orders", "transactions", "queries"].includes(activeTab) && (
-  <div className="mb-4 relative max-w-md">
-    <FiSearch
-      className="
-        absolute left-3 top-1/2 -translate-y-1/2
-        text-[var(--muted)]
-        pointer-events-none
-      "
-    />
-
-    <input
-      value={search}
-      onChange={(e) => {
-        setSearch(e.target.value);
-        setPage(1);
-      }}
-      placeholder={`Search ${activeTab}…`}
-      className="
-        w-full
-        h-9
-        pl-9 pr-3
-        rounded-lg
-        border border-[var(--border)]
-        bg-[var(--card)]
-        text-sm
-        placeholder:text-[var(--muted)]
-        transition
-        hover:border-[var(--accent)]/30
-        focus:outline-none
-        focus:ring-2
-        focus:ring-[var(--accent)]/30
-        focus:border-[var(--accent)]
-      "
-    />
-  </div>
-)}
 
 
           {/* PANEL */}
           <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
             {activeTab === "users" && (
               <UsersTab
-                users={users}
-                updatingUserId={updatingUserId}
-                onChangeRole={changeUserRole}
+              
               />
             )}
 
             {activeTab === "orders" && (
               <OrdersTab
-                orders={orders}
-                onUpdateStatus={updateOrderStatus}
+             
               />
             )}
 
             {activeTab === "transactions" && (
-              <TransactionsTab transactions={transactions} />
+              <TransactionsTab />
             )}
 
             {activeTab === "queries" && (
               <SupportQueriesTab
-                queries={queries}
-                onUpdateStatus={updateQueryStatus}
+               
               />
             )}
             {activeTab === "banners" && (
@@ -454,33 +290,7 @@ export default function AdminPanalPage() {
             )}
           </div>
 
-          {/* PAGINATION */}
-          {currentData.length > 0 &&
-            ["users", "orders", "transactions", "queries"].includes(
-              activeTab
-            ) && (
-              <div className="mt-4 flex justify-between items-center">
-                <button
-                  disabled={page === 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="p-2 rounded-lg border disabled:opacity-40"
-                >
-                  <FiChevronLeft size={20} />
-                </button>
-
-                <span className="text-sm text-[var(--muted)]">
-                  Page {page}
-                </span>
-
-                <button
-                  disabled={currentData.length < limit}
-                  onClick={() => setPage((p) => p + 1)}
-                  className="p-2 rounded-lg border disabled:opacity-40"
-                >
-                  <FiChevronRight size={20} />
-                </button>
-              </div>
-            )}
+        
         </div>
       </section>
     </AuthGuard>

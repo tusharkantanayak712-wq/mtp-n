@@ -2,8 +2,56 @@
 
 import { useState, useEffect } from "react";
 
-export default function TransactionsTab({ transactions = [] }) {
+export default function TransactionsTab() {
+  const [transactions, setTransactions] = useState([]);
   const [selectedTx, setSelectedTx] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [search] = useState("");
+
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    totalPages: 1,
+  });
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [page, limit, search]);
+
+  const fetchTransactions = async () => {
+    try {
+      setLoading(true);
+      const token = sessionStorage.getItem("token");
+
+      const res = await fetch(
+        `/api/admin/transactions?page=${page}&limit=${limit}&search=${search}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      setTransactions(data?.data || []);
+      setPagination(
+        data?.pagination || {
+          total: 0,
+          page: 1,
+          totalPages: 1,
+        }
+      );
+    } catch (err) {
+      console.error("Transaction fetch failed", err);
+      setTransactions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const statusMeta = {
     success: "bg-green-500/20 text-green-400",
@@ -13,7 +61,6 @@ export default function TransactionsTab({ transactions = [] }) {
 
   return (
     <div className="space-y-6">
-
       {/* ================= HEADER ================= */}
       <div>
         <h2 className="text-xl font-extrabold tracking-tight">
@@ -24,106 +71,161 @@ export default function TransactionsTab({ transactions = [] }) {
         </p>
       </div>
 
-      {/* ================= DESKTOP ================= */}
-      <div className="hidden md:block rounded-xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-black/5">
-            <tr className="text-xs uppercase tracking-wide text-[var(--muted)]">
-              <th className="px-5 py-3 text-left">Date</th>
-              <th className="px-5 py-3 text-left">Order ID</th>
-              <th className="px-5 py-3 text-left">User</th>
-              <th className="px-5 py-3 text-left">Game</th>
-              <th className="px-5 py-3 text-right">Amount</th>
-              <th className="px-5 py-3 text-left">Status</th>
-            </tr>
-          </thead>
+      {/* ================= META ================= */}
+      <div className="flex items-center justify-between text-sm text-[var(--muted)]">
+        <span>
+          Total Transactions:{" "}
+          <span className="font-semibold text-[var(--foreground)]">
+            {pagination.total}
+          </span>
+        </span>
 
-          <tbody>
+        <span>
+          Page {pagination.page} of {pagination.totalPages}
+        </span>
+      </div>
+
+      {/* ================= LOADING ================= */}
+      {loading && (
+        <div className="py-20 text-center text-[var(--muted)]">
+          Loading transactions…
+        </div>
+      )}
+
+      {!loading && (
+        <>
+          {/* ================= DESKTOP ================= */}
+          <div className="hidden md:block rounded-xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-black/5">
+                <tr className="text-xs uppercase tracking-wide text-[var(--muted)]">
+                  <th className="px-5 py-3 text-left">Date</th>
+                  <th className="px-5 py-3 text-left">Order ID</th>
+                  <th className="px-5 py-3 text-left">User</th>
+                  <th className="px-5 py-3 text-left">Game</th>
+                  <th className="px-5 py-3 text-right">Amount</th>
+                  <th className="px-5 py-3 text-left">Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {transactions.map((t) => (
+                  <tr
+                    key={t._id}
+                    onClick={() => setSelectedTx(t)}
+                    className="border-t border-[var(--border)] hover:bg-black/5 cursor-pointer transition"
+                  >
+                    <td className="px-5 py-4 text-xs text-[var(--muted)]">
+                      {new Date(t.createdAt).toLocaleString()}
+                    </td>
+
+                    <td className="px-5 py-4 font-mono text-xs break-all">
+                      {t.orderId}
+                    </td>
+
+                    <td className="px-5 py-4 truncate">
+                      {t.email || t.userId || "—"}
+                    </td>
+
+                    <td className="px-5 py-4 capitalize text-[var(--muted)]">
+                      {t.gameSlug}
+                    </td>
+
+                    <td className="px-5 py-4 text-right font-bold text-green-400">
+                      ₹{t.price}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${statusMeta[t.status]}`}
+                      >
+                        {t.status.toUpperCase()}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {!transactions.length && (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-[var(--muted)]">
+                      No transactions found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ================= MOBILE ================= */}
+          <div className="md:hidden space-y-3">
             {transactions.map((t) => (
-              <tr
+              <div
                 key={t._id}
                 onClick={() => setSelectedTx(t)}
-                className="border-t border-[var(--border)] hover:bg-black/5 cursor-pointer transition"
+                className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-2 cursor-pointer active:scale-[0.98] transition"
               >
-                <td className="px-5 py-4 text-xs text-[var(--muted)]">
-                  {new Date(t.createdAt).toLocaleString()}
-                </td>
-
-                <td className="px-5 py-4 font-mono text-xs break-all">
-                  {t.orderId}
-                </td>
-
-                <td className="px-5 py-4 truncate">
-                  {t.email || t.userId || "—"}
-                </td>
-
-                <td className="px-5 py-4 capitalize text-[var(--muted)]">
-                  {t.gameSlug}
-                </td>
-
-                <td className="px-5 py-4 text-right font-bold text-green-400">
-                  ₹{t.price}
-                </td>
-
-                <td className="px-5 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${statusMeta[t.status]}`}
-                  >
-                    {t.status.toUpperCase()}
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-[var(--muted)]">
+                    {new Date(t.createdAt).toLocaleDateString()}
                   </span>
-                </td>
-              </tr>
+
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusMeta[t.status]}`}
+                  >
+                    {t.status}
+                  </span>
+                </div>
+
+                <div className="text-lg font-bold text-green-400">
+                  ₹{t.price}
+                </div>
+
+                <div className="text-xs text-[var(--muted)] capitalize">
+                  {t.gameSlug}
+                </div>
+
+                <div className="text-xs font-mono truncate">
+                  {t.orderId}
+                </div>
+
+                <div className="text-xs text-[var(--muted)] truncate">
+                  {t.email || t.userId || "—"}
+                </div>
+              </div>
             ))}
-
-            {!transactions.length && (
-              <tr>
-                <td colSpan={6} className="py-12 text-center text-[var(--muted)]">
-                  No transactions found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ================= MOBILE ================= */}
-      <div className="md:hidden space-y-3">
-        {transactions.map((t) => (
-          <div
-            key={t._id}
-            onClick={() => setSelectedTx(t)}
-            className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-2 cursor-pointer active:scale-[0.98] transition"
-          >
-            <div className="flex justify-between items-center">
-              <span className="text-xs text-[var(--muted)]">
-                {new Date(t.createdAt).toLocaleDateString()}
-              </span>
-
-              <span
-                className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusMeta[t.status]}`}
-              >
-                {t.status}
-              </span>
-            </div>
-
-            <div className="text-lg font-bold text-green-400">
-              ₹{t.price}
-            </div>
-
-            <div className="text-xs text-[var(--muted)] capitalize">
-              {t.gameSlug}
-            </div>
-
-            <div className="text-xs font-mono truncate">
-              {t.orderId}
-            </div>
-
-            <div className="text-xs text-[var(--muted)] truncate">
-              {t.email || t.userId || "—"}
-            </div>
           </div>
-        ))}
-      </div>
+
+          {/* ================= PAGINATION ================= */}
+          {pagination.totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-lg border text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-black/5"
+              >
+                ← Previous
+              </button>
+
+              <span className="text-sm text-[var(--muted)]">
+                Page <b>{pagination.page}</b> of{" "}
+                <b>{pagination.totalPages}</b>
+              </span>
+
+              <button
+                onClick={() =>
+                  setPage((p) =>
+                    Math.min(pagination.totalPages, p + 1)
+                  )
+                }
+                disabled={page === pagination.totalPages}
+                className="px-4 py-2 rounded-lg border text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-black/5"
+              >
+                Next →
+              </button>
+            </div>
+          )}
+        </>
+      )}
 
       {/* ================= DRAWER ================= */}
       {selectedTx && (
@@ -153,16 +255,12 @@ function TransactionDrawer({ tx, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex">
-      {/* Overlay */}
       <div
         onClick={onClose}
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       />
 
-      {/* Drawer */}
       <div className="relative ml-auto w-full max-w-md h-full bg-[var(--card)] border-l border-[var(--border)] shadow-2xl animate-slide-in">
-
-        {/* ===== HEADER ===== */}
         <div className="px-6 py-5 border-b border-[var(--border)] relative space-y-2">
           <button
             onClick={onClose}
@@ -171,9 +269,7 @@ function TransactionDrawer({ tx, onClose }) {
             ✕
           </button>
 
-          <p className="text-xs text-[var(--muted)]">
-            Transaction Amount
-          </p>
+          <p className="text-xs text-[var(--muted)]">Transaction Amount</p>
 
           <div className="flex items-center justify-between">
             <span className="text-2xl font-extrabold text-green-400">
@@ -192,7 +288,6 @@ function TransactionDrawer({ tx, onClose }) {
           </p>
         </div>
 
-        {/* ===== CONTENT ===== */}
         <div className="p-6 space-y-6 overflow-y-auto h-[calc(100%-120px)] text-sm">
           <Section title="Game & Item">
             <Detail label="Game" value={tx.gameSlug} />
