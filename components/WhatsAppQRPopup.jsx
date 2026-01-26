@@ -74,7 +74,7 @@ export default function WhatsAppCommunityPopup() {
               </h2>
 
               <p className="text-xs text-[var(--muted)]">
-                Exclusive offers & early access deals ✨
+                Exclusive offers & early access deals 
               </p>
 
               {/* QR */}
