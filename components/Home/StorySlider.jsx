@@ -15,29 +15,30 @@ const storyData = [
     id: 2,
     title: "MLBB India",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500738/kapkap_20260115220013809_sys_zicwwk.jpg",
+      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769514968/WhatsApp_Image_2026-01-27_at_17.19.53_c70wzw.jpg",
     link: "/games/mobile-legends988",
   },
+
   {
     id: 3,
+    title: "MLBB Double",
+    image:
+      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515824/WhatsApp_Image_2026-01-27_at_17.39.55_w4gtnf.jpg",
+    link: "/games/mlbb-double332",
+  },
+  {
+    id: 4,
+    title: "MLBB Small/PH",
+    image:
+      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515220/WhatsApp_Image_2026-01-27_at_17.25.55_torxmi.jpg",
+    link: "/games/mlbb-smallphp638",
+  },
+    {
+    id: 5,
     title: "PUBG Mobile",
     image:
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
     link: "/games/pubg-mobile138",
-  },
-  {
-    id: 4,
-    title: "MLBB Double",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536006/WhatsApp_Image_2026-01-16_at_09.05.31_hqquhq.jpg",
-    link: "/games/mlbb-double332",
-  },
-  {
-    id: 5,
-    title: "MLBB Small",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536112/WhatsApp_Image_2026-01-16_at_09.29.38_pli9ba.jpg",
-    link: "/games/mlbb-smallphp638",
   },
   {
     id: 6,
