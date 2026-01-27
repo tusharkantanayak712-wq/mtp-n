@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 /* ================= IMAGES ================= */
 const MLBB_MAIN_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769514968/WhatsApp_Image_2026-01-27_at_17.19.53_c70wzw.jpg";
+  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769533093/WhatsApp_Image_2026-01-27_at_17.19.53_gfrfdn.jpg";
 
 const MLBB_SMALL_IMAGE =
   "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515220/WhatsApp_Image_2026-01-27_at_17.25.55_torxmi.jpg";

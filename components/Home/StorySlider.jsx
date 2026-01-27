@@ -15,7 +15,7 @@ const storyData = [
     id: 2,
     title: "MLBB India",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769514968/WhatsApp_Image_2026-01-27_at_17.19.53_c70wzw.jpg",
+      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769533093/WhatsApp_Image_2026-01-27_at_17.19.53_gfrfdn.jpg",
     link: "/games/mobile-legends988",
   },
 
