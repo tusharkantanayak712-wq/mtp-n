@@ -40,8 +40,8 @@ const random = (arr: string[]) =>
 
 export default function ChatBot() {
   /* ---------- ROUTE GUARD ---------- */
-  const pathname = usePathname();
-  if (!ALLOWED_ROUTES.includes(pathname)) return null;
+  // const pathname = usePathname();
+  // if (!ALLOWED_ROUTES.includes(pathname)) return null;
 
   /* ---------- STATE ---------- */
   const [isOpen, setIsOpen] = useState(false);
