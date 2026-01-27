@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const storyData = [
-      {
+  {
     id: 1,
     title: "Value pass(India)",
     image:
@@ -52,30 +52,54 @@ export default function StorySlider() {
   return (
     <section className="mt-1">
       <div
-        className="flex gap-4 overflow-x-auto px-2 py-3
-        [scrollbar-width:none]
-        [&::-webkit-scrollbar]:hidden"
+        className="
+          flex gap-4 px-2 py-3
+          overflow-x-auto
+          scroll-smooth
+          snap-x snap-mandatory
+          overscroll-x-contain
+          [scrollbar-width:none]
+          [&::-webkit-scrollbar]:hidden
+        "
       >
         {storyData.map((item) => (
           <Link
             key={item.id}
             href={item.link}
-            className="flex flex-col items-center min-w-[80px]"
+            className="
+              flex flex-col items-center
+              min-w-[80px]
+              snap-start
+              transition-transform duration-200 ease-out
+              hover:scale-[1.06]
+              active:scale-[0.96]
+            "
           >
-            {/* SIMPLE GRADIENT RING */}
+            {/* GRADIENT RING */}
             <div
-              className="rounded-full p-[2px]"
+              className="
+                rounded-full p-[2px]
+                transition-all duration-300
+              "
               style={{
                 background:
                   "linear-gradient(135deg, #ff5f6d, #d946ef, #3b82f6)",
               }}
             >
               <div className="rounded-full bg-black p-[2px]">
-                <div className="relative w-[70px] h-[70px] rounded-full overflow-hidden">
+                <div
+                  className="
+                    relative w-[70px] h-[70px]
+                    rounded-full overflow-hidden
+                    shadow-[0_6px_18px_rgba(0,0,0,0.45)]
+                  "
+                >
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
+                    sizes="70px"
+                    priority={item.id <= 3}
                     className="object-cover"
                   />
                 </div>
@@ -83,7 +107,14 @@ export default function StorySlider() {
             </div>
 
             {/* TITLE */}
-            <span className="mt-2 text-xs text-[var(--foreground)] text-center">
+            <span
+              className="
+                mt-2 text-xs text-center
+                leading-tight
+                text-[var(--foreground)]
+                line-clamp-2
+              "
+            >
               {item.title}
             </span>
           </Link>

@@ -15,8 +15,9 @@ export default function HeroSection() {
   return (
     <>
      <TopNoticeBanner/>
+             <GameBannerCarousel/>
+
             <StorySlider/>
-        <GameBannerCarousel/>
 
             <HomeQuickActions/>
 

@@ -5,13 +5,13 @@ import { FaWhatsapp } from "react-icons/fa";
 import { FiX, FiArrowRight } from "react-icons/fi";
 
 const STORAGE_KEY = "hide_whatsapp_banner";
-const ROTATE_INTERVAL = 3000;
+const ROTATE_INTERVAL = 3200;
 
 /* ================= WHATSAPP BANNERS ================= */
 const BANNERS = [
   {
     id: "discount",
-    title: "Get 1-5% OFF on WhatsApp",
+    title: "Get 1–5% OFF on WhatsApp",
     subtitle: "DM us directly to unlock discount",
     badge: "DM & Save",
     link: "https://wa.me/916372305866?text=Hi%20I%20want%205%25%20OFF",
@@ -19,15 +19,15 @@ const BANNERS = [
   {
     id: "bgmi",
     title: "BGMI UC Offer 🔥",
-    subtitle: "60 UC @ ₹70 — DM on WhatsApp",
-    badge: "Limited Deal",
+    subtitle: "60 UC @ ₹70 — limited time",
+    badge: "Hot Deal",
     link: "https://wa.me/916372305866?text=BGMI%2060%20UC%20Offer%20@%2070rs",
   },
   {
     id: "support",
     title: "Chat with us on WhatsApp",
     subtitle: "Instant support & latest offers",
-    badge: "Chat Now",
+    badge: "Support",
     link: "https://wa.me/916372305866?text=Hi%20I%20need%20help",
   },
 ];
@@ -35,6 +35,7 @@ const BANNERS = [
 export default function TopNoticeBanner() {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
 
   /* ================= INITIAL VISIBILITY ================= */
   useEffect(() => {
@@ -47,7 +48,11 @@ export default function TopNoticeBanner() {
     if (!visible) return;
 
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % BANNERS.length);
+      setAnimate(false);
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % BANNERS.length);
+        setAnimate(true);
+      }, 180);
     }, ROTATE_INTERVAL);
 
     return () => clearInterval(timer);
@@ -61,40 +66,54 @@ export default function TopNoticeBanner() {
     <div
       onClick={() => window.open(banner.link, "_blank")}
       className="
-        w-full cursor-pointer
-        bg-gradient-to-r
-        from-[var(--accent)]
-        via-[var(--accent-secondary)]
-        to-[var(--accent)]
-        text-[var(--foreground)]
+        relative w-full cursor-pointer
         border-b border-[var(--border)]
-        shadow-md
+        bg-gradient-to-r
+        from-[var(--accent)]/90
+        via-[var(--accent-secondary)]/90
+        to-[var(--accent)]/90
+        backdrop-blur-xl
         hover:brightness-105
         transition
       "
     >
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
 
         {/* LEFT */}
-        <div className="flex items-center gap-3">
-          <div className="rounded-full p-2 bg-green-500 text-white shadow">
-            <FaWhatsapp size={18} />
+        <div className="flex items-center gap-3 min-w-0">
+
+          <div className="
+            shrink-0 rounded-full p-2
+            bg-green-500 text-white
+            shadow-sm
+          ">
+            <FaWhatsapp size={16} />
           </div>
 
-          <div className="leading-tight">
-            <p className="font-semibold text-sm md:text-base flex items-center gap-1">
+          <div
+            className={`
+              min-w-0 leading-tight
+              transition-all duration-300
+              ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"}
+            `}
+          >
+            <p className="font-semibold text-xs sm:text-sm truncate flex items-center gap-1">
               {banner.title}
               <FiArrowRight className="opacity-70" />
             </p>
-            <p className="text-xs md:text-sm text-[var(--muted)]">
+            <p className="text-[10px] sm:text-xs text-[var(--muted)] truncate">
               {banner.subtitle}
             </p>
           </div>
         </div>
 
         {/* RIGHT */}
-        <div className="flex items-center gap-2">
-          <span className="hidden sm:inline text-xs font-medium bg-white/20 px-3 py-1 rounded-full">
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="
+            hidden sm:inline
+            text-[10px] font-medium
+            bg-white/20 px-2.5 py-1 rounded-full
+          ">
             {banner.badge}
           </span>
 
@@ -104,13 +123,16 @@ export default function TopNoticeBanner() {
               sessionStorage.setItem(STORAGE_KEY, "true");
               setVisible(false);
             }}
-            className="rounded-full p-1 hover:bg-black/20 transition"
+            className="
+              rounded-full p-1.5
+              hover:bg-black/20
+              transition
+            "
             aria-label="Close"
           >
-            <FiX size={18} />
+            <FiX size={16} />
           </button>
         </div>
-
       </div>
     </div>
   );

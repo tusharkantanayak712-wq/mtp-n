@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FaXTwitter,
   FaInstagram,
@@ -10,37 +11,50 @@ import {
   FaShareNodes,
 } from "react-icons/fa6";
 
+/* ================= CONFIG ================= */
+
+const ALLOWED_ROUTES = ["/", "/home"];
+
+/* ================= DATA ================= */
+
 const socialLinks = [
   {
     name: "Twitter",
     icon: FaXTwitter,
     url: "https://www.instagram.com/zynx.v1/",
-    color: "hover:bg-black hover:text-white",
   },
   {
     name: "Instagram",
     icon: FaInstagram,
     url: "https://www.instagram.com/zynx.v1/",
-    color:
-      "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
   },
   {
     name: "YouTube",
     icon: FaYoutube,
     url: "https://www.instagram.com/zynx.v1/",
-    color: "hover:bg-red-600 hover:text-white",
   },
 ];
 
+/* ================= COMPONENT ================= */
+
 export default function SocialFloat() {
+  /* ---------- ROUTE GUARD ---------- */
+  const pathname = usePathname();
+  if (!ALLOWED_ROUTES.includes(pathname)) return null;
+
+  /* ---------- STATE ---------- */
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
+  /* ---------- REFS ---------- */
   const containerRef = useRef<HTMLDivElement>(null);
 
   /* ================= CLOSE ON OUTSIDE CLICK ================= */
+
   useEffect(() => {
     if (!isOpen) return;
 
-    const handlePointerDown = (event: PointerEvent) => {
+    const handleClick = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
@@ -49,12 +63,36 @@ export default function SocialFloat() {
       }
     };
 
-    document.addEventListener("pointerdown", handlePointerDown);
-    return () =>
-      document.removeEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [isOpen]);
+
+  /* ================= SCROLL DIRECTION HANDLER ================= */
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+
+      // Hide on scroll down (only if menu closed)
+      if (currentY > lastScrollY && currentY > 60 && !isOpen) {
+        setIsVisible(false);
+      }
+      // Show on scroll up
+      else {
+        setIsVisible(true);
+      }
+
+      lastScrollY = currentY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [isOpen]);
 
   /* ================= SHARE ================= */
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -66,16 +104,28 @@ export default function SocialFloat() {
       } catch {}
     } else {
       await navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
     }
   };
 
+  /* ================= UI ================= */
+
   return (
-    <div ref={containerRef} className="fixed bottom-6 right-6 z-50">
+    <div
+      ref={containerRef}
+      className={`
+        fixed bottom-6 right-6 z-50
+        transition-all duration-300 ease-in-out
+        ${
+          isVisible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-6 pointer-events-none"
+        }
+      `}
+    >
       {/* ================= FLOATING MENU ================= */}
       {isOpen && (
-        <div className="absolute bottom-20 right-0 flex flex-col items-end gap-3">
-          {socialLinks.map((social, index) => {
+        <div className="absolute bottom-20 right-0 flex flex-col gap-3 mb-2">
+          {socialLinks.map((social) => {
             const Icon = social.icon;
             return (
               <Link
@@ -83,52 +133,40 @@ export default function SocialFloat() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`
-                  w-12 h-12
-                  rounded-full
-                  bg-[var(--card)]
-                  border border-[var(--border)]
+                className="
+                  w-12 h-12 rounded-full
+                  bg-white/95 backdrop-blur-xl
+                  shadow-lg border border-gray-200/50
                   flex items-center justify-center
-                  text-lg
-                  shadow-lg
-                  transition-all
-                  hover:scale-110 hover:shadow-xl
-                  animate-[fadeUp_0.3s_ease-out]
-                  ${social.color}
-                `}
-                style={{
-                  animationDelay: `${index * 60}ms`,
-                }}
+                  text-gray-700
+                  hover:text-white
+                  hover:bg-gradient-to-br hover:from-indigo-500 hover:to-purple-500
+                  transition-all hover:scale-110
+                "
                 aria-label={social.name}
               >
-                <Icon />
+                <Icon className="text-lg" />
               </Link>
             );
           })}
 
-          <div className="h-px bg-[var(--border)] w-8 my-1" />
+          <div className="h-px bg-gray-200 mx-2" />
 
           <button
             onClick={handleShare}
             className="
-              w-12 h-12
-              rounded-full
-              bg-[var(--card)]
-              border border-[var(--border)]
+              w-12 h-12 rounded-full
+              bg-white/95 backdrop-blur-xl
+              shadow-lg border border-gray-200/50
               flex items-center justify-center
-              text-lg
-              shadow-lg
-              transition-all
-              hover:scale-110 hover:shadow-xl
-              hover:bg-blue-600 hover:text-white
-              animate-[fadeUp_0.3s_ease-out]
+              text-gray-700
+              hover:text-white
+              hover:bg-gradient-to-br hover:from-blue-500 hover:to-cyan-500
+              transition-all hover:scale-110
             "
-            style={{
-              animationDelay: `${socialLinks.length * 60}ms`,
-            }}
             aria-label="Share"
           >
-            <FaShareNodes />
+            <FaShareNodes className="text-lg" />
           </button>
 
           <Link
@@ -136,58 +174,63 @@ export default function SocialFloat() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-              w-12 h-12
-              rounded-full
-              bg-[var(--card)]
-              border border-[var(--border)]
+              w-12 h-12 rounded-full
+              bg-white/95 backdrop-blur-xl
+              shadow-lg border border-gray-200/50
               flex items-center justify-center
-              text-lg
-              shadow-lg
-              transition-all
-              hover:scale-110 hover:shadow-xl
-              hover:bg-pink-600 hover:text-white
-              animate-[fadeUp_0.3s_ease-out]
+              text-gray-700
+              hover:text-white
+              hover:bg-gradient-to-br hover:from-pink-500 hover:to-rose-500
+              transition-all hover:scale-110
             "
-            style={{
-              animationDelay: `${(socialLinks.length + 1) * 60}ms`,
-            }}
-            aria-label="Support on Ko-fi"
+            aria-label="Support"
           >
-            <FaHeart />
+            <FaHeart className="text-lg" />
           </Link>
         </div>
       )}
 
       {/* ================= TOGGLE BUTTON ================= */}
       <button
-        type="button"
         onClick={() => setIsOpen((v) => !v)}
-        className={`
-          w-14 h-14
-          rounded-full
-          bg-gradient-to-br from-[var(--accent)] to-purple-600
-          text-white
+        className="
+          w-14 h-14 rounded-full
+          bg-gradient-to-br from-indigo-500 to-purple-500
+          text-white shadow-xl
           flex items-center justify-center
-          shadow-lg hover:shadow-xl
-          transition-all
-          hover:scale-110
-          ${isOpen ? "rotate-180" : "rotate-0"}
-        `}
+          hover:shadow-2xl transition-all hover:scale-105
+        "
         aria-label="Toggle social menu"
       >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {isOpen ? (
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
             strokeWidth={2}
-            d="M5 15l7-7 7 7"
-          />
-        </svg>
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        ) : (
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            />
+          </svg>
+        )}
       </button>
     </div>
   );

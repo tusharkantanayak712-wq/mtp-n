@@ -44,6 +44,7 @@ export async function GET(req) {
         wallet: user.wallet,
         order: user.order,
         userType: user.userType,
+        avatar: user.avatar,
       },
     });
 

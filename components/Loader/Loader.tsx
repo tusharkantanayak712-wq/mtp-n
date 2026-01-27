@@ -10,7 +10,7 @@ interface BlueBuffLoaderProps {
 
 export default function BlueBuffLoader({
   progress = 0,
-  duration = 900,
+  duration = 700,
   onComplete,
   showText = true,
   text = "Summoning Blue Buff",

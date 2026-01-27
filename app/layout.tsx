@@ -7,6 +7,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import ChristmasPopup from "@/components/Seasonal/ChristmasPopup";
 import { Poppins } from "next/font/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import ChatBot from "@/components/SocialFloat/Chatbot";
 
 
 export const metadata: Metadata = {
@@ -67,6 +68,7 @@ export default function RootLayout({
         <main className="pt-20">{children}</main>
         <Footer/>
               <SocialFloat />
+              <ChatBot />
               {/* <div/> */}
         </GoogleOAuthProvider>
 
