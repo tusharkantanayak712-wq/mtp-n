@@ -129,8 +129,7 @@ export async function PATCH(req) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Pricing can only be set for user, member, or admin",
+          message: "Pricing can only be set for user, member, or admin",
         },
         { status: 400 }
       );
@@ -165,20 +164,43 @@ export async function PATCH(req) {
       }
     }
 
-    const updated = await PricingConfig.findOneAndUpdate(
-      { userType },
-      {
-        $set: {
-          slabs,
-          overrides,
-        },
-      },
-      { upsert: true, new: true }
-    );
+    /* ================= LOAD EXISTING ================= */
+
+    const existing =
+      (await PricingConfig.findOne({ userType })) ||
+      new PricingConfig({ userType, slabs: [], overrides: [] });
+
+    /* ================= MERGE OVERRIDES ================= */
+
+    // key = gameSlug::itemSlug
+    const overrideMap = new Map();
+
+    // keep existing overrides
+    for (const o of existing.overrides || []) {
+      overrideMap.set(`${o.gameSlug}::${o.itemSlug}`, o);
+    }
+
+    // apply incoming overrides (replace or add)
+    for (const o of overrides) {
+      overrideMap.set(`${o.gameSlug}::${o.itemSlug}`, {
+        gameSlug: o.gameSlug,
+        itemSlug: o.itemSlug,
+        fixedPrice: o.fixedPrice,
+      });
+    }
+
+    const mergedOverrides = Array.from(overrideMap.values());
+
+    /* ================= SAVE ================= */
+
+    existing.slabs = slabs;
+    existing.overrides = mergedOverrides;
+
+    await existing.save();
 
     return NextResponse.json({
       success: true,
-      data: updated,
+      data: existing,
     });
   } catch (err) {
     console.error("PATCH pricing error:", err);

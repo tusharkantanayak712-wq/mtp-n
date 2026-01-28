@@ -31,7 +31,7 @@ const storyData = [
     title: "MLBB Small/PH",
     image:
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515220/WhatsApp_Image_2026-01-27_at_17.25.55_torxmi.jpg",
-    link: "/games/mlbb-smallphp638",
+    link: "/games/mlbb-smallphp980",
   },
     {
     id: 5,

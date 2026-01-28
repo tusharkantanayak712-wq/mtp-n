@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const API_BASE = "https://game-off-ten.vercel.app/api/v1";
 
@@ -16,82 +16,139 @@ export default function PricingTab({
 }) {
   /* ================= LOCAL STATE ================= */
 
-  const [pricingMode, setPricingMode] = useState("percent"); // percent | fixed
+  const [pricingMode, setPricingMode] = useState("percent");
   const [games, setGames] = useState([]);
   const [itemsByGame, setItemsByGame] = useState({});
   const [fixedGameFilter, setFixedGameFilter] = useState("");
+  const [fixedItemFilter, setFixedItemFilter] = useState("");
+  const [loadingFixedPrices, setLoadingFixedPrices] = useState(false);
+  const [bulkPercent, setBulkPercent] = useState("");
 
   /* ================= FETCH GAMES ================= */
 
   useEffect(() => {
-    const fetchGames = async () => {
+    (async () => {
       try {
         const res = await fetch(`${API_BASE}/games/list`);
         const json = await res.json();
         if (json.success) setGames(json.data.games);
-      } catch (err) {
-        console.error("Failed to fetch games", err);
+      } catch (e) {
+        console.error("Game fetch failed", e);
       }
-    };
-
-    fetchGames();
+    })();
   }, []);
 
   /* ================= FETCH ITEMS ================= */
 
   const fetchItemsForGame = async (gameSlug) => {
-    if (!gameSlug || itemsByGame[gameSlug]) return;
+    if (!gameSlug) return [];
+    if (itemsByGame[gameSlug]) return itemsByGame[gameSlug];
 
     try {
       const res = await fetch(`${API_BASE}/games/${gameSlug}/items`);
       const json = await res.json();
+
       if (json.success) {
-        setItemsByGame((prev) => ({
-          ...prev,
-          [gameSlug]: json.data.items,
-        }));
+        const items = json.data.items || [];
+        setItemsByGame((p) => ({ ...p, [gameSlug]: items }));
+        return items;
       }
-    } catch (err) {
-      console.error("Failed to fetch items", err);
+    } catch (e) {
+      console.error("Item fetch failed", e);
+    }
+
+    return [];
+  };
+
+  /* ================= HYDRATE FIXED PRICING ================= */
+
+  const hydrateFixedPricing = async (gameSlug) => {
+    if (!gameSlug) return;
+
+    setLoadingFixedPrices(true);
+
+    try {
+      const items = await fetchItemsForGame(gameSlug);
+
+      const hydrated = items.map((item) => {
+        const existing = overrides.find(
+          (o) =>
+            o.gameSlug === gameSlug &&
+            o.itemSlug === item.itemSlug
+        );
+
+        return {
+          gameSlug,
+          itemSlug: item.itemSlug,
+          itemName: item.itemName,
+          fixedPrice:
+            existing?.fixedPrice ??
+            Number(item.sellingPrice) ??
+            0,
+        };
+      });
+
+      setOverrides(hydrated);
+      setFixedItemFilter("");
+    } finally {
+      setLoadingFixedPrices(false);
     }
   };
 
-  /* ================= VALIDATION ================= */
+  /* ================= TRIGGERS ================= */
 
-  const isValidSlabs =
-    slabs.length > 0 &&
-    slabs.every(
-      (s) =>
-        Number.isFinite(s.min) &&
-        Number.isFinite(s.max) &&
-        Number.isFinite(s.percent) &&
-        s.min >= 0 &&
-        s.max >= s.min &&
-        s.percent >= 0
-    );
+  useEffect(() => {
+    if (pricingMode !== "fixed") return;
+    if (!fixedGameFilter) return;
 
-  const isValidOverrides =
-    overrides.length > 0 &&
-    overrides.every(
-      (o) =>
-        o.gameSlug &&
-        o.itemSlug &&
-        Number.isFinite(o.fixedPrice) &&
-        o.fixedPrice >= 0
-    );
+    hydrateFixedPricing(fixedGameFilter);
+  }, [pricingMode, pricingType, fixedGameFilter]);
 
-  const canSave =
-    !savingPricing &&
-    ((pricingMode === "percent" && isValidSlabs) ||
-      (pricingMode === "fixed" && isValidOverrides));
+  /* ================= FILTERED VIEW ================= */
 
-  /* ================= DERIVED ================= */
+  const visibleOverrides = useMemo(() => {
+    return overrides.filter((o) => {
+      if (fixedGameFilter && o.gameSlug !== fixedGameFilter) return false;
+      if (fixedItemFilter && o.itemSlug !== fixedItemFilter) return false;
+      return true;
+    });
+  }, [overrides, fixedGameFilter, fixedItemFilter]);
 
-  const visibleOverrides = fixedGameFilter
-    ? overrides.filter((o) => o.gameSlug === fixedGameFilter)
-    : overrides;
+  /* ================= UPDATE SINGLE PRICE ================= */
 
-  /* ================= SLABS ================= */
+  const updateOverridePrice = (i, value) => {
+    const next = [...overrides];
+    next[i].fixedPrice = Math.max(0, Number(value) || 0);
+    setOverrides(next);
+  };
+
+  /* ================= BULK % APPLY ================= */
+
+  const applyBulkPercentage = () => {
+    const percent = Number(bulkPercent);
+    if (!Number.isFinite(percent) || percent === 0) return;
+
+    const multiplier = 1 + percent / 100;
+
+    const next = overrides.map((o) => {
+      if (
+        (fixedGameFilter && o.gameSlug !== fixedGameFilter) ||
+        (fixedItemFilter && o.itemSlug !== fixedItemFilter)
+      ) {
+        return o;
+      }
+
+      return {
+        ...o,
+        fixedPrice: Math.round(o.fixedPrice * multiplier),
+      };
+    });
+
+    setOverrides(next);
+    setBulkPercent("");
+  };
+
+  /* ================= MARKUP SLABS ================= */
 
   const updateSlab = (i, key, value) => {
     const next = [...slabs];
@@ -103,240 +160,193 @@ export default function PricingTab({
     setSlabs([...slabs, { min: 0, max: 0, percent: 0 }]);
 
   const deleteSlab = (i) =>
-    setSlabs(slabs.filter((_, index) => index !== i));
+    setSlabs(slabs.filter((_, idx) => idx !== i));
 
-  /* ================= FIXED PRICES ================= */
+  /* ================= VALIDATION ================= */
 
-  const updateOverride = (i, key, value) => {
-    const next = [...overrides];
-    next[i][key] =
-      key === "fixedPrice" ? Math.max(0, Number(value) || 0) : value;
-    setOverrides(next);
-  };
+  const canSave =
+    !savingPricing &&
+    ((pricingMode === "percent" && slabs.length) ||
+      (pricingMode === "fixed" && overrides.length));
 
-  const addOverride = () =>
-    setOverrides([
-      ...overrides,
-      { gameSlug: "", itemSlug: "", fixedPrice: 0 },
-    ]);
-
-  const deleteOverride = (overrideIndex) =>
-    setOverrides(overrides.filter((_, i) => i !== overrideIndex));
+  /* ================= RENDER ================= */
 
   return (
-    <div className="max-w-6xl space-y-10">
-      {/* ================= HEADER ================= */}
-      <div className="space-y-2">
-        <h2 className="text-2xl font-black tracking-tight">Pricing Rules</h2>
-        <p className="text-sm text-gray/60 max-w-xl">
-          Configure pricing using percentage markups or fixed item prices.
-        </p>
-      </div>
-
-      {/* ================= MODE TOGGLE ================= */}
-      <div className="flex gap-1 bg-black/40 p-1 rounded-full w-fit border border-white/10">
-        <button
-          onClick={() => setPricingMode("percent")}
-          className={`px-4 h-9 rounded-full text-sm font-semibold transition
-            ${
-              pricingMode === "percent"
+    <div className="max-w-6xl space-y-8">
+      {/* MODE */}
+      <div className="flex gap-2">
+        {["percent", "fixed"].map((m) => (
+          <button
+            key={m}
+            onClick={() => setPricingMode(m)}
+            className={`px-4 h-9 rounded-full font-semibold ${
+              pricingMode === m
                 ? "bg-[var(--accent)] text-black"
-                : "text-gray/70 hover:text-white"
+                : "bg-black/30 text-gray/70"
             }`}
-        >
-          % Markup
-        </button>
-        <button
-          onClick={() => setPricingMode("fixed")}
-          className={`px-4 h-9 rounded-full text-sm font-semibold transition
-            ${
-              pricingMode === "fixed"
-                ? "bg-[var(--accent)] text-black"
-                : "text-gray/70 hover:text-white"
-            }`}
-        >
-          Fixed Price
-        </button>
+          >
+            {m === "percent" ? "% Markup" : "Fixed Price"}
+          </button>
+        ))}
       </div>
 
-      {/* ================= USER TYPE ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <span className="text-sm font-semibold text-gray/80">
-          Apply pricing for
-        </span>
-        <select
-          value={pricingType}
-          onChange={(e) => setPricingType(e.target.value)}
-          className="h-10 px-4 rounded-full border border-white/10 bg-black/40
-                     text-sm font-semibold backdrop-blur focus:ring-2
-                     focus:ring-[var(--accent)]/40"
-        >
-          <option value="user">Normal Users</option>
-          <option value="member">Members</option>
-          <option value="admin">Admins</option>
-        </select>
-      </div>
+      {/* USER TYPE */}
+      <select
+        value={pricingType}
+        onChange={(e) => setPricingType(e.target.value)}
+        className="h-10 px-4 rounded-full bg-black/30"
+      >
+        <option value="user">Users</option>
+        <option value="member">Members</option>
+        <option value="admin">Admins</option>
+      </select>
 
-      {/* ================= SLAB PRICING ================= */}
-      {pricingMode === "percent" && (
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-lg">
-          <div className="px-6 py-4 border-b border-white/10">
-            <h3 className="font-semibold">Price Range Markup</h3>
+      {/* ================= MARKUP (REFERENCE IN FIXED) ================= */}
+       {pricingMode === "percent" && (
+      <section className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="flex justify-between mb-3">
+          <h3 className="font-semibold">Price Range Markup</h3>
+          {pricingMode === "fixed" && (
+            <span className="text-xs text-yellow-400">
+              Reference only
+            </span>
+          )}
+        </div>
+
+        {slabs.map((s, i) => (
+          <div key={i} className="grid grid-cols-4 gap-3 mb-2">
+            <input
+              type="number"
+              value={s.min}
+              disabled={pricingMode === "fixed"}
+              onChange={(e) => updateSlab(i, "min", e.target.value)}
+            />
+            <input
+              type="number"
+              value={s.max}
+              disabled={pricingMode === "fixed"}
+              onChange={(e) => updateSlab(i, "max", e.target.value)}
+            />
+            <input
+              type="number"
+              value={s.percent}
+              disabled={pricingMode === "fixed"}
+              onChange={(e) =>
+                updateSlab(i, "percent", e.target.value)
+              }
+            />
+            {pricingMode === "percent" && (
+              <button
+                onClick={() => deleteSlab(i)}
+                className="text-red-400 text-sm"
+              >
+                Delete
+              </button>
+            )}
           </div>
+        ))}
 
-          <table className="w-full min-w-[520px] text-sm">
-            <tbody>
-              {slabs.map((s, i) => (
-                <tr key={i} className="border-t border-white/10">
-                  <td className="px-6 py-3">
-                    <input
-                      type="number"
-                      value={s.min}
-                      onChange={(e) =>
-                        updateSlab(i, "min", e.target.value)
-                      }
-                      className="input h-9"
-                    />
-                  </td>
-                  <td className="px-6 py-3">
-                    <input
-                      type="number"
-                      value={s.max}
-                      onChange={(e) =>
-                        updateSlab(i, "max", e.target.value)
-                      }
-                      className="input h-9"
-                    />
-                  </td>
-                  <td className="px-6 py-3">
-                    <input
-                      type="number"
-                      value={s.percent}
-                      onChange={(e) =>
-                        updateSlab(i, "percent", e.target.value)
-                      }
-                      className="input h-9"
-                    />
-                  </td>
-                  <td className="px-6 py-3 text-right">
-                    <button
-                      onClick={() => deleteSlab(i)}
-                      className="text-xs text-red-400"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {pricingMode === "percent" && (
+          <button
+            onClick={addSlab}
+            className="text-sm text-[var(--accent)] font-semibold"
+          >
+            + Add Range
+          </button>
+        )}
+      </section>
+         )}
 
-          <div className="px-6 py-4">
-            <button
-              onClick={addSlab}
-              className="text-sm font-semibold text-[var(--accent)]"
-            >
-              + Add Price Range
-            </button>
-          </div>
-        </section>
-      )}
-
-      {/* ================= FIXED PRICING ================= */}
+      {/* ================= FIXED MODE ================= */}
       {pricingMode === "fixed" && (
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-lg p-6 space-y-4">
-          {/* FILTER */}
-          <div className="flex gap-3 items-center">
+        <section className="space-y-4">
+          {/* FILTERS */}
+        
             <select
               value={fixedGameFilter}
               onChange={(e) => setFixedGameFilter(e.target.value)}
-              className="h-10 px-4 rounded-lg border border-white/10 bg-black/40
-                         text-sm font-semibold backdrop-blur"
+              className="h-10 px-4 rounded-lg bg-black/30"
             >
-              <option value="">All Games</option>
+              <option value="">Select Game</option>
               {games.map((g) => (
                 <option key={g.gameSlug} value={g.gameSlug}>
                   {g.gameName}
                 </option>
               ))}
             </select>
-
-            {fixedGameFilter && (
-              <button
-                onClick={() => setFixedGameFilter("")}
-                className="text-sm text-gray/60 hover:text-white"
+<br />
+            {/* {fixedGameFilter && (
+              <select
+                value={fixedItemFilter}
+                onChange={(e) => setFixedItemFilter(e.target.value)}
+                className="h-10 px-4 rounded-lg bg-black/30 w-full" 
               >
-                Clear
-              </button>
-            )}
+                <option value="">All Items</option>
+                {overrides.map((o) => (
+                  <option key={o.itemSlug} value={o.itemSlug}>
+                    {o.itemName || o.itemSlug}
+                  </option>
+                ))}
+              </select>
+            )} */}
+         
+
+          {/* BULK % APPLY */}
+          <div className="flex items-center gap-3 bg-black/20 p-3 rounded-lg">
+            <span className="text-sm font-semibold text-gray/70">
+              Adjust Price %
+            </span>
+            <input
+              type="number"
+              placeholder="+10 or -5"
+              value={bulkPercent}
+              onChange={(e) => setBulkPercent(e.target.value)}
+              className="w-24 h-9 px-3 rounded-md bg-black/40 border border-white/10"
+            />
+            <button
+              onClick={applyBulkPercentage}
+              disabled={!bulkPercent}
+              className="h-9 px-4 rounded-md bg-[var(--accent)] text-black font-semibold disabled:opacity-40"
+            >
+              Apply
+            </button>
           </div>
 
-          {/* LIST */}
-          {visibleOverrides.map((o) => {
-            const realIndex = overrides.indexOf(o);
-
-            return (
+          {/* TABLE */}
+          {loadingFixedPrices ? (
+            <p className="text-sm text-gray/60">Loading prices…</p>
+          ) : (
+            visibleOverrides.map((o) => (
               <div
-                key={realIndex}
-                className="grid gap-3 sm:grid-cols-4 rounded-xl border border-white/10 bg-black/30 p-4"
+                key={o.itemSlug}
+                className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-black/20"
               >
-                <input
-                  placeholder="Game"
-                  value={o.gameSlug}
-                  className="input h-9"
-                  disabled
-                />
-
-                <input
-                  placeholder="Item"
-                  value={o.itemSlug}
-                  className="input h-9"
-                  disabled
-                />
-
+                <input value={o.gameSlug} disabled />
+                <input value={o.itemName || o.itemSlug} disabled />
                 <input
                   type="number"
                   value={o.fixedPrice}
                   onChange={(e) =>
-                    updateOverride(
-                      realIndex,
-                      "fixedPrice",
+                    updateOverridePrice(
+                      overrides.findIndex(
+                        (x) => x.itemSlug === o.itemSlug
+                      ),
                       e.target.value
                     )
                   }
-                  className="input h-9"
                 />
-
-                <button
-                  onClick={() => deleteOverride(realIndex)}
-                  className="text-xs text-red-400 text-right"
-                >
-                  Delete
-                </button>
               </div>
-            );
-          })}
-
-          <button
-            onClick={addOverride}
-            className="text-sm font-semibold text-[var(--accent)]"
-          >
-            + Add Fixed Price
-          </button>
+            ))
+          )}
         </section>
       )}
 
-      {/* ================= SAVE ================= */}
+      {/* SAVE */}
       <div className="flex justify-end">
         <button
           onClick={onSave}
           disabled={!canSave}
-          className={`h-11 px-7 rounded-lg text-sm font-semibold transition
-            ${
-              canSave
-                ? "bg-[var(--accent)] text-black"
-                : "bg-white/10 text-gray/40 cursor-not-allowed"
-            }`}
+          className="px-6 h-10 rounded-lg bg-[var(--accent)] text-black font-semibold"
         >
           {savingPricing ? "Saving..." : "Save Pricing"}
         </button>
