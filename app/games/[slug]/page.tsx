@@ -25,30 +25,34 @@ export default function GameDetailPage() {
   const [activeItem, setActiveItem] = useState<any>(null);
   const [redirecting, setRedirecting] = useState(false);
   const [viewMode, setViewMode] = useState<"slider" | "grid">("grid");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   /** ✅ detect weekly pass */
   const isWeeklyPass = searchParams.get("type") === "weekly-pass";
-const isBGMI =
-  game?.gameName?.toLowerCase() === "pubg mobile" ||
-  game?.gameName?.toLowerCase() === "bgmi" ||
-  slug?.toString().startsWith("bgmi") ||
-  slug?.toString().startsWith("pubg");
+  const isBGMI =
+    game?.gameName?.toLowerCase() === "pubg mobile" ||
+    game?.gameName?.toLowerCase() === "bgmi" ||
+    slug?.toString().startsWith("bgmi") ||
+    slug?.toString().startsWith("pubg");
 
-const isGenshin =
-  game?.gameName?.toLowerCase().includes("genshin") ||
-  slug?.toString().startsWith("genshin-impact");
+  const isGenshin =
+    game?.gameName?.toLowerCase().includes("genshin") ||
+    slug?.toString().startsWith("genshin-impact");
   const isHOK =
-  game?.gameName?.toLowerCase().includes("honor") ||
-  slug?.toString().startsWith("honor-of-kings");
+    game?.gameName?.toLowerCase().includes("honor") ||
+    slug?.toString().startsWith("honor-of-kings");
 
   const isWuwa =
-  slug?.toString().toLowerCase().startsWith("wuthering-of-waves");
-const isWWM =
-  slug?.toString().toLowerCase().startsWith("where-winds-meet");
+    slug?.toString().toLowerCase().startsWith("wuthering-of-waves");
+  const isWWM =
+    slug?.toString().toLowerCase().startsWith("where-winds-meet");
 
   /* ================= FETCH GAME ================= */
   useEffect(() => {
     const token = sessionStorage.getItem("token");
+    setLoading(true);
+    setError(null);
 
     fetch(`/api/games/${slug}`, {
       headers: {
@@ -57,6 +61,12 @@ const isWWM =
     })
       .then((res) => res.json())
       .then((data) => {
+        if (!data.data || !data.data.itemId || data.data.itemId.length === 0) {
+          setError("No data found for this game");
+          setLoading(false);
+          return;
+        }
+
         const sortedItems = [...data.data.itemId].sort(
           (a, b) => a.sellingPrice - b.sellingPrice
         );
@@ -68,6 +78,12 @@ const isWWM =
 
         /** ✅ default active item */
         setActiveItem(sortedItems[0]);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching game:", err);
+        setError("Failed to load game data");
+        setLoading(false);
       });
   }, [slug]);
 
@@ -86,8 +102,54 @@ const isWWM =
     }
   }, [game, isWeeklyPass]);
 
-  if (!game || !activeItem) {
+  if (loading) {
     return <Loader />;
+  }
+
+  if (error || !game || !activeItem) {
+    return (
+      <section className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          {/* Icon */}
+          <div className="mb-6 flex justify-center">
+            <div className="relative">
+              <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full" />
+              <svg
+                className="w-24 h-24 text-blue-400/60 relative"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h2 className="text-2xl font-bold mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            No items Found
+          </h2>
+
+          {/* Message */}
+          <p className="text-gray-400 mb-8">
+            {error || "We couldn't find any packages for this game. Please try again later or contact support."}
+          </p>
+
+          {/* Action Button */}
+          <button
+            onClick={() => router.push("/")}
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105"
+          >
+            Back to Home
+          </button>
+        </div>
+      </section>
+    );
   }
 
   /* ================= ITEMS ================= */
@@ -128,17 +190,17 @@ const isWWM =
       dummy: item.dummyPrice?.toString() || "",
       image: item.itemImageId?.image || "",
     });
-const basePath = isBGMI
-  ? `/games/pubg/${slug}/buy`
-  : isGenshin
-  ? `/games/gensin/${slug}/buy`
-  : isHOK
-  ? `/games/hok/${slug}/buy`
-  : isWuwa
-  ? `/games/wwow/${slug}/buy`
-   : isWWM
-  ? `/games/wwm/${slug}/buy`
-  : `/games/${slug}/buy`;
+    const basePath = isBGMI
+      ? `/games/pubg/${slug}/buy`
+      : isGenshin
+        ? `/games/gensin/${slug}/buy`
+        : isHOK
+          ? `/games/hok/${slug}/buy`
+          : isWuwa
+            ? `/games/wwow/${slug}/buy`
+            : isWWM
+              ? `/games/wwm/${slug}/buy`
+              : `/games/${slug}/buy`;
 
 
 

@@ -63,46 +63,33 @@ export default function RootLayout({
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
           <Header />
 
-               {/* <div className="snow" />
+          {/* <div className="snow" />
   <span className="big-snow"></span>
   <span className="big-snow"></span>
   <span className="big-snow"></span>  */}
-  {/* <div className="hearts" />
-
-      <span className="fall-item medium" style={{ left: "10%", animationDuration: "22s" }}>💗</span>
-      <span className="fall-item big" style={{ left: "35%", animationDuration: "28s" }}>💖</span>
-      <span className="fall-item small" style={{ left: "65%", animationDuration: "24s" }}>💞</span>
-
-      <span className="fall-item medium" style={{ left: "20%", animationDuration: "26s" }}>🌹</span>
-      <span className="fall-item small" style={{ left: "75%", animationDuration: "30s" }}>🌸</span>
-
-      <span className="fall-item big" style={{ left: "50%", animationDuration: "32s" }}>🧸</span>
-
-      <span className="fall-item medium" style={{ left: "85%", animationDuration: "27s" }}>💍</span>
-
-      <span className="fall-item small" style={{ left: "45%", animationDuration: "25s" }}>✨</span> */}
+          {/* <div className="hearts" />
 
           {/* <ChristmasPopup />  */}
-          <ValentineEffect />
+          {/* <ValentineEffect />
 
-          <ValentinePopup />
+          <ValentinePopup /> */}
 
           <main className="pt-20">{children}</main>
           <Footer />
           <SocialFloat />
           <ChatBot />
-          <div/>
+          <div />
         </GoogleOAuthProvider>
 
 
-{/* OneSignal SDK */}
-<Script
-  src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
-  defer
-/>
+        {/* OneSignal SDK */}
+        <Script
+          src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+          defer
+        />
 
-<Script id="onesignal-init" strategy="afterInteractive">
-  {`
+        <Script id="onesignal-init" strategy="afterInteractive">
+          {`
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
@@ -114,7 +101,7 @@ export default function RootLayout({
       });
     });
   `}
-</Script>
+        </Script>
 
       </body>
       <GoogleAnalytics gaId="G-CKCKWLGJ9N" />

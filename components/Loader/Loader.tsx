@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface BlueBuffLoaderProps {
   progress?: number;
@@ -13,233 +14,346 @@ export default function BlueBuffLoader({
   duration = 700,
   onComplete,
   showText = true,
-  text = "Summoning Blue Buff",
+  text = "Loading",
 }: BlueBuffLoaderProps) {
   const [internalProgress, setInternalProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
 
-  const rafRef = useRef<number | null>(null);
-  const startRef = useRef<number | null>(null);
-
-  /* ================= PROGRESS ENGINE ================= */
   useEffect(() => {
     if (progress > 0) {
       setInternalProgress(progress);
-      if (progress >= 100) finish();
+      if (progress >= 100) {
+        setIsComplete(true);
+        setTimeout(() => {
+          setIsVisible(false);
+          onComplete?.();
+        }, 800);
+      }
       return;
     }
 
-    const animate = (time: number) => {
-      if (!startRef.current) startRef.current = time;
-      const elapsed = time - startRef.current;
-
+    const startTime = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
       const t = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 4);
+      const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
       setInternalProgress(eased * 100);
 
-      if (t < 1) {
-        rafRef.current = requestAnimationFrame(animate);
-      } else {
-        finish();
+      if (t >= 1) {
+        clearInterval(interval);
+        setIsComplete(true);
+        setTimeout(() => {
+          setIsVisible(false);
+          onComplete?.();
+        }, 800);
       }
-    };
+    }, 16);
 
-    rafRef.current = requestAnimationFrame(animate);
+    return () => clearInterval(interval);
+  }, [progress, duration, onComplete]);
 
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [progress, duration]);
-
-  const finish = () => {
-    setInternalProgress(100);
-    setIsComplete(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-      onComplete?.();
-    }, 700);
-  };
-
-  /* ================= COLOR LOGIC ================= */
-  const getProgressColor = (pct: number) => {
-    if (pct < 25) return "#3b82f6";
-    if (pct < 50) return "#22d3ee";
-    if (pct < 75) return "#8b5cf6";
-    return "#10b981";
-  };
-
-  const pulseIntensity = 0.3 + internalProgress / 220;
-  const activeParticles = Math.floor(internalProgress / 20);
-
-  if (!isAnimating) return null;
+  if (!isVisible) return null;
 
   return (
-    <div
-      className="
-        fixed inset-0 z-50 flex flex-col items-center justify-center
-        bg-[radial-gradient(circle_at_center,#0b1220,#020617)]
-      "
-    >
-      {/* ================= CORE ================= */}
-      <div className="relative w-48 h-48">
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1729 100%)",
+        }}
+      >
+        {/* Animated background gradient waves */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            background: [
+              "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
+              "radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%)",
+              "radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
+            ],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
 
-        {/* GLASS DEPTH RING */}
-        <div className="absolute inset-4 rounded-full bg-white/5 backdrop-blur-md border border-white/10" />
-
-        {/* ================= HEX RING ================= */}
-        <div
-          className="absolute inset-0 animate-spin"
-          style={{ animationDuration: `${4 - internalProgress / 60}s` }}
-        >
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <defs>
-              <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={getProgressColor(internalProgress)} />
-                <stop offset="100%" stopColor="#38bdf8" />
-              </linearGradient>
-            </defs>
-
-            <polygon
-              points="50,6 88,28 88,72 50,94 12,72 12,28"
-              fill="none"
-              stroke="url(#hexGrad)"
-              strokeWidth={2.5 + internalProgress / 50}
-              strokeDasharray="18 10"
-              opacity={isComplete ? 1 : 0.7}
-            />
-          </svg>
-        </div>
-
-        {/* ================= ORBIT PARTICLES ================= */}
-        {[0, 72, 144, 216, 288].map((deg, i) => {
-          const active = i < activeParticles;
-          return (
-            <div
-              key={i}
-              className="absolute inset-0"
-              style={{
-                animation: active
-                  ? `spin ${2.2 + i * 0.25}s linear infinite`
-                  : "none",
-              }}
-            >
-              <div
-                className="absolute w-3 h-3 rounded-full"
-                style={{
-                  top: "50%",
-                  left: "50%",
-                  transform: `
-                    rotate(${deg}deg)
-                    translateX(${36 + internalProgress / 18}px)
-                    translateY(-50%)
-                  `,
-                  background: getProgressColor(internalProgress),
-                  opacity: active ? 1 : 0.15,
-                  boxShadow: active
-                    ? `0 0 14px ${getProgressColor(internalProgress)}`
-                    : "none",
-                }}
-              />
-            </div>
-          );
-        })}
-
-        {/* ================= CENTER CORE ================= */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-24 h-24">
-
-            {/* ENERGY SWIRL */}
-            <div
-              className="absolute inset-1 rounded-full animate-spin blur-sm"
-              style={{
-                background: `conic-gradient(
-                  from 0deg,
-                  transparent,
-                  ${getProgressColor(internalProgress)},
-                  transparent
-                )`,
-                animationDuration: "3s",
-                opacity: 0.6,
-              }}
-            />
-
-            {/* AURA */}
-            <div
-              className="absolute inset-0 rounded-full blur-xl"
-              style={{
-                background: getProgressColor(internalProgress),
-                opacity: pulseIntensity,
-                transform: `scale(${1 + internalProgress / 480})`,
-              }}
-            />
-
-            {/* SHIELD */}
-            <svg viewBox="0 0 64 64" className="relative w-full h-full">
-              <path
-                d="M32 4 L8 14 L8 30 Q8 45 32 60 Q56 45 56 30 L56 14 Z"
-                fill={getProgressColor(internalProgress)}
-                opacity="0.95"
-              />
-            </svg>
-
-            {/* TEXT / CHECK */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {!isComplete ? (
-                <span
-                  className="font-extrabold text-xl"
-                  style={{
-                    color: "#e5e7eb",
-                    textShadow: `0 0 12px ${getProgressColor(internalProgress)}`,
-                  }}
-                >
-                  {Math.round(internalProgress)}%
-                </span>
-              ) : (
-                <svg width="28" height="28" viewBox="0 0 24 24">
-                  <path
-                    d="M20 6L9 17L4 12"
-                    stroke="#10b981"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* COMPLETION SHOCKWAVE */}
-        {isComplete && (
-          <div className="absolute inset-0 rounded-full border-2 border-emerald-400 animate-ping" />
-        )}
-      </div>
-
-      {/* ================= TEXT ================= */}
-      {showText && (
-        <div className="mt-10 text-center">
-          <p
-            className="text-sm font-semibold tracking-[0.25em] uppercase"
+        {/* Floating particles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full"
             style={{
-              color: getProgressColor(internalProgress),
-              textShadow: `0 0 14px ${getProgressColor(internalProgress)}`,
+              background: `hsl(${200 + i * 15}, 80%, 60%)`,
+              left: `${10 + i * 7}%`,
+              top: `${20 + (i % 3) * 30}%`,
+            }}
+            animate={{
+              y: [-20, -100],
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0],
+            }}
+            transition={{
+              duration: 3 + i * 0.2,
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: "easeOut",
+            }}
+          />
+        ))}
+
+        {/* Main loader container */}
+        <div className="relative">
+          {/* Outer glow ring */}
+          <motion.div
+            className="absolute inset-0 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{
+              background: "radial-gradient(circle, rgba(59, 130, 246, 0.4), rgba(139, 92, 246, 0.2))",
+              width: "280px",
+              height: "280px",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+
+          {/* Rotating gradient ring */}
+          <motion.div
+            className="absolute rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              width: "200px",
+              height: "200px",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              background: "conic-gradient(from 0deg, transparent, #3b82f6, #8b5cf6, transparent)",
+              opacity: 0.6,
+            }}
+          />
+
+          {/* Inner rotating ring (opposite direction) */}
+          <motion.div
+            className="absolute rounded-full"
+            animate={{ rotate: -360 }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              width: "160px",
+              height: "160px",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              background: "conic-gradient(from 180deg, transparent, #06b6d4, #3b82f6, transparent)",
+              opacity: 0.5,
+            }}
+          />
+
+          {/* Liquid morphing orb */}
+          <motion.div
+            className="relative rounded-full backdrop-blur-xl"
+            animate={{
+              borderRadius: [
+                "60% 40% 30% 70% / 60% 30% 70% 40%",
+                "30% 60% 70% 40% / 50% 60% 30% 60%",
+                "60% 40% 30% 70% / 60% 30% 70% 40%",
+              ],
+              scale: isComplete ? [1, 1.2, 0] : [0.95, 1.05, 0.95],
+            }}
+            transition={{
+              borderRadius: {
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              },
+              scale: isComplete
+                ? { duration: 0.6, times: [0, 0.5, 1] }
+                : { duration: 2, repeat: Infinity, ease: "easeInOut" },
+            }}
+            style={{
+              width: "140px",
+              height: "140px",
+              background: "linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.3))",
+              border: "2px solid rgba(255, 255, 255, 0.1)",
+              boxShadow: "0 0 60px rgba(59, 130, 246, 0.4), inset 0 0 40px rgba(139, 92, 246, 0.2)",
             }}
           >
-            {text}
-            {!isComplete && <span className="ml-1 animate-pulse">…</span>}
-          </p>
+            {/* Progress indicator */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center"
+              >
+                {!isComplete ? (
+                  <motion.div
+                    key="progress"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <motion.span
+                      className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent"
+                      animate={{ opacity: [0.7, 1, 0.7] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      {Math.round(internalProgress)}
+                    </motion.span>
+                    <span className="text-xl font-light text-blue-300 ml-1">%</span>
+                  </motion.div>
+                ) : (
+                  <motion.svg
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    className="text-emerald-400"
+                  >
+                    <motion.path
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M20 6L9 17l-5-5"
+                    />
+                  </motion.svg>
+                )}
+              </motion.div>
+            </div>
 
-          <p className="text-xs opacity-70 mt-2">
-            {internalProgress < 30 && "Initializing mana core"}
-            {internalProgress >= 30 && internalProgress < 60 && "Empowering buff"}
-            {internalProgress >= 60 && internalProgress < 90 && "Almost ready"}
-            {internalProgress >= 90 && !isComplete && "Finalizing"}
-            {isComplete && "Blue Buff Ready"}
-          </p>
+            {/* Inner glow pulse */}
+            <motion.div
+              className="absolute inset-4 rounded-full blur-xl"
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                scale: [0.8, 1, 0.8],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                background: "radial-gradient(circle, rgba(59, 130, 246, 0.6), transparent)",
+              }}
+            />
+          </motion.div>
         </div>
-      )}
-    </div>
+
+        {/* Loading text */}
+        {showText && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-16 text-center"
+          >
+            <motion.p
+              className="text-lg font-medium tracking-wider uppercase"
+              style={{
+                background: "linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6)",
+                backgroundSize: "200% 100%",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {text}
+              {!isComplete && (
+                <motion.span
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  ...
+                </motion.span>
+              )}
+            </motion.p>
+
+            {/* Status text */}
+            <motion.p
+              className="text-sm text-blue-300/60 mt-3 font-light"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {internalProgress < 30 && "Initializing"}
+              {internalProgress >= 30 && internalProgress < 60 && "Processing"}
+              {internalProgress >= 60 && internalProgress < 90 && "Almost there"}
+              {internalProgress >= 90 && !isComplete && "Finalizing"}
+              {isComplete && "Complete"}
+            </motion.p>
+          </motion.div>
+        )}
+
+        {/* Completion burst effect */}
+        {isComplete && (
+          <>
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-2 h-2 rounded-full bg-blue-400"
+                initial={{
+                  x: 0,
+                  y: 0,
+                  opacity: 1,
+                  scale: 1,
+                }}
+                animate={{
+                  x: Math.cos((i * Math.PI * 2) / 8) * 150,
+                  y: Math.sin((i * Math.PI * 2) / 8) * 150,
+                  opacity: 0,
+                  scale: 0,
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeOut",
+                }}
+                style={{
+                  left: "50%",
+                  top: "50%",
+                }}
+              />
+            ))}
+          </>
+        )}
+      </motion.div>
+    </AnimatePresence>
   );
 }
