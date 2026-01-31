@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FiFilter, FiX, FiSearch, FiGrid, FiList } from "react-icons/fi";
@@ -16,8 +17,7 @@ export default function GamesPage() {
   const [games, setGames] = useState([]);
 
   const [featuredGames, setFeaturedGames] = useState([]);
-    const [mlbbVeriant, setMlbbVeriant] = useState([]);
-
+  const [mlbbVeriant, setMlbbVeriant] = useState([]);
 
   const [otts, setOtts] = useState(null);
   const [memberships, setMemberships] = useState(null);
@@ -33,10 +33,6 @@ export default function GamesPage() {
   const WEEKLY_PASS_SLUG = "mobile-legends988";
 
   const outOfStockGames = [
-    // "Genshin Impact",
-    // "Honor Of Kings",
-    // "Wuthering of Waves",
-    // "Where Winds Meet",
     "mobile-legends-backup826"
   ];
 
@@ -58,8 +54,8 @@ export default function GamesPage() {
         if (!mounted) return;
 
         let fetchedGames = json?.data?.games || [];
-let fetchedFeatured = json?.data?.featuredGames || [];
-let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
+        let fetchedFeatured = json?.data?.featuredGames || [];
+        let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
 
         console.log("Fetched Games:", fetchedGames);
 
@@ -73,7 +69,6 @@ let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
             (g) =>
               g.gameSlug === WEEKLY_PASS_SLUG &&
               g.gameName === "Weekly Pass",
-
           );
 
           if (!alreadyExists) {
@@ -139,47 +134,48 @@ let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
 
   /* ================= CATEGORY PROCESSING ================= */
   const processedFeaturedGames = useMemo(() => {
-  let list = [...featuredGames];
+    let list = [...featuredGames];
 
-  if (hideOOS) {
-    list = list.filter((g) => !isOutOfStock(g.gameName));
-  }
-     if (searchQuery.trim()) {
+    if (hideOOS) {
+      list = list.filter((g) => !isOutOfStock(g.gameName));
+    }
+    if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter((g) =>
         g.gameName.toLowerCase().includes(q)
       );
     }
 
-  if (sort === "az") {
-    list.sort((a, b) => a.gameName.localeCompare(b.gameName));
-  } else if (sort === "za") {
-    list.sort((a, b) => b.gameName.localeCompare(a.gameName));
-  }
+    if (sort === "az") {
+      list.sort((a, b) => a.gameName.localeCompare(b.gameName));
+    } else if (sort === "za") {
+      list.sort((a, b) => b.gameName.localeCompare(a.gameName));
+    }
 
-  return list;
-}, [featuredGames, hideOOS, sort, isOutOfStock,searchQuery]);
+    return list;
+  }, [featuredGames, hideOOS, sort, isOutOfStock, searchQuery]);
+
   const processedMlbbGames = useMemo(() => {
-  let list = [...mlbbVeriant];
+    let list = [...mlbbVeriant];
 
-  if (hideOOS) {
-    list = list.filter((g) => !isOutOfStock(g.gameName));
-  }
-     if (searchQuery.trim()) {
+    if (hideOOS) {
+      list = list.filter((g) => !isOutOfStock(g.gameName));
+    }
+    if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter((g) =>
         g.gameName.toLowerCase().includes(q)
       );
     }
 
-  if (sort === "az") {
-    list.sort((a, b) => a.gameName.localeCompare(b.gameName));
-  } else if (sort === "za") {
-    list.sort((a, b) => b.gameName.localeCompare(a.gameName));
-  }
+    if (sort === "az") {
+      list.sort((a, b) => a.gameName.localeCompare(b.gameName));
+    } else if (sort === "za") {
+      list.sort((a, b) => b.gameName.localeCompare(a.gameName));
+    }
 
-  return list;
-}, [mlbbVeriant, hideOOS, sort, isOutOfStock,searchQuery]);
+    return list;
+  }, [mlbbVeriant, hideOOS, sort, isOutOfStock, searchQuery]);
 
   /* ================= HANDLERS ================= */
   const clearFilters = () => {
@@ -189,182 +185,201 @@ let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
 
   /* ================= RENDER ================= */
   return (
-    <section className="min-h-screen px-4 py-10 bg-[var(--background)] text-[var(--foreground)]">
+    <section className="min-h-screen px-4 py-7 bg-[var(--background)] text-[var(--foreground)]">
       {/* ================= TOP BAR ================= */}
-    <div className="max-w-7xl mx-auto mb-8 px-4">
-  <div className="flex flex-col sm:flex-row gap-4 items-center">
-    
-    {/* ================= SEARCH (65%) ================= */}
-    <div className="relative w-full sm:w-[65%]">
-      <FiSearch
-        className="absolute left-3.5 top-1/2 -translate-y-1/2
-        text-[var(--muted)] text-sm"
-      />
-
-      <input
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Search games..."
-        className="
-          w-full
-          pl-10 pr-4 py-2.5
-          rounded-xl
-          bg-[var(--card)]
-          border border-[var(--border)]
-          text-sm
-          transition
-          focus:outline-none
-          focus:border-[var(--accent)]
-          focus:ring-2 focus:ring-[var(--accent)]/20
-        "
-      />
-    </div>
-
-    {/* ================= CONTROLS (35%) ================= */}
-    <div className="flex w-full sm:w-[35%] justify-end gap-2">
-      
-      {/* GRID / LIST TOGGLE */}
-      <div
-        className="flex p-1 rounded-xl
-        bg-[var(--card)]
-        border border-[var(--border)]"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-7xl mx-auto mb-8 px-4"
       >
-        <button
-          onClick={() => setViewMode("grid")}
-          className={`p-2 rounded-lg transition
-            ${viewMode === "grid"
-              ? "bg-[var(--accent)] text-white shadow"
-              : "text-[var(--muted)] hover:text-[var(--foreground)]"}
-          `}
-        >
-          <FiGrid size={16} />
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          {/* ================= SEARCH (65%) ================= */}
+          <div className="relative w-full sm:w-[65%]">
+            <FiSearch
+              className="absolute left-3.5 top-1/2 -translate-y-1/2
+              text-[var(--muted)] text-sm"
+            />
 
-        <button
-          onClick={() => setViewMode("list")}
-          className={`p-2 rounded-lg transition
-            ${viewMode === "list"
-              ? "bg-[var(--accent)] text-white shadow"
-              : "text-[var(--muted)] hover:text-[var(--foreground)]"}
-          `}
-        >
-          <FiList size={16} />
-        </button>
-      </div>
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search games..."
+              className="
+                w-full
+                pl-10 pr-4 py-2.5
+                rounded-xl
+                bg-[var(--card)]
+                border border-[var(--border)]
+                text-sm
+                transition
+                focus:outline-none
+                focus:border-[var(--accent)]
+                focus:ring-2 focus:ring-[var(--accent)]/20
+              "
+            />
+          </div>
 
-      {/* CLEAR FILTER */}
-      {activeFilterCount > 0 && (
-        <button
-          onClick={clearFilters}
-          className="
-            p-2 rounded-xl
-            border border-red-500/40
-            text-red-400
-            hover:bg-red-500/10
-            transition
-          "
-          title="Clear filters"
+          {/* ================= CONTROLS (35%) ================= */}
+          <div className="flex w-full sm:w-[35%] justify-end gap-2">
+            {/* GRID / LIST TOGGLE */}
+            <div
+              className="flex p-1 rounded-xl
+              bg-[var(--card)]
+              border border-[var(--border)]"
+            >
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setViewMode("grid")}
+                className={`p-2 rounded-lg transition
+                  ${viewMode === "grid"
+                    ? "bg-[var(--accent)] text-white shadow"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
+              >
+                <FiGrid size={16} />
+              </motion.button>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setViewMode("list")}
+                className={`p-2 rounded-lg transition
+                  ${viewMode === "list"
+                    ? "bg-[var(--accent)] text-white shadow"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
+              >
+                <FiList size={16} />
+              </motion.button>
+            </div>
+
+            {/* CLEAR FILTER */}
+            {activeFilterCount > 0 && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={clearFilters}
+                className="
+                  p-2 rounded-xl
+                  border border-red-500/40
+                  text-red-400
+                  hover:bg-red-500/10
+                  transition
+                "
+                title="Clear filters"
+              >
+                <FiX size={16} />
+              </motion.button>
+            )}
+
+            {/* FILTER BUTTON */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowFilter(true)}
+              className="
+                relative p-2.5 rounded-xl
+                border border-[var(--border)]
+                bg-[var(--card)]
+                hover:border-[var(--accent)]
+                transition
+              "
+              title="Filters"
+            >
+              <FiFilter size={16} />
+
+              {activeFilterCount > 0 && (
+                <span
+                  className="
+                    absolute -top-1.5 -right-1.5
+                    min-w-[18px] h-[18px]
+                    flex items-center justify-center
+                    text-[10px]
+                    bg-[var(--accent)]
+                    text-white
+                    rounded-full
+                    px-1
+                  "
+                >
+                  {activeFilterCount}
+                </span>
+              )}
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ================= FEATURED GAMES ================= */}
+      {processedFeaturedGames.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="max-w-7xl mx-auto mb-14"
         >
-          <FiX size={16} />
-        </button>
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-2xl font-bold">Featured Games</h2>
+            <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] to-transparent" />
+            <span className="text-sm text-[var(--muted)]">
+              {processedFeaturedGames.length}
+            </span>
+          </div>
+
+          {viewMode === "grid" ? (
+            <GameGrid
+              games={processedFeaturedGames}
+              isOutOfStock={isOutOfStock}
+            />
+          ) : (
+            <GameList
+              games={processedFeaturedGames}
+              isOutOfStock={isOutOfStock}
+            />
+          )}
+        </motion.div>
       )}
 
-      {/* FILTER BUTTON */}
-      <button
-        onClick={() => setShowFilter(true)}
-        className="
-          relative p-2.5 rounded-xl
-          border border-[var(--border)]
-          bg-[var(--card)]
-          hover:border-[var(--accent)]
-          transition
-        "
-        title="Filters"
-      >
-        <FiFilter size={16} />
+      {/* ================= MLBB VARIANT ================= */}
+      {processedMlbbGames.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="max-w-7xl mx-auto mb-14"
+        >
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-2xl font-bold">MLBB Variant</h2>
+            <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] to-transparent" />
+            <span className="text-sm text-[var(--muted)]">
+              {processedMlbbGames.length}
+            </span>
+          </div>
 
-        {activeFilterCount > 0 && (
-          <span
-            className="
-              absolute -top-1.5 -right-1.5
-              min-w-[18px] h-[18px]
-              flex items-center justify-center
-              text-[10px]
-              bg-[var(--accent)]
-              text-white
-              rounded-full
-              px-1
-            "
-          >
-            {activeFilterCount}
-          </span>
-        )}
-      </button>
-    </div>
-  </div>
-</div>
-
-
-      {/* ================= CATEGORIES ================= */}
-    
-
-{processedFeaturedGames.length > 0 && (
-  <div className="max-w-7xl mx-auto mb-14">
-    <div className="flex items-center gap-4 mb-6">
-      <h2 className="text-2xl font-bold">
-        Featured Games
-      </h2>
-      <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] to-transparent" />
-      <span className="text-sm text-[var(--muted)]">
-        {processedFeaturedGames.length}
-      </span>
-    </div>
-
-    {viewMode === "grid" ? (
-      <GameGrid
-        games={processedFeaturedGames}
-        isOutOfStock={isOutOfStock}
-      />
-    ) : (
-      <GameList
-        games={processedFeaturedGames}
-        isOutOfStock={isOutOfStock}
-      />
-    )}
-  </div>
-)}
-
-{processedMlbbGames.length > 0 && (
-  <div className="max-w-7xl mx-auto mb-14">
-    <div className="flex items-center gap-4 mb-6">
-      <h2 className="text-2xl font-bold">
-        MLBB Veriant
-      </h2>
-      <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] to-transparent" />
-      <span className="text-sm text-[var(--muted)]">
-        {processedMlbbGames.length}
-      </span>
-    </div>
-
-    {viewMode === "grid" ? (
-      <GameGrid
-        games={processedMlbbGames}
-        isOutOfStock={isOutOfStock}
-      />
-    ) : (
-      <GameList
-        games={processedMlbbGames}
-        isOutOfStock={isOutOfStock}
-      />
-    )}
-  </div>
-)}
+          {viewMode === "grid" ? (
+            <GameGrid
+              games={processedMlbbGames}
+              isOutOfStock={isOutOfStock}
+            />
+          ) : (
+            <GameList
+              games={processedMlbbGames}
+              isOutOfStock={isOutOfStock}
+            />
+          )}
+        </motion.div>
+      )}
 
       {/* ================= ALL GAMES ================= */}
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4">
-          All Games ({processedGames.length})
-        </h2>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="max-w-7xl mx-auto mb-14"
+      >
+        <div className="flex items-center gap-4 mb-6">
+          <h2 className="text-2xl font-bold">All Games</h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] to-transparent" />
+          <span className="text-sm text-[var(--muted)]">
+            {processedGames.length}
+          </span>
+        </div>
 
         {viewMode === "grid" ? (
           <GameGrid
@@ -377,38 +392,42 @@ let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
             isOutOfStock={isOutOfStock}
           />
         )}
-      </div>
+      </motion.div>
 
-      
+      {/* ================= OTT SECTION ================= */}
       {otts?.items?.length > 0 && (
-        <section className="max-w-7xl mx-auto mb-16 px-4">
-       
-
-          {/* GRID */}
-   <ServiceGridSection
-  title={otts.title}
-  total={otts.total}
-  items={otts.items}
-  hrefPrefix="/games/ott"
-/>
-
-        </section>
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="max-w-7xl mx-auto mb-16 px-4"
+        >
+          <ServiceGridSection
+            title={otts.title}
+            total={otts.total}
+            items={otts.items}
+            hrefPrefix="/games/ott"
+          />
+        </motion.section>
       )}
-
 
       {/* ================= MEMBERSHIP SECTION ================= */}
       {memberships?.items?.length > 0 && (
-        <section className="max-w-7xl mx-auto mb-16 px-4">
-        <ServiceGridSection
-  title={memberships.title}
-  total={memberships.total}
-  items={memberships.items}
-  hrefPrefix="/games/membership"
-  showCategory={false}
-  ctaText="View Details →"
-/>
-
-        </section>
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="max-w-7xl mx-auto mb-16 px-4"
+        >
+          <ServiceGridSection
+            title={memberships.title}
+            total={memberships.total}
+            items={memberships.items}
+            hrefPrefix="/games/membership"
+            showCategory={false}
+            ctaText="View Details →"
+          />
+        </motion.section>
       )}
 
       {/* ================= FILTER MODAL ================= */}

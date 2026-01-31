@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -18,7 +19,6 @@ const storyData = [
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769533093/WhatsApp_Image_2026-01-27_at_17.19.53_gfrfdn.jpg",
     link: "/games/mobile-legends988",
   },
-
   {
     id: 3,
     title: "MLBB Double",
@@ -33,7 +33,7 @@ const storyData = [
       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515220/WhatsApp_Image_2026-01-27_at_17.25.55_torxmi.jpg",
     link: "/games/mlbb-smallphp980",
   },
-    {
+  {
     id: 5,
     title: "PUBG Mobile",
     image:
@@ -54,7 +54,7 @@ export default function StorySlider() {
     <section className="mt-1">
       <div
         className="
-          flex gap-4 px-2 py-3
+          flex gap-3 px-2 py-3
           overflow-x-auto
           scroll-smooth
           snap-x snap-mandatory
@@ -63,62 +63,70 @@ export default function StorySlider() {
           [&::-webkit-scrollbar]:hidden
         "
       >
-        {storyData.map((item) => (
-          <Link
+        {storyData.map((item, index) => (
+          <motion.div
             key={item.id}
-            href={item.link}
-            className="
-              flex flex-col items-center
-              min-w-[80px]
-              snap-start
-              transition-transform duration-200 ease-out
-              hover:scale-[1.06]
-              active:scale-[0.96]
-            "
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.05, duration: 0.3 }}
           >
-            {/* GRADIENT RING */}
-            <div
+            <Link
+              href={item.link}
               className="
-                rounded-full p-[2px]
-                transition-all duration-300
+                flex flex-col items-center
+                min-w-[75px]
+                snap-start
+                transition-transform duration-200 ease-out
+                hover:scale-105
+                active:scale-95
               "
-              style={{
-                background:
-                  "linear-gradient(135deg, #ff5f6d, #d946ef, #3b82f6)",
-              }}
             >
-              <div className="rounded-full bg-black p-[2px]">
-                <div
-                  className="
-                    relative w-[70px] h-[70px]
-                    rounded-full overflow-hidden
-                    shadow-[0_6px_18px_rgba(0,0,0,0.45)]
-                  "
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="70px"
-                    priority={item.id <= 3}
-                    className="object-cover"
-                  />
+              {/* GRADIENT RING */}
+              <div
+                className="
+                  rounded-full p-[2px]
+                  transition-all duration-300
+                  hover:p-[3px]
+                "
+                style={{
+                  background:
+                    "linear-gradient(135deg, #ff5f6d, #d946ef, #3b82f6)",
+                }}
+              >
+                <div className="rounded-full bg-[var(--background)] p-[2px]">
+                  <div
+                    className="
+                      relative w-16 h-16
+                      rounded-full overflow-hidden
+                      shadow-lg
+                    "
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      sizes="64px"
+                      priority={item.id <= 3}
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* TITLE */}
-            <span
-              className="
-                mt-2 text-xs text-center
-                leading-tight
-                text-[var(--foreground)]
-                line-clamp-2
-              "
-            >
-              {item.title}
-            </span>
-          </Link>
+              {/* TITLE */}
+              <span
+                className="
+                  mt-1.5 text-[10px] text-center
+                  leading-tight
+                  text-[var(--foreground)]
+                  line-clamp-2
+                  max-w-[75px]
+                "
+              >
+                {item.title}
+              </span>
+            </Link>
+          </motion.div>
         ))}
       </div>
     </section>
