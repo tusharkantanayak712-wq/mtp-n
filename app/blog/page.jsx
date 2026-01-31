@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
-  FiFilter,
-  FiX,
   FiSearch,
   FiClock,
   FiCalendar,
   FiStar,
+  FiChevronLeft,
+  FiChevronRight,
+  FiArrowRight,
 } from "react-icons/fi";
 
 /* ================= BLOG DATA ================= */
@@ -19,7 +21,7 @@ const BLOGS_DATA = [
     slug: "mlbb-weekly-pass-price-in-india",
     type: "Guide",
     excerpt:
-      "Learn the latest MLBB weekly pass price in India and whether it’s worth buying.",
+      "Learn the latest MLBB weekly pass price in India and whether it's worth buying.",
     publishedAt: "2025-01-10",
     readingTime: "4 min read",
     featured: true,
@@ -59,7 +61,6 @@ export default function BlogPage() {
   const [type, setType] = useState("all");
   const [sort, setSort] = useState("latest");
   const [currentPage, setCurrentPage] = useState(1);
-  const [showFilter, setShowFilter] = useState(false);
 
   const filteredBlogs = useMemo(() => {
     let blogs = [...BLOGS_DATA];
@@ -99,76 +100,111 @@ export default function BlogPage() {
   }, [search, type, sort]);
 
   return (
-    <section className="min-h-screen bg-[var(--background)] px-4 sm:px-6 py-10">
+    <section className="min-h-screen bg-[var(--background)] px-4 sm:px-6 py-6">
       <div className="max-w-6xl mx-auto space-y-12">
 
         {/* HEADER */}
-        <header className="space-y-4 text-center sm:text-left">
-          <h1 className="text-3xl sm:text-5xl font-extrabold bg-gradient-to-r from-[var(--accent)] to-purple-400 bg-clip-text text-transparent">
+        <motion.header
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-4 text-center sm:text-left"
+        >
+          <h1 className="text-3xl sm:text-6xl font-extrabold bg-gradient-to-r from-[var(--accent)] to-purple-400 bg-clip-text text-transparent">
             MLBB Blogs & Guides
           </h1>
-          <p className="text-[var(--muted)] max-w-2xl">
+          <p className="text-base text-[var(--muted)] max-w-2xl">
             Latest pricing updates, safety tips, and MLBB recharge guides.
           </p>
-        </header>
+        </motion.header>
 
         {/* SEARCH */}
-        <div className="flex items-center gap-3 p-3 rounded-2xl bg-[var(--card)] border shadow-sm">
-          <FiSearch className="text-[var(--muted)]" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="relative"
+        >
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" size={20} />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search articles..."
-            className="flex-1 bg-transparent outline-none text-sm"
+            className="w-full h-14 pl-12 pr-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] outline-none text-sm focus:ring-2 focus:ring-[var(--accent)]/20 transition shadow-sm"
           />
-        </div>
+        </motion.div>
 
         {/* BLOG GRID */}
-        {paginatedBlogs.length > 0 ? (
-          <div className="grid md:grid-cols-2 gap-6">
-            {paginatedBlogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 text-[var(--muted)]">
-            No articles found.
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {paginatedBlogs.length > 0 ? (
+            <motion.div
+              key="blogs"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid md:grid-cols-2 gap-6"
+            >
+              {paginatedBlogs.map((blog, index) => (
+                <BlogCard key={blog.id} blog={blog} index={index} />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="text-center py-20 text-[var(--muted)]"
+            >
+              <p className="text-lg">No articles found.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="flex justify-center gap-2 mt-8 flex-wrap">
-            <button
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-center gap-2 mt-8 flex-wrap"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => p - 1)}
-              className="px-4 py-2 rounded-lg border disabled:opacity-40"
+              className="px-4 py-2 rounded-xl border border-[var(--border)] disabled:opacity-40 disabled:cursor-not-allowed hover:border-[var(--accent)] transition flex items-center gap-2"
             >
+              <FiChevronLeft size={16} />
               Prev
-            </button>
+            </motion.button>
 
             {Array.from({ length: totalPages }).map((_, i) => (
-              <button
+              <motion.button
                 key={i}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`px-4 py-2 rounded-lg border transition ${
-                  currentPage === i + 1
-                    ? "bg-[var(--accent)] text-black font-semibold"
-                    : "hover:border-[var(--accent)]"
-                }`}
+                className={`px-4 py-2 rounded-xl border transition ${currentPage === i + 1
+                  ? "bg-[var(--accent)] text-white font-semibold border-[var(--accent)]"
+                  : "border-[var(--border)] hover:border-[var(--accent)]"
+                  }`}
               >
                 {i + 1}
-              </button>
+              </motion.button>
             ))}
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => p + 1)}
-              className="px-4 py-2 rounded-lg border disabled:opacity-40"
+              className="px-4 py-2 rounded-xl border border-[var(--border)] disabled:opacity-40 disabled:cursor-not-allowed hover:border-[var(--accent)] transition flex items-center gap-2"
             >
               Next
-            </button>
-          </div>
+              <FiChevronRight size={16} />
+            </motion.button>
+          </motion.div>
         )}
       </div>
     </section>
@@ -176,42 +212,55 @@ export default function BlogPage() {
 }
 
 /* ================= BLOG CARD ================= */
-function BlogCard({ blog }) {
+function BlogCard({ blog, index }) {
   return (
-    <Link
-      href={`/blog/${blog.slug}`}
-      className="group rounded-2xl p-6 bg-[var(--card)] border hover:-translate-y-1 hover:shadow-xl transition"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
     >
-      <div className="flex items-center gap-2 text-xs mb-3">
-        <span className="px-2 py-1 rounded bg-[var(--accent)] text-black font-semibold">
-          {blog.type}
-        </span>
-        {blog.featured && <FiStar className="text-[var(--accent)]" />}
-        {isNewPost(blog.publishedAt) && (
-          <span className="px-2 py-1 rounded bg-green-500/20 text-green-500">
-            New
+      <Link
+        href={`/blog/${blog.slug}`}
+        className="group block rounded-2xl p-6 bg-[var(--card)] border border-[var(--border)] hover:-translate-y-1 hover:shadow-xl hover:border-[var(--accent)] transition-all duration-300"
+      >
+        <div className="flex items-center gap-2 text-xs mb-4">
+          <span className="px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-semibold">
+            {blog.type}
           </span>
-        )}
-      </div>
+          {blog.featured && <FiStar className="text-[var(--accent)]" />}
+          {isNewPost(blog.publishedAt) && (
+            <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 font-semibold">
+              New
+            </span>
+          )}
+        </div>
 
-      <h2 className="text-lg font-semibold group-hover:text-[var(--accent)] transition">
-        {blog.title}
-      </h2>
+        <h2 className="text-xl font-bold group-hover:text-[var(--accent)] transition mb-3">
+          {blog.title}
+        </h2>
 
-      <p className="text-sm text-[var(--muted)] mt-2 line-clamp-2">
-        {blog.excerpt}
-      </p>
+        <p className="text-sm text-[var(--muted)] line-clamp-2 mb-4">
+          {blog.excerpt}
+        </p>
 
-      <div className="flex justify-between mt-5 text-xs text-[var(--muted)]">
-        <span className="flex items-center gap-1">
-          <FiClock />
-          {blog.readingTime}
-        </span>
-        <span className="flex items-center gap-1">
-          <FiCalendar />
-          {new Date(blog.publishedAt).toDateString()}
-        </span>
-      </div>
-    </Link>
+        <div className="flex justify-between items-center mt-5 pt-4 border-t border-[var(--border)]">
+          <div className="flex items-center gap-4 text-xs text-[var(--muted)]">
+            <span className="flex items-center gap-1.5">
+              <FiClock />
+              {blog.readingTime}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <FiCalendar />
+              {new Date(blog.publishedAt).toLocaleDateString()}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1 text-[var(--accent)] text-sm font-medium opacity-0 group-hover:opacity-100 transition">
+            Read more
+            <FiArrowRight className="group-hover:translate-x-1 transition" />
+          </div>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
