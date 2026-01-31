@@ -7,10 +7,10 @@ import Image from "next/image";
 const storyData = [
   {
     id: 1,
-    title: "Value pass(India)",
+    title: "Weekly/monthly bundle(india)",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768671923/WhatsApp_Image_2026-01-17_at_22.58.12_nfcotg.jpg",
-    link: "/games/value-pass-ml948",
+      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769872025/WhatsApp_Image_2026-01-31_at_20.33.31_nzn2ll.jpg",
+    link: "/games/weeklymonthly-bundle931",
   },
   {
     id: 2,
