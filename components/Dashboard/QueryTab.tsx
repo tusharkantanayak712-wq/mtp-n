@@ -33,8 +33,8 @@ const SUPPORT_CONFIG = {
       {
         id: "instagram",
         title: "Instagram",
-        value: "@zynx.v1",
-        href: "https://www.instagram.com/zynx.v1",
+        value: "@mlbbtopup.in",
+        href: "https://www.instagram.com/mlbbtopup.in",
         icon: "instagram",
         external: true,
       },

@@ -21,17 +21,17 @@ const socialLinks = [
   {
     name: "Twitter",
     icon: FaXTwitter,
-    url: "https://www.instagram.com/zynx.v1/",
+    url: "https://www.instagram.com/mlbbtopup.in/",
   },
   {
     name: "Instagram",
     icon: FaInstagram,
-    url: "https://www.instagram.com/zynx.v1/",
+    url: "https://www.instagram.com/mlbbtopup.in/",
   },
   {
     name: "YouTube",
     icon: FaYoutube,
-    url: "https://www.instagram.com/zynx.v1/",
+    url: "https://www.instagram.com/mlbbtopup.in/",
   },
 ];
 

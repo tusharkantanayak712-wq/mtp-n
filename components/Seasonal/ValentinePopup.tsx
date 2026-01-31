@@ -37,7 +37,7 @@ export default function ValentinePopup() {
       if (distance <= 0) {
         setTimeLeft((prev) => ({
           ...prev,
-          message: "It's Valentine’s Day! 💖",
+          message: "It's Valentine's Day! 💖",
         }));
         clearInterval(timer);
         return;
@@ -47,11 +47,11 @@ export default function ValentinePopup() {
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor(
           (distance % (1000 * 60 * 60 * 24)) /
-            (1000 * 60 * 60)
+          (1000 * 60 * 60)
         ),
         minutes: Math.floor(
           (distance % (1000 * 60 * 60)) /
-            (1000 * 60)
+          (1000 * 60)
         ),
         seconds: Math.floor(
           (distance % (1000 * 60)) / 1000
@@ -64,89 +64,223 @@ export default function ValentinePopup() {
   }, []);
 
   const handleRedirect = () => {
-    // Close animation first
     setShow(false);
-
     setTimeout(() => {
       sessionStorage.setItem("valentine_popup_seen", "true");
       router.push("/special-leaderboard");
     }, 300);
   };
 
+  const handleClose = () => {
+    setShow(false);
+    setTimeout(() => {
+      sessionStorage.setItem("valentine_popup_seen", "true");
+    }, 300);
+  };
+
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-lg animate-fadeIn">
-
-      {/* Floating background hearts */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(12)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute text-pink-400 opacity-20 animate-floatSlow"
-            style={{
-              left: `${Math.random() * 100}%`,
-              fontSize: `${14 + Math.random() * 20}px`,
-              animationDelay: `${Math.random() * 10}s`,
-            }}
-          >
-            💕
-          </span>
-        ))}
-      </div>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 99999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(8px)',
+        animation: 'fadeIn 0.3s ease'
+      }}
+    >
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { 
+            opacity: 0; 
+            transform: translateY(30px);
+          }
+          to { 
+            opacity: 1; 
+            transform: translateY(0);
+          }
+        }
+        @keyframes heartBeat {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+      `}</style>
 
       {/* Popup Card */}
-      <div className="relative w-[92%] max-w-sm rounded-3xl p-8 text-center border border-pink-500/40 bg-gradient-to-br from-pink-600/25 via-rose-500/20 to-purple-600/20 backdrop-blur-2xl shadow-[0_0_80px_rgba(255,0,120,0.25)] animate-popupIn">
+      <div
+        style={{
+          position: 'relative',
+          width: '90%',
+          maxWidth: '400px',
+          borderRadius: '20px',
+          padding: '32px 24px',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(244, 63, 94, 0.15))',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(236, 72, 153, 0.3)',
+          boxShadow: '0 20px 60px rgba(236, 72, 153, 0.3)',
+          animation: 'slideUp 0.4s ease-out'
+        }}
+      >
+        {/* Close Button */}
+        <button
+          onClick={handleClose}
+          style={{
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            color: '#fff',
+            fontSize: '18px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(236, 72, 153, 0.3)';
+            e.currentTarget.style.transform = 'rotate(90deg)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.transform = 'rotate(0deg)';
+          }}
+        >
+          ✕
+        </button>
 
-        {/* Glow */}
-        <div className="absolute -top-16 -left-16 w-56 h-56 bg-pink-500/30 blur-[140px] rounded-full" />
-        <div className="absolute -bottom-16 -right-16 w-56 h-56 bg-rose-500/30 blur-[140px] rounded-full" />
-
-        <div className="relative z-10">
-          <div className="text-6xl mb-4 animate-heartBeat">
-            💖
-          </div>
-
-          <h2 className="text-2xl font-extrabold mb-2 text-white tracking-wide">
-            Valentine Special
-          </h2>
-
-          <p className="text-sm text-pink-100 mb-6">
-            Celebrate love & epic wins.  
-            Top 10 players will receive exclusive prizes!
-          </p>
-
-          {/* Countdown */}
-          {timeLeft.message ? (
-            <div className="mb-6 text-pink-300 font-semibold">
-              {timeLeft.message}
-            </div>
-          ) : (
-            <div className="mb-6 grid grid-cols-4 gap-2 text-center">
-              {["days", "hours", "minutes", "seconds"].map((unit) => (
-                <div
-                  key={unit}
-                  className="rounded-xl bg-pink-500/20 border border-pink-400/30 py-2 backdrop-blur-sm"
-                >
-                  <div className="text-lg font-bold text-white">
-                    {timeLeft[unit as keyof typeof timeLeft]}
-                  </div>
-                  <div className="text-[10px] uppercase text-pink-200">
-                    {unit}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Button */}
-          <button
-            onClick={handleRedirect}
-            className="px-8 py-2.5 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-semibold transition-all duration-300 active:scale-95 hover:shadow-[0_0_25px_rgba(255,0,120,0.7)]"
-          >
-            View Special Leaderboard 💝
-          </button>
+        {/* Heart Icon */}
+        <div
+          style={{
+            fontSize: '64px',
+            marginBottom: '16px',
+            animation: 'heartBeat 1.5s ease-in-out infinite'
+          }}
+        >
+          💖
         </div>
+
+        {/* Title */}
+        <h2
+          style={{
+            fontSize: '28px',
+            fontWeight: 700,
+            marginBottom: '8px',
+            color: '#fff',
+            textShadow: '0 2px 10px rgba(236, 72, 153, 0.5)'
+          }}
+        >
+          Valentine Special
+        </h2>
+
+        {/* Description */}
+        <p
+          style={{
+            fontSize: '14px',
+            color: 'rgba(255, 255, 255, 0.8)',
+            marginBottom: '24px',
+            lineHeight: '1.5'
+          }}
+        >
+          Celebrate love & epic wins.<br />
+          Top 10 players will receive exclusive prizes!
+        </p>
+
+        {/* Countdown */}
+        {timeLeft.message ? (
+          <div
+            style={{
+              marginBottom: '24px',
+              color: '#fda4af',
+              fontWeight: 600,
+              fontSize: '16px'
+            }}
+          >
+            {timeLeft.message}
+          </div>
+        ) : (
+          <div
+            style={{
+              marginBottom: '24px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '8px'
+            }}
+          >
+            {["days", "hours", "minutes", "seconds"].map((unit) => (
+              <div
+                key={unit}
+                style={{
+                  borderRadius: '12px',
+                  background: 'rgba(236, 72, 153, 0.15)',
+                  border: '1px solid rgba(236, 72, 153, 0.3)',
+                  padding: '10px 6px'
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    color: '#fff'
+                  }}
+                >
+                  {timeLeft[unit as keyof typeof timeLeft]}
+                </div>
+                <div
+                  style={{
+                    fontSize: '10px',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    marginTop: '2px'
+                  }}
+                >
+                  {unit}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* CTA Button */}
+        <button
+          onClick={handleRedirect}
+          style={{
+            padding: '12px 28px',
+            borderRadius: '50px',
+            background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: '15px',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            boxShadow: '0 4px 16px rgba(236, 72, 153, 0.4)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(236, 72, 153, 0.5)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 16px rgba(236, 72, 153, 0.4)';
+          }}
+        >
+          View Special Leaderboard 💝
+        </button>
       </div>
     </div>
   );

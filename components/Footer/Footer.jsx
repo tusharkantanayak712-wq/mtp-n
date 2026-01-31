@@ -39,7 +39,7 @@ const FOOTER_LINKS = [
 ];
 
 const SOCIALS = [
-  { label: "Instagram", href: "https://instagram.com/zynx.v1", icon: FaInstagram },
+  { label: "Instagram", href: "https://instagram.com/mlbbtopup.in", icon: FaInstagram },
   { label: "Twitter", href: "https://x.com/tk_dev_", icon: FaXTwitter },
   { label: "YouTube", href: "https://youtube.com", icon: FaYoutube },
 ];
