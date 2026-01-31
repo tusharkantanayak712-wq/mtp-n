@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Clock, History } from "lucide-react";
 import { getVerifiedPlayers } from "@/utils/storage/verifiedPlayerStorage";
 
@@ -32,8 +33,11 @@ export default function RecentVerifiedPlayers({
   if (!players.length) return null;
 
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm">
-
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-lg"
+    >
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-sm font-semibold">
@@ -48,24 +52,26 @@ export default function RecentVerifiedPlayers({
       {/* ================= LIST ================= */}
       <div className="space-y-2">
         {players.map((p, index) => (
-          <button
+          <motion.button
             key={`${p.playerId}-${p.zoneId}-${index}`}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.05 }}
+            whileHover={{ x: 4 }}
             onClick={() => onSelect(p)}
             className="
               w-full text-left
               rounded-xl border border-[var(--border)]
-              bg-black/20 hover:bg-black/30
+              bg-[var(--muted)]/5 hover:bg-[var(--muted)]/10
               hover:border-[var(--accent)]
               transition-all
               p-3
-              group
             "
           >
             <div className="flex items-start justify-between gap-3">
-
               {/* LEFT */}
-              <div>
-                <p className="text-sm font-semibold leading-tight">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold leading-tight truncate">
                   {p.username || "Unknown Player"}
                 </p>
 
@@ -74,7 +80,7 @@ export default function RecentVerifiedPlayers({
                 </p>
 
                 {p.savedAt && (
-                  <div className="flex items-center gap-1 mt-1 text-[10px] text-gray-500">
+                  <div className="flex items-center gap-1 mt-1 text-[10px] text-[var(--muted)]">
                     <Clock size={12} />
                     {timeAgo(p.savedAt)}
                   </div>
@@ -86,17 +92,18 @@ export default function RecentVerifiedPlayers({
                 className="
                   text-[10px] font-medium
                   px-2 py-1 rounded-full
-                  bg-[var(--accent)]/15
+                  bg-[var(--accent)]/10
                   text-[var(--accent)]
                   whitespace-nowrap
+                  flex-shrink-0
                 "
               >
                 {p.region}
               </span>
             </div>
-          </button>
+          </motion.button>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

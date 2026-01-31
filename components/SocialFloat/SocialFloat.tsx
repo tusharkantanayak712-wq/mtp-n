@@ -23,22 +23,19 @@ const socialLinks = [
     name: "Twitter",
     icon: FaXTwitter,
     url: "https://www.instagram.com/mlbbtopup.in/",
-    color: "from-gray-700 to-black",
-    hoverColor: "from-gray-800 to-black",
+    color: "bg-gray-800",
   },
   {
     name: "Instagram",
     icon: FaInstagram,
     url: "https://www.instagram.com/mlbbtopup.in/",
-    color: "from-pink-500 to-purple-600",
-    hoverColor: "from-pink-600 to-purple-700",
+    color: "bg-gradient-to-br from-pink-500 to-purple-600",
   },
   {
     name: "YouTube",
     icon: FaYoutube,
     url: "https://www.instagram.com/mlbbtopup.in/",
-    color: "from-red-500 to-red-600",
-    hoverColor: "from-red-600 to-red-700",
+    color: "bg-red-600",
   },
 ];
 
@@ -119,13 +116,12 @@ export default function SocialFloat() {
   return (
     <motion.div
       ref={containerRef}
-      initial={{ opacity: 0, scale: 0.8 }}
+      initial={{ opacity: 0, scale: 0.9 }}
       animate={{
         opacity: isVisible ? 1 : 0,
-        scale: isVisible ? 1 : 0.8,
-        y: isVisible ? 0 : 20,
+        scale: isVisible ? 1 : 0.9,
       }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.2 }}
       className="fixed bottom-6 right-6 z-50"
       style={{ pointerEvents: isVisible ? "auto" : "none" }}
     >
@@ -133,39 +129,33 @@ export default function SocialFloat() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-20 right-0 flex flex-col gap-3 mb-2"
+            className="absolute bottom-16 right-0 flex flex-col gap-2 mb-2"
           >
             {socialLinks.map((social, index) => {
               const Icon = social.icon;
               return (
                 <motion.div
                   key={social.name}
-                  initial={{ opacity: 0, x: 20, scale: 0.8 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: 20, scale: 0.8 }}
-                  transition={{ delay: index * 0.05 }}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ delay: index * 0.03 }}
                 >
                   <Link
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative block"
+                    className="group block"
                     aria-label={social.name}
                   >
-                    {/* Glow effect */}
                     <div
-                      className={`absolute inset-0 rounded-full bg-gradient-to-br ${social.color} blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300`}
-                    />
-
-                    {/* Button */}
-                    <div
-                      className={`relative w-12 h-12 rounded-full bg-gradient-to-br ${social.color} shadow-lg flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl`}
+                      className={`w-11 h-11 rounded-full ${social.color} shadow-lg flex items-center justify-center text-white transition-all hover:scale-110`}
                     >
-                      <Icon className="text-lg" />
+                      <Icon className="text-base" />
                     </div>
                   </Link>
                 </motion.div>
@@ -173,60 +163,42 @@ export default function SocialFloat() {
             })}
 
             {/* Divider */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ delay: 0.15 }}
-              className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-2"
-            />
+            <div className="h-px bg-[var(--border)] mx-1 my-1" />
 
             {/* Share Button */}
             <motion.div
-              initial={{ opacity: 0, x: 20, scale: 0.8 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 20, scale: 0.8 }}
-              transition={{ delay: 0.2 }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ delay: 0.12 }}
             >
               <button
                 onClick={handleShare}
-                className="group relative block"
+                className="group block"
                 aria-label="Share"
               >
-                {/* Glow effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-
-                {/* Button */}
-                <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 shadow-lg flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
-                  <FaShareNodes className="text-lg" />
+                <div className="w-11 h-11 rounded-full bg-blue-600 shadow-lg flex items-center justify-center text-white transition-all hover:scale-110">
+                  <FaShareNodes className="text-base" />
                 </div>
               </button>
             </motion.div>
 
             {/* Support Button */}
             <motion.div
-              initial={{ opacity: 0, x: 20, scale: 0.8 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 20, scale: 0.8 }}
-              transition={{ delay: 0.25 }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ delay: 0.15 }}
             >
               <Link
                 href="https://ko-fi.com/zynxv1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block"
+                className="group block"
                 aria-label="Support"
               >
-                {/* Glow effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-
-                {/* Button */}
-                <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 shadow-lg flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <FaHeart className="text-lg" />
-                  </motion.div>
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 shadow-lg flex items-center justify-center text-white transition-all hover:scale-110">
+                  <FaHeart className="text-base" />
                 </div>
               </Link>
             </motion.div>
@@ -237,49 +209,19 @@ export default function SocialFloat() {
       {/* ================= TOGGLE BUTTON ================= */}
       <motion.button
         onClick={() => setIsOpen((v) => !v)}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="group relative"
+        className="relative"
         aria-label="Toggle social menu"
       >
-        {/* Outer glow ring */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 blur-xl opacity-60"
-        />
-
-        {/* Button */}
-        <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-2xl flex items-center justify-center overflow-hidden">
-          {/* Shimmer effect */}
-          <motion.div
-            animate={{
-              x: ["-100%", "100%"],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-          />
-
-          {/* Icon */}
+        <div className="w-12 h-12 rounded-full bg-[var(--accent)] text-white shadow-xl flex items-center justify-center">
           <motion.div
             animate={{ rotate: isOpen ? 90 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="relative z-10"
+            transition={{ duration: 0.2 }}
           >
             {isOpen ? (
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -293,7 +235,7 @@ export default function SocialFloat() {
               </svg>
             ) : (
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
