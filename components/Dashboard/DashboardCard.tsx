@@ -36,25 +36,25 @@ export default function DashboardCard({
     >
       <div className="relative z-10 flex items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <span className={`text-[8px] font-black uppercase tracking-[0.2em] italic
-            ${isActive ? "text-black/50" : "text-[var(--muted)]/50"}
+          <span className={`text-[9px] font-bold uppercase tracking-widest
+            ${isActive ? "text-black/50" : "text-[var(--muted)]"}
           `}>
             {tab.label}
           </span>
-          <h3 className={`text-lg font-black uppercase italic tracking-tighter leading-none
-            ${isActive ? "text-white" : "text-[var(--foreground)]"}
+          <h3 className={`text-xl font-[900] uppercase italic tracking-tighter leading-none
+            ${isActive ? "text-black" : "text-[var(--foreground)]"}
           `}>
             {tab.value}
           </h3>
         </div>
 
-        <div className={`p-2 rounded-xl transition-all duration-300
+        <div className={`p-2.5 rounded-xl transition-all duration-300
           ${isActive
-            ? "bg-black/10 text-white"
-            : "bg-white/5 text-[var(--muted)] group-hover:text-[var(--accent)]"
+            ? "bg-black/10 text-black"
+            : "bg-[var(--background)] text-[var(--muted)] group-hover:text-[var(--accent)] border border-[var(--border)]"
           }`}
         >
-          <Icon size={18} />
+          <Icon size={20} />
         </div>
       </div>
 

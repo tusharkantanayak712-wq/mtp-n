@@ -73,19 +73,19 @@ export default function OrderItem({ order }: { order: OrderType }) {
 
       {/* TOP STATUS BAR */}
       <div
-        className="px-4 py-1.5 flex items-center justify-between border-b border-white/5"
-        style={{ backgroundColor: `${config.color}05` }}
+        className="px-4 py-3 flex items-center justify-between border-b border-[var(--border)]"
+        style={{ backgroundColor: `${config.color}08` }}
       >
         <div className="flex items-center gap-2" style={{ color: config.color }}>
-          <config.icon size={10} className={config.label === 'PENDING' ? 'animate-spin' : ''} />
-          <span className="text-[9px] font-black uppercase tracking-[0.2em] italic">
+          <config.icon size={14} className={config.label === 'PENDING' ? 'animate-spin' : ''} />
+          <span className="text-[10px] font-bold uppercase tracking-wider">
             {config.label}
           </span>
         </div>
         <div className="flex items-center gap-3 min-w-0 flex-1 justify-end">
           <div className="flex flex-col items-end min-w-0">
-            <div className="text-[8px] font-black uppercase tracking-widest text-white/20 mb-0.5">Order Identity</div>
-            <div className="text-[9px] font-black italic text-white/60 font-mono break-all text-right leading-tight">
+            <div className="text-[9px] font-bold uppercase tracking-widest text-[var(--muted)] mb-0.5">Order ID</div>
+            <div className="text-[10px] font-bold text-[var(--foreground)] font-mono break-all text-right leading-tight opacity-70">
               {order.orderId.toUpperCase()}
             </div>
           </div>
@@ -93,10 +93,10 @@ export default function OrderItem({ order }: { order: OrderType }) {
             onClick={handleCopy}
             className={`p-2 rounded-lg transition-all border ${copied
               ? "bg-green-500/10 border-green-500/20 text-green-500"
-              : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white"
+              : "bg-[var(--background)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--foreground)]/30"
               }`}
           >
-            {copied ? <FiCheck size={12} /> : <FiCopy size={12} />}
+            {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
           </button>
         </div>
       </div>
@@ -107,16 +107,16 @@ export default function OrderItem({ order }: { order: OrderType }) {
 
           {/* GAME & ITEM */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-black uppercase italic tracking-tighter leading-none mb-1">
+            <h3 className="text-lg font-bold text-[var(--foreground)] uppercase tracking-tight leading-none mb-2">
               {getGameName(order.gameSlug)}
             </h3>
-            <div className="flex flex-col gap-1">
-              <p className="text-[9px] font-bold text-[var(--muted)]/40 uppercase tracking-[0.2em] italic">
+            <div className="flex flex-col gap-1.5">
+              <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
                 {order.itemName}
               </p>
-              <div className="flex items-center gap-1.5 py-1 px-2 rounded-lg bg-white/5 border border-white/5 w-fit">
-                <FiUser className="text-[var(--accent)]/40" size={10} />
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/60 font-mono break-all leading-none">
+              <div className="flex items-center gap-2 py-1 px-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] w-fit">
+                <FiUser className="text-[var(--accent)]" size={12} />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground)] font-mono break-all leading-none opacity-80">
                   {order.playerId}
                 </span>
               </div>
@@ -126,17 +126,17 @@ export default function OrderItem({ order }: { order: OrderType }) {
           {/* PRICE & TOGGLE */}
           <div className="flex items-center gap-4">
             <div className="flex flex-col items-end">
-              <div className="text-xl font-black italic tracking-tighter text-white leading-none">
+              <div className="text-xl font-[900] text-[var(--foreground)] leading-none tracking-tight">
                 ₹{order.price}
               </div>
-              <div className="text-[8px] font-bold text-[var(--muted)]/30 uppercase mt-1">
+              <div className="text-[10px] font-medium text-[var(--muted)] uppercase mt-1">
                 {new Date(order.createdAt).toLocaleDateString()}
               </div>
             </div>
 
             <motion.div
               animate={{ rotate: open ? 180 : 0 }}
-              className="p-1 text-[var(--muted)]/20"
+              className="p-1 text-[var(--muted)]"
             >
               <FiChevronDown size={20} />
             </motion.div>
@@ -153,7 +153,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
             exit={{ height: 0, opacity: 0 }}
             className="px-5 pb-5 overflow-hidden"
           >
-            <div className="border-t border-white/5 pt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="border-t border-[var(--border)] pt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <InfoNode label="Player ID" value={order.playerId} icon={FiUser} mono />
               <InfoNode label="Zone ID" value={order.zoneId} icon={FiGrid} mono />
               <InfoNode label="Payment" value={order.paymentMethod.toUpperCase()} icon={FiCreditCard} />
@@ -167,12 +167,12 @@ export default function OrderItem({ order }: { order: OrderType }) {
 
 function InfoNode({ label, value, icon: Icon, mono }: any) {
   return (
-    <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
-      <div className="flex items-center gap-2 text-[var(--muted)] font-black uppercase text-[8px] tracking-widest opacity-30">
-        <Icon size={12} />
+    <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+      <div className="flex items-center gap-2 text-[var(--muted)] font-bold uppercase text-[9px] tracking-widest">
+        <Icon size={14} />
         {label}
       </div>
-      <div className={`text-white uppercase font-black text-[10px] ${mono ? 'font-mono' : ''}`}>
+      <div className={`text-[var(--foreground)] uppercase font-bold text-[11px] ${mono ? 'font-mono' : ''}`}>
         {value || 'N/A'}
       </div>
     </div>

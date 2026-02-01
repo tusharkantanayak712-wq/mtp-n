@@ -68,16 +68,16 @@ export default function OrdersTab() {
 
   return (
     <div className="space-y-6">
-      {/* TACTICAL HEADER */}
+      {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] border border-[var(--accent)]/10 shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]">
             <FiTerminal size={18} />
           </div>
           <div>
-            <h3 className="text-xl font-[900] uppercase italic tracking-tighter">Mission Log</h3>
-            <p className="text-[9px] font-black text-[var(--muted)]/40 uppercase tracking-[0.2em]">
-              {loading ? "Syncing Deployment Data..." : `Showing ${totalCount} Active Records`}
+            <h3 className="text-xl font-[900] uppercase italic tracking-tighter text-[var(--foreground)]">Your Orders</h3>
+            <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
+              {loading ? "Loading your orders..." : `Showing ${totalCount} Orders`}
             </p>
           </div>
         </div>
@@ -88,8 +88,8 @@ export default function OrdersTab() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="FILTER DEPLOYMENTS..."
-            className="w-full pl-11 pr-4 py-3 rounded-xl bg-black/20 border border-white/5 focus:border-[var(--accent)]/40 text-[10px] uppercase font-black tracking-widest outline-none transition-all placeholder:text-white/5"
+            placeholder="Search orders..."
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-[11px] uppercase font-bold tracking-widest outline-none transition-all placeholder:text-[var(--muted)] text-[var(--foreground)]"
           />
         </div>
       </div>
@@ -112,16 +112,16 @@ export default function OrdersTab() {
                 <FiActivity size={16} />
               </motion.div>
             </div>
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--muted)]/40 animate-pulse">Syncing Database</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] animate-pulse">Loading...</span>
           </div>
         ) : orders.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center py-20 border border-dashed border-white/5 rounded-[2.5rem]"
+            className="flex flex-col items-center justify-center py-20 border border-dashed border-[var(--border)] rounded-[2.5rem]"
           >
-            <FiLayers size={32} className="text-white/5 mb-4" />
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]/40 italic">No Active Deployments Found</p>
+            <FiLayers size={32} className="text-[var(--muted)]/20 mb-4" />
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted)]">No orders found</p>
           </motion.div>
         ) : (
           <div className="space-y-4">
@@ -144,11 +144,11 @@ export default function OrdersTab() {
 
       {/* TACTICAL PAGINATION */}
       {totalPages > 1 && (
-        <div className="pt-8 border-t border-white/5 flex justify-center items-center gap-3">
+        <div className="pt-8 border-t border-[var(--border)] flex justify-center items-center gap-3">
           <button
             disabled={page === 1}
             onClick={() => setPage((p) => p - 1)}
-            className="p-3 rounded-xl bg-white/5 border border-white/5 disabled:opacity-20 hover:bg-white/10 transition-all group"
+            className="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] disabled:opacity-50 text-[var(--foreground)] hover:bg-[var(--accent)]/10 hover:border-[var(--accent)] transition-all group"
           >
             <FiChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
           </button>
@@ -158,10 +158,10 @@ export default function OrdersTab() {
               <button
                 key={p}
                 onClick={() => setPage(p)}
-                className={`min-w-[40px] px-3 py-2 rounded-xl text-[10px] font-black transition-all
+                className={`min-w-[40px] px-3 py-2 rounded-xl text-[11px] font-bold transition-all
                   ${p === page
-                    ? "bg-[var(--accent)] text-black shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
-                    : "bg-white/5 text-[var(--muted)] hover:bg-white/10 border border-white/5"
+                    ? "bg-[var(--accent)] text-black shadow-[0_4px_10px_-2px_rgba(var(--accent-rgb),0.3)]"
+                    : "bg-[var(--background)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] border border-[var(--border)]"
                   }`}
               >
                 {p < 10 ? `0${p}` : p}
@@ -172,7 +172,7 @@ export default function OrdersTab() {
           <button
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
-            className="p-3 rounded-xl bg-white/5 border border-white/5 disabled:opacity-20 hover:bg-white/10 transition-all group"
+            className="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] disabled:opacity-50 text-[var(--foreground)] hover:bg-[var(--accent)]/10 hover:border-[var(--accent)] transition-all group"
           >
             <FiChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
           </button>
