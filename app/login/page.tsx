@@ -50,6 +50,7 @@ export default function AuthPage() {
       sessionStorage.setItem("email", data.user.email);
       sessionStorage.setItem("userId", data.user.userId);
       sessionStorage.setItem("phone", data.user.phone || "");
+      sessionStorage.setItem("avatar", data.user.avatar || "");
 
       setUserName(data.user.name);
       setSuccess("done");

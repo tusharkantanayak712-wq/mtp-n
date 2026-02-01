@@ -59,6 +59,7 @@ export async function POST(req: Request) {
         email: user.email,
         userId: user.userId,
         userType: user.userType,
+        avatar: user.avatar,
       },
     });
   } catch (error) {

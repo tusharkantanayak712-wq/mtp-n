@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiChevronRight, FiLogOut } from "react-icons/fi";
+import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
 
 /* ================= CONFIG ================= */
@@ -56,21 +56,54 @@ export default function Header() {
       return;
     }
 
+    // Load initial data from session storage for instant UI update
+    const savedUser = {
+      name: sessionStorage.getItem("userName"),
+      email: sessionStorage.getItem("email"),
+      userId: sessionStorage.getItem("userId"),
+      avatar: sessionStorage.getItem("avatar"),
+    };
+    if (savedUser.name) setUser(savedUser);
+
     fetch("/api/auth/me", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
       .then((d) => {
-        if (d.success) setUser(d.user);
-        else sessionStorage.removeItem("token");
+        if (d.success) {
+          setUser(d.user);
+          // Keep session storage in sync
+          sessionStorage.setItem("userName", d.user.name);
+          sessionStorage.setItem("email", d.user.email);
+          sessionStorage.setItem("userId", d.user.id || d.user.userId);
+          sessionStorage.setItem("avatar", d.user.avatar || "");
+          if (d.user.phone) sessionStorage.setItem("phone", d.user.phone);
+        } else {
+          const keysToRemove = ["token", "userName", "email", "userId", "phone", "avatar"];
+          keysToRemove.forEach(key => sessionStorage.removeItem(key));
+          setUser(null);
+        }
       })
       .finally(() => setLoading(false));
   }, []);
 
+  const [showLogoutToast, setShowLogoutToast] = useState(false);
+
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    // Clear all auth and session related data
+    const keysToRemove = ["token", "userName", "email", "userId", "phone", "pending_topup_order"];
+    keysToRemove.forEach(key => sessionStorage.removeItem(key));
+
+    // Clear form-related persistent data
+    localStorage.removeItem("mlbb_verified_players");
+
     setUser(null);
-    window.location.href = "/";
+    setShowLogoutToast(true);
+
+    // Redirect after a short delay to show the message
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 2000);
   };
 
   /* ================= SCROLL ================= */
@@ -106,10 +139,19 @@ export default function Header() {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
-        ? "backdrop-blur-2xl bg-[var(--background)]/90 shadow-xl border-b border-[var(--border)]"
+        ? "backdrop-blur-3xl bg-black/80 shadow-[0_8px_32px_rgba(0,0,0,0.8)] border-b border-white/5 active-header"
         : "bg-transparent"
         }`}
     >
+      {/* TACTICAL TOP EDGE GLOW */}
+      <div className={`absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)]/30 to-transparent transition-opacity duration-500 ${scrolled ? "opacity-100" : "opacity-0"}`} />
+
+      {/* SCANLINE EFFECT ON SCROLL */}
+      {scrolled && (
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100%_3px]" />
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* ================= LOGO ================= */}
@@ -137,17 +179,17 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setActiveNav(item.href)}
-                className="relative px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group"
+                className="relative px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] italic text-[var(--muted)] hover:text-[var(--accent)] transition-all group overflow-hidden"
               >
-                {item.label}
+                <span className="relative z-10">{item.label}</span>
                 <motion.span
                   initial={false}
                   animate={{
-                    scaleX: activeNav === item.href ? 1 : 0,
+                    width: activeNav === item.href ? "100%" : "0%",
                   }}
-                  className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[var(--accent)] to-purple-500 transform origin-left"
+                  className="absolute bottom-0 left-0 h-[2px] bg-[var(--accent)] shadow-[0_0_10px_rgba(var(--accent-rgb),0.5)] transition-all duration-300"
                 />
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[var(--accent)] to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-[var(--accent)]/0 group-hover:bg-[var(--accent)]/5 transition-colors duration-300" />
               </Link>
             ))}
           </nav>
@@ -161,23 +203,23 @@ export default function Header() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setUserMenuOpen((p) => !p)}
-              className="relative flex items-center gap-2 h-10 px-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)] transition-all duration-300 group shadow-sm"
+              className="relative flex items-center gap-2 h-10 px-4 rounded-full bg-white/[0.03] border border-white/5 hover:border-[var(--accent)]/40 hover:bg-white/[0.06] transition-all duration-500 group shadow-2xl"
             >
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--accent)] to-purple-600 flex items-center justify-center overflow-hidden ring-2 ring-transparent group-hover:ring-[var(--accent)]/30 transition-all">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[var(--accent)] to-purple-600 flex items-center justify-center overflow-hidden ring-1 ring-white/10 group-hover:rotate-12 transition-all duration-500">
                 {user?.avatar ? (
                   <Image
                     src={user.avatar}
                     alt="Avatar"
-                    width={28}
-                    height={28}
+                    width={24}
+                    height={24}
                     className="object-cover w-full h-full"
                   />
                 ) : (
-                  <FaUser className="text-white text-xs" />
+                  <FiShield className="text-white text-[10px]" />
                 )}
               </div>
               {user && (
-                <span className="hidden sm:block text-sm font-medium pr-1 max-w-[100px] truncate">
+                <span className="hidden sm:block text-[10px] font-black uppercase tracking-widest text-white/80 pr-1 max-w-[100px] truncate italic">
                   {user.name}
                 </span>
               )}
@@ -190,15 +232,17 @@ export default function Header() {
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute right-0 top-full mt-2 w-80 max-h-[80vh] overflow-y-auto bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-2xl"
+                  transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+                  className="absolute right-0 top-full mt-3 w-80 max-h-[80vh] overflow-y-auto bg-[#0A0A0A]/95 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 overflow-hidden"
                 >
+                  <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent" />
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none opacity-20" />
                   {!user ? (
                     <>
                       {/* Navigation for non-logged users on mobile */}
-                      <div className="md:hidden p-3 border-b border-[var(--border)]">
-                        <p className="px-3 py-2 text-xs font-semibold text-[var(--muted)] uppercase tracking-wide">
-                          Navigation
+                      <div className="md:hidden p-4 border-b border-white/5">
+                        <p className="px-3 py-2 text-[8px] font-black text-[var(--muted)] uppercase tracking-[0.3em] opacity-40 italic">
+                          Quick Links
                         </p>
                         {HEADER_CONFIG.nav.map((item, index) => (
                           <motion.div
@@ -213,15 +257,15 @@ export default function Header() {
                                 setUserMenuOpen(false);
                                 setActiveNav(item.href);
                               }}
-                              className={`flex items-center justify-between px-3 py-3 rounded-xl transition-all ${activeNav === item.href
-                                ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                                : "hover:bg-[var(--accent)]/5 text-[var(--muted)]"
+                              className={`flex items-center justify-between px-4 py-4 rounded-2xl transition-all border border-transparent ${activeNav === item.href
+                                ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20 shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]"
+                                : "hover:bg-white/[0.03] text-white/60"
                                 }`}
                             >
-                              <span className="text-sm font-medium">{item.label}</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest italic">{item.label}</span>
                               <FiChevronRight
                                 className={
-                                  activeNav === item.href ? "text-[var(--accent)]" : ""
+                                  activeNav === item.href ? "text-[var(--accent)]" : "opacity-40"
                                 }
                               />
                             </Link>
@@ -237,9 +281,18 @@ export default function Header() {
                         <Link
                           href="/login"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block p-6 text-center font-semibold hover:bg-[var(--accent)]/5 transition-colors rounded-2xl"
+                          className="group relative block p-8 text-center overflow-hidden"
                         >
-                          Login / Register
+                          <div className="absolute inset-0 bg-[var(--accent)]/0 group-hover:bg-[var(--accent)]/5 transition-colors duration-500" />
+                          <div className="relative z-10 flex flex-col items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 transition-transform duration-500">
+                              <FiZap size={20} />
+                            </div>
+                            <div>
+                              <h3 className="text-sm font-black uppercase italic tracking-wider text-white">Login / Register</h3>
+                              <p className="text-[10px] font-medium text-[var(--muted)] uppercase tracking-widest mt-1">Access your account</p>
+                            </div>
+                          </div>
                         </Link>
                       </motion.div>
                     </>
@@ -249,10 +302,10 @@ export default function Header() {
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="p-5 bg-gradient-to-br from-[var(--accent)]/10 to-purple-600/10 border-b border-[var(--border)]"
+                        className="p-6 bg-gradient-to-br from-[var(--accent)]/10 to-transparent border-b border-white/5"
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--accent)] to-purple-600 flex items-center justify-center overflow-hidden flex-shrink-0 ring-2 ring-[var(--accent)]/20">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-purple-600 flex items-center justify-center overflow-hidden flex-shrink-0 ring-1 ring-white/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.2)]">
                             {user?.avatar ? (
                               <Image
                                 src={user.avatar}
@@ -262,12 +315,12 @@ export default function Header() {
                                 className="object-cover w-full h-full"
                               />
                             ) : (
-                              <FaUser className="text-white text-xl" />
+                              <FiShield className="text-white text-xl" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-bold text-base truncate">{user.name}</p>
-                            <p className="text-xs text-[var(--muted)] truncate">
+                            <p className="font-black text-sm uppercase italic tracking-wider text-white truncate">{user.name}</p>
+                            <p className="text-[10px] font-medium text-[var(--muted)] uppercase tracking-widest truncate mt-0.5">
                               {user.email}
                             </p>
                           </div>
@@ -276,17 +329,17 @@ export default function Header() {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={handleLogout}
-                          className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-semibold transition-all"
+                          className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 text-[10px] font-black uppercase italic tracking-[0.2em] border border-red-500/20 transition-all shadow-lg shadow-red-500/5 group"
                         >
-                          <FiLogOut size={16} />
+                          <FiLogOut size={14} className="group-hover:-translate-x-1 transition-transform" />
                           Logout
                         </motion.button>
                       </motion.div>
 
                       {/* Navigation Items (Mobile Only) */}
-                      <div className="md:hidden p-3 border-b border-[var(--border)]">
-                        <p className="px-3 py-2 text-xs font-semibold text-[var(--muted)] uppercase tracking-wide">
-                          Navigation
+                      <div className="md:hidden p-4 border-b border-white/5">
+                        <p className="px-3 py-2 text-[8px] font-black text-[var(--muted)] uppercase tracking-[0.3em] opacity-40 italic">
+                          Quick Links
                         </p>
                         {HEADER_CONFIG.nav.map((item, index) => (
                           <motion.div
@@ -301,17 +354,17 @@ export default function Header() {
                                 setUserMenuOpen(false);
                                 setActiveNav(item.href);
                               }}
-                              className={`flex items-center justify-between px-3 py-3 rounded-xl transition-all ${activeNav === item.href
-                                ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                                : "hover:bg-[var(--accent)]/5"
+                              className={`flex items-center justify-between px-4 py-4 rounded-2xl transition-all border border-transparent ${activeNav === item.href
+                                ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20 shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]"
+                                : "hover:bg-white/[0.03] text-white/60"
                                 }`}
                             >
-                              <span className="text-sm font-medium">{item.label}</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest italic">{item.label}</span>
                               <FiChevronRight
                                 className={
                                   activeNav === item.href
                                     ? "text-[var(--accent)]"
-                                    : "text-[var(--muted)]"
+                                    : "opacity-40"
                                 }
                               />
                             </Link>
@@ -331,9 +384,9 @@ export default function Header() {
                             <Link
                               href={item.href}
                               onClick={() => setUserMenuOpen(false)}
-                              className="flex items-center justify-between px-3 py-3 rounded-xl hover:bg-[var(--accent)]/5 transition-all group"
+                              className="flex items-center justify-between px-4 py-4 rounded-2xl hover:bg-white/[0.03] border border-transparent hover:border-white/5 transition-all group"
                             >
-                              <span className="text-sm font-medium">{item.label}</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest text-white/70 group-hover:text-[var(--accent)] italic">{item.label}</span>
                               <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
                             </Link>
                           </motion.div>
@@ -350,15 +403,15 @@ export default function Header() {
                                 href={
                                   HEADER_CONFIG.userMenu.roles[user.userType].href
                                 }
-                                className="flex items-center justify-between px-3 py-3 rounded-xl hover:bg-[var(--accent)]/5 transition-all group"
+                                className="flex items-center justify-between px-4 py-4 rounded-2xl bg-[var(--accent)]/5 border border-[var(--accent)]/20 hover:bg-[var(--accent)]/10 transition-all group"
                               >
-                                <span className="text-sm font-semibold">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--accent)] italic">
                                   {
                                     HEADER_CONFIG.userMenu.roles[user.userType]
                                       .label
                                   }
                                 </span>
-                                <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
+                                <FiChevronRight className="text-[var(--accent)] group-hover:translate-x-1 transition-all" />
                               </Link>
                             </motion.div>
                           )}
@@ -371,6 +424,28 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* LOGOUT SUCCESS TOAST */}
+      <AnimatePresence>
+        {showLogoutToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]"
+          >
+            <div className="px-6 py-4 rounded-[2rem] bg-[#0A0A0A]/90 backdrop-blur-2xl border border-green-500/30 flex items-center gap-4 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+              <div className="w-10 h-10 rounded-full bg-green-500 text-black flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                <FiCheckCircle size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-black uppercase tracking-widest text-green-500 italic">Logged Out</span>
+                <span className="text-[10px] text-white/60 font-medium uppercase tracking-[0.1em]">Successfully logged out</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

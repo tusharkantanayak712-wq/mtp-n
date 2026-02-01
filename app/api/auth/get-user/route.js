@@ -51,6 +51,7 @@ export async function POST(request) {
           order: foundUser.order,
           userId: foundUser.userId,
           userType: foundUser.userType,
+          avatar: foundUser.avatar,
           createdAt: foundUser.createdAt,
           updatedAt: foundUser.updatedAt,
         },
