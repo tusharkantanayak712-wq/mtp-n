@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
-import logo from "@/public/logo.png";
+import { FiCreditCard, FiSmartphone, FiUser, FiInfo, FiCheck, FiShield } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 export default function ReviewAndPaymentStep({
   step,
@@ -26,7 +27,6 @@ export default function ReviewAndPaymentStep({
   const [upiQR, setUpiQR] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-
   // Generate UPI QR
   const handleUPI = async () => {
     setPaymentMethod("upi");
@@ -38,244 +38,232 @@ export default function ReviewAndPaymentStep({
     setUpiQR(qr);
   };
 
-
   // Handle proceed to payment
-const handleProceed = async () => {
-  if (!paymentMethod) {
-    alert("Please select a payment method");
-    return;
-  }
-
-  setIsRedirecting(true); // 🔑 start loading
-
-  try {
-    const userId = sessionStorage.getItem("userId");
-    const storedPhone = userPhone || sessionStorage.getItem("phone");
-
-    // if (!storedPhone) {
-    //   alert("Phone number missing. Please log in again.");
-    //   setIsRedirecting(false);
-    //   return;
-    // }
-
-    const orderPayload = {
-      gameSlug: slug,
-      itemSlug,
-      itemName,
-      playerId: reviewData.playerId,
-      zoneId: reviewData.zoneId,
-      paymentMethod,
-      email: userEmail || null,
-      phone: storedPhone,
-      currency: "INR",
-    };
-const token = sessionStorage.getItem("token");
-
-    const res = await fetch("/api/order/create-gateway-order", {
-      method: "POST",
-   headers: {
-        Authorization: `Bearer ${token}`,
-      },
-          body: JSON.stringify(orderPayload),
-    });
-
-    const data = await res.json();
-
-    if (!data.success) {
-      alert("Order failed: " + data.message);
-      setIsRedirecting(false);
+  const handleProceed = async () => {
+    if (!paymentMethod) {
+      alert("Please select a payment method");
       return;
     }
 
-    sessionStorage.setItem("pending_topup_order", data.orderId);
+    setIsRedirecting(true);
 
-    // 🚀 redirect
-    window.location.href = data.paymentUrl;
-  } catch (err) {
-    alert("Something went wrong. Please try again.");
-    setIsRedirecting(false);
-  }
-};
+    try {
+      const storedPhone = userPhone || sessionStorage.getItem("phone");
+      const orderPayload = {
+        gameSlug: slug,
+        itemSlug,
+        itemName,
+        playerId: reviewData.playerId,
+        zoneId: reviewData.zoneId,
+        paymentMethod,
+        email: userEmail || null,
+        phone: storedPhone,
+        currency: "INR",
+      };
 
+      const token = sessionStorage.getItem("token");
 
+      const res = await fetch("/api/order/create-gateway-order", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderPayload),
+      });
 
-return (
-  <div className="space-y-8">
-    {/* STEP 2 */}
-    {step === 2 && (
-      <>
-        {/* PAYMENT METHOD */}
-        <div className="rounded-2xl border border-gray-700 bg-gradient-to-br from-black/40 to-black/20 p-5">
-          <h3 className="text-lg font-semibold mb-4">Payment Method</h3>
+      const data = await res.json();
 
-          <div className="space-y-3">
-            {/* Wallet */}
+      if (!data.success) {
+        alert("Order failed: " + data.message);
+        setIsRedirecting(false);
+        return;
+      }
+
+      sessionStorage.setItem("pending_topup_order", data.orderId);
+
+      // 🚀 redirect
+      window.location.href = data.paymentUrl;
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+      setIsRedirecting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* STEP 2: REVIEW & PAY */}
+      {step === 2 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
+          {/* USER & ACCOUNT DETAILS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-[var(--accent)]/5 rounded-full blur-2xl -z-10 group-hover:bg-[var(--accent)]/10 transition-all" />
+              <h3 className="text-xs font-[900] uppercase tracking-widest text-[var(--muted)] mb-4 flex items-center gap-2">
+                <FiUser className="text-lg" /> User Details
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Email Address</p>
+                  <p className="font-medium truncate text-sm">{userEmail || "Not provided"}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Phone Number</p>
+                  <p className="font-medium truncate text-sm">{userPhone || "Not provided"}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full blur-2xl -z-10 group-hover:bg-blue-500/10 transition-all" />
+              <h3 className="text-xs font-[900] uppercase tracking-widest text-[var(--muted)] mb-4 flex items-center gap-2">
+                <FiShield className="text-lg" /> Game Account
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Username</p>
+                  <p className="font-bold text-[var(--accent)] truncate text-sm">{reviewData.userName}</p>
+                </div>
+                <div className="flex gap-4">
+                  <div>
+                    <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Player ID</p>
+                    <p className="font-medium truncate text-sm">{reviewData.playerId}</p>
+                  </div>
+                  {reviewData.zoneId && (
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Zone ID</p>
+                      <p className="font-medium truncate text-sm">{reviewData.zoneId}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* PAYMENT METHODS */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-[900] uppercase tracking-widest text-[var(--foreground)] flex items-center gap-2">
+              <FiCreditCard /> Select Payment Method
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Wallet Option */}
+              <button
+                onClick={() => {
+                  if (walletBalance >= totalPrice) setPaymentMethod("wallet");
+                }}
+                disabled={walletBalance < totalPrice}
+                className={`relative p-4 rounded-xl border2 transition-all text-left group overflow-hidden
+                             ${paymentMethod === "wallet"
+                    ? "bg-[var(--accent)]/10 border-[var(--accent)] ring-1 ring-[var(--accent)]"
+                    : "bg-[var(--background)] border-[var(--border)] hover:border-[var(--muted)]"
+                  }
+                             ${walletBalance < totalPrice ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                        `}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-bold text-sm">Wallet Balance</span>
+                  {paymentMethod === "wallet" && <FiCheck className="text-[var(--accent)]" />}
+                </div>
+                <div className="flex items-end gap-2">
+                  <span className="text-lg font-[900]">₹{walletBalance}</span>
+                  {walletBalance < totalPrice && (
+                    <span className="text-[10px] text-red-400 font-bold mb-1">Insufficient</span>
+                  )}
+                </div>
+              </button>
+
+              {/* UPI Option */}
+              <button
+                onClick={handleUPI}
+                className={`relative p-4 rounded-xl border transition-all text-left group overflow-hidden
+                             ${paymentMethod === "upi"
+                    ? "bg-[var(--accent)]/10 border-[var(--accent)] ring-1 ring-[var(--accent)]"
+                    : "bg-[var(--background)] border-[var(--border)] hover:border-[var(--muted)]"
+                  }
+                        `}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-bold text-sm">UPI / QR Payment</span>
+                  {paymentMethod === "upi" && <FiCheck className="text-[var(--accent)]" />}
+                </div>
+                <div className="flex items-end gap-2">
+                  <span className="text-xs text-[var(--muted)] font-medium">Instant Processing</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* SUMMARY & ACTION */}
+          <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 relative overflow-hidden">
+            <div className="space-y-2 mb-6">
+              <div className="flex justify-between text-sm">
+                <span className="text-[var(--muted)] font-medium">Subtotal</span>
+                <span className="font-bold">₹{price}</span>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-[var(--muted)] font-medium">Discount</span>
+                  <span className="font-bold text-green-400">- ₹{discount}</span>
+                </div>
+              )}
+              <div className="h-px bg-[var(--border)] my-2" />
+              <div className="flex justify-between items-center">
+                <span className="font-[900] text-lg uppercase tracking-tight">Total Pay</span>
+                <span className="font-[900] text-2xl text-[var(--accent)]">₹{totalPrice}</span>
+              </div>
+            </div>
+
             <button
-              disabled
-              onClick={() => {
-                if (walletBalance < totalPrice) return;
-                setPaymentMethod("wallet");
-              }}
-              className={`w-full p-4 rounded-xl border transition-all text-left flex justify-between items-center
-                ${
-                  paymentMethod === "wallet"
-                    ? "border-[var(--accent)] bg-[var(--accent)]/15"
-                    : "border-gray-700 hover:border-gray-500"
-                }
-                ${walletBalance < totalPrice && "opacity-50 cursor-not-allowed"}
-              `}
+              onClick={handleProceed}
+              disabled={isRedirecting || !paymentMethod || (paymentMethod === "wallet" && walletBalance < totalPrice)}
+              className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-[900] uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
-              <span className="font-medium">Wallet</span>
-              <span className="text-sm text-gray-300">₹{walletBalance}</span>
+              {isRedirecting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  Processing...
+                </span>
+              ) : "Proceed to Pay"}
             </button>
+          </div>
+        </motion.div>
+      )}
 
-            {walletBalance < totalPrice && (
-              <p className="text-xs text-red-400">
-                Insufficient balance (₹{totalPrice} required)
-              </p>
+      {/* STEP 3: QR CODE DISPLAY */}
+      {step === 3 && paymentMethod === "upi" && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-8 text-center"
+        >
+          <div className="w-16 h-16 bg-[var(--accent)]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FiSmartphone className="text-3xl text-[var(--accent)]" />
+          </div>
+          <h3 className="text-xl font-[900] uppercase tracking-wide mb-2">Scan to Pay</h3>
+          <p className="text-[var(--muted)] text-sm mb-6">Use any UPI app to scan and pay safely.</p>
+
+          <div className="w-64 h-64 mx-auto bg-white p-4 rounded-2xl shadow-xl mb-8">
+            {upiQR ? (
+              <Image src={upiQR} alt="UPI QR" width={250} height={250} className="w-full h-full object-contain" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-black/50 text-sm font-bold animate-pulse">
+                Generating QR...
+              </div>
             )}
-
-            {/* UPI */}
-            <button
-              onClick={handleUPI}
-              className={`w-full p-4 rounded-xl border transition-all text-left flex justify-between items-center
-                ${
-                  paymentMethod === "upi"
-                    ? "border-[var(--accent)] bg-[var(--accent)]/15"
-                    : "border-gray-700 hover:border-gray-500"
-                }
-              `}
-            >
-              <span className="font-medium">UPI / QR Payment</span>
-              <span className="text-xs text-gray-400">Instant</span>
-            </button>
-          </div>
-        </div>
-
-    
-
-        {/* USER DETAILS */}
-     {/* USER DETAILS */}
-<div className="border border-gray-700/60 rounded-xl bg-black/20 px-4 py-3">
-  <h3 className="text-sm font-semibold mb-2 text-gray-200">Your Details</h3>
-
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-    <div className="flex justify-between gap-2">
-      <span className="text-gray-400">Email</span>
-      <span className="font-medium truncate">
-        {userEmail || "Not provided"}
-      </span>
-    </div>
-
-    <div className="flex justify-between gap-2">
-      <span className="text-gray-400">Phone</span>
-      <span className="font-medium">
-        {userPhone || "Not provided"}
-      </span>
-    </div>
-  </div>
-</div>
-
-
-        {/* GAME DETAILS */}
-     {/* GAME DETAILS */}
-<div className="border border-gray-700/60 rounded-xl bg-black/20 px-4 py-3">
-  <h3 className="text-sm font-semibold mb-2 text-gray-200">
-    Game Account
-  </h3>
-
-  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-    <div className="flex justify-between gap-2">
-      <span className="text-gray-400">Username</span>
-      <span className="font-medium truncate">
-        {reviewData.userName}
-      </span>
-    </div>
-
-    <div className="flex justify-between gap-2">
-      <span className="text-gray-400">Player ID</span>
-      <span className="font-medium truncate">
-        {reviewData.playerId}
-      </span>
-    </div>
-
-    <div className="flex justify-between gap-2">
-      <span className="text-gray-400">Zone</span>
-      <span className="font-medium">
-        {reviewData.zoneId}
-      </span>
-    </div>
-  </div>
-</div>
-
-    {/* PRICE SUMMARY */}
-        <div className="rounded-2xl border border-gray-700 bg-black/30 p-5">
-          <h3 className="text-lg font-semibold mb-3">Order Summary</h3>
-
-          <div className="space-y-1 text-sm text-gray-300">
-            <div className="flex justify-between">
-              <span>Base Price</span>
-              <span>₹{price}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Discount</span>
-              <span className="text-green-400">- ₹{discount}</span>
-            </div>
-          </div>
-
-          <div className="mt-3 pt-3 border-t border-gray-700 flex justify-between items-center">
-            <span className="font-semibold text-lg">Total</span>
-            <span className="text-xl font-bold">₹{totalPrice}</span>
           </div>
 
           <button
-            onClick={handleProceed}
-            disabled={
-              isRedirecting ||
-              !paymentMethod ||
-              (paymentMethod === "wallet" && walletBalance < totalPrice)
-            }
-            className="mt-5 w-full rounded-xl bg-[var(--accent)] text-black py-3 font-semibold
-              transition-all hover:scale-[1.01] active:scale-[0.99]
-              disabled:opacity-50 disabled:cursor-not-allowed
-              flex items-center justify-center gap-2"
+            onClick={onPaymentComplete}
+            className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-[900] uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] transition-all"
           >
-            {isRedirecting ? (
-              <>
-                <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                Redirecting…
-              </>
-            ) : (
-              "Proceed to Pay"
-            )}
+            I Have Completed Payment
           </button>
-        </div>
-
-      </>
-    )}
-
-    {/* STEP 3 */}
-    {step === 3 && paymentMethod === "upi" && (
-      <div className="rounded-2xl border border-gray-700 bg-black/30 p-6 text-center">
-        <p className="font-semibold mb-3">Scan & Pay via UPI</p>
-
-        <div className="w-52 h-52 mx-auto bg-white p-4 rounded-2xl shadow">
-          {upiQR ? (
-            <Image src={upiQR} alt="UPI QR" width={200} height={200} />
-          ) : (
-            <p className="text-sm">Generating QR…</p>
-          )}
-        </div>
-
-        <button
-          onClick={onPaymentComplete}
-          className="mt-6 w-full py-3 rounded-xl bg-[var(--accent)] text-black font-semibold"
-        >
-          I Have Paid
-        </button>
-      </div>
-    )}
-  </div>
-);
-
+        </motion.div>
+      )}
+    </div>
+  );
 }
