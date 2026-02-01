@@ -50,7 +50,7 @@ export default function RegionPage() {
           className="mb-10"
         >
           <h1 className="text-3xl md:text-5xl font-[900] italic tracking-tighter uppercase leading-none mb-2">
-            REGION <span className="text-[#56CCF2]">SCANNER</span>
+            REGION <span className="text-[var(--accent)]">SCANNER</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
             Verification Portal
@@ -69,11 +69,11 @@ export default function RegionPage() {
               {/* Player ID */}
               <div className="relative group">
                 <User
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[#56CCF2] transition-colors"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors"
                   size={16}
                 />
                 <input
-                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-[var(--background)] border border-[var(--border)] outline-none text-[12px] font-bold tracking-wider uppercase focus:border-[#56CCF2]/40 transition-all"
+                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-[var(--background)] border border-[var(--border)] outline-none text-[12px] font-bold tracking-wider uppercase focus:border-[var(--accent)]/40 transition-all"
                   placeholder="PLAYER ID"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
@@ -83,11 +83,11 @@ export default function RegionPage() {
               {/* Zone ID */}
               <div className="relative group">
                 <MapPin
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[#56CCF2] transition-colors"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors"
                   size={16}
                 />
                 <input
-                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-[var(--background)] border border-[var(--border)] outline-none text-[12px] font-bold tracking-wider uppercase focus:border-[#56CCF2]/40 transition-all"
+                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-[var(--background)] border border-[var(--border)] outline-none text-[12px] font-bold tracking-wider uppercase focus:border-[var(--accent)]/40 transition-all"
                   placeholder="ZONE"
                   value={zone}
                   onChange={(e) => setZone(e.target.value)}
@@ -103,9 +103,10 @@ export default function RegionPage() {
               disabled={loading || !id || !zone}
               className="
                 w-full py-4 rounded-2xl font-black text-black uppercase tracking-[0.2em] italic text-xs
-                bg-[#56CCF2] hover:bg-[#4ebde1] disabled:opacity-30 transition-all
+                bg-[var(--accent)] hover:opacity-90 disabled:opacity-30 transition-all
                 flex items-center justify-center gap-2
               "
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               {loading ? (
                 <>

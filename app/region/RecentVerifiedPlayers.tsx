@@ -37,7 +37,7 @@ export default function RecentVerifiedPlayers({
       {/* Header */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-2">
-          <FiRotateCcw size={14} className="text-[#56CCF2]" />
+          <FiRotateCcw size={14} className="text-[var(--accent)]" />
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60">
             RECENT SCANS
           </h3>
@@ -58,17 +58,17 @@ export default function RecentVerifiedPlayers({
               className="
                 w-full text-left
                 rounded-2xl border border-[var(--border)]
-                bg-[var(--card)]/40 hover:border-[#56CCF2]/30
+                bg-[var(--card)]/40 hover:border-[var(--accent)]/30
                 transition-all duration-200
                 p-4 group flex items-center justify-between gap-4
               "
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[#56CCF2]/60 group-hover:text-[#56CCF2] group-hover:bg-[#56CCF2]/10 transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)]/60 group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-colors">
                   <FiShield size={14} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[11px] font-[900] uppercase tracking-tight italic truncate text-[var(--foreground)] group-hover:text-[#56CCF2] transition-colors leading-none mb-1.5">
+                  <p className="text-[11px] font-[900] uppercase tracking-tight italic truncate text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none mb-1.5">
                     {p.username || "UNKNOWN PLAYER"}
                   </p>
                   <div className="flex items-center gap-2 text-[9px] font-bold text-[var(--muted)] opacity-40 uppercase tracking-tighter">
@@ -80,7 +80,7 @@ export default function RecentVerifiedPlayers({
               </div>
 
               <div className="text-right flex-shrink-0">
-                <span className="block text-[9px] font-black text-[#56CCF2] tracking-widest uppercase italic mb-1">
+                <span className="block text-[9px] font-black text-[var(--accent)] tracking-widest uppercase italic mb-1">
                   {p.region || "N/A"}
                 </span>
                 {p.savedAt && (

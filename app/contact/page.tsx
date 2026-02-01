@@ -6,7 +6,7 @@ import { FiArrowRight, FiInfo } from "react-icons/fi";
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[#56CCF2]/30 pb-32 transition-colors duration-300 px-6">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 px-6">
 
       <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
 
@@ -17,7 +17,7 @@ export default function ContactPage() {
           className="mb-12"
         >
           <h1 className="text-4xl md:text-6xl font-[900] italic tracking-tighter uppercase leading-none mb-2">
-            CONTACT <span className="text-[#56CCF2]">SUPPORT</span>
+            CONTACT <span className="text-[var(--accent)]">SUPPORT</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
             Get In Touch
@@ -32,17 +32,17 @@ export default function ContactPage() {
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[#56CCF2]/30 transition-all"
+              className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[var(--accent)]/30 transition-all"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[#56CCF2]/60 group-hover:text-[#56CCF2] group-hover:bg-[#56CCF2]/10 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)]/60 group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-colors">
                   <FaEnvelope size={16} />
                 </div>
                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60">Direct Email</h2>
               </div>
               <a
                 href="mailto:aamonvss@gmail.com"
-                className="inline-flex items-center gap-2 text-xl md:text-2xl font-[900] italic uppercase tracking-tighter text-[var(--foreground)] hover:text-[#56CCF2] transition-colors break-all"
+                className="inline-flex items-center gap-2 text-xl md:text-2xl font-[900] italic uppercase tracking-tighter text-[var(--foreground)] hover:text-[var(--accent)] transition-colors break-all"
               >
                 aamonvss@gmail.com
                 <FiArrowRight />
@@ -54,7 +54,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[#56CCF2]/30 transition-all"
+              className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[var(--accent)]/30 transition-all"
             >
               <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-6">Social Network</h2>
               <div className="flex flex-wrap gap-3">
@@ -67,7 +67,7 @@ export default function ContactPage() {
                     href={social.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:text-[#56CCF2] hover:border-[#56CCF2]/40 transition-all group/link"
+                    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/40 transition-all group/link"
                   >
                     <social.icon size={14} />
                     <span className="text-[9px] font-black uppercase tracking-widest italic">{social.label}</span>

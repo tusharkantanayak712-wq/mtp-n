@@ -24,11 +24,11 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-[var(--background)] text-[var(--foreground)] selection:bg-[#56CCF2]/30 pb-32 transition-colors duration-300 px-6">
+    <main className="min-h-screen relative overflow-hidden bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 px-6">
 
       {/* Background Lighting */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[20%] w-[70%] h-[50%] bg-blue-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[70%] h-[50%] bg-[var(--accent)]/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[10%] w-[50%] h-[50%] bg-purple-500/5 rounded-full blur-[120px]" />
       </div>
 
@@ -40,11 +40,11 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-20 text-center md:text-left"
         >
-          <div className="inline-block px-4 py-1.5 rounded-full bg-[#56CCF2]/5 border border-[#56CCF2]/10 mb-6">
-            <span className="text-[#56CCF2] text-[10px] font-black uppercase tracking-widest italic">Our Identity</span>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 mb-6">
+            <span className="text-[var(--accent)] text-[10px] font-black uppercase tracking-widest italic">Our Identity</span>
           </div>
           <h1 className="text-5xl md:text-8xl font-[1000] italic tracking-tighter uppercase leading-[0.85] mb-6">
-            ABOUT <span className="text-[#56CCF2]">{BRAND.toUpperCase()}</span>
+            ABOUT <span className="text-[var(--accent)]">{BRAND.toUpperCase()}</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] md:text-xs font-[900] uppercase tracking-[0.4em] opacity-60 italic leading-relaxed max-w-xl">
             DEFINING THE GOLD STANDARD IN AUTOMATED GAME TOP-UPS
@@ -60,7 +60,7 @@ export default function AboutPage() {
         >
           <motion.div variants={itemVariants} className="bg-[var(--card)]/40 border border-[var(--border)] rounded-[40px] p-8 md:p-12 relative overflow-hidden mb-12">
             <h2 className="text-2xl md:text-4xl font-[900] italic uppercase tracking-tighter text-[var(--foreground)] mb-6">
-              OUR <span className="text-[#56CCF2]">MISSION</span>
+              OUR <span className="text-[var(--accent)]">MISSION</span>
             </h2>
             <p className="text-[var(--muted)] text-base md:text-lg leading-relaxed opacity-70 mb-10 italic">
               {BRAND} was engineered to eliminate the friction in premium gaming transactions. We believe that securing your diamonds, passes, and credits should be as fast as the games you play.
@@ -73,7 +73,7 @@ export default function AboutPage() {
                 "Transparent & market-leading rates"
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 py-3 border-b border-[var(--border)] last:border-0 md:last:border-b">
-                  <div className="w-5 h-5 rounded-full bg-[#56CCF2]/10 flex items-center justify-center text-[#56CCF2]">
+                  <div className="w-5 h-5 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
                     <FiCheck size={12} />
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-60 italic">{item}</span>
@@ -118,9 +118,9 @@ export default function AboutPage() {
               <motion.div
                 key={i}
                 variants={itemVariants}
-                className="p-8 rounded-[32px] bg-[var(--card)]/20 border border-[var(--border)] hover:border-[#56CCF2]/30 transition-all group"
+                className="p-8 rounded-[32px] bg-[var(--card)]/20 border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all group"
               >
-                <div className="w-12 h-12 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[#56CCF2] group-hover:bg-[#56CCF2] group-hover:text-black transition-all mb-6">
+                <div className="w-12 h-12 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all mb-6">
                   <feature.icon size={20} />
                 </div>
                 <h3 className="text-xl font-[900] italic uppercase tracking-tighter text-[var(--foreground)] mb-3">{feature.title}</h3>

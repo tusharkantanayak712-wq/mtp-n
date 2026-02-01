@@ -90,7 +90,7 @@ export default function StorySlider() {
                 "
                 style={{
                   background:
-                    "linear-gradient(135deg, #ff5f6d, #d946ef, #3b82f6)",
+                    "linear-gradient(135deg, var(--accent), var(--accent-hover), var(--accent))",
                 }}
               >
                 <div className="rounded-full bg-[var(--background)] p-[2px]">

@@ -17,7 +17,7 @@ export default function BlogPage() {
       date="Jan 10, 2025"
       image="https://res.cloudinary.com/dk0sslz1q/image/upload/v1765619191/ideogram-v3.0_A_high-quality_horizontal_rectangular_website_banner_for_a_gaming_top-up_website-0_2_rgpuck.png"
     >
-      <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[#56CCF2] pl-6 py-2 bg-[#56CCF2]/5 rounded-r-2xl">
+      <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         The <strong>MLBB weekly pass</strong> is one of the most cost-effective recharge options for Mobile Legends players in India. It provides daily diamond rewards for 7 days at a much lower cost.
       </p>
 
@@ -32,8 +32,8 @@ export default function BlogPage() {
       </p>
 
       <div className="bg-[var(--card)] border border-[var(--border)] p-10 rounded-[40px] my-16 shadow-xl relative overflow-hidden group">
-        <div className="absolute top-0 left-0 w-1 h-full bg-[#56CCF2]" />
-        <h3 className="italic font-black uppercase text-[#56CCF2] mb-4">Quick Fact 🔍</h3>
+        <div className="absolute top-0 left-0 w-1 h-full bg-[var(--accent)]" />
+        <h3 className="italic font-black uppercase text-[var(--accent)] mb-4">Quick Fact 🔍</h3>
         <p className="text-sm italic opacity-70 m-0">
           Buying the Weekly Pass gives you up to 4x value compared to normal diamond packs of the same price.
         </p>
@@ -60,11 +60,11 @@ export default function BlogPage() {
         <h4 className="text-xl font-black italic uppercase tracking-widest mb-8 opacity-40 transition-colors">Pricing FAQ</h4>
         <div className="space-y-8">
           <div className="group">
-            <h5 className="text-[#56CCF2] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">Can I buy multiple passes?</h5>
+            <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">Can I buy multiple passes?</h5>
             <p className="text-sm opacity-60">Yes! Stacking usually extends the duration of your daily rewards. Check the platform specific limits before purchasing.</p>
           </div>
           <div className="group">
-            <h5 className="text-[#56CCF2] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">Is it cheaper than diamonds?</h5>
+            <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">Is it cheaper than diamonds?</h5>
             <p className="text-sm opacity-60">Per diamond, the Weekly Pass is significantly cheaper than buying any other standard pack in the game.</p>
           </div>
         </div>

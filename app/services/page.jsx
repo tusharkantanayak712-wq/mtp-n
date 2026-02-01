@@ -49,7 +49,7 @@ export default function ServicesPage() {
           className="mb-16"
         >
           <h1 className="text-4xl md:text-6xl font-[900] italic tracking-tighter uppercase leading-none mb-2">
-            OUR <span className="text-[#56CCF2]">SERVICES</span>
+            OUR <span className="text-[var(--accent)]">SERVICES</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic font-sans">
             Solutions for Every Scale
@@ -70,22 +70,22 @@ export default function ServicesPage() {
                 whileHover={service.active ? { x: 3, backgroundColor: "var(--card)" } : {}}
                 onClick={() => service.active && window.open(whatsappLink, "_blank")}
                 className={`group relative p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] transition-all duration-300 overflow-hidden flex flex-col md:flex-row items-start md:items-center gap-6 ${service.active
-                    ? "cursor-pointer hover:border-[#56CCF2]/30 hover:shadow-xl"
-                    : "opacity-30 grayscale cursor-not-allowed border-dashed"
+                  ? "cursor-pointer hover:border-[var(--accent)]/30 hover:shadow-xl"
+                  : "opacity-30 grayscale cursor-not-allowed border-dashed"
                   }`}
               >
                 {/* Icon Container */}
-                <div className="w-14 h-14 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[#56CCF2]/60 group-hover:text-[#56CCF2] group-hover:bg-[#56CCF2]/10 transition-all shadow-lg flex-shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)]/60 group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-all shadow-lg flex-shrink-0">
                   <Icon size={24} />
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl md:text-2xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[#56CCF2] transition-colors leading-none">
+                    <h3 className="text-xl md:text-2xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none">
                       {service.title}
                     </h3>
-                    <span className="text-[8px] font-black px-2 py-0.5 rounded bg-[#56CCF2]/5 text-[#56CCF2]/60 border border-[#56CCF2]/10 tracking-widest uppercase">
+                    <span className="text-[8px] font-black px-2 py-0.5 rounded bg-[var(--accent)]/5 text-[var(--accent)]/60 border border-[var(--accent)]/10 tracking-widest uppercase">
                       {service.badge}
                     </span>
                   </div>
@@ -97,9 +97,9 @@ export default function ServicesPage() {
                 {/* Action Indicator */}
                 <div className="flex items-center gap-3 text-right flex-shrink-0 ml-auto md:ml-4">
                   <div className="hidden md:flex flex-col items-end opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[9px] font-black uppercase text-[#56CCF2] tracking-widest">Connect Now</span>
+                    <span className="text-[9px] font-black uppercase text-[var(--accent)] tracking-widest">Connect Now</span>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[#56CCF2] group-hover:border-[#56CCF2]/40 transition-all group-hover:scale-105">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/40 transition-all group-hover:scale-105">
                     <FiArrowRight size={18} />
                   </div>
                 </div>
@@ -115,10 +115,11 @@ export default function ServicesPage() {
           className="mt-16 p-8 rounded-3xl border border-[var(--border)] bg-[var(--card)]/20 text-center"
         >
           <h4 className="text-xl font-[900] italic uppercase tracking-tighter mb-2">Ready to expand?</h4>
-          <p className="text-[var(--muted)] text-xs opacity-60 mb-8 max-w-sm mx-auto">Discuss custom configurations and bulk rates with our enterprise team.</p>
+          <p className="text-[var(--muted)] text-[10px] opacity-60 mb-8 max-w-sm mx-auto uppercase tracking-widest font-black italic">Discuss custom configurations and bulk rates with our enterprise team.</p>
           <button
             onClick={() => window.open(whatsappLink, "_blank")}
-            className="px-8 py-3.5 rounded-2xl bg-[#56CCF2] text-black font-black uppercase tracking-widest text-[10px] italic shadow-lg hover:bg-[#4ebde1] transition-all flex items-center gap-2 mx-auto"
+            className="px-8 py-3.5 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-widest text-[10px] italic shadow-lg hover:scale-105 transition-all flex items-center gap-2 mx-auto"
+            style={{ backgroundColor: 'var(--accent)' }}
           >
             <FiMessageCircle size={14} />
             Connect on WhatsApp

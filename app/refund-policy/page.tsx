@@ -29,7 +29,7 @@ export default function RefundPolicy() {
   ];
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[#56CCF2]/30 pb-32 transition-colors duration-300 px-6">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 px-6">
 
       <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
 
@@ -40,7 +40,7 @@ export default function RefundPolicy() {
           className="mb-16 text-center md:text-left"
         >
           <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none mb-2">
-            REFUND <span className="text-[#56CCF2]">POLICY</span>
+            REFUND <span className="text-[var(--accent)]">POLICY</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
             Service Reversal Guidelines
@@ -58,7 +58,7 @@ export default function RefundPolicy() {
               whileHover={{ backgroundColor: "var(--card)" }}
               className="p-6 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] group flex items-start gap-5 transition-all"
             >
-              <div className="text-xl font-black italic text-[#56CCF2] opacity-20 group-hover:opacity-100 transition-opacity pt-0.5">
+              <div className="text-xl font-black italic text-[var(--accent)] opacity-20 group-hover:opacity-100 transition-opacity pt-0.5">
                 {section.id}
               </div>
               <div>
@@ -71,9 +71,9 @@ export default function RefundPolicy() {
 
         {/* CTA - SIMPLIFIED */}
         <div className="mt-12 p-8 rounded-3xl border border-[var(--border)] text-center opacity-40">
-          <FiRefreshCcw className="mx-auto mb-4 text-[#56CCF2]" size={20} />
+          <FiRefreshCcw className="mx-auto mb-4 text-[var(--accent)]" size={20} />
           <p className="text-[10px] font-bold uppercase tracking-widest max-w-xs mx-auto mb-6">Need a transaction audit? Our logistics team is available for status verification.</p>
-          <Link href="/contact" className="text-[9px] font-black uppercase text-[#56CCF2] border-b border-[#56CCF2]/30 pb-1">Open Support Audit</Link>
+          <Link href="/contact" className="text-[9px] font-black uppercase text-[var(--accent)] border-b border-[var(--accent)]/30 pb-1">Open Support Audit</Link>
         </div>
 
       </div>

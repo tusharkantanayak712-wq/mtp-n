@@ -31,7 +31,7 @@ export default function LeaderboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[#56CCF2]/30 pb-32 transition-colors duration-300">
+      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300">
         <div className="max-w-2xl mx-auto px-6 pt-12 md:pt-24 relative z-10">
 
           {/* 🏆 HEADER SECTION - SIMPLER */}
@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-4xl md:text-6xl font-[900] italic tracking-tighter uppercase leading-none mb-2 transition-colors text-center md:text-left">
-              ELITE <span className="text-[#56CCF2]">SPENDORS</span>
+              ELITE <span className="text-[var(--accent)]">SPENDORS</span>
             </h1>
             <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic text-center md:text-left">
               The Legend Board
@@ -61,9 +61,10 @@ export default function LeaderboardPage() {
                   key={r}
                   onClick={() => setRange(r)}
                   className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${range === r
-                    ? "bg-[#56CCF2] text-black shadow-lg"
+                    ? "bg-[var(--accent)] text-black shadow-lg"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
+                  style={range === r ? { backgroundColor: 'var(--accent)' } : {}}
                 >
                   {r === "weekly" ? "This Week" : "This Month"}
                 </button>
@@ -74,7 +75,7 @@ export default function LeaderboardPage() {
           <AnimatePresence mode="wait">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-24">
-                <div className="w-8 h-8 border-2 border-[var(--border)] border-t-[#56CCF2] rounded-full animate-spin mb-4" />
+                <div className="w-8 h-8 border-2 border-[var(--border)] border-t-[var(--accent)] rounded-full animate-spin mb-4" />
                 <span className="text-[9px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40 italic">Syncing Data...</span>
               </div>
             ) : data.length === 0 ? (
@@ -93,8 +94,8 @@ export default function LeaderboardPage() {
                     className={`
                       relative group flex items-center p-5 rounded-2xl border transition-all duration-300
                       ${index === 0
-                        ? "bg-[var(--card)] border-[#56CCF2]/20 shadow-xl"
-                        : "bg-[var(--card)]/40 border-[var(--border)] hover:border-[#56CCF2]/30"
+                        ? "bg-[var(--card)] border-[var(--accent)]/20 shadow-xl"
+                        : "bg-[var(--card)]/40 border-[var(--border)] hover:border-[var(--accent)]/30"
                       }
                     `}
                   >
@@ -111,26 +112,26 @@ export default function LeaderboardPage() {
 
                     {/* User Profile */}
                     <div className="flex-1 min-w-0 ml-4">
-                      <p className={`font-[900] uppercase italic tracking-tight truncate leading-none mb-1.5 transition-colors ${index === 0 ? "text-[var(--foreground)] text-lg" : "text-[var(--foreground)] text-base group-hover:text-[#56CCF2]"}`}>
+                      <p className={`font-[900] uppercase italic tracking-tight truncate leading-none mb-1.5 transition-colors ${index === 0 ? "text-[var(--foreground)] text-lg" : "text-[var(--foreground)] text-base group-hover:text-[var(--accent)]"}`}>
                         {item.user?.name || "ANONYMOUS"}
                       </p>
                       <div className="flex items-center gap-2 text-[9px] font-bold text-[var(--muted)] opacity-40 uppercase tracking-tighter">
                         <span>UID {item.user?.userId || "—"}</span>
-                        {index === 0 && <span className="text-[#56CCF2] opacity-100 font-black tracking-widest ml-1">#1 CHAMPION</span>}
+                        {index === 0 && <span className="text-[var(--accent)] opacity-100 font-black tracking-widest ml-1">#1 CHAMPION</span>}
                       </div>
                     </div>
 
                     {/* Spending Detail */}
                     <div className="text-right ml-4">
                       <div className={`font-black italic tracking-tighter transition-all origin-right ${index === 0 ? "text-3xl text-[var(--foreground)]" : "text-xl text-[var(--foreground)] group-hover:scale-110"}`}>
-                        <span className="text-[#56CCF2] mr-0.5">₹</span>
+                        <span className="text-[var(--accent)] mr-0.5">₹</span>
                         {item.totalSpent?.toLocaleString()}
                       </div>
                     </div>
 
                     {/* Subtle Side Glow for Rank #1 */}
                     {index === 0 && (
-                      <div className="absolute inset-y-0 left-0 w-1 bg-[#56CCF2] rounded-l-2xl shadow-[0_0_15px_rgba(86,204,242,0.4)]" />
+                      <div className="absolute inset-y-0 left-0 w-1 bg-[var(--accent)] rounded-l-2xl shadow-[0_0_15px_rgba(var(--accent-rgb),0.4)]" />
                     )}
                   </motion.div>
                 ))}

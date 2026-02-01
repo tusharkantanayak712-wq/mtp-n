@@ -98,7 +98,7 @@ export default function BlogPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1 className="text-4xl md:text-6xl font-[900] italic tracking-tighter uppercase leading-none mb-2">
-            MLBB <span className="text-[#56CCF2]">INSIGHTS</span>
+            MLBB <span className="text-[var(--accent)]">INSIGHTS</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic font-sans">
             Safety Tips & Pricing Guides
@@ -119,7 +119,7 @@ export default function BlogPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="SEARCH..."
-            className="w-full h-14 pl-11 pr-6 rounded-2xl bg-[var(--card)] border border-[var(--border)] outline-none text-[12px] font-bold tracking-widest uppercase focus:border-[#56CCF2]/40 transition-all font-sans"
+            className="w-full h-14 pl-11 pr-6 rounded-2xl bg-[var(--card)] border border-[var(--border)] outline-none text-[12px] font-bold tracking-widest uppercase focus:border-[var(--accent)]/40 transition-all font-sans"
           />
         </motion.div>
 
@@ -149,7 +149,7 @@ export default function BlogPage() {
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => p - 1)}
-              className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] disabled:opacity-20 transition-all hover:border-[#56CCF2]/30"
+              className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] disabled:opacity-20 transition-all hover:border-[var(--accent)]/30"
             >
               <FiChevronLeft size={16} />
             </button>
@@ -159,7 +159,7 @@ export default function BlogPage() {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => p + 1)}
-              className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] disabled:opacity-20 transition-all hover:border-[#56CCF2]/30"
+              className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] disabled:opacity-20 transition-all hover:border-[var(--accent)]/30"
             >
               <FiChevronRight size={16} />
             </button>
@@ -180,12 +180,12 @@ function BlogCard({ blog, index }) {
     >
       <Link
         href={`/blog/${blog.slug}`}
-        className="group block relative rounded-2xl bg-[var(--card)] border border-[var(--border)] p-6 md:p-8 hover:border-[#56CCF2]/30 transition-all duration-300"
+        className="group block relative rounded-2xl bg-[var(--card)] border border-[var(--border)] p-6 md:p-8 hover:border-[var(--accent)]/30 transition-all duration-300"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-3">
-              <span className="text-[9px] font-black text-[#56CCF2] uppercase tracking-[0.15em] italic">
+              <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-[0.15em] italic">
                 {blog.type}
               </span>
               <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
@@ -194,7 +194,7 @@ function BlogCard({ blog, index }) {
               </span>
             </div>
 
-            <h2 className="text-xl md:text-2xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] leading-[1.1] group-hover:text-[#56CCF2] transition-colors mb-2">
+            <h2 className="text-xl md:text-2xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] leading-[1.1] group-hover:text-[var(--accent)] transition-colors mb-2">
               {blog.title}
             </h2>
 
@@ -207,7 +207,7 @@ function BlogCard({ blog, index }) {
             <div className="hidden md:flex flex-col items-end gap-1 text-[9px] font-black text-[var(--muted)] opacity-30 uppercase tracking-widest group-hover:opacity-100 transition-opacity">
               <div className="flex items-center gap-1.5"><FiClock size={10} /> {blog.readingTime}</div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[#56CCF2] group-hover:border-[#56CCF2]/40 transition-all group-hover:scale-105">
+            <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/40 transition-all group-hover:scale-105">
               <FiArrowRight size={18} />
             </div>
           </div>

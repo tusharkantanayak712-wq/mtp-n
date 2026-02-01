@@ -64,7 +64,7 @@ export default function BlueBuffLoader({
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1729 100%)",
+          background: "var(--background)",
         }}
       >
         {/* Animated background gradient waves */}
@@ -72,10 +72,10 @@ export default function BlueBuffLoader({
           className="absolute inset-0"
           animate={{
             background: [
-              "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
-              "radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%)",
-              "radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)",
-              "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 50%, var(--accent)/0.15 0%, transparent 50%)",
+              "radial-gradient(circle at 80% 50%, var(--accent)/0.1 0%, transparent 50%)",
+              "radial-gradient(circle at 50% 80%, var(--accent)/0.15 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 50%, var(--accent)/0.15 0%, transparent 50%)",
             ],
           }}
           transition={{
@@ -124,7 +124,7 @@ export default function BlueBuffLoader({
               ease: "easeInOut",
             }}
             style={{
-              background: "radial-gradient(circle, rgba(59, 130, 246, 0.4), rgba(139, 92, 246, 0.2))",
+              background: "radial-gradient(circle, var(--accent)/0.4, var(--accent)/0.1)",
               width: "280px",
               height: "280px",
               top: "50%",
@@ -148,7 +148,7 @@ export default function BlueBuffLoader({
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              background: "conic-gradient(from 0deg, transparent, #3b82f6, #8b5cf6, transparent)",
+              background: "conic-gradient(from 0deg, transparent, var(--accent), transparent)",
               opacity: 0.6,
             }}
           />
@@ -197,9 +197,9 @@ export default function BlueBuffLoader({
             style={{
               width: "140px",
               height: "140px",
-              background: "linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.3))",
-              border: "2px solid rgba(255, 255, 255, 0.1)",
-              boxShadow: "0 0 60px rgba(59, 130, 246, 0.4), inset 0 0 40px rgba(139, 92, 246, 0.2)",
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+              boxShadow: "0 0 60px var(--accent)/0.2, inset 0 0 40px var(--accent)/0.05",
             }}
           >
             {/* Progress indicator */}
@@ -217,13 +217,13 @@ export default function BlueBuffLoader({
                     exit={{ opacity: 0 }}
                   >
                     <motion.span
-                      className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent"
+                      className="text-4xl font-black italic uppercase tracking-tighter bg-gradient-to-r from-[var(--accent)] to-[var(--foreground)] bg-clip-text text-transparent"
                       animate={{ opacity: [0.7, 1, 0.7] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     >
                       {Math.round(internalProgress)}
                     </motion.span>
-                    <span className="text-xl font-light text-blue-300 ml-1">%</span>
+                    <span className="text-xl font-bold italic text-[var(--accent)] ml-1">%</span>
                   </motion.div>
                 ) : (
                   <motion.svg
@@ -279,21 +279,14 @@ export default function BlueBuffLoader({
             className="mt-16 text-center"
           >
             <motion.p
-              className="text-lg font-medium tracking-wider uppercase"
-              style={{
-                background: "linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6)",
-                backgroundSize: "200% 100%",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+              className="text-lg font-[900] italic uppercase tracking-[0.2em] text-[var(--foreground)]"
               animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                opacity: [0.5, 1, 0.5],
               }}
               transition={{
-                duration: 3,
+                duration: 2,
                 repeat: Infinity,
-                ease: "linear",
+                ease: "easeInOut",
               }}
             >
               {text}

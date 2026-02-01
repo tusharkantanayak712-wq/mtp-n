@@ -50,7 +50,7 @@ export default function TermsAndConditions() {
   ];
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-[var(--background)] text-[var(--foreground)] selection:bg-[#56CCF2]/30 pb-32 transition-colors duration-300 px-6">
+    <main className="min-h-screen relative overflow-hidden bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 px-6">
 
       <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
 
@@ -60,17 +60,17 @@ export default function TermsAndConditions() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-16 text-center md:text-left"
         >
-          <div className="inline-block px-4 py-1.5 rounded-full bg-[#56CCF2]/5 border border-[#56CCF2]/10 mb-6 font-sans">
-            <span className="text-[#56CCF2] text-[10px] font-black uppercase tracking-widest italic">Legal Agreement</span>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 mb-6 font-sans">
+            <span className="text-[var(--accent)] text-[10px] font-black uppercase tracking-widest italic">Legal Agreement</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none mb-2">
-            TERMS & <span className="text-[#56CCF2]">CONDITIONS</span>
+            TERMS & <span className="text-[var(--accent)]">CONDITIONS</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
             Defining the Service Standards
           </p>
           <div className="flex items-center gap-4 mt-8 text-[9px] font-black uppercase tracking-widest opacity-30 italic justify-center md:justify-start">
-            <FiFileText size={14} className="text-[#56CCF2]" />
+            <FiFileText size={14} className="text-[var(--accent)]" />
             <span>REVISED: JANUARY 2026</span>
           </div>
         </motion.div>
@@ -83,9 +83,9 @@ export default function TermsAndConditions() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[#56CCF2]/30 transition-all flex flex-col md:flex-row gap-6"
+              className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[var(--accent)]/30 transition-all flex flex-col md:flex-row gap-6"
             >
-              <div className="text-2xl font-black italic text-[#56CCF2] opacity-20 group-hover:opacity-100 transition-opacity leading-none pt-1">
+              <div className="text-2xl font-black italic text-[var(--accent)] opacity-20 group-hover:opacity-100 transition-opacity leading-none pt-1">
                 {section.id}
               </div>
               <div className="flex-1">
@@ -110,10 +110,10 @@ export default function TermsAndConditions() {
                 <p className="text-[9px] font-bold text-[var(--muted)] opacity-50 uppercase leading-relaxed">Violations of these terms result in immediate termination of account access without prior warning.</p>
               </div>
             </div>
-            <div className="p-8 rounded-2xl bg-[#56CCF2]/5 border border-[#56CCF2]/10 flex items-start gap-4">
-              <FiGlobe className="text-[#56CCF2] mt-1 flex-shrink-0" />
+            <div className="p-8 rounded-2xl bg-[var(--accent)]/5 border border-[var(--accent)]/10 flex items-start gap-4">
+              <FiGlobe className="text-[var(--accent)] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[10px] font-black uppercase text-[#56CCF2] tracking-widest mb-2">Governing Law</h3>
+                <h3 className="text-[10px] font-black uppercase text-[var(--accent)] tracking-widest mb-2">Governing Law</h3>
                 <p className="text-[9px] font-bold text-[var(--muted)] opacity-50 uppercase leading-relaxed">All agreements are interpreted under the local jurisdiction of our operational base.</p>
               </div>
             </div>
