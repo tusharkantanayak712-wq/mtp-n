@@ -116,7 +116,7 @@ export async function PATCH(req) {
     }
 
     const body = await req.json();
-    const { userType, slabs = [], overrides = [] } = body;
+    let { userType, slabs = [], overrides = [] } = body;
 
     if (!userType) {
       return NextResponse.json(
@@ -125,11 +125,14 @@ export async function PATCH(req) {
       );
     }
 
-    if (!["user", "member", "admin"].includes(userType)) {
+    userType = userType.trim().toLowerCase();
+
+    const validRoles = ["user", "member", "admin", "owner"];
+    if (!validRoles.includes(userType)) {
       return NextResponse.json(
         {
           success: false,
-          message: "Pricing can only be set for user, member, or admin",
+          message: `Invalid role: ${userType}. Supported roles are ${validRoles.join(", ")}`,
         },
         { status: 400 }
       );
@@ -143,7 +146,7 @@ export async function PATCH(req) {
         typeof s.percent !== "number"
       ) {
         return NextResponse.json(
-          { success: false, message: "Invalid slab format" },
+          { success: false, message: "Invalid slab format: min, max, and percent must be numbers" },
           { status: 400 }
         );
       }
@@ -158,26 +161,28 @@ export async function PATCH(req) {
         o.fixedPrice < 0
       ) {
         return NextResponse.json(
-          { success: false, message: "Invalid override format" },
+          { success: false, message: "Invalid override format: gameSlug, itemSlug, and valid fixedPrice are required" },
           { status: 400 }
         );
       }
     }
 
     /* ================= LOAD EXISTING ================= */
+    let existing = await PricingConfig.findOne({ userType });
 
-    const existing =
-      (await PricingConfig.findOne({ userType })) ||
-      new PricingConfig({ userType, slabs: [], overrides: [] });
+    if (!existing) {
+      existing = new PricingConfig({ userType, slabs: [], overrides: [] });
+    }
 
     /* ================= MERGE OVERRIDES ================= */
-
     // key = gameSlug::itemSlug
     const overrideMap = new Map();
 
     // keep existing overrides
     for (const o of existing.overrides || []) {
-      overrideMap.set(`${o.gameSlug}::${o.itemSlug}`, o);
+      if (o.gameSlug && o.itemSlug) {
+        overrideMap.set(`${o.gameSlug}::${o.itemSlug}`, o);
+      }
     }
 
     // apply incoming overrides (replace or add)
@@ -192,20 +197,28 @@ export async function PATCH(req) {
     const mergedOverrides = Array.from(overrideMap.values());
 
     /* ================= SAVE ================= */
-
     existing.slabs = slabs;
     existing.overrides = mergedOverrides;
 
-    await existing.save();
+    try {
+      await existing.save();
+    } catch (saveError) {
+      console.error(`Database save error for userType ${userType}:`, saveError);
+      return NextResponse.json(
+        { success: false, message: saveError.message || "Database save failed" },
+        { status: 400 } // Likely a validation or constraint error
+      );
+    }
 
     return NextResponse.json({
       success: true,
+      message: `Pricing for ${userType} updated successfully`,
       data: existing,
     });
   } catch (err) {
     console.error("PATCH pricing error:", err);
     return NextResponse.json(
-      { success: false, message: "Server error" },
+      { success: false, message: "Internal server error" },
       { status: 500 }
     );
   }

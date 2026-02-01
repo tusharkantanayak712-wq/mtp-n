@@ -4,12 +4,12 @@ const PricingConfigSchema = new mongoose.Schema(
   {
     userType: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "member", "admin", "owner"],
       required: true,
       unique: true,
     },
 
-    /* ================= SLAB PRICING (EXISTING) ================= */
+    /* ================= SLAB PRICING ================= */
     slabs: [
       {
         min: { type: Number, required: true },     // inclusive
@@ -18,7 +18,7 @@ const PricingConfigSchema = new mongoose.Schema(
       },
     ],
 
-    /* ================= FIXED PRICE OVERRIDES (NEW) ================= */
+    /* ================= FIXED PRICE OVERRIDES ================= */
     overrides: [
       {
         gameSlug: {
@@ -41,12 +41,9 @@ const PricingConfigSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-/* ================= OPTIONAL SAFETY ================= */
-/* Prevent duplicate override for same game+item */
-PricingConfigSchema.index(
-  { userType: 1, "overrides.gameSlug": 1, "overrides.itemSlug": 1 },
-  { unique: true, sparse: true }
-);
+// Force refresh model if it exists to pick up schema changes (like new enum values)
+if (mongoose.models.PricingConfig) {
+  delete mongoose.models.PricingConfig;
+}
 
-export default mongoose.models.PricingConfig ||
-  mongoose.model("PricingConfig", PricingConfigSchema);
+export default mongoose.model("PricingConfig", PricingConfigSchema);
