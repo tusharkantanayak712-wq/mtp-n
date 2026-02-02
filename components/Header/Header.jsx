@@ -134,7 +134,7 @@ export default function Header() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
+      className={`fixed top-0 w-full z-[1000] transition-all duration-500 ${scrolled
         ? "backdrop-blur-3xl bg-[var(--background)]/80 shadow-2xl border-b border-[var(--border)] active-header"
         : "bg-transparent"
         }`}
