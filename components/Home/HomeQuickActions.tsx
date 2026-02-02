@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Globe,
@@ -9,37 +9,35 @@ import {
   Layers,
   BookOpen,
   Trophy,
-  Image as ImageIcon,
-  BadgePercent,
-  Zap,
   Crown,
-  LayoutGrid,
   Flower2,
   Inbox,
-  LifeBuoy
+  LifeBuoy,
+  Heart
 } from "lucide-react";
 
 /* ===================== CONFIG ===================== */
 
 const topRow = [
-  { title: "Scanner", href: "/region", icon: Globe },
-  { title: "Games", href: "/games", icon: Gamepad2 },
-  { title: "Services", href: "/services", icon: Layers },
-  { title: "Blogs", href: "/blog", icon: BookOpen },
-  { title: "Leader", href: "/leaderboard", icon: Trophy },
+  { title: "Scanner", href: "/region", icon: Globe, color: "#3b82f6" },
+  { title: "Games", href: "/games", icon: Gamepad2, color: "#22c55e" },
+  { title: "Services", href: "/services", icon: Layers, color: "#a855f7" },
+  { title: "Blogs", href: "/blog", icon: BookOpen, color: "#eab308" },
+  { title: "Leader", href: "/leaderboard", icon: Trophy, color: "#f97316" },
 ];
 
 const bottomRow = [
-  { title: "Orders", href: "/dashboard/orders", icon: Inbox },
-  { title: "Support", href: "/dashboard/support", icon: LifeBuoy },
-  { title: "Silver", href: "/games/membership/silver-membership", icon: Crown },
-  { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown },
+  { title: "Orders", href: "/dashboard/orders", icon: Inbox, color: "#64748b" },
+  { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
+  { title: "Silver", href: "/games/membership/silver-membership", icon: Crown, color: "#94a3b8" },
+  { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },
   {
     title: "Valentine",
-    icon: Flower2,
+    icon: Heart,
     href: "/special-leaderboard",
     isColorful: true,
-    accent: "from-rose-400 to-pink-600"
+    color: "#ff2e63",
+    accent: "from-rose-500 to-pink-500"
   },
 ];
 
@@ -56,98 +54,116 @@ export default function HomeQuickActions() {
   const getTargetHref = (item: any) => {
     const isAuthProtected = item.title === "Orders" || item.title === "Support";
     if (isAuthProtected && !isLoggedIn) {
-      return `/login?redirect=${item.originalHref || item.href}`;
+      return `/login?redirect=${item.href}`;
     }
     return item.href;
   };
 
+  const ActionCard = ({ item, index, delayBase }: any) => {
+    const Icon = item.icon;
+    const isColorful = item.isColorful;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.5,
+          delay: delayBase + index * 0.04,
+          ease: [0.16, 1, 0.3, 1]
+        }}
+        className="flex-1"
+      >
+        <Link
+          href={getTargetHref(item)}
+          className="group relative flex flex-col items-center justify-center py-2 px-1"
+        >
+          {/* Enhanced Icon Section */}
+          <div className="relative flex items-center justify-center p-2 rounded-2xl transition-all duration-500">
+
+            {/* VALENTINE SPECIAL HIGHLIGHT */}
+            {isColorful && (
+              <>
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.2, 0.4] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 bg-rose-500/20 blur-xl rounded-full"
+                />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="absolute -inset-1 border border-dashed border-rose-500/30 rounded-2xl"
+                />
+              </>
+            )}
+
+            {/* Ultra-Subtle Hover Ring */}
+            <div
+              className={`absolute inset-0 rounded-2xl border transition-all duration-500 scale-125 group-hover:scale-100 ${isColorful ? "border-rose-500/20 bg-rose-500/5" : "border-white/0 group-hover:border-white/5 group-hover:bg-white/[0.02]"
+                }`}
+            />
+
+            {/* Ambient Backlight */}
+            <div
+              className="absolute inset-0 blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-700"
+              style={{ backgroundColor: item.color }}
+            />
+
+            {/* The Icon */}
+            <div className={`
+              relative z-10 transition-all duration-500
+              group-hover:-translate-y-1
+              ${isColorful ? "text-rose-500" : ""}
+            `}>
+              <Icon
+                size={isColorful ? 24 : 22}
+                strokeWidth={isColorful ? 2 : 1.25}
+                style={{ color: isColorful ? undefined : item.color }}
+                className={`
+                  transition-transform duration-500
+                  ${isColorful ? "drop-shadow-[0_0_12px_rgba(255,46,99,0.5)] group-hover:scale-125" : "group-hover:scale-115"}
+                `}
+              />
+            </div>
+          </div>
+
+          {/* Title */}
+          <span
+            className={`
+              mt-2 text-[9px] font-black tracking-[0.1em] uppercase transition-all duration-300
+              ${isColorful ? "text-rose-500 scale-105" : "text-[var(--muted)] group-hover:text-[var(--foreground)]"}
+            `}
+          >
+            {item.title}
+          </span>
+
+          {/* Status Bar */}
+          <div className={`mt-1.5 h-[1.5px] transition-all duration-500 rounded-full ${isColorful ? "w-4 bg-rose-500 opacity-60" : "w-0 group-hover:w-3 opacity-40"
+            }`}
+            style={{ backgroundColor: isColorful ? undefined : item.color }}
+          />
+        </Link>
+      </motion.div>
+    );
+  };
+
   return (
-    <section className="relative max-w-7xl mx-auto px-4 mt-8 pb-4 overflow-hidden">
-      {/* Background Decorative Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-tr from-[var(--accent)]/5 via-transparent to-purple-500/5 blur-[100px] pointer-events-none" />
+    <section className="relative max-w-7xl mx-auto px-4 mt-4">
+      <div className="relative z-10 max-w-2xl mx-auto">
+        <div className="flex flex-col gap-1">
+          {/* ================= TOP ROW ================= */}
+          <div className="flex justify-between gap-1">
+            {topRow.map((item, index) => (
+              <ActionCard key={item.title} item={item} index={index} delayBase={0} />
+            ))}
+          </div>
 
-      <div className="relative z-10 space-y-2">
-        {/* ================= TOP ROW ================= */}
-        <div className="grid grid-cols-5 gap-2">
-          {topRow.map((item, index) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-            >
-              <Link
-                href={item.href}
-                className="
-                  group flex flex-col items-center justify-center py-2 px-1
-                  transition-all duration-300
-                  active:scale-95
-                "
-              >
-                <div className="w-12 h-12 rounded-2xl bg-[var(--accent)]/5 flex items-center justify-center transition-all group-hover:bg-[var(--accent)]/15 group-hover:scale-110 group-hover:-rotate-3">
-                  <item.icon
-                    size={20}
-                    className="text-[var(--accent)] transition-all group-hover:drop-shadow-[0_0_8px_var(--accent)]"
-                  />
-                </div>
-
-                <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors">
-                  {item.title}
-                </span>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* ================= BOTTOM ROW ================= */}
-        <div className="grid grid-cols-5 gap-2">
-          {bottomRow.map((item: any, index: number) => {
-            const isColorful = item.isColorful;
-
-            const Content = (
-              <div
-                className="
-                  group flex flex-col items-center justify-center py-2 px-1
-                  transition-all duration-300
-                  active:scale-95
-                "
-              >
-                <div className={`
-                  w-12 h-12 rounded-2xl flex items-center justify-center transition-all
-                  ${isColorful
-                    ? `bg-gradient-to-br ${item.accent} text-white shadow-lg shadow-rose-500/20 group-hover:scale-110 group-hover:rotate-6`
-                    : "bg-[var(--accent)]/5 text-[var(--accent)] group-hover:bg-[var(--accent)]/15 group-hover:scale-110 group-hover:-rotate-3"
-                  }
-                `}>
-                  <item.icon size={20} className={isColorful ? "drop-shadow-sm" : ""} />
-                </div>
-
-                <span className={`
-                  mt-2 text-[10px] font-black uppercase tracking-widest transition-colors
-                  ${isColorful ? "text-rose-500" : "text-[var(--muted)] group-hover:text-[var(--foreground)]"}
-                `}>
-                  {item.title}
-                </span>
-              </div>
-            );
-
-            return (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + index * 0.05 }}
-              >
-                {item.href ? (
-                  <Link href={getTargetHref(item)} className="block group">
-                    {Content}
-                  </Link>
-                ) : (
-                  <div>{Content}</div>
-                )}
-              </motion.div>
-            );
-          })}
+          {/* ================= BOTTOM ROW ================= */}
+          <div className="flex justify-between gap-1">
+            {bottomRow.map((item, index) => (
+              <ActionCard key={item.title} item={item} index={index} delayBase={0.1} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
