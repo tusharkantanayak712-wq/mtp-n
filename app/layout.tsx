@@ -12,6 +12,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import ChatBot from "@/components/SocialFloat/Chatbot";
 import ValentinePopup from "@/components/Seasonal/ValentinePopup";
 import ValentineEffect from "@/components/Seasonal/ValentineEffect";
+import Maintaince from "@/components/Seasonal/Maintaince";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 
 
 export const metadata: Metadata = {
@@ -73,7 +75,9 @@ export default function RootLayout({
           {/* <ValentineEffect />
 
            */}
+          {/* <ValentineEffect /> */}
           <ValentinePopup />
+          {FEATURE_FLAGS.MAINTENANCE_MODE && <Maintaince />}
           <main className="pt-20">{children}</main>
           <Footer />
           <SocialFloat />
