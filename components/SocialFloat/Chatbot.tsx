@@ -2,20 +2,27 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
 import {
-  FaComments,
-  FaPaperPlane,
-  FaRobot,
-  FaXmark,
-} from "react-icons/fa6";
+  FiMessageSquare,
+  FiSend,
+  FiX,
+  FiCpu,
+  FiUser,
+  FiTrendingUp,
+  FiPackage,
+  FiLifeBuoy,
+  FiZap,
+} from "react-icons/fi";
 
 /* ================= CONFIG ================= */
 
 const SUPPORT_PHONE = "6372305866";
 const SUPPORT_EMAIL = "tusharkantanayak713@gmail.com";
 
-const ALLOWED_ROUTES = ["/", "/home"];
+const QUICK_REPLIES = [
+  { label: "Support", icon: FiLifeBuoy, action: "support" },
+  { label: "Delivery Time", icon: FiZap, action: "delivery" },
+];
 
 /* ================= TYPES ================= */
 
@@ -27,7 +34,7 @@ interface Message {
 }
 
 type Context = {
-  topic?: "pricing" | "support";
+  topic?: "pricing" | "support" | "tracking";
   userName?: string;
   unknownCount: number;
 };
@@ -40,10 +47,6 @@ const random = (arr: string[]) =>
 /* ================= COMPONENT ================= */
 
 export default function ChatBot() {
-  /* ---------- ROUTE GUARD ---------- */
-  // const pathname = usePathname();
-  // if (!ALLOWED_ROUTES.includes(pathname)) return null;
-
   /* ---------- STATE ---------- */
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -51,7 +54,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "init",
-      text: "Hi 👋 I'm your assistant. How can I help you today?",
+      text: "System Online. 👋 I'm your AI assistant. How can I help you today?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -61,7 +64,6 @@ export default function ChatBot() {
   /* ---------- REFS ---------- */
   const chatRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   const contextRef = useRef<Context>({ unknownCount: 0 });
 
   /* ================= AUTO SCROLL ================= */
@@ -81,7 +83,7 @@ export default function ChatBot() {
       }
     };
 
-    document.addEventListener("mousedown", handler);
+    document.addEventListener("mousedown", handler, { passive: true });
     return () => document.removeEventListener("mousedown", handler);
   }, [isOpen]);
 
@@ -105,13 +107,11 @@ export default function ChatBot() {
 
     const onScroll = () => {
       const currentY = window.scrollY;
-
       if (currentY > lastScrollY && currentY > 60 && !isOpen) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
       }
-
       lastScrollY = currentY;
     };
 
@@ -125,66 +125,78 @@ export default function ChatBot() {
     const msg = input.toLowerCase();
     const ctx = contextRef.current;
 
+    if (msg === "prices") {
+      ctx.topic = "pricing";
+      return "I can certainly help with that! 💰 MLBB Diamonds start from ₹99. Which game package are you looking for?";
+    }
+
+    if (msg === "track") {
+      ctx.topic = "tracking";
+      return "To track your order, please provide your Order ID. 📦 Most orders are delivered within 5-15 minutes.";
+    }
+
+    if (msg === "support") {
+      ctx.topic = "support";
+      return `Our support team is available 24/7. \n📞 WhatsApp: ${SUPPORT_PHONE}\n📧 Email: ${SUPPORT_EMAIL}`;
+    }
+
+    if (msg === "delivery") {
+      return "Delivery is near-instant! ⚡ Once your payment is confirmed, diamonds are typically credited within 2 to 10 minutes.";
+    }
+
     const nameMatch = msg.match(/my name is (\w+)/);
     if (nameMatch) {
       ctx.userName = nameMatch[1];
       ctx.unknownCount = 0;
-      return `Nice to meet you, ${ctx.userName} 😊 How can I help?`;
+      return `Target identified: ${ctx.userName}. 🎯 Command acknowledged. How can I assist you?`;
     }
 
     if (/^(hi|hello|hey)/.test(msg)) {
       ctx.unknownCount = 0;
       return random([
-        "Hey! 👋 What are you looking for today?",
-        "Hi there 😊 Need prices, top-ups, or support?",
-        "Hello! How can I assist you today?",
+        "Greetings. 👋 Looking for top-ups or tactical support?",
+        "System ready. 😊 How can I help you today?",
+        "Connection established. Hello! How can I assist?",
       ]);
     }
 
-    if (msg.includes("price") || msg.includes("cost")) {
+    if (msg.includes("price") || msg.includes("cost") || msg.includes("diamond")) {
       ctx.topic = "pricing";
       ctx.unknownCount = 0;
-      return "Sure 💰 Which game are you checking prices for? (MLBB / PUBG)";
+      return "We offer the most competitive prices! 💎 Standard MLBB pack (284 Diamonds) is currently our best seller. Want to see all prices?";
     }
 
-    if (ctx.topic === "pricing") {
-      if (msg.includes("mlbb"))
-        return "MLBB diamonds start from ₹99 ⚡ Instant delivery.";
-      if (msg.includes("pubg"))
-        return "PUBG UC prices depend on pack size 🎮 Small or large packs?";
-    }
+    if (msg.includes("mlbb"))
+      return "MLBB Top-ups are processed instantly. ⚡ Just select your package and provide your Zone ID.";
 
-    if (msg.includes("support") || msg.includes("issue")) {
+    if (msg.includes("support") || msg.includes("issue") || msg.includes("help")) {
       ctx.topic = "support";
       ctx.unknownCount = 0;
-      return "I'm sorry about that 😕 Is it a payment issue or delivery issue?";
+      return "Understood. 🔧 If you're facing an issue, please contact us on WhatsApp for the fastest resolution.";
     }
 
     ctx.unknownCount++;
-
     if (ctx.unknownCount >= 2) {
       return (
-        "I might be missing something 😅\n\n" +
-        `📞 Customer Support: ${SUPPORT_PHONE}\n` +
-        `📧 Email: ${SUPPORT_EMAIL}`
+        "Tactical analysis inconclusive. 😅\n\n" +
+        `Direct uplink for support:\n📞 ${SUPPORT_PHONE}\n📧 ${SUPPORT_EMAIL}`
       );
     }
 
     return random([
-      "Hmm 🤔 Can you explain a bit more?",
-      "Got it 👍 Could you give me more details?",
+      "Scanning message... Could you provide more details? 🤔",
+      "Acknowledged. Please elaborate for more accurate assistance. 🤖",
     ]);
   };
 
   /* ================= SEND MESSAGE ================= */
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
+  const handleSendMessage = (text: string) => {
+    if (!text.trim()) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
-      text: message,
+      text,
       sender: "user",
       timestamp: new Date(),
     };
@@ -197,14 +209,14 @@ export default function ChatBot() {
       setMessages((p) => [
         ...p,
         {
-          id: Date.now().toString(),
+          id: Date.now().toString() + "-res",
           text: getBotResponse(userMsg.text),
           sender: "bot",
           timestamp: new Date(),
         },
       ]);
       setIsTyping(false);
-    }, 700 + Math.random() * 600);
+    }, 800 + Math.random() * 700);
   };
 
   /* ================= UI ================= */
@@ -218,147 +230,177 @@ export default function ChatBot() {
         scale: isVisible ? 1 : 0.9,
       }}
       transition={{ duration: 0.2 }}
-      className="fixed bottom-6 left-6 z-50"
+      className="fixed bottom-4 left-4 z-[60]"
       style={{ pointerEvents: isVisible ? "auto" : "none" }}
     >
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className="mb-4 w-80 sm:w-96 h-[500px] bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9, y: 20, filter: "blur(10px)" }}
+            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, scale: 0.9, y: 20, filter: "blur(10px)" }}
+            className="mb-3 w-[340px] sm:w-[380px] h-[520px] bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_-12px_rgba(var(--accent-rgb),0.3)] flex flex-col overflow-hidden ring-1 ring-white/5"
           >
+            {/* Scanline Effect */}
+            <motion.div
+              animate={{ y: ["0%", "100%"] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 pointer-events-none z-0"
+              style={{
+                background: "linear-gradient(to bottom, transparent, rgba(var(--accent-rgb), 0.03), transparent)",
+                height: "10%",
+              }}
+            />
+
             {/* Header */}
-            <div className="bg-[var(--accent)] p-4 flex items-center justify-between">
+            <div className="relative z-10 bg-gradient-to-r from-[var(--accent)]/20 to-transparent p-4 border-b border-white/10 flex items-center justify-between">
               <div className="flex gap-3 items-center">
-                <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
-                  <FaRobot className="text-white" />
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-lg shadow-[var(--accent)]/20">
+                    <FiCpu className="text-white text-lg" />
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-black animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-sm">AI Assistant</h3>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-green-400" />
-                    <p className="text-xs text-white/80">Online</p>
-                  </div>
+                  <h3 className="text-white font-bold text-sm tracking-tight">TACTICAL AI</h3>
+                  <p className="text-[10px] text-white/50 uppercase tracking-widest font-medium">System Core v2.0</p>
                 </div>
               </div>
 
-              {/* Close Button */}
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition"
-                aria-label="Close chat"
+                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all border border-white/5"
               >
-                <FaXmark />
+                <FiX />
               </button>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 p-4 space-y-3 overflow-y-auto">
+            {/* Messages Area */}
+            <div className="flex-1 p-4 space-y-4 overflow-y-auto relative z-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <AnimatePresence initial={false}>
                 {messages.map((m) => (
                   <motion.div
                     key={m.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={`flex gap-2 ${m.sender === "user" ? "flex-row-reverse" : ""
-                      }`}
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    className={`flex gap-3 ${m.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
                   >
-                    {m.sender === "bot" && (
-                      <div className="w-7 h-7 rounded-full bg-[var(--accent)] text-white flex items-center justify-center flex-shrink-0">
-                        <FaRobot className="text-xs" />
-                      </div>
-                    )}
+                    <div className={`w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm ${m.sender === "user" ? "bg-white/10" : "bg-[var(--accent)]/20 border border-[var(--accent)]/30"}`}>
+                      {m.sender === "user" ? <FiUser className="text-white/60" /> : <FiCpu className="text-[var(--accent)]" />}
+                    </div>
                     <div
-                      className={`px-3 py-2 rounded-xl max-w-[75%] text-sm whitespace-pre-line ${m.sender === "user"
-                        ? "bg-[var(--accent)] text-white rounded-tr-sm"
-                        : "bg-[var(--muted)]/20 text-[var(--foreground)] rounded-tl-sm"
+                      className={`relative px-4 py-2.5 rounded-2xl max-w-[80%] text-[13px] leading-relaxed shadow-sm ${m.sender === "user"
+                        ? "bg-[var(--accent)] text-white font-medium rounded-tr-none"
+                        : "bg-white/5 text-white/90 border border-white/5 rounded-tl-none"
                         }`}
                     >
                       {m.text}
+                      <span className={`block mt-1 text-[9px] ${m.sender === "user" ? "text-white/60" : "text-white/30"}`}>
+                        {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
                     </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
 
-              {/* Typing Indicator */}
-              <AnimatePresence>
-                {isTyping && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className="flex gap-2 items-center"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-[var(--accent)] text-white flex items-center justify-center">
-                      <FaRobot className="text-xs" />
-                    </div>
-                    <div className="px-3 py-2 rounded-xl rounded-tl-sm bg-[var(--muted)]/20 flex gap-1">
-                      {[0, 1, 2].map((i) => (
-                        <motion.div
-                          key={i}
-                          animate={{ y: [0, -6, 0] }}
-                          transition={{
-                            duration: 0.6,
-                            repeat: Infinity,
-                            delay: i * 0.15,
-                          }}
-                          className="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"
-                        />
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex gap-3"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center">
+                    <FiCpu className="text-[var(--accent)] text-xs animate-pulse" />
+                  </div>
+                  <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white/5 border border-white/5 flex gap-1.5 items-center">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        animate={{ opacity: [0.3, 1, 0.3] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                        className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
+            {/* Quick Replies */}
+            <div className="px-4 py-2 flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-t border-white/5">
+              {QUICK_REPLIES.map((reply) => (
+                <button
+                  key={reply.action}
+                  onClick={() => handleSendMessage(reply.action)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/70 text-[11px] whitespace-nowrap hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/40 hover:text-white transition-all"
+                >
+                  <reply.icon className="text-[var(--accent)]" />
+                  {reply.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Input Footer */}
             <form
-              onSubmit={handleSendMessage}
-              className="p-3 border-t border-[var(--border)] flex gap-2"
+              onSubmit={(e) => { e.preventDefault(); handleSendMessage(message); }}
+              className="p-4 bg-gradient-to-t from-black/40 to-transparent relative z-10"
             >
-              <input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type a message…"
-                className="flex-1 px-4 py-2 rounded-full bg-[var(--muted)]/10 border border-[var(--border)] outline-none text-sm focus:border-[var(--accent)] transition"
-              />
-              <button
-                disabled={!message.trim()}
-                className="w-9 h-9 rounded-full bg-[var(--accent)] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition hover:scale-105"
-              >
-                <FaPaperPlane className="text-xs" />
-              </button>
+              <div className="relative group">
+                <input
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Initiate command..."
+                  className="w-full pl-4 pr-12 py-3.5 rounded-xl bg-white/5 border border-white/10 outline-none text-[13px] text-white placeholder:text-white/20 focus:border-[var(--accent)]/50 focus:ring-1 focus:ring-[var(--accent)]/20 transition-all"
+                />
+                <button
+                  type="submit"
+                  disabled={!message.trim()}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shadow-lg shadow-[var(--accent)]/40 disabled:opacity-30 disabled:grayscale transition-all hover:scale-105 active:scale-95"
+                >
+                  <FiSend className="text-sm" />
+                </button>
+              </div>
             </form>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Toggle Button */}
+      {/* Floating Toggle Button */}
       <motion.button
         onClick={() => setIsOpen((v) => !v)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative"
-        aria-label="Toggle chat"
+        className="relative group"
       >
-        <div className="w-12 h-12 rounded-full bg-[var(--accent)] text-white shadow-xl flex items-center justify-center">
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {isOpen ? <FaXmark className="text-lg" /> : <FaComments className="text-lg" />}
-          </motion.div>
-
-          {/* Notification dot */}
-          {!isOpen && (
-            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
-          )}
+        <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-20 group-hover:opacity-40 transition-opacity" />
+        <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] text-white shadow-2xl flex items-center justify-center border border-white/20">
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FiX className="text-2xl" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="open"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="relative"
+              >
+                <FiMessageSquare className="text-2xl" />
+                {/* Tactical Dot */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-black" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.button>
     </motion.div>

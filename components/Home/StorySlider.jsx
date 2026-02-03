@@ -57,7 +57,7 @@ const storyData = [
 export default function StorySlider() {
   return (
     <section className="relative py-6 px-4">
-      <div className="flex gap-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory relative z-10">
+      <div className="flex gap-3 md:gap-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory relative z-10">
         {storyData.map((item, index) => (
           <motion.div
             key={item.id}
@@ -67,7 +67,7 @@ export default function StorySlider() {
           >
             <Link
               href={item.link}
-              className="group relative flex flex-col items-center min-w-[82px] snap-center"
+              className="group relative flex flex-col items-center min-w-[72px] md:min-w-[82px] snap-center"
             >
               <div className="relative">
                 {/* Clean Colored Ring (No Shadow, No Glow) */}
@@ -78,12 +78,12 @@ export default function StorySlider() {
                   }}
                 >
                   <div className="p-0.5 rounded-full bg-[var(--background)]">
-                    <div className="relative w-[70px] h-[70px] rounded-full overflow-hidden">
+                    <div className="relative w-[58px] h-[58px] md:w-[70px] md:h-[70px] rounded-full overflow-hidden">
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        sizes="70px"
+                        sizes="(max-width: 768px) 58px, 70px"
                         priority={item.id <= 4}
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
@@ -94,12 +94,12 @@ export default function StorySlider() {
                 {/* Status Badge (Flat Premium - No Shadow) */}
                 {item.badge && (
                   <span
-                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full text-[8.5px] font-bold text-white uppercase tracking-wider z-20 border border-[var(--background)]"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-[8px] md:text-[8.5px] font-bold text-white uppercase tracking-wider z-20 border border-[var(--background)]"
                     style={{ backgroundColor: item.color || "var(--accent)" }}
                   >
                     <span className="flex items-center gap-1.5">
                       {item.badge === "Live" && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
                       )}
                       {item.badge}
                     </span>
@@ -108,7 +108,7 @@ export default function StorySlider() {
               </div>
 
               {/* Title - Flat & Clean */}
-              <span className="mt-4 text-[10px] font-medium text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors duration-300 tracking-wide text-center uppercase">
+              <span className="mt-4 text-[9px] md:text-[10px] font-medium text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors duration-300 tracking-wide text-center uppercase">
                 {item.title}
               </span>
             </Link>

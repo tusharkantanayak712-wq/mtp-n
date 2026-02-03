@@ -9,7 +9,7 @@ export default function GameHeader({ game }) {
   if (!game) return null;
 
   return (
-    <div className="relative max-w-6xl mx-auto mb-6 mt-4">
+    <div className="relative max-w-6xl mx-auto mb-6 mt-1">
       {/* Background Glow similar to BuyPanel */}
       <div className="absolute inset-2 bg-gradient-to-r from-[var(--accent)]/30 to-purple-600/30 blur-[40px] opacity-20 -z-10" />
 
