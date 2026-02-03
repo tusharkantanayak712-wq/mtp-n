@@ -166,7 +166,7 @@ export async function POST(req: Request) {
     await order.save();
 
     /* =====================================================
-       TOPUP (IDEMPOTENT)
+       TOPUP (IDEMPOTENT & CONCURRENCY GUARD)
     ===================================================== */
     if (order.topupStatus === "success") {
       return NextResponse.json({
@@ -176,42 +176,80 @@ export async function POST(req: Request) {
       });
     }
 
-    const gameResp = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.API_SECRET_KEY!,
-        },
-        body: JSON.stringify({
-          playerId: String(order.playerId),
-          zoneId: String(order.zoneId),
-          productId: `${order.gameSlug}_${order.itemSlug}`,
-          currency: "USD",
-        }),
+    if (order.topupStatus === "processing") {
+      return NextResponse.json({
+        success: false,
+        message: "Topup is already in progress. Please wait.",
+      });
+    }
+
+    // Mark as processing to prevent concurrent hits
+    order.topupStatus = "processing";
+    await order.save();
+
+    // Determine multiplier and base slug for the external API
+    let multiplier = 1;
+    let baseItemSlug = order.itemSlug;
+
+    // Detect generic combo pattern like [slug]-2x, [slug]-3x etc.
+    const comboMatch = order.itemSlug.match(/(.+)-(\d+)x$/);
+    if (comboMatch) {
+      baseItemSlug = comboMatch[1];
+      multiplier = parseInt(comboMatch[2]);
+    }
+
+    const responses = [];
+    let successCount = 0;
+
+    for (let i = 0; i < multiplier; i++) {
+      try {
+        const gameResp = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": process.env.API_SECRET_KEY!,
+            },
+            body: JSON.stringify({
+              playerId: String(order.playerId),
+              zoneId: String(order.zoneId),
+              productId: `${order.gameSlug}_${baseItemSlug}`, // Use base slug (e.g. weekly-pass816)
+              currency: "USD",
+            }),
+          }
+        );
+
+        const gameData = await gameResp.json();
+        responses.push(gameData);
+
+        const isSuccess =
+          gameResp.ok &&
+          (gameData?.success === true ||
+            gameData?.status === true ||
+            gameData?.result?.status === "SUCCESS");
+
+        if (isSuccess) {
+          successCount++;
+        }
+      } catch (err) {
+        console.error(`Topup attempt ${i + 1} failed:`, err);
+        responses.push({ error: "Attempt failed", message: (err as any).message });
       }
-    );
+    }
 
-    const gameData = await gameResp.json();
-    order.externalResponse = gameData;
+    order.externalResponse = responses;
 
-    const topupSuccess =
-      gameResp.ok &&
-      (gameData?.success === true ||
-        gameData?.status === true ||
-        gameData?.result?.status === "SUCCESS");
-
-    if (topupSuccess) {
+    if (successCount === multiplier) {
       order.status = "success";
       order.topupStatus = "success";
       await order.save();
-
-      // Optional email
-      try {
-        const user = await User.findOne({ userId: order.userId });
-        // send mail if needed
-      } catch {}
+    } else if (successCount > 0) {
+      // Partial success
+      order.status = "success"; // Mark as success but you might want to log this specially
+      order.topupStatus = "success";
+      order.itemName = `${order.itemName} (Partial: ${successCount}/${multiplier})`;
+      await order.save();
     } else {
       order.status = "failed";
       order.topupStatus = "failed";
@@ -222,9 +260,9 @@ export async function POST(req: Request) {
       success: order.status === "success",
       message:
         order.status === "success"
-          ? "Topup successful"
+          ? `Topup successful (${successCount}/${multiplier})`
           : "Topup failed",
-      topupResponse: gameData,
+      topupResponse: responses,
     });
   } catch (error: any) {
     console.error("VERIFY ERROR:", error);

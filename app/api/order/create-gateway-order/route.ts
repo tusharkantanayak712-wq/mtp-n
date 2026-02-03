@@ -85,13 +85,28 @@ async function resolvePrice(
   const data = await resp.json();
   if (!data?.data?.itemId) throw new Error("Game not found");
 
-  const baseItem = data.data.itemId.find(
+  let baseItem = data.data.itemId.find(
     (i: any) => i.itemSlug === itemSlug
   );
 
+  let multiplier = 1;
+  const ALLOWED_MULTIPLIERS = [2, 3]; // Added 3x support
+
+  if (!baseItem && itemSlug.startsWith("weekly-pass816-")) {
+    const match = itemSlug.match(/weekly-pass816-(\d+)x/);
+    if (!match) throw new Error("Invalid combo format");
+
+    multiplier = parseInt(match[1]);
+    if (!ALLOWED_MULTIPLIERS.includes(multiplier)) {
+      throw new Error(`Combo multiplier ${multiplier}x is not allowed`);
+    }
+
+    baseItem = data.data.itemId.find((i: any) => i.itemSlug === "weekly-pass816");
+  }
+
   if (!baseItem) throw new Error("Invalid game item");
 
-  let price = Number(baseItem.sellingPrice);
+  let price = Number(baseItem.sellingPrice) * multiplier;
 
   if (userType !== "owner") {
     await connectDB();
@@ -179,7 +194,7 @@ export async function POST(req: Request) {
       });
     }
 
-    if (!email ) {
+    if (!email) {
       return NextResponse.json({
         success: false,
         message: "Provide email or phone",
@@ -190,10 +205,10 @@ export async function POST(req: Request) {
     const price = await resolvePrice(gameSlug, itemSlug, userType);
 
     /* ---------- ORDER ID ---------- */
-  const orderId =
-  "TOPUP" +
-  Date.now().toString(36).toUpperCase() +
-  crypto.randomBytes(6).toString("hex").toUpperCase();
+    const orderId =
+      "TOPUP" +
+      Date.now().toString(36).toUpperCase() +
+      crypto.randomBytes(6).toString("hex").toUpperCase();
 
     const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
 

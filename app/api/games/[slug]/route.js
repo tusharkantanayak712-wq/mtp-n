@@ -246,7 +246,7 @@ export async function GET(req, { params }) {
           process.env.JWT_SECRET
         );
         if (decoded?.userType) userType = decoded.userType;
-      } catch {}
+      } catch { }
     }
 
     const pricingRole = resolvePricingRole(userType);
@@ -272,9 +272,40 @@ export async function GET(req, { params }) {
       }).lean();
     }
 
-    /* ===== APPLY PRICING ===== */
     const gameSlug = data.data.gameSlug;
 
+    /* ================= COMBO OFFERS (PRE-PRICING) ================= */
+    const baseWeeklyPass = data.data.itemId.find(
+      (i) => i.itemSlug === "weekly-pass816"
+    );
+
+    if (baseWeeklyPass) {
+      const combos = [
+        { multiplier: 2, label: "2x" },
+        // { multiplier: 3, label: "3x" },
+      ];
+
+      combos.forEach((combo) => {
+        // Only add if it doesn't already exist from the source API
+        const exists = data.data.itemId.find(
+          (i) => i.itemSlug === `${baseWeeklyPass.itemSlug}-${combo.multiplier}x`
+        );
+        if (!exists) {
+          data.data.itemId.push({
+            ...baseWeeklyPass,
+            itemName: `${combo.label} ${baseWeeklyPass.itemName}`,
+            itemSlug: `${baseWeeklyPass.itemSlug}-${combo.multiplier}x`,
+            sellingPrice: baseWeeklyPass.sellingPrice * combo.multiplier,
+            dummyPrice: baseWeeklyPass.dummyPrice
+              ? baseWeeklyPass.dummyPrice * combo.multiplier
+              : undefined,
+            index: baseWeeklyPass.index + combo.multiplier * 0.1,
+          });
+        }
+      });
+    }
+
+    /* ===== APPLY PRICING ===== */
     data.data.itemId = data.data.itemId.map((item) => {
       const basePrice = Number(item.sellingPrice);
       let finalPrice = basePrice;
@@ -301,6 +332,9 @@ export async function GET(req, { params }) {
         sellingPrice: Math.ceil(finalPrice),
       };
     });
+
+    // Final sort to keep UI clean
+    data.data.itemId.sort((a, b) => a.sellingPrice - b.sellingPrice);
 
     return NextResponse.json(data);
   } catch (err) {

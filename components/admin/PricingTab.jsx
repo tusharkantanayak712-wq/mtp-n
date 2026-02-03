@@ -58,7 +58,31 @@ export default function PricingTab({
       const res = await fetch(`${API_BASE}/games/${gameSlug}/items`);
       const json = await res.json();
       if (json.success) {
-        const items = json.data.items || [];
+        let items = json.data.items || [];
+
+        /* ================= INJECT COMBO OFFERS (ADMIN) ================= */
+        const weeklyPass = items.find((i) => i.itemSlug === "weekly-pass816");
+        if (weeklyPass) {
+          const combos = [
+            { multiplier: 2, label: "2x" },
+            { multiplier: 3, label: "3x" },
+          ];
+
+          combos.forEach((combo) => {
+            const comboSlug = `${weeklyPass.itemSlug}-${combo.multiplier}x`;
+            if (!items.find((i) => i.itemSlug === comboSlug)) {
+              items.push({
+                ...weeklyPass,
+                itemName: `${combo.label} ${weeklyPass.itemName}`,
+                itemSlug: comboSlug,
+                sellingPrice: Number(weeklyPass.sellingPrice) * combo.multiplier,
+                index: weeklyPass.index + combo.multiplier * 0.1,
+              });
+            }
+          });
+          items.sort((a, b) => (Number(a.sellingPrice) || 0) - (Number(b.sellingPrice) || 0));
+        }
+
         setItemsByGame((p) => ({ ...p, [gameSlug]: items }));
         return items;
       }
