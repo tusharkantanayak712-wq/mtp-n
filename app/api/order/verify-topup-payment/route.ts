@@ -168,6 +168,9 @@ export async function POST(req: Request) {
     /* =====================================================
        TOPUP (IDEMPOTENT & CONCURRENCY GUARD)
     ===================================================== */
+    /* =====================================================
+       TOPUP (IDEMPOTENT & CONCURRENCY GUARD)
+    ===================================================== */
     if (order.topupStatus === "success") {
       return NextResponse.json({
         success: true,
@@ -177,10 +180,18 @@ export async function POST(req: Request) {
     }
 
     if (order.topupStatus === "processing") {
-      return NextResponse.json({
-        success: false,
-        message: "Topup is already in progress. Please wait.",
-      });
+      // Check if processing for more than 3 minutes (stale)
+      const updatedAt = (order as any).updatedAt || new Date();
+      const diffMinutes = (Date.now() - new Date(updatedAt).getTime()) / 60000;
+
+      if (diffMinutes < 3) {
+        return NextResponse.json({
+          success: false,
+          message: "Topup is already in progress. Please wait.",
+        });
+      }
+
+      console.log(`Retrying stale processing order: ${orderId} (${Math.round(diffMinutes)} mins old)`);
     }
 
     // Mark as processing to prevent concurrent hits
@@ -192,17 +203,28 @@ export async function POST(req: Request) {
     let baseItemSlug = order.itemSlug;
 
     // Detect generic combo pattern like [slug]-2x, [slug]-3x etc.
-    const comboMatch = order.itemSlug.match(/(.+)-(\d+)x$/);
+    const comboMatch = order.itemSlug.match(/(.+)-(\d+)x$/i);
     if (comboMatch) {
       baseItemSlug = comboMatch[1];
       multiplier = parseInt(comboMatch[2]);
     }
+
+    // Normalize gameSlug to lowercase for the provider API
+    const normalizedGameSlug = order.gameSlug.toLowerCase();
+
+    console.log(`[TOPUP] Starting fulfillment for Order ${orderId}: ${multiplier}x ${baseItemSlug} (${normalizedGameSlug})`);
 
     const responses = [];
     let successCount = 0;
 
     for (let i = 0; i < multiplier; i++) {
       try {
+        console.log(`[TOPUP] Attempt ${i + 1}/${multiplier} (Product: ${normalizedGameSlug}_${baseItemSlug})`);
+
+        // Timeout protection (15 seconds)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
         const gameResp = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`,
           {
@@ -214,12 +236,14 @@ export async function POST(req: Request) {
             body: JSON.stringify({
               playerId: String(order.playerId),
               zoneId: String(order.zoneId),
-              productId: `${order.gameSlug}_${baseItemSlug}`, // Use base slug (e.g. weekly-pass816)
+              productId: `${normalizedGameSlug}_${baseItemSlug}`,
               currency: "USD",
             }),
+            signal: controller.signal,
           }
         );
 
+        clearTimeout(timeoutId);
         const gameData = await gameResp.json();
         responses.push(gameData);
 
@@ -231,10 +255,13 @@ export async function POST(req: Request) {
 
         if (isSuccess) {
           successCount++;
+          console.log(`[TOPUP] Attempt ${i + 1} SUCCESS`);
+        } else {
+          console.error(`[TOPUP] Attempt ${i + 1} FAILED:`, JSON.stringify(gameData));
         }
-      } catch (err) {
-        console.error(`Topup attempt ${i + 1} failed:`, err);
-        responses.push({ error: "Attempt failed", message: (err as any).message });
+      } catch (err: any) {
+        console.error(`[TOPUP] Attempt ${i + 1} CRASHED:`, err.message);
+        responses.push({ error: "System Error", message: err.message });
       }
     }
 
@@ -243,25 +270,25 @@ export async function POST(req: Request) {
     if (successCount === multiplier) {
       order.status = "success";
       order.topupStatus = "success";
-      await order.save();
     } else if (successCount > 0) {
       // Partial success
-      order.status = "success"; // Mark as success but you might want to log this specially
+      order.status = "success";
       order.topupStatus = "success";
       order.itemName = `${order.itemName} (Partial: ${successCount}/${multiplier})`;
-      await order.save();
     } else {
       order.status = "failed";
       order.topupStatus = "failed";
-      await order.save();
     }
+
+    await order.save();
+    console.log(`[TOPUP] Order ${orderId} finalized with status: ${order.status} (${successCount}/${multiplier} success)`);
 
     return NextResponse.json({
       success: order.status === "success",
       message:
         order.status === "success"
           ? `Topup successful (${successCount}/${multiplier})`
-          : "Topup failed",
+          : "Topup fulfillment failed. System will retry automatically or contact support.",
       topupResponse: responses,
     });
   } catch (error: any) {
