@@ -48,21 +48,25 @@ export default function Header() {
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
-    const checkSubscription = async () => {
-      if (window.OneSignalDeferred) {
-        window.OneSignalDeferred.push(async (OneSignal) => {
-          const permission = await OneSignal.Notifications.permission;
+    if (typeof window !== "undefined") {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      window.OneSignalDeferred.push(async (OneSignal) => {
+        // Initial check
+        setIsSubscribed(OneSignal.Notifications.permission === "granted");
+
+        // Listen for permission changes
+        OneSignal.Notifications.addEventListener("permissionChange", (permission) => {
           setIsSubscribed(permission === "granted");
         });
-      }
-    };
-    checkSubscription();
+      });
+    }
   }, []);
 
   const handlePushToggle = () => {
     if (window.OneSignalDeferred) {
       window.OneSignalDeferred.push(async (OneSignal) => {
-        await OneSignal.Slidedown.promptPush();
+        // Force the slidedown to show, even if previously dismissed
+        await OneSignal.Slidedown.promptPush({ force: true });
       });
     }
   };
