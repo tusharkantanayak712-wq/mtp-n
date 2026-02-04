@@ -128,56 +128,59 @@ export async function POST(req: Request) {
     const comboMatch = order.itemSlug.match(/(.+)-(\d+)x$/i);
     const isMultiplierOrder = !!comboMatch;
 
-    let finalOrder = order; // Default to the current order object
-
-    if (isMultiplierOrder) {
-      // isMultiplierOrder -> USE ATOMIC LOCKING (Fix for double fulfillment)
-      const lockedOrder = await Order.findOneAndUpdate(
-        {
-          orderId,
-          topupStatus: { $nin: ["success", "processing"] },
+    // Unified Atomic Locking for ALL orders
+    // This prevents double-execution if the user refreshes or parallel requests come in.
+    const lockedOrder = await Order.findOneAndUpdate(
+      {
+        orderId,
+        topupStatus: { $nin: ["success", "processing"] },
+      },
+      {
+        $set: {
+          paymentStatus: "success",
+          topupStatus: "processing",
+          gatewayResponse: data,
         },
-        {
-          $set: {
+      },
+      { new: true }
+    );
+
+    if (!lockedOrder) {
+      // The order is ALREADY 'success' or 'processing'.
+      const currentOrder = await Order.findOne({ orderId });
+
+      if (currentOrder?.topupStatus === "processing") {
+        // Check for Timeout (90 seconds)
+        const lastUpdate = new Date(currentOrder.updatedAt).getTime();
+        if (Date.now() - lastUpdate > 90000) {
+          currentOrder.status = "failed";
+          currentOrder.topupStatus = "failed";
+          currentOrder.paymentStatus = "success"; // Payment was success, fulfillment failed
+          await currentOrder.save();
+
+          return NextResponse.json({
+            success: false,
+            message: "Order processing timed out",
             paymentStatus: "success",
-            topupStatus: "processing",
-            gatewayResponse: data,
-          },
-        },
-        { new: true }
-      );
-
-      if (!lockedOrder) {
-        const currentOrder = await Order.findOne({ orderId });
-        return NextResponse.json({
-          success: true,
-          message: "Topup already processed",
-          paymentStatus: currentOrder?.paymentStatus || "success",
-          topupStatus: currentOrder?.topupStatus || "processing",
-        });
-      }
-      finalOrder = lockedOrder;
-
-    } else {
-      // Normal Order -> Use ORIGINAL LOGIC (No atomic lock)
-      order.paymentStatus = "success";
-      order.gatewayResponse = data;
-      await order.save();
-
-      // Topup Logic
-      if (order.topupStatus === "success") {
-        return NextResponse.json({
-          success: true,
-          message: "Topup already completed",
-          paymentStatus: order.paymentStatus,
-          topupStatus: order.topupStatus
-        });
+            topupStatus: "failed",
+          });
+        }
       }
 
-      order.topupStatus = "processing";
-      await order.save();
-      finalOrder = order;
+      return NextResponse.json({
+        success: currentOrder?.status === "success",
+        message:
+          currentOrder?.status === "success"
+            ? "Topup already completed"
+            : "Topup processing",
+        paymentStatus: currentOrder?.paymentStatus || "success",
+        topupStatus: currentOrder?.topupStatus || "processing",
+        topupResponse: currentOrder?.externalResponse,
+      });
     }
+
+    // If we got the lock, we proceed with fulfillment.
+    let finalOrder = lockedOrder;
 
     /* ---------------------------------------------------
        FULFILLMENT LOGIC (Shared or Specific)

@@ -16,6 +16,8 @@ export default function TopupComplete() {
 
   useEffect(() => {
     const orderId = sessionStorage.getItem("pending_topup_order");
+    const startTime = Date.now();
+    let isMounted = true;
 
     if (!orderId) {
       setStatus("failed");
@@ -23,7 +25,7 @@ export default function TopupComplete() {
       return;
     }
 
-    async function verify() {
+    const verify = async () => {
       try {
         const token = sessionStorage.getItem("token");
 
@@ -36,25 +38,45 @@ export default function TopupComplete() {
         });
 
         const data = await res.json();
+        return data?.success;
+      } catch (err) {
+        console.error("Topup verification error:", err);
+        return false;
+      }
+    };
 
-        if (data?.success) {
+    const poll = async () => {
+      if (!isMounted) return;
+
+      const success = await verify();
+
+      if (success) {
+        if (isMounted) {
           setStatus("success");
           setMessage("Payment successful!");
-
-          // Optional cleanup
           sessionStorage.removeItem("pending_topup_order");
-        } else {
+        }
+        return;
+      }
+
+      // If not success, check if we've exceeded the 90-second timeout
+      if (Date.now() - startTime < 90000) {
+        // Continue polling every 3 seconds
+        setTimeout(poll, 3000);
+      } else {
+        // Timeout reached
+        if (isMounted) {
           setStatus("failed");
           setMessage("Payment verification pending");
         }
-      } catch (err) {
-        console.error("Topup verification error:", err);
-        setStatus("failed");
-        setMessage("Unable to verify payment");
       }
-    }
+    };
 
-    verify();
+    poll();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
