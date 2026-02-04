@@ -91,102 +91,27 @@ export async function POST(req: Request) {
     }
 
     // Final Confirmation
-    if (String(data?.result?.orderId) !== String(orderId)) {
-      return NextResponse.json({
-        success: false,
-        message: "Order ID mismatch from gateway",
-        paymentStatus: "failed",
-        topupStatus: "pending"
-      });
-    }
+    order.paymentStatus = "success";
+    order.gatewayResponse = data;
+    await order.save();
 
-    // Security: Ensure valid Transaction ID (Proof of Work)
-    if (!data?.result?.txnId) {
-      return NextResponse.json({
-        success: false,
-        message: "Missing Transaction ID from gateway",
-        paymentStatus: "failed",
-        topupStatus: "pending"
-      });
-    }
-
-    // Security: Sanity check on amount (No zero/negative payments)
-    if (paidAmount <= 0) {
-      return NextResponse.json({
-        success: false,
-        message: "Invalid payment amount detected",
-        paymentStatus: "failed",
-        topupStatus: "pending"
-      });
-    }
-
-    // STEP 1: Always record Payment Success first (Idempotent)
-    // We use updateOne to avoid version errors and ensure this ALWAYS happens if gateway verification passed.
-    await Order.updateOne(
-      { _id: order._id },
-      {
-        $set: {
-          paymentStatus: "success",
-          gatewayResponse: data
-        }
-      }
-    );
-
-    // Security: Blacklisted Players & Emails
-    const BLACKLIST_IDS = ["12345678", "00000000", "1478544003", "1703098323"];
-    const BLACKLIST_EMAILS = ["badactor@example.com", "fraud@gmail.com", "anyemchi@gmail.com", "knishan777@gmail.com"];
-
-    const isBlacklisted =
-      BLACKLIST_IDS.includes(String(order.playerId)) ||
-      (order.email && BLACKLIST_EMAILS.includes(String(order.email).toLowerCase()));
-
-    // STEP 2: ATOMIC LOCK for Topup Fulfillment
-    // Attempt to transition from 'pending' to 'processing' (or 'failed' if blacklisted)
-    // This operations fails (returns null) if status is NOT 'pending', preventing double fulfillment.
-    const lockedOrder = await Order.findOneAndUpdate(
-      {
-        _id: order._id,
-        topupStatus: "pending" // LOCKED: Must be pending.
-      },
-      {
-        $set: {
-          // If blacklisted, set to failed, otherwise processing
-          topupStatus: isBlacklisted ? "failed" : "processing"
-        }
-      },
-      { new: true }
-    );
-
-    if (!lockedOrder) {
-      // Lock failed: This means topup is already in progress, done, or failed previously.
-      // But we know Payment is success (from Step 1).
-      const currentOrder = await Order.findById(order._id);
+    // Topup Logic
+    if (order.topupStatus === "success") {
       return NextResponse.json({
         success: true,
-        message: "Payment success. Topup status: " + currentOrder.topupStatus,
-        // Force success here because we know Step 1 passed
-        paymentStatus: "success",
-        topupStatus: currentOrder.topupStatus
+        message: "Topup already completed",
+        paymentStatus: order.paymentStatus,
+        topupStatus: order.topupStatus
       });
     }
 
-    // Stop here if blacklisted (it's now safely saved as failed)
-    if (isBlacklisted) {
-      return NextResponse.json({
-        success: true,
-        message: "Topup blocked due to security restrictions",
-        paymentStatus: lockedOrder.paymentStatus,
-        topupStatus: "failed"
-      });
-    }
-
-    // Proceed using the safely locked order
-    const orderToProcess = lockedOrder;
+    order.topupStatus = "processing";
+    await order.save();
 
     let multiplier = 1;
-    let baseItemSlug = orderToProcess.itemSlug;
+    let baseItemSlug = order.itemSlug;
 
-    const comboMatch = orderToProcess.itemSlug.match(/(.+)-(\d+)x$/i);
+    const comboMatch = order.itemSlug.match(/(.+)-(\d+)x$/i);
     if (comboMatch) {
       baseItemSlug = comboMatch[1];
       multiplier = parseInt(comboMatch[2]);
@@ -197,7 +122,7 @@ export async function POST(req: Request) {
 
     for (let i = 0; i < multiplier; i++) {
       try {
-        console.log(`[fulfillment] Attempt ${i + 1}/${multiplier} | Order: ${orderId} | ID: ${orderToProcess.gameSlug}_${baseItemSlug}`);
+        console.log(`[fulfillment] Attempt ${i + 1}/${multiplier} | Order: ${orderId} | ID: ${order.gameSlug}_${baseItemSlug}`);
 
         const gameResp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`, {
           method: "POST",
@@ -206,9 +131,9 @@ export async function POST(req: Request) {
             "x-api-key": process.env.API_SECRET_KEY!,
           },
           body: JSON.stringify({
-            playerId: String(orderToProcess.playerId),
-            zoneId: String(orderToProcess.zoneId),
-            productId: `${orderToProcess.gameSlug}_${baseItemSlug}`,
+            playerId: String(order.playerId),
+            zoneId: String(order.zoneId),
+            productId: `${order.gameSlug}_${baseItemSlug}`,
             currency: "USD",
           }),
         });
@@ -229,26 +154,26 @@ export async function POST(req: Request) {
       }
     }
 
-    orderToProcess.externalResponse = responses;
+    order.externalResponse = responses;
     if (successCount === multiplier) {
-      orderToProcess.status = "success";
-      orderToProcess.topupStatus = "success";
+      order.status = "success";
+      order.topupStatus = "success";
     } else if (successCount > 0) {
-      orderToProcess.status = "success";
-      orderToProcess.topupStatus = "success";
-      orderToProcess.itemName = `${orderToProcess.itemName} (${successCount}/${multiplier} delivered)`;
+      order.status = "success";
+      order.topupStatus = "success";
+      order.itemName = `${order.itemName} (${successCount}/${multiplier} delivered)`;
     } else {
-      orderToProcess.status = "failed";
-      orderToProcess.topupStatus = "failed";
+      order.status = "failed";
+      order.topupStatus = "failed";
     }
 
-    await orderToProcess.save();
+    await order.save();
 
     return NextResponse.json({
-      success: orderToProcess.status === "success",
-      message: orderToProcess.status === "success" ? "Topup successful" : "Topup failed",
-      paymentStatus: orderToProcess.paymentStatus,
-      topupStatus: orderToProcess.topupStatus,
+      success: order.status === "success",
+      message: order.status === "success" ? "Topup successful" : "Topup failed",
+      paymentStatus: order.paymentStatus,
+      topupStatus: order.topupStatus,
       topupResponse: responses,
     });
   } catch (error: any) {
