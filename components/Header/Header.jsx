@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser } from "react-icons/fi";
+import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiBell } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
 
 /* ================= CONFIG ================= */
@@ -43,6 +43,29 @@ export default function Header() {
 
   const dropdownRef = useRef(null);
   const logoRef = useRef(null);
+
+  /* ================= PUSH NOTIFICATIONS ================= */
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    const checkSubscription = async () => {
+      if (window.OneSignalDeferred) {
+        window.OneSignalDeferred.push(async (OneSignal) => {
+          const permission = await OneSignal.Notifications.permission;
+          setIsSubscribed(permission === "granted");
+        });
+      }
+    };
+    checkSubscription();
+  }, []);
+
+  const handlePushToggle = () => {
+    if (window.OneSignalDeferred) {
+      window.OneSignalDeferred.push(async (OneSignal) => {
+        await OneSignal.Slidedown.promptPush();
+      });
+    }
+  };
 
   /* ================= AUTH ================= */
   useEffect(() => {
@@ -194,6 +217,22 @@ export default function Header() {
           {/* ================= ACTIONS ================= */}
           <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
             <ThemeToggle />
+
+            {/* PUSH NOTIFICATION TOGGLE */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handlePushToggle}
+              className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 group ${isSubscribed ? "text-[var(--accent)]" : "text-[var(--foreground)]/60"}`}
+              title={isSubscribed ? "Notifications Enabled" : "Enable Notifications"}
+            >
+              <div className="w-full h-full rounded-full flex items-center justify-center bg-[var(--foreground)]/5 group-hover:bg-[var(--foreground)]/10 transition-colors">
+                <FiBell className={`text-lg transition-transform duration-500 ${isSubscribed ? "scale-110" : "group-hover:rotate-12"}`} />
+              </div>
+              {isSubscribed && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-[var(--accent)] rounded-full border-2 border-[var(--background)] shadow-[0_0_10px_rgba(var(--accent-rgb),0.5)]" />
+              )}
+            </motion.button>
 
             {/* USER BUTTON */}
             <motion.button
