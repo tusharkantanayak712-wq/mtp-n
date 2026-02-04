@@ -96,10 +96,10 @@ export async function POST(req: Request) {
     await order.save();
 
     // Topup Logic
-    if (order.topupStatus === "success") {
+    if (order.topupStatus === "success" || order.topupStatus === "processing") {
       return NextResponse.json({
         success: true,
-        message: "Topup already completed",
+        message: order.topupStatus === "processing" ? "Order is being processed" : "Topup already completed",
         paymentStatus: order.paymentStatus,
         topupStatus: order.topupStatus
       });
