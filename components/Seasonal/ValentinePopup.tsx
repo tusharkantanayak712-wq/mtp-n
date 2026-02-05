@@ -83,10 +83,12 @@ export default function ValentinePopup() {
   };
 
   const handleRedirect = async () => {
-    await triggerOneSignal();
+
     setShow(false);
     sessionStorage.setItem("valentine_popup_seen", "true");
+    await triggerOneSignal();
     router.push("/special-leaderboard");
+
   };
 
   return (
