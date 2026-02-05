@@ -76,7 +76,7 @@ export default function RootLayout({
 
            */}
           {/* <ValentineEffect /> */}
-          <ValentinePopup />
+          {/* <ValentinePopup /> */}
           {FEATURE_FLAGS.MAINTENANCE_MODE && <Maintaince />}
           <main className="pt-20">{children}</main>
           <Footer />
