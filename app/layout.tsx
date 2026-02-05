@@ -106,9 +106,9 @@ export default function RootLayout({
               });
 
               // Automatically show the slidedown prompt if not subscribed
-              // if (!OneSignal.Notifications.permission) {
-              //    OneSignal.Slidedown.promptPush();
-              // }
+              if (!OneSignal.Notifications.permission) {
+                 OneSignal.Slidedown.promptPush();
+              }
             });
           `}
         </Script>
