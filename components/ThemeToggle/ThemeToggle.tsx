@@ -191,7 +191,7 @@ export default function ThemeToggle() {
                         visible: { opacity: 1, y: 0 }
                       }}
                       onClick={() => changeTheme(t.id)}
-                      className={`relative group overflow-hidden flex items-center gap-3 p-3 rounded-xl transition-all duration-300 border ${theme === t.id
+                      className={`relative group overflow-hidden flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-300 border ${theme === t.id
                         ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-[0_4px_12px_rgba(var(--accent-rgb),0.3)]"
                         : "bg-white/5 text-[var(--foreground)] border-white/5 hover:bg-white/10 hover:border-white/10"
                         }`}
@@ -199,13 +199,13 @@ export default function ThemeToggle() {
                       {/* HOVER GLOW */}
                       <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                      <span className="text-lg relative z-10 group-hover:scale-110 transition-transform duration-300">{t.icon}</span>
-                      <div className="flex flex-col items-start relative z-10">
-                        <span className={`text-[10px] font-[800] uppercase tracking-wider leading-none ${theme === t.id ? "text-white" : "text-[var(--foreground)]/90"}`}>
+                      <span className="text-base relative z-10 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">{t.icon}</span>
+                      <div className="flex flex-col items-start relative z-10 flex-1 min-w-0">
+                        <span className={`text-[10px] font-[800] uppercase tracking-wide leading-none ${theme === t.id ? "text-white" : "text-white/90"}`}>
                           {t.label}
                         </span>
                         {theme === t.id && (
-                          <span className="text-[8px] font-medium opacity-80 mt-1 flex items-center gap-1">
+                          <span className="text-[8px] font-medium opacity-80 mt-0.5 flex items-center gap-1">
                             Active
                           </span>
                         )}
@@ -214,7 +214,7 @@ export default function ThemeToggle() {
                       {theme === t.id && (
                         <motion.div
                           layoutId="active-dot"
-                          className="absolute right-3 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_white]"
+                          className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_white]"
                         />
                       )}
                     </motion.button>

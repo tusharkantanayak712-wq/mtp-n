@@ -247,7 +247,19 @@ export default function Header() {
               title={isSubscribed ? "Notifications Enabled" : "Enable Notifications"}
             >
               <div className="w-full h-full rounded-full flex items-center justify-center bg-[var(--foreground)]/5 group-hover:bg-[var(--foreground)]/10 transition-colors">
-                <FiBell className={`text-lg transition-transform duration-500 ${isSubscribed ? "scale-110" : "group-hover:rotate-12"}`} />
+                <motion.div
+                  animate={{
+                    rotate: [0, -15, 15, -15, 15, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatDelay: 3,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <FiBell className={`text-lg transition-all duration-500 ${isSubscribed ? "scale-110" : ""}`} />
+                </motion.div>
               </div>
               {isSubscribed && (
                 <span className="absolute top-0 right-0 w-2 h-2 bg-[var(--accent)] rounded-full border-2 border-[var(--background)] shadow-[0_0_10px_rgba(var(--accent-rgb),0.5)]" />
@@ -352,82 +364,93 @@ export default function Header() {
                     </>
                   ) : (
                     <>
-                      {/* User Info Header with Logout */}
+                      {/* User Info Header with Logout Icon */}
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="p-6 bg-gradient-to-br from-[var(--accent)]/10 to-transparent border-b border-[var(--border)]"
+                        className="p-5 bg-gradient-to-br from-[var(--accent)]/10 via-[var(--accent)]/5 to-transparent border-b border-[var(--border)]"
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[var(--foreground)]/5 flex-shrink-0">
+                        <div className="flex items-start gap-3">
+                          {/* Avatar */}
+                          <div className="relative w-14 h-14 rounded-2xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[var(--accent)]/20 to-[var(--foreground)]/5 flex-shrink-0 border border-[var(--accent)]/20">
                             {user?.avatar ? (
                               <Image
                                 src={user.avatar}
                                 alt="Avatar"
-                                width={48}
-                                height={48}
+                                width={56}
+                                height={56}
                                 className="object-cover w-full h-full"
                               />
                             ) : (
-                              <FiUser className="text-[var(--foreground)]/40 text-xl" />
+                              <FiUser className="text-[var(--accent)]/60 text-2xl" />
                             )}
+                            {/* Active indicator */}
+                            <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[var(--card)] shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-black text-sm uppercase italic tracking-wider text-[var(--foreground)] truncate">{user.name}</p>
-                            <p className="text-[10px] font-medium text-[var(--muted)] uppercase tracking-widest truncate mt-0.5">
+
+                          {/* Name & Email */}
+                          <div className="flex-1 min-w-0 pt-0.5">
+                            <p className="font-black text-base uppercase italic tracking-wide text-[var(--foreground)] truncate leading-tight">{user.name}</p>
+                            <p className="text-[10px] font-medium text-[var(--muted)] tracking-wide truncate mt-1.5">
                               {user.email}
                             </p>
                           </div>
+
+                          {/* Logout Icon */}
+                          <motion.button
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setUserMenuOpen(false);
+                              handleLogout();
+                            }}
+                            className="w-9 h-9 rounded-xl flex items-center justify-center bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 hover:border-red-500/50 transition-all group flex-shrink-0 shadow-lg shadow-red-500/5"
+                            title="Logout"
+                          >
+                            <FiLogOut size={16} className="group-hover:rotate-12 transition-transform" />
+                          </motion.button>
                         </div>
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={handleLogout}
-                          className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 text-[10px] font-black uppercase italic tracking-[0.2em] border border-red-500/20 transition-all shadow-lg shadow-red-500/5 group"
-                        >
-                          <FiLogOut size={14} className="group-hover:-translate-x-1 transition-transform" />
-                          Logout
-                        </motion.button>
                       </motion.div>
 
-                      {/* Navigation Items (Mobile Only) */}
-                      <div className="md:hidden p-4 border-b border-[var(--border)]">
-                        <p className="px-3 py-2 text-[8px] font-black text-[var(--muted)] uppercase tracking-[0.3em] opacity-40 italic">
-                          Quick Links
-                        </p>
-                        {HEADER_CONFIG.nav.map((item, index) => (
-                          <motion.div
-                            key={item.href}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                          >
-                            <Link
-                              href={item.href}
-                              onClick={() => {
-                                setUserMenuOpen(false);
-                                setActiveNav(item.href);
-                              }}
-                              className={`flex items-center justify-between px-4 py-4 rounded-2xl transition-all border border-transparent ${activeNav === item.href
-                                ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20 shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]"
-                                : "hover:bg-[var(--foreground)]/5 text-[var(--foreground)]/60"
-                                }`}
+                      {/* Region Check & Services - Side by Side */}
+                      <div className="p-4 border-b border-[var(--border)]">
+                        <div className="grid grid-cols-2 gap-3">
+                          {HEADER_CONFIG.nav.map((item, index) => (
+                            <motion.div
+                              key={item.href}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: index * 0.05 }}
                             >
-                              <span className="text-[10px] font-black uppercase tracking-widest italic">{item.label}</span>
-                              <FiChevronRight
-                                className={
-                                  activeNav === item.href
-                                    ? "text-[var(--accent)]"
-                                    : "opacity-40"
-                                }
-                              />
-                            </Link>
-                          </motion.div>
-                        ))}
+                              <Link
+                                href={item.href}
+                                onClick={() => {
+                                  setUserMenuOpen(false);
+                                  setActiveNav(item.href);
+                                }}
+                                className={`relative flex flex-col items-center justify-center gap-2.5 px-4 py-5 rounded-2xl transition-all duration-300 border group overflow-hidden ${activeNav === item.href
+                                  ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/30 shadow-[0_0_20px_rgba(var(--accent-rgb),0.15)]"
+                                  : "border-[var(--border)] hover:bg-[var(--accent)]/5 text-[var(--foreground)]/60 hover:border-[var(--accent)]/30 hover:shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]"
+                                  }`}
+                              >
+                                {/* Background glow effect */}
+                                <div className={`absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+
+                                <span className={`relative text-xl transition-all duration-300 ${activeNav === item.href ? "text-[var(--accent)] scale-110" : "opacity-50 group-hover:opacity-100 group-hover:scale-110"}`}>
+                                  {item.icon}
+                                </span>
+                                <span className="relative text-[9px] font-black uppercase tracking-wider italic text-center leading-tight">
+                                  {item.label}
+                                </span>
+                              </Link>
+                            </motion.div>
+                          ))}
+                        </div>
                       </div>
 
                       {/* Menu Items */}
-                      <div className="p-3">
+                      <div className="p-3 space-y-1">
                         {HEADER_CONFIG.userMenu.common.map((item, index) => (
                           <motion.div
                             key={item.label}
@@ -438,13 +461,13 @@ export default function Header() {
                             <Link
                               href={item.href}
                               onClick={() => setUserMenuOpen(false)}
-                              className="flex items-center justify-between px-4 py-4 rounded-2xl hover:bg-[var(--foreground)]/5 border border-transparent hover:border-[var(--border)] transition-all group"
+                              className="flex items-center justify-between px-4 py-3.5 rounded-xl hover:bg-[var(--foreground)]/5 border border-transparent hover:border-[var(--border)] transition-all group"
                             >
                               <div className="flex items-center gap-3">
-                                <span className="text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">{item.icon}</span>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/70 group-hover:text-[var(--accent)] italic">{item.label}</span>
+                                <span className="text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors text-sm">{item.icon}</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/70 group-hover:text-[var(--accent)] italic transition-colors">{item.label}</span>
                               </div>
-                              <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
+                              <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all text-sm" />
                             </Link>
                           </motion.div>
                         ))}
@@ -455,15 +478,17 @@ export default function Header() {
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.2 }}
+                              className="pt-1"
                             >
                               <Link
                                 href={
                                   HEADER_CONFIG.userMenu.roles[user.userType].href
                                 }
-                                className="flex items-center justify-between px-4 py-4 rounded-2xl bg-[var(--accent)]/5 border border-[var(--accent)]/20 hover:bg-[var(--accent)]/10 transition-all group"
+                                onClick={() => setUserMenuOpen(false)}
+                                className="flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/20 hover:bg-[var(--accent)]/10 hover:border-[var(--accent)]/30 transition-all group shadow-lg shadow-[var(--accent)]/5"
                               >
                                 <div className="flex items-center gap-3">
-                                  <span className="text-[var(--accent)] group-hover:scale-110 transition-transform">
+                                  <span className="text-[var(--accent)] group-hover:scale-110 transition-transform text-sm">
                                     {HEADER_CONFIG.userMenu.roles[user.userType].icon}
                                   </span>
                                   <span className="text-[10px] font-black uppercase tracking-widest text-[var(--accent)] italic">
@@ -473,7 +498,7 @@ export default function Header() {
                                     }
                                   </span>
                                 </div>
-                                <FiChevronRight className="text-[var(--accent)] group-hover:translate-x-1 transition-all" />
+                                <FiChevronRight className="text-[var(--accent)] group-hover:translate-x-1 transition-all text-sm" />
                               </Link>
                             </motion.div>
                           )}
