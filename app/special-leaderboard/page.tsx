@@ -305,7 +305,7 @@ export default function SpecialLeaderboard() {
                   className="bg-rose-500/5 border border-rose-500/10 p-8 rounded-[40px] text-center backdrop-blur-sm"
                 >
                   <p className="text-rose-500 font-black uppercase tracking-[0.2em] text-[10px] md:text-xs">
-                    🎁 TOP 5 PLAYERS WILL RECEIVE EXCLUSIVE VALENTINE REWARDS
+                    🎁 TOP 1 PLAYERS WILL RECEIVE EXCLUSIVE VALENTINE REWARDS
                   </p>
                 </motion.div>
 

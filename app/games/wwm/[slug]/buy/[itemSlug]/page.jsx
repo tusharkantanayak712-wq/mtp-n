@@ -92,7 +92,7 @@ function BuyFlowContent() {
 
   /* ================= VALIDATION ================= */
   const handleValidate = async () => {
-    if (!playerId || !zoneId) {
+    if (!playerId) {
       alert("Please enter Player ID and Zone ID");
       return;
     }

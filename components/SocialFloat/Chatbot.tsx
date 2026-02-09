@@ -244,7 +244,7 @@ export default function ChatBot() {
             initial={{ opacity: 0, scale: 0.9, y: 20, filter: "blur(10px)" }}
             animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, scale: 0.9, y: 20, filter: "blur(10px)" }}
-            className="mb-3 w-[340px] sm:w-[380px] h-[520px] bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_-12px_rgba(var(--accent-rgb),0.3)] flex flex-col overflow-hidden ring-1 ring-white/5"
+            className="mb-3 w-[340px] sm:w-[380px] h-[520px] bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_-12px_color-mix(in_srgb,var(--accent)_30%,transparent)] flex flex-col overflow-hidden ring-1 ring-white/5"
           >
             {/* Scanline Effect */}
             <motion.div
@@ -252,7 +252,7 @@ export default function ChatBot() {
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               className="absolute inset-0 pointer-events-none z-0"
               style={{
-                background: "linear-gradient(to bottom, transparent, rgba(var(--accent-rgb), 0.03), transparent)",
+                background: "linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) 3%, transparent), transparent)",
                 height: "10%",
               }}
             />
@@ -378,8 +378,11 @@ export default function ChatBot() {
         whileTap={{ scale: 0.95 }}
         className="relative group"
       >
-        <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-20 group-hover:opacity-40 transition-opacity" />
-        <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] text-white shadow-2xl flex items-center justify-center border border-white/20">
+        <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-30 group-hover:opacity-50 transition-opacity rounded-full" />
+        <div className="relative w-14 h-14 rounded-full bg-gradient-to-b from-[var(--accent)] to-[var(--accent-hover)] text-white shadow-[0_4px_20px_color-mix(in_srgb,var(--accent)_40%,transparent)] flex items-center justify-center border border-white/20 ring-1 ring-white/10 group-hover:shadow-[0_4px_25px_color-mix(in_srgb,var(--accent)_60%,transparent)] transition-all overflow-hidden">
+          {/* Glossy overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent opacity-50 pointer-events-none" />
+
           <AnimatePresence mode="wait">
             {isOpen ? (
               <motion.div
@@ -388,6 +391,7 @@ export default function ChatBot() {
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
+                className="relative z-10"
               >
                 <FiX className="text-2xl" />
               </motion.div>
@@ -398,11 +402,11 @@ export default function ChatBot() {
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: -90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="relative"
+                className="relative z-10"
               >
-                <FiMessageSquare className="text-2xl" />
+                <FiMessageSquare className="text-2xl drop-shadow-md" />
                 {/* Tactical Dot */}
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-black" />
+                <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1a1a1a]" />
               </motion.div>
             )}
           </AnimatePresence>
