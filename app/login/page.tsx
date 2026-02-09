@@ -11,7 +11,8 @@ import {
   FiCheckCircle,
   FiAlertCircle,
   FiLock,
-  FiTerminal
+  FiMail,
+  FiShieldOff
 } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
 
@@ -22,48 +23,95 @@ function AuthContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [showOtpField, setShowOtpField] = useState(false);
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
 
   const handleGoogleLogin = async (credential: string) => {
     if (loading) return;
-
     setLoading(true);
     setError("");
     setSuccess("");
-
     try {
       const res = await fetch("/api/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: credential }),
       });
-
       const data = await res.json();
-
       if (!data.success) {
         setError(data.message || "Authentication Protocol Failed");
         setLoading(false);
         return;
       }
-
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("userName", data.user.name);
-      sessionStorage.setItem("email", data.user.email);
-      sessionStorage.setItem("userId", data.user.userId);
-      sessionStorage.setItem("phone", data.user.phone || "");
-      sessionStorage.setItem("avatar", data.user.avatar || "");
-
-      setUserName(data.user.name);
-      setSuccess("done");
-
-      setTimeout(() => {
-        window.location.replace(redirectPath);
-      }, 1500);
+      saveSession(data);
     } catch {
       setError("Nexus Connection Interrupted");
       setLoading(false);
     }
+  };
+
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!email) {
+      setError("Please enter your Gmail address");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSuccess("Check your Gmail for the code");
+        setShowOtpField(true);
+      } else {
+        setError(data.message);
+      }
+    } catch {
+      setError("Nexus connection failed");
+    }
+    setLoading(false);
+  };
+
+  const handleOtpVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/otp/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        saveSession(data);
+      } else {
+        setError(data.message);
+      }
+    } catch {
+      setError("Authentication failed");
+    }
+    setLoading(false);
+  };
+
+  const saveSession = (data: any) => {
+    sessionStorage.setItem("token", data.token);
+    sessionStorage.setItem("userName", data.user.name);
+    sessionStorage.setItem("email", data.user.email);
+    sessionStorage.setItem("userId", data.user.userId);
+    sessionStorage.setItem("phone", data.user.phone || "");
+    sessionStorage.setItem("avatar", data.user.avatar || "");
+    setUserName(data.user.name);
+    setSuccess("done");
+    setTimeout(() => window.location.replace(redirectPath), 1500);
   };
 
   const containerVariants = {
@@ -83,7 +131,7 @@ function AuthContent() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center pt-12 sm:pt-20 px-4 overflow-hidden bg-[var(--background)]">
+    <section className="relative min-h-screen flex flex-col items-center pt-8 sm:pt-20 px-4 overflow-hidden bg-[var(--background)]">
       {/* AMBIENT BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
@@ -101,18 +149,14 @@ function AuthContent() {
         className="relative z-10 w-full max-w-[400px]"
       >
         <div className="w-full relative">
-
-
-
-
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="px-6 pt-0 pb-4 sm:px-8 sm:pt-0 sm:pb-4"
+            className="px-6 pb-4 sm:px-8 sm:pb-4"
           >
             {/* HEADER */}
-            <div className="flex flex-col items-center text-center mb-6">
+            <div className="flex flex-col items-center text-center mb-8">
               <motion.div
                 variants={itemVariants}
                 animate={{ y: [0, -8, 0] }}
@@ -131,93 +175,182 @@ function AuthContent() {
                 />
               </motion.div>
 
-              <motion.div variants={itemVariants} className="space-y-4">
-                <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[var(--foreground)] to-[var(--foreground)]/60 drop-shadow-sm">
-                  Access Account
+              <motion.div variants={itemVariants} className="space-y-2">
+                <h1 className="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[var(--foreground)] to-[var(--foreground)]/60 drop-shadow-sm">
+                  {showOtpField ? "Verification" : "Login Portal"}
                 </h1>
-                <p className="text-sm font-medium text-[var(--muted)]/80 tracking-wide mt-2">
-                  Sign in to continue
+                <p className="text-xs font-medium text-[var(--muted)]/80 tracking-wide uppercase">
+                  {showOtpField ? "Confirm your identity" : "Secure Access Control"}
                 </p>
               </motion.div>
             </div>
 
             <AnimatePresence mode="wait">
-              {/* STATUS MESSAGES */}
-              {success && (
+              {success && success !== "done" && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, height: "auto", scale: 1 }}
-                  exit={{ opacity: 0, height: 0, scale: 0.9 }}
-                  className="mb-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center gap-3 text-center"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-6 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center gap-2 text-center"
                 >
-                  <FiCheckCircle className="text-emerald-500" size={18} />
-                  <span className="text-xs font-bold text-emerald-500 uppercase tracking-wider">Login Successful</span>
+                  <FiCheckCircle className="text-emerald-500 flex-shrink-0" size={14} />
+                  <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">{success}</span>
+                </motion.div>
+              )}
+
+              {success === "done" && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mb-6 p-4 rounded-xl bg-emerald-500 text-white flex items-center justify-center gap-2 text-center shadow-[0_0_30px_rgba(16,185,129,0.3)]"
+                >
+                  <FiCheckCircle size={20} />
+                  <span className="text-sm font-black uppercase tracking-widest">ACCESS GRANTED</span>
                 </motion.div>
               )}
 
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, height: "auto", scale: 1 }}
-                  exit={{ opacity: 0, height: 0, scale: 0.9 }}
-                  className="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center gap-3 text-center"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-6 p-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center gap-2 text-center"
                 >
-                  <FiAlertCircle className="text-red-500" size={18} />
-                  <span className="text-xs font-bold text-red-500 uppercase tracking-wider">{error}</span>
+                  <FiAlertCircle className="text-red-500 flex-shrink-0" size={14} />
+                  <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{error}</span>
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* ACTION AREA */}
-            {!success && (
+            {success !== "done" && (
               <motion.div variants={containerVariants} className="space-y-6">
-                <motion.div variants={itemVariants} className={`relative group ${loading ? "opacity-50 pointer-events-none" : ""}`}>
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-purple-600 rounded-full opacity-20 blur transition duration-500 group-hover:opacity-40" />
-                  <div className="relative flex justify-center transition-transform duration-200 active:scale-[0.98] scale-110 origin-center my-0">
+
+                {/* GMAIL OTP SECTION */}
+                <motion.form
+                  variants={itemVariants}
+                  onSubmit={showOtpField ? handleOtpVerify : handleSendOtp}
+                  className="space-y-4"
+                >
+                  <div className="space-y-4">
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-4 flex items-center text-[var(--muted)] pointer-events-none group-focus-within:text-[var(--accent)] transition-colors">
+                        <FiMail size={18} />
+                      </div>
+                      <input
+                        type="email"
+                        placeholder="yourname@gmail.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled={showOtpField}
+                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-5 text-sm font-bold focus:outline-none focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
+                      />
+                      {showOtpField && (
+                        <button
+                          type="button"
+                          onClick={() => { setShowOtpField(false); setOtp(""); setSuccess(""); }}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-[var(--accent)] hover:underline"
+                        >
+                          Change
+                        </button>
+                      )}
+                    </div>
+
+                    <AnimatePresence>
+                      {showOtpField && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0, y: -10 }}
+                          animate={{ opacity: 1, height: "auto", y: 0 }}
+                          exit={{ opacity: 0, height: 0, y: -10 }}
+                          className="overflow-hidden space-y-4"
+                        >
+                          <div className="relative group">
+                            <div className="absolute inset-y-0 left-4 flex items-center text-[var(--muted)] pointer-events-none group-focus-within:text-[var(--accent)] transition-colors">
+                              <FiShield size={18} />
+                            </div>
+                            <input
+                              type="text"
+                              placeholder="Enter 6-Digit Code"
+                              value={otp}
+                              onChange={(e) => setOtp(e.target.value)}
+                              maxLength={6}
+                              required
+                              autoFocus
+                              className="w-full bg-[var(--foreground)]/[0.03] border border-[var(--accent)]/30 rounded-2xl pl-12 pr-5 py-5 text-lg font-black tracking-[0.3em] focus:outline-none focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/20 shadow-inner"
+                            />
+                          </div>
+                          <div className="flex justify-between items-center px-1">
+                            <p className="text-[10px] text-[var(--muted)]/60 font-medium italic">Didn't get it?</p>
+                            <button type="button" onClick={() => handleSendOtp()} className="text-[10px] font-black uppercase text-[var(--accent)] hover:text-[var(--foreground)] transition-colors">Resend Code</button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-[var(--accent)] text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
+                  >
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <span>{showOtpField ? "Verify & Login" : "Send Access Code"}</span>
+                      </>
+                    )}
+                  </button>
+                </motion.form>
+
+                {/* DIVIDER */}
+                <div className="relative flex items-center gap-4 py-2">
+                  <div className="h-[1px] flex-1 bg-[var(--border)]/30" />
+                  <span className="text-[9px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">Social Connect</span>
+                  <div className="h-[1px] flex-1 bg-[var(--border)]/30" />
+                </div>
+
+                {/* GOOGLE SECTION (Always Available) */}
+                <motion.div variants={itemVariants} className={`relative flex justify-center w-full ${loading ? "opacity-50 pointer-events-none" : ""}`}>
+                  <div className="w-full max-w-xs transition-transform hover:scale-[1.02] active:scale-[0.98]">
                     <GoogleLogin
                       onSuccess={(res) => res.credential && handleGoogleLogin(res.credential)}
                       onError={() => setError("Connection Failed")}
                       theme="filled_black"
                       size="large"
                       shape="pill"
-                      text="continue_with"
+                      width="300"
+                      text="signin_with"
                     />
                   </div>
                 </motion.div>
 
-                <motion.div variants={itemVariants} className="space-y-6">
+                {/* TRUST FOOTER */}
+                <motion.div variants={itemVariants} className="pt-8 space-y-6">
                   <div className="grid grid-cols-3 gap-3">
                     <Feature icon={FiShield} label="Encrypted" />
                     <Feature icon={FiZap} label="Instant" />
-                    <Feature icon={FiActivity} label="Dynamic" />
+                    <Feature icon={FiActivity} label="Monitoring" />
                   </div>
 
-                  <div className="text-center space-y-4">
-                    <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase tracking-widest leading-relaxed max-w-[280px] mx-auto">
-                      Authorized use only. By proceeding you sync with our <a href="/terms" className="text-[var(--muted)] hover:text-[var(--accent)] transition-colors underline decoration-dotted">Terms</a> • <a href="/privacy" className="text-[var(--muted)] hover:text-[var(--accent)] transition-colors underline decoration-dotted">Privacy</a>
+                  <div className="text-center space-y-3">
+                    <p className="text-[9px] font-bold text-[var(--muted)]/50 uppercase tracking-widest leading-relaxed">
+                      By continuing you agree to our <a href="/terms" className="text-[var(--accent)] hover:underline">Terms</a>
                     </p>
-
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
                       <FiLock size={10} className="text-emerald-500" />
-                      <span className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]">
-                        Hardware Secured <span className="text-emerald-500">•</span> <span className="text-emerald-500">Google OAuth 2.0</span>
-                      </span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/70">SECURE SHELL v2.0</span>
                     </div>
                   </div>
                 </motion.div>
 
-
               </motion.div>
             )}
-
-
-
           </motion.div>
         </div>
-
-
-      </motion.div >
-    </section >
+      </motion.div>
+    </section>
   );
 }
 
@@ -232,10 +365,10 @@ export default function AuthPage() {
 function Feature({ icon: Icon, label }: { icon: any, label: string }) {
   return (
     <div className="group flex flex-col items-center gap-2 p-3 rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:bg-[var(--accent)]/5 hover:border-[var(--accent)]/20 transition-all duration-300">
-      <div className="w-8 h-8 rounded-xl bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 transition-all">
-        <Icon size={16} />
+      <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 transition-all">
+        <Icon size={14} />
       </div>
-      <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors">{label}</span>
+      <span className="text-[7px] font-black uppercase tracking-widest text-[var(--muted)]/80 group-hover:text-[var(--foreground)] transition-colors">{label}</span>
     </div>
   );
 }
