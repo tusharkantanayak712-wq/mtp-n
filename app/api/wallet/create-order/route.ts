@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import WalletTransaction from "@/models/WalletTransaction";
 
 export async function POST(req: Request) {
   try {
@@ -121,6 +122,21 @@ export async function POST(req: Request) {
         message: data.message || "Failed to create payment order"
       });
     }
+
+    // ============ CREATE PENDING TRANSACTION ============
+    await WalletTransaction.create({
+      transactionId: `PENDING_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      userId: user.userId,
+      userObjectId: user._id,
+      type: "credit",
+      amount: numAmount,
+      balanceBefore: user.wallet || 0,
+      balanceAfter: user.wallet || 0, // Balance hasn't changed yet
+      description: "Wallet Top-up Initiated",
+      status: "pending",
+      referenceId: orderId,
+      performedBy: "user",
+    });
 
     return NextResponse.json({
       success: true,

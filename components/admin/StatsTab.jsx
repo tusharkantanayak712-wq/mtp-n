@@ -297,6 +297,7 @@ export default function StatsTab() {
                                             <th className="px-6 py-4">User</th>
                                             <th className="px-6 py-4">Type</th>
                                             <th className="px-6 py-4 text-right">Amount</th>
+                                            <th className="px-6 py-4">Status</th>
                                             <th className="px-6 py-4 text-right">Actions</th>
                                             <th className="px-6 py-4 text-right">Date</th>
                                         </tr>
@@ -327,8 +328,8 @@ export default function StatsTab() {
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${txn.type === 'credit'
-                                                                ? 'bg-green-500/10 text-green-500 border border-green-500/20'
-                                                                : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                                                            ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                                                            : 'bg-red-500/10 text-red-500 border border-red-500/20'
                                                             }`}>
                                                             {txn.type}
                                                         </span>
@@ -336,6 +337,16 @@ export default function StatsTab() {
                                                     <td className="px-6 py-4 text-right">
                                                         <span className={`font-mono font-bold ${txn.type === 'credit' ? 'text-green-500' : 'text-red-500'}`}>
                                                             {txn.type === 'credit' ? '+' : '-'}{txn.amount.toLocaleString()}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${txn.status === 'success'
+                                                                ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                                                                : txn.status === 'failed'
+                                                                    ? 'bg-red-500/10 text-red-500 border border-red-500/20'
+                                                                    : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
+                                                            }`}>
+                                                            {txn.status || 'success'}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 text-right text-[11px] text-[var(--muted)]">

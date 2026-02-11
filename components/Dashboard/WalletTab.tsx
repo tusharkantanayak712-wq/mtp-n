@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FiPlusCircle,
@@ -89,7 +89,7 @@ export default function WalletTab({
       {/* TACTICAL BALANCE MODULE */}
       <div className="relative group overflow-hidden">
         <div className="absolute -inset-1 bg-gradient-to-r from-[var(--accent)]/30 to-transparent blur-3xl opacity-20 pointer-events-none" />
-        <div className="relative p-6 sm:p-8 rounded-[2.5rem] bg-black/40 border border-white/5 flex items-center justify-between overflow-hidden">
+        <div className="relative p-6 sm:p-8 rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)] flex items-center justify-between overflow-hidden shadow-sm">
           <div className="absolute right-[-20px] top-[-20px] text-[var(--accent)]/5 rotate-12">
             <FiZap size={140} />
           </div>
@@ -99,10 +99,10 @@ export default function WalletTab({
               Wallet Balance
             </p>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase text-white">
+              <span className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase text-[var(--foreground)]">
                 ₹{walletBalance}
               </span>
-              <span className="text-[10px] font-bold text-[var(--muted)]/40 uppercase tracking-widest leading-none">
+              <span className="text-[10px] font-bold text-[var(--muted)]/60 uppercase tracking-widest leading-none">
                 Available
               </span>
             </div>
@@ -144,9 +144,9 @@ export default function WalletTab({
                     setAmountError("");
                   }
                 }}
-                className="w-full p-4 rounded-2xl border border-white/10 bg-white/5 focus:bg-white/10 focus:border-[var(--accent)]/40 text-2xl font-black italic tracking-tight placeholder:text-white/5 outline-none transition-all"
+                className="w-full p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] focus:bg-[var(--foreground)]/[0.02] focus:border-[var(--accent)]/40 text-2xl font-black italic tracking-tight text-[var(--foreground)] placeholder:text-[var(--muted)]/30 outline-none transition-all"
               />
-              <div className="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-black text-[var(--muted)]/40 uppercase tracking-widest">
+              <div className="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-black text-[var(--muted)] uppercase tracking-widest">
                 INR
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function WalletTab({
                     setAmount(String(v));
                     setAmountError("");
                   }}
-                  className="px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-white/5 bg-white/5 hover:bg-[var(--accent)] hover:text-black hover:border-[var(--accent)] transition-all"
+                  className="px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-black hover:border-[var(--accent)] transition-all"
                 >
                   ₹{v}
                 </button>
@@ -186,29 +186,29 @@ export default function WalletTab({
                 className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300
                   ${method === "upi"
                     ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                    : "border-white/5 bg-white/5 hover:bg-white/10"
+                    : "border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.02]"
                   }`}
               >
                 <div className="flex items-center gap-4">
-                  <div className={`p-2.5 rounded-xl ${method === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-white/5 text-[var(--muted)]'}`}>
+                  <div className={`p-2.5 rounded-xl ${method === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'}`}>
                     <FiSmartphone size={18} />
                   </div>
                   <div className="text-left">
-                    <span className={`text-[11px] font-black uppercase tracking-widest italic leading-none ${method === 'upi' ? 'text-[var(--accent)]' : 'text-white'}`}>
+                    <span className={`text-[11px] font-black uppercase tracking-widest italic leading-none ${method === 'upi' ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
                       UPI / Netbanking
                     </span>
-                    <p className="text-[9px] font-medium text-[var(--muted)]/40 uppercase tracking-wider mt-1">Instant Add</p>
+                    <p className="text-[9px] font-medium text-[var(--muted)]/60 uppercase tracking-wider mt-1">Instant Add</p>
                   </div>
                 </div>
               </button>
 
-              <div className="flex flex-col gap-2 p-4 rounded-2xl border border-white/5 bg-white/5">
+              <div className="flex flex-col gap-2 p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)]">
                 <div className="flex items-center gap-4">
                   <div className="p-2.5 rounded-xl bg-green-500/10 text-green-500">
                     <FiDollarSign size={18} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-black uppercase tracking-widest italic text-white block">
+                    <span className="text-[11px] font-black uppercase tracking-widest italic text-[var(--foreground)] block">
                       Crypto / USDT
                     </span>
                     <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider">
@@ -232,6 +232,166 @@ export default function WalletTab({
           </button>
         </div>
       </div>
+
+      {/* TRANSACTION HISTORY SECTION */}
+      <div className="pt-8 border-t border-[var(--border)]/20">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-bold tracking-tight text-[var(--foreground)] flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+            Transaction History
+          </h3>
+          <TransactionHistoryRefresh />
+        </div>
+
+        <TransactionHistoryWrapper />
+      </div>
+    </div>
+  );
+}
+
+function TransactionHistoryRefresh() {
+  return (
+    <button
+      onClick={() => window.dispatchEvent(new Event("refreshTransactionHistory"))}
+      className="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] transition-all"
+      title="Refresh History"
+    >
+      <FiLoader size={14} className="hover:animate-spin" />
+    </button>
+  );
+}
+
+function TransactionHistoryWrapper() {
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    const handleRefresh = () => setKey(k => k + 1);
+    window.addEventListener("refreshTransactionHistory", handleRefresh);
+    return () => window.removeEventListener("refreshTransactionHistory", handleRefresh);
+  }, []);
+
+  return <TransactionHistory key={key} />;
+}
+
+function TransactionHistory() {
+  const [history, setHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchHistory = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`/api/wallet/history?page=${page}&limit=5`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (json.success) {
+        setHistory(json.data);
+        if (json.pagination) {
+          setTotalPages(json.pagination.totalPages);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHistory();
+  }, [page]);
+
+  if (loading && history.length === 0) {
+    return (
+      <div className="flex justify-center py-10">
+        <FiLoader className="animate-spin text-[var(--accent)]" size={24} />
+      </div>
+    );
+  }
+
+  if (history.length === 0) {
+    return (
+      <div className="text-center py-10 text-[var(--muted)] text-sm">
+        No transactions found.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[var(--foreground)]/[0.03] text-[var(--muted)] font-bold uppercase tracking-wider">
+              <tr>
+                <th className="px-4 py-3">Type</th>
+                <th className="px-4 py-3">Amount</th>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--border)] text-[var(--foreground)]">
+              {history.map((txn) => (
+                <tr key={txn._id} className="hover:bg-[var(--foreground)]/[0.02] transition-colors">
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${txn.type === 'credit'
+                      ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                      : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                      }`}>
+                      {txn.type}
+                    </span>
+                    <p className="text-[10px] text-[var(--muted)] mt-0.5 max-w-[150px] truncate">
+                      {txn.description}
+                    </p>
+                  </td>
+                  <td className="px-4 py-3 font-mono font-bold">
+                    <span className={txn.type === 'credit' ? 'text-green-500' : 'text-red-500'}>
+                      {txn.type === 'credit' ? '+' : '-'}₹{txn.amount}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-[10px] text-[var(--muted)]">
+                    {new Date(txn.createdAt).toLocaleDateString()}
+                    <br />
+                    {new Date(txn.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <span className={`text-[10px] font-bold uppercase tracking-wider ${txn.status === 'success' ? 'text-green-500' : txn.status === 'failed' ? 'text-red-500' : 'text-yellow-500'
+                      }`}>
+                      {txn.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Simple Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-3 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.05] text-[10px] font-bold text-[var(--muted)] hover:text-[var(--foreground)] uppercase disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            Prev
+          </button>
+          <span className="text-xs font-mono self-center text-[var(--muted)]">
+            {page} / {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-3 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.05] text-[10px] font-bold text-[var(--muted)] hover:text-[var(--foreground)] uppercase disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

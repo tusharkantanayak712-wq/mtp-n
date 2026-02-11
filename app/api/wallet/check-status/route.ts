@@ -32,12 +32,10 @@ export async function POST(req: Request) {
     }
 
     // ============ CHECK IF ALREADY PROCESSED ============
-    const existingTxn = await WalletTransaction.findOne({
-      referenceId: orderId,
-      status: "success"
-    });
+    // Look for existing transaction by referenceId (orderId)
+    let existingTxn = await WalletTransaction.findOne({ referenceId: orderId });
 
-    if (existingTxn) {
+    if (existingTxn && existingTxn.status === "success") {
       return NextResponse.json({
         success: true,
         message: "Payment already processed",
@@ -60,20 +58,100 @@ export async function POST(req: Request) {
     const data = await resp.json();
     console.log("Gateway Response:", data);
 
-    // 💳 Gateway success logic
-    const gatewaySuccess =
-      data?.status == true ||
-      data?.result?.txnStatus == "COMPLETED" ||
-      data?.result?.txnStatus == "SUCCESS";
+    // 💳 Analyze Gateway Status
+    const gatewayStatus = data?.result?.txnStatus;
 
-    if (!gatewaySuccess) {
-      // Log failure if not already logged
-      const existingFail = await WalletTransaction.findOne({
-        referenceId: orderId,
-        status: "failed"
+    // Success conditions (adjust based on actual gateway response)
+    // Some gateways return 'SUCCESS', 'COMPLETED', or boolean status true
+    const isSuccess =
+      data?.status === true ||
+      gatewayStatus === "COMPLETED" ||
+      gatewayStatus === "SUCCESS";
+
+    // Failure conditions
+    // Be careful not to mark 'PENDING' as failed
+    const isFailed =
+      gatewayStatus === "FAILED" ||
+      gatewayStatus === "FAILURE" ||
+      gatewayStatus === "TXN_FAILURE";
+
+    const amount = Number(data?.result?.amount || 0);
+
+    /* ============ HANDLE SUCCESS ============ */
+    if (isSuccess) {
+      if (!amount) {
+        return NextResponse.json({
+          success: false,
+          message: "Invalid amount received from gateway",
+        });
+      }
+
+      // 💰 Update User Wallet
+      let user = await User.findById(tokenUserId);
+      if (!user) {
+        user = await User.findOne({ userId: tokenUserId });
+      }
+
+      if (!user) {
+        return NextResponse.json(
+          { success: false, message: "User not found" },
+          { status: 404 }
+        );
+      }
+
+      const balanceBefore = user.wallet || 0;
+      const balanceAfter = balanceBefore + amount;
+
+      user.wallet = balanceAfter;
+      user.order = (user.order || 0) + 1; // Increment order count log
+      await user.save();
+
+      // 📝 Update or Create Transaction Log
+      if (existingTxn) {
+        // Update existing pending/failed transaction to success
+        existingTxn.status = "success";
+        existingTxn.amount = amount; // Ensure amount matches actual payment
+        existingTxn.balanceAfter = balanceAfter;
+        existingTxn.description = "Wallet Top-up Successful";
+        // Update transactionId to indicate success (optional, but good for clarity)
+        // existingTxn.transactionId = `TOPUP_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`; 
+        // Better to keep original ID or update? Let's update to match consistent format for successful topups
+        existingTxn.transactionId = `TOPUP_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+        await existingTxn.save();
+      } else {
+        // Should theoretically exist if created via create-order app flow
+        // But handle case where it doesn't (legacy or direct API call)
+        await WalletTransaction.create({
+          transactionId: `TOPUP_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+          userId: user.userId,
+          userObjectId: user._id,
+          type: "credit",
+          amount: amount,
+          balanceBefore: balanceBefore,
+          balanceAfter: balanceAfter,
+          description: "Wallet Top-up Successful",
+          status: "success",
+          referenceId: orderId,
+          performedBy: "user",
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Payment Successful",
+        amount,
+        newWallet: user.wallet,
       });
+    }
 
-      if (!existingFail) {
+    /* ============ HANDLE FAILURE ============ */
+    if (isFailed) {
+      if (existingTxn) {
+        existingTxn.status = "failed";
+        existingTxn.description = `Top-up Failed: ${data?.message || gatewayStatus || "Unknown Error"}`;
+        await existingTxn.save();
+      } else {
+        // Create failure record if not exists
         let user = await User.findById(tokenUserId);
         if (!user) user = await User.findOne({ userId: tokenUserId });
 
@@ -82,11 +160,11 @@ export async function POST(req: Request) {
             transactionId: `FAIL_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
             userId: user.userId,
             userObjectId: user._id,
-            type: "credit", // It was intended to be a credit
-            amount: Number(data?.result?.amount || 0),
+            type: "credit", // Intended type
+            amount: amount,
             balanceBefore: user.wallet || 0,
             balanceAfter: user.wallet || 0,
-            description: `Top-up Failed: ${data?.message || data?.result?.txnStatus || "Unknown Error"}`,
+            description: `Top-up Failed: ${data?.message || gatewayStatus || "Unknown Error"}`,
             status: "failed",
             referenceId: orderId,
             performedBy: "user",
@@ -96,61 +174,19 @@ export async function POST(req: Request) {
 
       return NextResponse.json({
         success: false,
-        message: "Payment Pending or Failed",
+        message: "Payment Failed",
       });
     }
 
-    const amount = Number(data?.result?.amount || 0);
-
-    if (!amount) {
-      return NextResponse.json({
-        success: false,
-        message: "Invalid amount",
-      });
-    }
-
-    // 💰 Update User Wallet
-    let user = await User.findById(tokenUserId);
-    if (!user) {
-      user = await User.findOne({ userId: tokenUserId });
-    }
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    const balanceBefore = user.wallet || 0;
-    const balanceAfter = balanceBefore + amount;
-
-    user.wallet = balanceAfter;
-    user.order = (user.order || 0) + 1;
-
-    await user.save();
-
-    // ============ LOG TRANSACTION ============
-    await WalletTransaction.create({
-      transactionId: `TOPUP_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-      userId: user.userId,
-      userObjectId: user._id,
-      type: "credit",
-      amount: amount,
-      balanceBefore: balanceBefore,
-      balanceAfter: balanceAfter,
-      description: "Wallet Top-up via UPI",
-      status: "success",
-      referenceId: orderId,
-      performedBy: "user",
-    });
+    /* ============ HANDLE PENDING (Default) ============ */
+    // If not success and not explicitly failed, it's pending.
+    // We don't need to change DB state (it's already pending).
 
     return NextResponse.json({
-      success: true,
-      message: "Payment Successful",
-      amount,
-      newWallet: user.wallet,
+      success: false,
+      message: "Payment Pending",
     });
+
   } catch (error) {
     console.error("Check-status error:", error);
     return NextResponse.json(
