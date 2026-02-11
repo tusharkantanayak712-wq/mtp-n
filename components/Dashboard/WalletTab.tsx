@@ -96,14 +96,14 @@ export default function WalletTab({
 
           <div className="relative z-10">
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)] mb-2 italic">
-              Balance Capacity
+              Wallet Balance
             </p>
             <div className="flex items-baseline gap-2">
               <span className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase text-white">
                 ₹{walletBalance}
               </span>
               <span className="text-[10px] font-bold text-[var(--muted)]/40 uppercase tracking-widest leading-none">
-                Available Credits
+                Available
               </span>
             </div>
           </div>
@@ -119,7 +119,7 @@ export default function WalletTab({
         <div className="space-y-6">
           <div>
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] flex items-center gap-2 mb-4">
-              <FiPlusCircle className="text-[var(--accent)]" /> Acquisition Amount
+              <FiPlusCircle className="text-[var(--accent)]" /> Enter Amount
             </label>
 
             <div className="relative">
@@ -177,7 +177,7 @@ export default function WalletTab({
         <div className="space-y-6">
           <div>
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] flex items-center gap-2 mb-4">
-              <FiCreditCard className="text-[var(--accent)]" /> Access Protocol
+              <FiCreditCard className="text-[var(--accent)]" /> Payment Method
             </label>
 
             <div className="grid gap-3">
@@ -195,18 +195,30 @@ export default function WalletTab({
                   </div>
                   <div className="text-left">
                     <span className={`text-[11px] font-black uppercase tracking-widest italic leading-none ${method === 'upi' ? 'text-[var(--accent)]' : 'text-white'}`}>
-                      UPI Interface
+                      UPI / Netbanking
                     </span>
-                    <p className="text-[9px] font-medium text-[var(--muted)]/40 uppercase tracking-wider mt-1">Instant Authorization</p>
+                    <p className="text-[9px] font-medium text-[var(--muted)]/40 uppercase tracking-wider mt-1">Instant Add</p>
                   </div>
                 </div>
               </button>
 
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-dashed border-white/5 opacity-30 cursor-not-allowed">
-                <div className="p-2.5 rounded-xl bg-white/5 text-[var(--muted)]">
-                  <FiZap size={18} />
+              <div className="flex flex-col gap-2 p-4 rounded-2xl border border-white/5 bg-white/5">
+                <div className="flex items-center gap-4">
+                  <div className="p-2.5 rounded-xl bg-green-500/10 text-green-500">
+                    <FiDollarSign size={18} />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-black uppercase tracking-widest italic text-white block">
+                      Crypto / USDT
+                    </span>
+                    <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider">
+                      1 USD = 97 Coins
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[11px] font-black uppercase tracking-widest italic text-white">USDT Node Pending</span>
+                <p className="text-[10px] font-medium text-[var(--muted)] mt-2 pl-1">
+                  Contact customer service for adding via crypto.
+                </p>
               </div>
             </div>
           </div>
@@ -216,7 +228,7 @@ export default function WalletTab({
             disabled={loading}
             className="w-full p-4 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic text-xs shadow-[0_20px_40px_-10px_rgba(var(--accent-rgb),0.3)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale transition-all flex items-center justify-center gap-3"
           >
-            {loading ? <FiLoader className="animate-spin" size={18} /> : "Initialize Transfer"}
+            {loading ? <FiLoader className="animate-spin" size={18} /> : "Add Funds"}
           </button>
         </div>
       </div>
