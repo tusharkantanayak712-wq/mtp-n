@@ -17,27 +17,55 @@ export async function GET(req) {
         if (decoded.userType !== "owner")
             return Response.json({ message: "Forbidden" }, { status: 403 });
 
-        /* ================= AGGREGATION ================= */
-        const [totalBalance, topWallets] = await Promise.all([
-            // Sum all user wallets
+        /* ================= QUERY PARAMS ================= */
+        const { searchParams } = new URL(req.url);
+        const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
+        const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
+        const search = searchParams.get("search") || "";
+        const skip = (page - 1) * limit;
+
+        /* ================= AGGREGATION & FETCH ================= */
+        // Base query: wallet > 0
+        const query = { wallet: { $gt: 0 } };
+
+        if (search) {
+            query.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } },
+                { userId: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        const [totalBalanceAgg, wallets, totalCount] = await Promise.all([
+            // Sum all user wallets (this is global sum, not affected by pagination/search usually, 
+            // but maybe we want global sum regardless of search? Keeping it global for now)
             User.aggregate([
                 { $match: { wallet: { $gt: 0 } } },
                 { $group: { _id: null, total: { $sum: "$wallet" } } }
             ]),
-            // Top 10 wallets
-            User.find({ wallet: { $gt: 0 } })
+            // Paginated wallets
+            User.find(query)
                 .sort({ wallet: -1 })
-                .limit(10)
+                .skip(skip)
+                .limit(limit)
                 .select("name userId wallet email userType")
-                .lean()
+                .lean(),
+            // Count for pagination
+            User.countDocuments(query)
         ]);
 
         /* ================= RESPONSE ================= */
         return Response.json({
             success: true,
             data: {
-                totalBalance: totalBalance[0]?.total || 0,
-                topWallets: topWallets || [],
+                totalBalance: totalBalanceAgg[0]?.total || 0,
+                wallets: wallets || [],
+                pagination: {
+                    total: totalCount,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalCount / limit)
+                }
             },
         });
     } catch (err) {

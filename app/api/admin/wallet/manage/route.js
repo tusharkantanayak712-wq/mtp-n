@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import WalletTransaction from "@/models/WalletTransaction";
 import jwt from "jsonwebtoken";
 
 export async function POST(req) {
@@ -13,7 +14,8 @@ export async function POST(req) {
             );
         }
 
-        if (amount <= 0) {
+        const numAmount = Number(amount);
+        if (!numAmount || numAmount <= 0) {
             return Response.json(
                 { success: false, message: "Amount must be positive" },
                 { status: 400 }
@@ -42,27 +44,43 @@ export async function POST(req) {
             );
         }
 
-        /* ================= UPDATE WALLET ================= */
-        const updateAmount = action === "add" ? amount : -amount;
+        const currentBalance = user.wallet || 0;
+        const updateAmount = action === "add" ? numAmount : -numAmount;
 
         // Prevent negative balance if removing
-        if (action === "remove" && user.wallet < amount) {
+        if (action === "remove" && currentBalance < numAmount) {
             return Response.json(
                 { success: false, message: "Insufficient balance to remove" },
                 { status: 400 }
             );
         }
 
+        /* ================= UPDATE WALLET ================= */
         const updatedUser = await User.findOneAndUpdate(
             { _id: user._id },
             { $inc: { wallet: updateAmount } },
             { new: true }
         );
 
+        /* ================= CREATE TRANSACTION ================= */
+        await WalletTransaction.create({
+            transactionId: `ADM_TXN_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+            userId: user.userId,
+            userObjectId: user._id,
+            type: action === "add" ? "credit" : "debit",
+            amount: numAmount,
+            balanceBefore: currentBalance,
+            balanceAfter: updatedUser.wallet,
+            description: `Admin ${action === "add" ? "Credit" : "Debit"} Adjustment`,
+            status: "success",
+            referenceId: decoded.userId, // Admin ID as reference
+            performedBy: "admin",
+        });
+
         /* ================= RESPONSE ================= */
         return Response.json({
             success: true,
-            message: `Successfully ${action === "add" ? "added" : "removed"} ${amount} credits`,
+            message: `Successfully ${action === "add" ? "added" : "removed"} ${numAmount} credits`,
             data: updatedUser,
         });
     } catch (err) {

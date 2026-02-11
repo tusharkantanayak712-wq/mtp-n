@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import WalletTransaction from "@/models/WalletTransaction";
 import jwt from "jsonwebtoken";
 
 export async function POST(req: Request) {
@@ -30,6 +31,22 @@ export async function POST(req: Request) {
       );
     }
 
+    // ============ CHECK IF ALREADY PROCESSED ============
+    const existingTxn = await WalletTransaction.findOne({
+      referenceId: orderId,
+      status: "success"
+    });
+
+    if (existingTxn) {
+      return NextResponse.json({
+        success: true,
+        message: "Payment already processed",
+        amount: existingTxn.amount,
+        newWallet: existingTxn.balanceAfter,
+      });
+    }
+
+    // ============ GATEWAY CHECK ============
     const formData = new URLSearchParams();
     formData.append("user_token", process.env.XTRA_USER_TOKEN!);
     formData.append("order_id", orderId);
@@ -50,6 +67,33 @@ export async function POST(req: Request) {
       data?.result?.txnStatus == "SUCCESS";
 
     if (!gatewaySuccess) {
+      // Log failure if not already logged
+      const existingFail = await WalletTransaction.findOne({
+        referenceId: orderId,
+        status: "failed"
+      });
+
+      if (!existingFail) {
+        let user = await User.findById(tokenUserId);
+        if (!user) user = await User.findOne({ userId: tokenUserId });
+
+        if (user) {
+          await WalletTransaction.create({
+            transactionId: `FAIL_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+            userId: user.userId,
+            userObjectId: user._id,
+            type: "credit", // It was intended to be a credit
+            amount: Number(data?.result?.amount || 0),
+            balanceBefore: user.wallet || 0,
+            balanceAfter: user.wallet || 0,
+            description: `Top-up Failed: ${data?.message || data?.result?.txnStatus || "Unknown Error"}`,
+            status: "failed",
+            referenceId: orderId,
+            performedBy: "user",
+          });
+        }
+      }
+
       return NextResponse.json({
         success: false,
         message: "Payment Pending or Failed",
@@ -66,7 +110,6 @@ export async function POST(req: Request) {
     }
 
     // 💰 Update User Wallet
-    // Try finding by MongoDB _id first, then by custom userId
     let user = await User.findById(tokenUserId);
     if (!user) {
       user = await User.findOne({ userId: tokenUserId });
@@ -79,10 +122,28 @@ export async function POST(req: Request) {
       );
     }
 
-    user.wallet = (user.wallet || 0) + amount;
+    const balanceBefore = user.wallet || 0;
+    const balanceAfter = balanceBefore + amount;
+
+    user.wallet = balanceAfter;
     user.order = (user.order || 0) + 1;
 
     await user.save();
+
+    // ============ LOG TRANSACTION ============
+    await WalletTransaction.create({
+      transactionId: `TOPUP_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      userId: user.userId,
+      userObjectId: user._id,
+      type: "credit",
+      amount: amount,
+      balanceBefore: balanceBefore,
+      balanceAfter: balanceAfter,
+      description: "Wallet Top-up via UPI",
+      status: "success",
+      referenceId: orderId,
+      performedBy: "user",
+    });
 
     return NextResponse.json({
       success: true,

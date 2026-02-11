@@ -193,7 +193,7 @@ export default function AdminPanalPage() {
 
           {/* TABS */}
           <div className="mb-5 flex flex-wrap gap-2">
-            {["stats", "users", "orders", "transactions", "queries", "pricing", "banners"].map(
+            {["wallet", "users", "orders", "transactions", "queries", "pricing", "banners"].map(
               (tab) => {
                 const isActive = activeTab === tab;
 
@@ -250,7 +250,7 @@ export default function AdminPanalPage() {
 
           {/* PANEL */}
           <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            {activeTab === "stats" && <StatsTab />}
+            {activeTab === "wallet" && <StatsTab />}
             {activeTab === "users" && (
               <UsersTab
 
