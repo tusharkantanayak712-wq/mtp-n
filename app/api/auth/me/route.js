@@ -45,6 +45,9 @@ export async function GET(req) {
         order: user.order,
         userType: user.userType,
         avatar: user.avatar,
+        userId: user.userId,
+        referralUsed: user.referralUsed || false,
+        referralCount: user.referralCount || 0,
       },
     });
 

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiBell } from "react-icons/fi";
+import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiBell, FiUsers } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
 
 /* ================= CONFIG ================= */
@@ -26,6 +26,7 @@ const HEADER_CONFIG = {
     common: [
       { label: "My Orders", href: "/dashboard/orders", icon: <FiShoppingBag size={14} /> },
       { label: "My Wallet", href: "/dashboard/wallet", icon: <FiShoppingBag size={14} /> },
+      { label: "Refer & Earn", href: "/dashboard/referral", icon: <FiUsers size={14} /> },
 
       { label: "Customer Support", href: "/dashboard/support", icon: <FiMessageSquare size={14} /> },
       { label: "Membership", href: "/admin-panal", icon: <FiShield size={14} /> },

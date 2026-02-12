@@ -2,79 +2,131 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FiRefreshCcw, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
+import {
+  FiRefreshCw,
+  FiAlertTriangle,
+  FiCheckCircle,
+  FiShield,
+  FiCpu,
+  FiFileText,
+  FiHelpCircle
+} from "react-icons/fi";
 
 export default function RefundPolicy() {
-  const sections = [
+  const policies = [
     {
-      id: "01",
-      title: "Digital Standard",
-      content: "All top-ups are digital assets delivered instantly. Once processed, transactions are final and generally non-refundable."
+      icon: <FiCpu />,
+      title: "Digital Delivery Standard",
+      description: "All top-ups are digital assets delivered instantly to your account. Once the credits are successfully added, the transaction is considered final and generally non-refundable."
     },
     {
-      id: "02",
-      title: "Eligible Errors",
-      content: "Refunds are restricted to verified technical failures where payment was successful but no in-game credit was issued."
+      icon: <FiAlertTriangle />,
+      title: "Eligible Refund Scenarios",
+      description: "Refunds are strictly limited to technical failures where payment was deducted from your bank but no in-game credit was received after 24 hours."
     },
     {
-      id: "03",
-      title: "User Liability",
-      content: "Incorrect Player ID or Zone inputs by the user are non-refundable. Please verify all details before confirming payment."
+      icon: <FiShield />,
+      title: "User Responsibility",
+      description: "Mistakes made by the user, such as entering an incorrect Player ID, Game Zone, or Region, are not eligible for refunds. Please double-check details before purchasing."
     },
     {
-      id: "04",
-      title: "Audit Period",
-      content: "Approved reversals are processed within 5–7 business days through the original payment gateway node."
+      icon: <FiRefreshCw />,
+      title: "Processing Timeline",
+      description: "Approved refunds are processed within 5–7 business days and will be reversed to the original payment method used during the transaction."
     }
   ];
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 px-6">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 relative overflow-hidden">
 
-      <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-[var(--accent)]/5 to-transparent pointer-events-none" />
+      <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-[var(--accent)]/5 rounded-full blur-[100px] pointer-events-none" />
 
-        {/* HEADER - SIMPLIFIED */}
+      <div className="max-w-5xl mx-auto pt-24 md:pt-32 px-6 relative z-10">
+
+        {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-16 text-center md:text-left"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 space-y-4"
         >
-          <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none mb-2">
-            REFUND <span className="text-[var(--accent)]">POLICY</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 mb-4">
+            <FiFileText size={12} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Official Policy</span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none">
+            Refund <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/60">Policy</span>
           </h1>
-          <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
-            Service Reversal Guidelines
+
+          <p className="max-w-xl mx-auto text-sm md:text-base text-[var(--muted)] font-medium leading-relaxed">
+            Clear guidelines on our refund process, user responsibilities, and service commitments. We value transparency in every transaction.
           </p>
         </motion.div>
 
-        {/* COMPACT LIST */}
-        <div className="space-y-3">
-          {sections.map((section, i) => (
-            <motion.section
-              key={section.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.05 }}
-              whileHover={{ backgroundColor: "var(--card)" }}
-              className="p-6 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] group flex items-start gap-5 transition-all"
+        {/* POLICY GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {policies.map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 + 0.2 }}
+              className="group p-8 rounded-3xl bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--foreground)]/[0.02] transition-all duration-300 shadow-sm hover:shadow-lg relative overflow-hidden"
             >
-              <div className="text-xl font-black italic text-[var(--accent)] opacity-20 group-hover:opacity-100 transition-opacity pt-0.5">
-                {section.id}
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity text-[var(--foreground)] pointer-events-none">
+                <FiFileText size={120} />
               </div>
-              <div>
-                <h2 className="text-base font-[900] italic uppercase tracking-tighter text-[var(--foreground)] mb-1.5">{section.title}</h2>
-                <p className="text-[11px] md:text-xs text-[var(--muted)] leading-relaxed opacity-60 italic">{section.content}</p>
+
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-[var(--accent)]/20 shadow-[0_0_15px_-3px_var(--accent)]/20">
+                  <div className="text-2xl">{item.icon}</div>
+                </div>
+
+                <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)] mb-3 group-hover:text-[var(--accent)] transition-colors">
+                  {item.title}
+                </h3>
+
+                <p className="text-sm text-[var(--muted)] leading-relaxed font-medium">
+                  {item.description}
+                </p>
               </div>
-            </motion.section>
+            </motion.div>
           ))}
         </div>
 
-        {/* CTA - SIMPLIFIED */}
-        <div className="mt-12 p-8 rounded-3xl border border-[var(--border)] text-center opacity-40">
-          <FiRefreshCcw className="mx-auto mb-4 text-[var(--accent)]" size={20} />
-          <p className="text-[10px] font-bold uppercase tracking-widest max-w-xs mx-auto mb-6">Need a transaction audit? Our logistics team is available for status verification.</p>
-          <Link href="/contact" className="text-[9px] font-black uppercase text-[var(--accent)] border-b border-[var(--accent)]/30 pb-1">Open Support Audit</Link>
-        </div>
+        {/* SUPPORT CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-16 relative overflow-hidden rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)] p-8 md:p-12 text-center"
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+            <div className="mx-auto w-16 h-16 rounded-full bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] mb-2">
+              <FiHelpCircle size={32} />
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">Still have questions?</h3>
+              <p className="text-[var(--muted)] text-sm font-medium">
+                If you believe your transaction qualifies for a refund or need clarification, our support team is ready to assist you.
+              </p>
+            </div>
+
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-bold uppercase tracking-widest text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
+            >
+              <FiRefreshCw className="animate-spin-slow" />
+              Contact Support
+            </Link>
+          </div>
+        </motion.div>
 
       </div>
     </main>

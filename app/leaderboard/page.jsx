@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AuthGuard from "@/components/AuthGuard";
+import { FiUsers, FiDollarSign } from "react-icons/fi";
 
 export default function LeaderboardPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState("weekly");
+  const [type, setType] = useState("purchase"); // "purchase" | "referral"
 
   const limit = 10;
 
@@ -17,7 +19,7 @@ export default function LeaderboardPage() {
 
     setLoading(true);
 
-    fetch(`/api/leaderboard?limit=${limit}&range=${range}`, {
+    fetch(`/api/leaderboard?limit=${limit}&range=${range}&type=${type}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -26,47 +28,75 @@ export default function LeaderboardPage() {
       .then((res) => {
         setData(res.success ? res.data : []);
       })
+      .catch((err) => {
+        console.error("Leaderboard fetch error:", err);
+        setData([]);
+      })
       .finally(() => setLoading(false));
-  }, [range]);
+  }, [range, type]);
 
   return (
     <AuthGuard>
       <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300">
         <div className="max-w-2xl mx-auto px-6 pt-12 md:pt-24 relative z-10">
 
-          {/* 🏆 HEADER SECTION - SIMPLER */}
+          {/* 🏆 HEADER SECTION */}
           <motion.div
-            className="mb-12"
+            className="mb-8"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-4xl md:text-6xl font-[900] italic tracking-tighter uppercase leading-none mb-2 transition-colors text-center md:text-left">
-              ELITE <span className="text-[var(--accent)]">SPENDORS</span>
+            <h1 className="text-4xl md:text-5xl font-[900] italic tracking-tighter uppercase leading-none mb-2 transition-colors text-center md:text-left flex flex-col md:block">
+              {type === "purchase" ? (
+                <>ELITE <span className="text-[var(--accent)]">SPENDORS</span></>
+              ) : (
+                <>TOP <span className="text-[var(--accent)]">RECRUITERS</span></>
+              )}
             </h1>
             <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic text-center md:text-left">
               The Legend Board
             </p>
           </motion.div>
 
-          {/* 📅 TOGGLE SECTION - SLIMMER */}
+          {/* 🎛️ CONTROLS SECTION */}
           <motion.div
-            className="flex justify-start mb-12"
+            className="flex flex-col sm:flex-row gap-4 mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="bg-[var(--card)] p-1 rounded-2xl flex w-full max-w-[320px] border border-[var(--border)] transition-colors">
+            {/* TYPE TOGGLE */}
+            <div className="bg-[var(--card)] p-1 rounded-2xl flex w-full border border-[var(--border)] transition-colors">
+              {[
+                { id: "purchase", label: "Top Spenders", icon: FiDollarSign },
+                { id: "referral", label: "Top Referrers", icon: FiUsers }
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setType(t.id)}
+                  className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${type === t.id
+                    ? "bg-[var(--accent)] text-black shadow-lg"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                    }`}
+                >
+                  <t.icon size={14} />
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            {/* RANGE TOGGLE */}
+            <div className="bg-[var(--card)] p-1 rounded-2xl flex w-full sm:w-auto border border-[var(--border)] transition-colors">
               {["weekly", "monthly"].map((r) => (
                 <button
                   key={r}
                   onClick={() => setRange(r)}
-                  className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${range === r
-                    ? "bg-[var(--accent)] text-black shadow-lg"
+                  className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${range === r
+                    ? "bg-[var(--foreground)] text-[var(--background)]"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
-                  style={range === r ? { backgroundColor: 'var(--accent)' } : {}}
                 >
-                  {r === "weekly" ? "This Week" : "This Month"}
+                  {r === "weekly" ? "Week" : "Month"}
                 </button>
               ))}
             </div>
@@ -74,16 +104,31 @@ export default function LeaderboardPage() {
 
           <AnimatePresence mode="wait">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-24">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center py-24"
+              >
                 <div className="w-8 h-8 border-2 border-[var(--border)] border-t-[var(--accent)] rounded-full animate-spin mb-4" />
                 <span className="text-[9px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40 italic">Syncing Data...</span>
-              </div>
+              </motion.div>
             ) : data.length === 0 ? (
-              <div className="text-center py-24 text-[var(--muted)] font-black uppercase tracking-[0.3em] text-[11px] italic opacity-20 transition-opacity">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-24 text-[var(--muted)] font-black uppercase tracking-[0.3em] text-[11px] italic opacity-20 transition-opacity"
+              >
                 The Throne is Empty
-              </div>
+              </motion.div>
             ) : (
-              <div className="space-y-3">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-3"
+              >
                 {data.map((item, index) => (
                   <motion.div
                     key={index}
@@ -121,11 +166,20 @@ export default function LeaderboardPage() {
                       </div>
                     </div>
 
-                    {/* Spending Detail */}
+                    {/* Metric Detail */}
                     <div className="text-right ml-4">
-                      <div className={`font-black italic tracking-tighter transition-all origin-right ${index === 0 ? "text-3xl text-[var(--foreground)]" : "text-xl text-[var(--foreground)] group-hover:scale-110"}`}>
-                        <span className="text-[var(--accent)] mr-0.5">₹</span>
-                        {item.totalSpent?.toLocaleString()}
+                      <div className={`font-black italic tracking-tighter transition-all origin-right flex items-center justify-end ${index === 0 ? "text-3xl text-[var(--foreground)]" : "text-xl text-[var(--foreground)] group-hover:scale-110"}`}>
+                        {type === "purchase" ? (
+                          <>
+                            <span className="text-[var(--accent)] mr-1">₹</span>
+                            {item.totalSpent?.toLocaleString()}
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-[var(--accent)] mr-2">{item.referralCount}</span>
+                            <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60 self-center mt-1">Ref</span>
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -135,7 +189,7 @@ export default function LeaderboardPage() {
                     )}
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

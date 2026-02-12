@@ -13,7 +13,9 @@ import {
   Flower2,
   Inbox,
   LifeBuoy,
-  Heart
+  Heart,
+  Wallet,
+  Users
 } from "lucide-react";
 
 /* ===================== CONFIG ===================== */
@@ -24,6 +26,7 @@ const topRow = [
   { title: "Services", href: "/services", icon: Layers, color: "#a855f7" },
   { title: "Blogs", href: "/blog", icon: BookOpen, color: "#eab308" },
   { title: "Leader", href: "/leaderboard", icon: Trophy, color: "#f97316" },
+  { title: "Wallet", href: "/dashboard/wallet", icon: Wallet, color: "#10b981" },
 ];
 
 const bottomRow = [
@@ -31,6 +34,7 @@ const bottomRow = [
   { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
   { title: "Silver", href: "/games/membership/silver-membership", icon: Crown, color: "#94a3b8" },
   { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },
+  { title: "Referral", href: "/dashboard/referral", icon: Users, color: "#ec4899" },
   {
     title: "Valentine",
     icon: Heart,

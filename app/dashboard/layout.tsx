@@ -3,7 +3,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { motion } from "framer-motion";
 import AuthGuard from "../../components/AuthGuard";
-import { FiZap, FiInbox, FiHelpCircle, FiZap as FiZapIcon, FiUser, FiCreditCard } from "react-icons/fi";
+import { FiZap, FiInbox, FiHelpCircle, FiZap as FiZapIcon, FiUser, FiCreditCard, FiUsers } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import DashboardCard from "../../components/Dashboard/DashboardCard";
@@ -13,6 +13,9 @@ interface UserContextType {
         name: string;
         email: string;
         phone: string;
+        userId: string;
+        referralUsed: boolean;
+        referralCount: number;
     };
     walletBalance: number;
     setWalletBalance: (balance: number) => void;
@@ -36,6 +39,9 @@ export default function DashboardLayout({
         name: "",
         email: "",
         phone: "",
+        userId: "",
+        referralUsed: false,
+        referralCount: 0,
     });
     const pathname = usePathname();
 
@@ -58,6 +64,9 @@ export default function DashboardLayout({
                         name: data.user.name,
                         email: data.user.email,
                         phone: data.user.phone,
+                        userId: data.user.userId,
+                        referralUsed: data.user.referralUsed,
+                        referralCount: data.user.referralCount,
                     });
                     setWalletBalance(data.user.wallet || 0);
                     localStorage.setItem("walletBalance", String(data.user.wallet || 0));
@@ -89,6 +98,7 @@ export default function DashboardLayout({
         { key: "orders", label: "Operations", value: "Orders", icon: FiInbox, href: "/dashboard/orders" },
         { key: "support", label: "Protocol", value: "Support", icon: FiHelpCircle, href: "/dashboard/support" },
         { key: "wallet", label: "Credits", value: "Wallet", icon: FiCreditCard, href: "/dashboard/wallet" },
+        { key: "referral", label: "Network", value: "Referral", icon: FiUsers, href: "/dashboard/referral" },
         // { key: "account", label: "Identity", value: "Profile", icon: FiUser, href: "/dashboard/account" },
     ];
 

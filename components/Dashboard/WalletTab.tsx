@@ -14,11 +14,17 @@ import {
 interface WalletTabProps {
   walletBalance: number;
   setWalletBalance: (balance: number) => void;
+  userReferral?: {
+    userId: string;
+    referralUsed: boolean;
+    referralCount: number;
+  };
 }
 
 export default function WalletTab({
   walletBalance,
   setWalletBalance,
+  userReferral,
 }: WalletTabProps) {
   const [amount, setAmount] = useState("");
   const [amountError, setAmountError] = useState("");

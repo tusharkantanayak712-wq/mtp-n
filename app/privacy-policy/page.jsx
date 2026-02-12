@@ -2,81 +2,133 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FiShield, FiInfo } from "react-icons/fi";
+import {
+  FiShield,
+  FiLock,
+  FiEye,
+  FiDatabase,
+  FiGlobe,
+  FiServer,
+  FiFileText
+} from "react-icons/fi";
 
 const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Blue Buff";
 
 export default function PrivacyPolicy() {
-  const sections = [
+  const policies = [
     {
-      id: "01",
+      icon: <FiDatabase />,
       title: "Data Collection",
-      content: "We collect account details (Email, Phone, Game ID) and technical data (IP, Browser) exclusively for order delivery and fraud prevention."
+      description: "We collect essential account details (Email, Phone, Game ID) and technical data (IP, Browser) exclusively for order delivery and fraud prevention."
     },
     {
-      id: "02",
+      icon: <FiLock />,
       title: "Usage Protocol",
-      content: "Your data is used solely to process orders and improve platform security. We never sell or trade your personal information for marketing."
+      description: "Your data is used solely to process orders and improve platform security. We never sell, trade, or share your personal information with third-party marketers."
     },
     {
-      id: "03",
-      title: "Security & Retention",
-      content: "We utilize encrypted gateways and retain logs only as long as legally required for transaction verification and auditing."
+      icon: <FiServer />,
+      title: "Security Measures",
+      description: "We utilize 256-bit SSL encryption and secure gateways. Logs are retained only as long as legally required for transaction verification and auditing."
     },
     {
-      id: "04",
-      title: "Third-Party Apps",
-      content: "Our platform integrates with verified payment and analytics providers who operate under their own strict privacy standards."
+      icon: <FiGlobe />,
+      title: "Third-Party Integration",
+      description: "Our platform integrates with verified payment and analytics providers who operate under their own strict privacy standards and compliance certifications."
     }
   ];
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 px-6">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent)]/30 pb-32 transition-colors duration-300 relative overflow-hidden">
 
-      <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-[var(--accent)]/5 to-transparent pointer-events-none" />
+      <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-[var(--accent)]/5 rounded-full blur-[100px] pointer-events-none" />
 
-        {/* HEADER - SIMPLIFIED */}
+      <div className="max-w-5xl mx-auto pt-24 md:pt-32 px-6 relative z-10">
+
+        {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-16 text-center md:text-left"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 space-y-4"
         >
-          <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none mb-2">
-            PRIVACY <span className="text-[var(--accent)]">POLICY</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 mb-4">
+            <FiShield size={12} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Data Protection</span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none">
+            Privacy <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/60">Policy</span>
           </h1>
-          <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
-            Data Protection Standards
+
+          <p className="max-w-xl mx-auto text-sm md:text-base text-[var(--muted)] font-medium leading-relaxed">
+            We are committed to protecting your digital footprint. Our protocols ensure your data remains secure, private, and under your control.
           </p>
         </motion.div>
 
-        {/* COMPACT LIST */}
-        <div className="space-y-3">
-          {sections.map((section, i) => (
-            <motion.section
-              key={section.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.05 }}
-              whileHover={{ backgroundColor: "var(--card)" }}
-              className="p-6 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] group flex items-start gap-5 transition-all"
+        {/* POLICY GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {policies.map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 + 0.2 }}
+              className="group p-8 rounded-3xl bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--foreground)]/[0.02] transition-all duration-300 shadow-sm hover:shadow-lg relative overflow-hidden"
             >
-              <div className="text-xl font-black italic text-[var(--accent)] opacity-20 group-hover:opacity-100 transition-opacity pt-0.5">
-                {section.id}
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity text-[var(--foreground)] pointer-events-none">
+                <FiFileText size={120} />
               </div>
-              <div>
-                <h2 className="text-base font-[900] italic uppercase tracking-tighter text-[var(--foreground)] mb-1.5">{section.title}</h2>
-                <p className="text-[11px] md:text-xs text-[var(--muted)] leading-relaxed opacity-60 italic">{section.content}</p>
+
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-[var(--accent)]/20 shadow-[0_0_15px_-3px_var(--accent)]/20">
+                  <div className="text-2xl">{item.icon}</div>
+                </div>
+
+                <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)] mb-3 group-hover:text-[var(--accent)] transition-colors">
+                  {item.title}
+                </h3>
+
+                <p className="text-sm text-[var(--muted)] leading-relaxed font-medium">
+                  {item.description}
+                </p>
               </div>
-            </motion.section>
+            </motion.div>
           ))}
         </div>
 
-        {/* FULL POLICY LINK */}
-        <div className="mt-12 p-8 rounded-3xl border border-[var(--border)] text-center opacity-40">
-          <FiShield className="mx-auto mb-4 text-[var(--accent)]" size={20} />
-          <p className="text-[10px] font-bold uppercase tracking-widest max-w-xs mx-auto mb-6">Standard compliance protocols are active. For full legal disclosure, contact our data protection officer.</p>
-          <Link href="/contact" className="text-[9px] font-black uppercase text-[var(--accent)] border-b border-[var(--accent)]/30 pb-1">Legal Support Access</Link>
-        </div>
+        {/* COMPLIANCE CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-16 relative overflow-hidden rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)] p-8 md:p-12 text-center"
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+            <div className="mx-auto w-16 h-16 rounded-full bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] mb-2">
+              <FiEye size={32} />
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">Transparency & Control</h3>
+              <p className="text-[var(--muted)] text-sm font-medium">
+                You have the right to request access to your data or demand its deletion at any time. Our Data Protection Officer is available for any inquiries.
+              </p>
+            </div>
+
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-bold uppercase tracking-widest text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
+            >
+              <FiShield className="animate-pulse" />
+              Contact Data Officer
+            </Link>
+          </div>
+        </motion.div>
 
       </div>
     </main>

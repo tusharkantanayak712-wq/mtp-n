@@ -62,6 +62,23 @@ const UserSchema = new mongoose.Schema(
       default: 0,
     },
 
+    /* ================= REFERRAL SYSTEM ================= */
+    referralUsed: {
+      type: Boolean,
+      default: false, // true if this user has already used someone else's code
+    },
+
+    referralCount: {
+      type: Number,
+      default: 0, // how many users used this user's code
+    },
+
+    referredBy: {
+      type: String, // userId of the referrer
+      sparse: true,
+      index: true,
+    },
+
     userType: {
       type: String,
       enum: ["user", "admin", "owner", "member"],
