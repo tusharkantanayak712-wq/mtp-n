@@ -1,24 +1,44 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 export async function POST(request) {
   try {
     await connectDB();
-    const body = await request.json();
 
-    const { identifier, newPassword } = body;
-
-    if (!identifier || !newPassword) {
+    // 1. AUTHENTICATION CHECK
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return Response.json(
-        { success: false, message: "Missing required fields" },
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.split(" ")[1];
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+      return Response.json(
+        { success: false, message: "Invalid token" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { newPassword } = body;
+
+    if (!newPassword || newPassword.length < 6) {
+      return Response.json(
+        { success: false, message: "Password must be at least 6 characters" },
         { status: 400 }
       );
     }
 
-    // Find user by email or phone
-    const user = await User.findOne({
-      $or: [{ email: identifier }, { phone: identifier }],
-    });
+    // 2. FETCH USER FROM TOKEN ID
+    const user = await User.findById(decoded.userId);
 
     if (!user) {
       return Response.json(
@@ -27,8 +47,9 @@ export async function POST(request) {
       );
     }
 
-    // Update password
-    user.password = newPassword;
+    // 3. HASH NEW PASSWORD & SAVE
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
     await user.save();
 
     return Response.json(
@@ -37,8 +58,9 @@ export async function POST(request) {
     );
 
   } catch (error) {
+    console.error("Update Password Error:", error);
     return Response.json(
-      { success: false, message: "Server error", error: error.message },
+      { success: false, message: "Server error" },
       { status: 500 }
     );
   }
