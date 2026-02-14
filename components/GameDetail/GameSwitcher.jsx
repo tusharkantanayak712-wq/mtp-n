@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export default function GameSwitcher() {
     const router = useRouter();
@@ -13,10 +14,8 @@ export default function GameSwitcher() {
     const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Helper: check if weekly pass variant is active
     const isWeeklyPassQuery = searchParams.get("type") === "weekly-pass";
     const currentSlug = params?.slug;
-
     const WEEKLY_PASS_SLUG = "mobile-legends988";
 
     useEffect(() => {
@@ -31,7 +30,6 @@ export default function GameSwitcher() {
 
                 let fetchedGames = json?.data?.games || [];
 
-                // Duplicate Weekly Pass (same as GamesPage logic)
                 const weeklyPassSource = fetchedGames.find(
                     (g) => g.gameSlug === WEEKLY_PASS_SLUG
                 );
@@ -44,25 +42,19 @@ export default function GameSwitcher() {
                     );
 
                     if (!alreadyExists) {
-                        // Add Weekly Pass as a distinct item
                         fetchedGames.push({
                             ...weeklyPassSource,
                             gameName: "Weekly Pass",
                             _variant: "weekly-pass",
                             gameSlug: WEEKLY_PASS_SLUG,
                             gameImageId: {
-                                image:
-                                    "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536006/WhatsApp_Image_2026-01-16_at_08.50.36_tviv2b.jpg", // Distinct image
+                                image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536006/WhatsApp_Image_2026-01-16_at_08.50.36_tviv2b.jpg",
                             },
                         });
                     }
                 }
 
-                // Sort: Weekly Pass first, then alpha or by popularity?
-                // Let's put Weekly Pass near MLBB or at start.
-                // Simple alpha sort for now
                 fetchedGames.sort((a, b) => a.gameName.localeCompare(b.gameName));
-
                 setGames(fetchedGames);
                 setLoading(false);
             } catch (err) {
@@ -75,10 +67,8 @@ export default function GameSwitcher() {
         return () => { mounted = false; };
     }, []);
 
-    // Handle scroll to active item
     useEffect(() => {
         if (!loading && games.length > 0 && scrollContainerRef.current) {
-            // Find index of current game
             const activeIndex = games.findIndex(g => {
                 const isVariant = g._variant === "weekly-pass";
                 if (isVariant && isWeeklyPassQuery && g.gameSlug === currentSlug) return true;
@@ -90,14 +80,12 @@ export default function GameSwitcher() {
                 const container = scrollContainerRef.current;
                 const element = container.children[activeIndex];
                 if (element) {
-                    // Center the active element
                     const scrollLeft = element.offsetLeft - (container.clientWidth / 2) + (element.clientWidth / 2);
                     container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
                 }
             }
         }
     }, [loading, games, currentSlug, isWeeklyPassQuery]);
-
 
     const handleSwitch = (game) => {
         if (game._variant === "weekly-pass") {
@@ -108,21 +96,27 @@ export default function GameSwitcher() {
     };
 
     if (loading) return (
-        <div className="w-full h-24 bg-[var(--card)]/30 animate-pulse rounded-xl mb-6" />
+        <div className="w-full flex gap-4 overflow-hidden mb-8">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 animate-pulse" />
+            ))}
+        </div>
     );
 
     return (
-        <div className="w-full mb-6 relative z-20">
+        <div className="w-full mb-8 relative z-20">
             <div className="flex items-center justify-between mb-4 px-1">
-                <h3 className="text-xs font-black text-[var(--muted)] uppercase tracking-[0.2em] flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-                    Quick Switch
-                </h3>
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-[2px] bg-[var(--accent)]" />
+                    <h3 className="text-[10px] md:text-xs font-black text-[var(--foreground)] uppercase tracking-[0.3em] opacity-50">
+                        Quick Switch
+                    </h3>
+                </div>
             </div>
 
             <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide snap-x"
+                className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide snap-x no-scrollbar"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {games.map((game, idx) => {
@@ -131,33 +125,59 @@ export default function GameSwitcher() {
                         (!isVariant && !isWeeklyPassQuery && game.gameSlug === currentSlug);
 
                     return (
-                        <motion.button
+                        <div
                             key={`${game.gameSlug}-${idx}-${isVariant ? 'wp' : 'reg'}`}
-                            onClick={() => handleSwitch(game)}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={`
-                        relative flex-shrink-0 w-[4.5rem] h-[4.5rem] md:w-20 md:h-20 rounded-2xl overflow-hidden transition-all duration-300 snap-center group
-                        ${isActive
-                                    ? "ring-2 ring-[var(--accent)] shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)] opacity-100 scale-105"
-                                    : "ring-1 ring-[var(--border)] opacity-60 hover:opacity-100 hover:ring-[var(--foreground)]/20 grayscale hover:grayscale-0"
-                                }
-                    `}
+                            className="flex-shrink-0 flex flex-col items-center gap-1.5 snap-center transition-all duration-500"
                         >
-                            <img
-                                src={game.gameImageId?.image || "/placeholder.jpg"}
-                                alt={game.gameName}
-                                className="w-full h-full object-cover"
-                            />
+                            <motion.button
+                                onClick={() => handleSwitch(game)}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: idx * 0.05 }}
+                                whileHover={{ scale: 1.05, y: -2 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={`
+                                    relative w-14 h-14 md:w-16 md:h-16 rounded-[1.25rem] transition-all duration-500 group
+                                    ${isActive
+                                        ? "ring-2 ring-[var(--accent)] shadow-[0_8px_20px_-5px_rgba(var(--accent-rgb),0.4)]"
+                                        : "opacity-50 hover:opacity-100 grayscale hover:grayscale-0"
+                                    }
+                                `}
+                            >
+                                {/* Reflection Shimmer */}
+                                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[1.25rem] z-20">
+                                    <motion.div
+                                        animate={{ x: ["-100%", "200%"] }}
+                                        transition={{ repeat: Infinity, duration: 4, ease: "linear", repeatDelay: 2 }}
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-full skew-x-[-20deg]"
+                                    />
+                                </div>
 
-                            {/* Gradient Overlay */}
-                            <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-100' : ''}`} />
+                                <div className="relative w-full h-full rounded-[1.25rem] overflow-hidden bg-[var(--card)] ring-1 ring-white/10 group-hover:ring-white/20">
+                                    <Image
+                                        src={game.gameImageId?.image || "/placeholder.jpg"}
+                                        alt={game.gameName}
+                                        fill
+                                        unoptimized
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-100' : ''}`} />
+                                </div>
 
-                            {/* Active Indicator */}
-                            {isActive && (
-                                <div className="absolute inset-0 border-2 border-[var(--accent)] rounded-2xl" />
-                            )}
-                        </motion.button>
+                                {/* Active Glow Backdrop */}
+                                {isActive && (
+                                    <div className="absolute inset-0 -z-10 bg-[var(--accent)] blur-xl opacity-20 scale-125 rounded-[1.25rem]" />
+                                )}
+                            </motion.button>
+
+                            {/* Game Name Label - Always Visible */}
+                            <p className={`
+                                text-[7px] md:text-[8px] font-black uppercase tracking-wider text-center max-w-[4rem] md:max-w-[4.5rem] line-clamp-1 transition-colors duration-300
+                                ${isActive ? 'text-[var(--accent)]' : 'text-[var(--muted)] opacity-60 group-hover:opacity-100'}
+                            `}>
+                                {game.gameName}
+                            </p>
+                        </div>
                     );
                 })}
             </div>
