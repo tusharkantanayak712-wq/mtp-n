@@ -54,7 +54,11 @@ export default function OrderItem({ order }: { order: OrderType }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const rawStatus = (order.topupStatus || order.status || "").toLowerCase();
+  const rawStatus = (
+    order.status?.toLowerCase().includes("refund")
+      ? "refund"
+      : (order.topupStatus || order.status || "")
+  ).toLowerCase();
 
   const getStatusConfig = (s: string) => {
     if (s.includes("success") || s.includes("completed") || s.includes("deployed")) {
