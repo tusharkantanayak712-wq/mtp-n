@@ -122,7 +122,7 @@ export async function PATCH(req) {
       );
     }
 
-    const allowedStatus = ["pending", "success", "failed", "cancelled"];
+    const allowedStatus = ["pending", "success", "failed", "processing", "cancelled", "refund", "Refund", "REFUND"];
     if (!allowedStatus.includes(status)) {
       return Response.json(
         { success: false, message: "Invalid status" },
@@ -142,6 +142,15 @@ export async function PATCH(req) {
 
     if (status === "failed") {
       update.topupStatus = "failed";
+    }
+
+    if (status === "processing") {
+      update.topupStatus = "processing";
+    }
+
+    if (status === "refund" || status === "REFUND" || status === "Refund") {
+      update.topupStatus = "refund";
+      update.paymentStatus = "refund";
     }
 
     const order = await Order.findOneAndUpdate(

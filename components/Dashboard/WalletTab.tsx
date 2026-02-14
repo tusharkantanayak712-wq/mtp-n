@@ -431,7 +431,7 @@ function TransactionHistory() {
                     {new Date(txn.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className={`text-[10px] font-bold uppercase tracking-wider ${txn.status === 'success' ? 'text-green-500' : txn.status === 'failed' ? 'text-red-500' : 'text-yellow-500'
+                    <span className={`text-[10px] font-bold uppercase tracking-wider ${txn.status === 'success' ? 'text-green-500' : txn.status === 'failed' ? 'text-red-500' : txn.status === 'refund' || txn.status === 'refunded' ? 'text-blue-500' : 'text-yellow-500'
                       }`}>
                       {txn.status}
                     </span>

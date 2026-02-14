@@ -63,6 +63,9 @@ export default function OrderItem({ order }: { order: OrderType }) {
     if (s.includes("failed") || s.includes("cancelled") || s.includes("error")) {
       return { color: "#ef4444", icon: FiAlertCircle, label: "FAILED" };
     }
+    if (s.includes("refund")) {
+      return { color: "#3b82f6", icon: FiCheckCircle, label: "REFUNDED" };
+    }
     return { color: "#f59e0b", icon: FiLoader, label: "PENDING" };
   };
 
