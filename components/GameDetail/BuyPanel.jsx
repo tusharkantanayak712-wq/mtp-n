@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { FiArrowRight, FiShield, FiTag } from "react-icons/fi";
+import { FiArrowRight, FiShield, FiTag, FiShoppingBag } from "react-icons/fi";
 import { motion } from "framer-motion";
-import logo from "@/public/logo.png";
 
 export default function BuyPanel({
   activeItem,
@@ -17,7 +16,7 @@ export default function BuyPanel({
   const itemImage =
     activeItem?.itemImageId?.image ||
     activeItem?.image ||
-    logo;
+    "/logo.png";
 
   const discount = calculateDiscount(
     activeItem.sellingPrice,
@@ -29,111 +28,81 @@ export default function BuyPanel({
       ref={buyPanelRef}
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="max-w-4xl mx-auto p-4"
+      className="fixed bottom-4 left-4 right-4 z-40 md:static md:max-w-3xl md:mx-auto md:p-0 md:mt-4"
     >
       <div className="relative group">
-        {/* Ambient Glow */}
-        <div className="absolute inset-2 bg-gradient-to-r from-[var(--accent)]/40 to-purple-600/40 blur-[40px] opacity-40 group-hover:opacity-60 transition-opacity duration-700 -z-10" />
+        {/* Glow */}
+        <div className="absolute inset-4 bg-[var(--accent)]/30 blur-[40px] opacity-20 group-hover:opacity-40 transition-opacity duration-700 -z-10" />
 
         {/* Main Bar */}
-        <div className="relative bg-[var(--card)]/80 backdrop-blur-xl border border-[var(--border)] rounded-[2.5rem] p-2 md:p-3 shadow-2xl flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden transform transition-all hover:scale-[1.01]">
+        <div className="relative bg-[var(--card)]/90 backdrop-blur-2xl border border-[var(--border)] rounded-[1.5rem] p-2 pr-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center justify-between gap-3 overflow-hidden ring-1 ring-white/5">
 
-          {/* Detailed Texture */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
-
-          {/* TOP SECTION (Mobile: Row, Desktop: Flexed) */}
-          <div className="flex flex-row items-center gap-4 w-full md:w-auto md:flex-1 p-2 md:p-0">
-
-            {/* Left: Product Viz */}
-            <div className="relative w-24 h-24 md:w-28 md:h-28 shrink-0 md:pl-3">
-              <div className="absolute inset-0 bg-[var(--accent)]/10 rounded-2xl rotate-6" />
-              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[var(--background)] shadow-lg ring-1 ring-[var(--border)]">
-                <Image
-                  src={itemImage}
-                  alt={activeItem.itemName}
-                  fill
-                  unoptimized
-                  className="object-cover transition-all duration-500 group-hover:scale-110"
-                />
-              </div>
-              {discount && (
-                <div className="absolute -bottom-2 -right-2 bg-black text-white text-[10px] font-[900] px-2.5 py-1 rounded-lg border border-white/20 shadow-xl z-10 flex items-center gap-1">
-                  <FiTag className="w-3 h-3" /> -{discount}%
-                </div>
-              )}
+          {/* LEFT: Product Info */}
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            {/* Image */}
+            <div className="relative w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[var(--background)] rounded-xl overflow-hidden border border-[var(--border)] shadow-sm">
+              <Image
+                src={itemImage}
+                alt={activeItem.itemName}
+                fill
+                unoptimized
+                className="object-cover"
+              />
             </div>
 
-            {/* Center: Information */}
-            <div className="flex-1 flex flex-col justify-center text-left min-w-0">
-              <div className="inline-flex items-center justify-start gap-2 mb-2">
-                <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--muted)] opacity-80 truncate">
-                  Ready to Ship
-                </span>
+            {/* Texts */}
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm md:text-base font-[900] text-[var(--foreground)] tracking-tight leading-none truncate">
+                  {activeItem.itemName}
+                </h2>
+                {discount > 0 && (
+                  <span className="bg-rose-500/10 text-rose-500 border border-rose-500/20 text-[9px] font-black px-1.5 rounded-md hidden sm:inline-block">
+                    -{discount}%
+                  </span>
+                )}
               </div>
 
-              <h2 className="text-xl md:text-3xl font-[900] text-[var(--foreground)] tracking-tight leading-none mb-2 md:mb-3 truncate">
-                {activeItem.itemName}
-              </h2>
-
-              {/* Price Block */}
-              <div className="flex items-center justify-start gap-3">
-                <span className="text-3xl md:text-4xl font-[900] text-[var(--accent)] tracking-tighter drop-shadow-sm">
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="text-lg md:text-xl font-[900] text-[var(--accent)] leading-none">
                   ₹{activeItem.sellingPrice}
                 </span>
                 {activeItem.dummyPrice && (
-                  <div className="flex flex-col items-start leading-none opacity-50">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Was</span>
-                    <span className="text-sm font-bold text-[var(--muted)] line-through decoration-2">
-                      ₹{activeItem.dummyPrice}
-                    </span>
-                  </div>
+                  <span className="text-[10px] font-bold text-[var(--muted)] line-through decoration-rose-500/50 opacity-60">
+                    ₹{activeItem.dummyPrice}
+                  </span>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Right: Action Zone */}
-          <div className="w-full md:w-auto md:min-w-[220px] p-1">
-            <button
-              onClick={() => goBuy(activeItem)}
-              disabled={redirecting}
-              className={`
-                 relative w-full h-full min-h-[60px] md:min-h-[70px] rounded-[2rem] overflow-hidden group/btn
-                 flex flex-col items-center justify-center gap-1
-                 transition-all duration-300
-                 ${redirecting
-                  ? 'bg-[var(--muted)]/10 text-[var(--muted)] cursor-not-allowed'
-                  : 'bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--accent)] hover:text-white shadow-xl hover:shadow-[var(--accent)]/30'
-                }
-               `}
-            >
-              {/* Hover shine effect */}
-              {!redirecting && (
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shine_1s_infinite]" />
-              )}
-
-              <div className="relative z-10 flex items-center gap-2">
-                <span className="text-lg font-[900] uppercase tracking-wider">
-                  {redirecting ? "Processing" : "Buy Now"}
+          {/* RIGHT: Buy Action */}
+          <button
+            onClick={() => goBuy(activeItem)}
+            disabled={redirecting}
+            className={`
+                relative h-12 md:h-12 px-6 rounded-2xl overflow-hidden flex items-center gap-2 shrink-0 transition-all active:scale-95
+                ${redirecting
+                ? 'bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed'
+                : 'bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--accent)] hover:text-white shadow-lg shadow-[var(--accent)]/10'
+              }
+            `}
+          >
+            {redirecting ? (
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
+              />
+            ) : (
+              <>
+                <span className="text-xs md:text-sm font-black uppercase tracking-wider">
+                  Buy Now
                 </span>
-                {!redirecting && <FiArrowRight className="text-xl group-hover/btn:translate-x-1 transition-transform" />}
-              </div>
-
-              {!redirecting && (
-                <span className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-60 relative z-10">
-                  Instant Delivery
-                </span>
-              )}
-            </button>
-
-            <div className="mt-3 flex items-center justify-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-[var(--muted)] opacity-50">
-              <FiShield size={10} /> 100% Safe Payment
-            </div>
-          </div>
+                <FiArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </>
+            )}
+          </button>
 
         </div>
       </div>

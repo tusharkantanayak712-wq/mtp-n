@@ -9,7 +9,8 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import ChristmasPopup from "@/components/Seasonal/ChristmasPopup";
 import { Poppins } from "next/font/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import ChatBot from "@/components/SocialFloat/Chatbot";
+// import ChatBot from "@/components/SocialFloat/Chatbot"; // Removed as we use wrapper
+import ChatbotWrapper from "@/components/Layout/ChatbotWrapper";
 import ValentinePopup from "@/components/Seasonal/ValentinePopup";
 import ValentineEffect from "@/components/Seasonal/ValentineEffect";
 import Maintaince from "@/components/Seasonal/Maintaince";
@@ -61,6 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
 
+
       <body className="bg-black text-white">
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
           <Header />
@@ -81,7 +83,8 @@ export default function RootLayout({
           <main className="pt-20">{children}</main>
           <Footer />
           <SocialFloat />
-          <ChatBot />
+          <ChatbotWrapper />
+
           <div />
         </GoogleOAuthProvider>
 

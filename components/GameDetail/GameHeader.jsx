@@ -2,71 +2,79 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FiZap, FiShield } from "react-icons/fi";
-import logo from "@/public/logo.png";
+import { FiZap, FiShield, FiCheckCircle } from "react-icons/fi";
 
 export default function GameHeader({ game }) {
   if (!game) return null;
 
   return (
-    <div className="relative max-w-6xl mx-auto mb-6 mt-1">
-      {/* Background Glow similar to BuyPanel */}
-      <div className="absolute inset-2 bg-gradient-to-r from-[var(--accent)]/30 to-purple-600/30 blur-[40px] opacity-20 -z-10" />
+    <div className="relative max-w-6xl mx-auto mb-2 mt-0">
+      {/* Subtle Background Glow */}
+      <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-10 bg-[var(--accent)]/20 blur-[30px] opacity-10 -z-10" />
 
       <motion.div
-        initial={{ y: 20, opacity: 0 }}
+        initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative px-4 py-3 md:p-3 rounded-[2.5rem] bg-[var(--card)]/80 backdrop-blur-xl border border-[var(--border)] shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden transform transition-all hover:scale-[1.005]"
+        transition={{ duration: 0.4 }}
+        className="relative px-3 py-2 md:px-4 md:py-2.5 rounded-[1.25rem] bg-[var(--card)]/90 backdrop-blur-xl border border-[var(--border)] shadow-lg flex items-center justify-between gap-3 overflow-hidden group hover:border-[var(--accent)]/30 transition-colors"
       >
         {/* Decorative Texture */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] pointer-events-none" />
 
-        {/* LEFT: Game Icon + Name */}
-        <div className="relative z-10 flex items-center gap-4 md:pl-2">
-          {/* Game Icon - Matching BuyPanel visual style */}
-          <div className="relative w-20 h-20 md:w-24 md:h-24 shrink-0 p-1">
-            <div className="absolute inset-0 bg-[var(--accent)]/10 rounded-2xl rotate-3" />
-            <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[var(--background)] shadow-lg ring-1 ring-[var(--border)] group">
+        {/* LEFT: Compact Game Info */}
+        <div className="relative z-10 flex items-center gap-3">
+          {/* Compact Icon */}
+          <div className="relative w-10 h-10 md:w-12 md:h-12 shrink-0">
+            <div className="absolute inset-0 bg-[var(--accent)]/10 rounded-xl rotate-3" />
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-[var(--background)] ring-1 ring-[var(--border)] shadow-sm">
               <Image
-                src={game.gameImageId?.image || logo}
+                src={game.gameImageId?.image || "/logo.png"}
                 alt={game.gameName}
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
+            </div>
+            {/* Live Indicator Dot */}
+            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[var(--card)] rounded-full flex items-center justify-center z-10">
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
             </div>
           </div>
 
-          {/* Name & Subtitle */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--muted)] opacity-80">
-                Live Status
-              </span>
+          {/* Name & Publisher */}
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center gap-1.5">
+              <h1 className="text-sm md:text-base font-[900] tracking-tight uppercase text-[var(--foreground)] leading-tight line-clamp-1">
+                {game.gameName}
+              </h1>
+              <FiCheckCircle className="text-[var(--accent)] text-[10px] md:text-xs shrink-0" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-[900] tracking-tight uppercase text-[var(--foreground)] leading-none">
-              {game.gameName}
-            </h1>
-            <p className="text-[10px] font-bold tracking-[0.2em] text-[var(--accent)] uppercase opacity-90 mt-1">
+            <p className="text-[9px] md:text-[10px] font-bold tracking-widest text-[var(--muted)] uppercase opacity-80">
               {game.gameFrom}
             </p>
           </div>
         </div>
 
-        {/* RIGHT: Badges (Mobile Below Name, Desktop Right) */}
-        <div className="flex flex-col md:flex-row md:items-center gap-2 md:pr-4 relative z-10">
-          <div className="flex gap-2">
-            <div className="px-3 py-1.5 rounded-xl bg-[var(--background)]/80 border border-[var(--border)] flex items-center gap-1.5 text-[10px] font-[900] uppercase tracking-wider text-[var(--foreground)] shadow-sm">
-              <FiZap className="text-yellow-400" size={14} fill="currentColor" />
-              Instant Delivery
+        {/* RIGHT: Consolidated Badges */}
+        <div className="flex items-center gap-2 relative z-10 shrink-0">
+          {/* Mobile: Just Icons */}
+          <div className="flex md:hidden gap-1.5">
+            <div className="w-7 h-7 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)]">
+              <FiZap size={12} fill="currentColor" />
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-[var(--background)]/80 border border-[var(--border)] flex items-center gap-1.5 text-[10px] font-[900] uppercase tracking-wider text-[var(--foreground)] shadow-sm">
-              <FiShield className="text-green-400" size={14} />
-              Trusted
+            <div className="w-7 h-7 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-500">
+              <FiShield size={12} />
+            </div>
+          </div>
+
+          {/* Desktop: Full Badges */}
+          <div className="hidden md:flex gap-2">
+            <div className="px-2.5 py-1 rounded-lg bg-[var(--accent)]/5 border border-[var(--accent)]/20 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--foreground)]">
+              <FiZap className="text-[var(--accent)]" size={12} fill="currentColor" />
+              <span>Instant</span>
+            </div>
+            <div className="px-2.5 py-1 rounded-lg bg-green-500/5 border border-green-500/20 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--foreground)]">
+              <FiShield className="text-green-500" size={12} />
+              <span>Safe</span>
             </div>
           </div>
         </div>

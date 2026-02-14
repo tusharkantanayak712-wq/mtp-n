@@ -7,10 +7,11 @@ import { motion } from "framer-motion";
 import Loader from "@/components/Loader/Loader";
 import MLBBPurchaseGuide from "@/components/HelpImage/MLBBPurchaseGuide";
 
+import GameSwitcher from "@/components/GameDetail/GameSwitcher";
+
 import GameHeader from "@/components/GameDetail/GameHeader";
 import PackageSelector from "@/components/GameDetail/PackageSelector";
 import BuyPanel from "@/components/GameDetail/BuyPanel";
-
 import PackageSelectorBgmi from "@/components/GameDetail/PackageSelectorBgmi";
 import BuyPanelBgmi from "@/components/GameDetail/BuyPanelBgmi";
 
@@ -225,7 +226,8 @@ function GameDetailContent() {
 
   /* ================= RENDER ================= */
   return (
-    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-10">
+    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 pb-10 pt-2">
+      <GameSwitcher />
       {/* ================= HEADER ================= */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
