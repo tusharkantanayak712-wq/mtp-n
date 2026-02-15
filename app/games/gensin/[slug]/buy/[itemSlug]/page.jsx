@@ -75,52 +75,82 @@ function BuyFlowContent() {
 
   return (
     <AuthGuard>
-      <section className="min-h-screen px-4 py-8 md:py-12 bg-gradient-to-b from-[var(--background)] to-[var(--card)]/20">
+      <section className="min-h-screen px-4 pt-2 pb-12 md:pt-4 md:pb-16 bg-gradient-to-b from-[var(--background)] to-[var(--card)]/20">
         <div className="max-w-4xl mx-auto">
 
           {/* ================= HEADER & PROGRESS ================= */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between relative mb-8 max-w-2xl mx-auto">
-              {/* Progress Line */}
-              <div className="absolute top-1/2 left-0 w-full h-1 bg-[var(--border)] rounded-full -z-10 overflow-hidden">
-                <motion.div
-                  className="h-full bg-[var(--accent)]"
-                  initial={{ width: "0%" }}
-                  animate={{
-                    width: step === 1 ? "0%" : step === 2 ? "50%" : "100%"
-                  }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
-                />
-              </div>
+          <div className="mb-4 relative">
+            <div className="max-w-md mx-auto px-6">
+              <div className="flex items-center justify-between relative text-center">
+                {/* Progress Line Background */}
+                <div className="absolute top-[20px] left-0 w-full h-[1.5px] bg-[var(--border)]/10 -z-10" />
 
-              {/* Steps */}
-              {[
-                { id: 1, label: "Verify", icon: FiUserCheck },
-                { id: 2, label: "Review", icon: FiShoppingBag },
-                { id: 3, label: "Pay", icon: FiCreditCard },
-              ].map((s) => (
-                <div key={s.id} className="flex flex-col items-center gap-2 bg-[var(--background)] px-3 py-1 rounded-full border border-dashed border-transparent">
+                {/* Animated Progress Line */}
+                <div className="absolute top-[20px] left-0 w-full h-[1.5px] -z-10">
                   <motion.div
-                    initial={false}
+                    className="h-full bg-[var(--accent)] shadow-[0_0_15px_var(--accent)]"
+                    initial={{ width: "0%" }}
                     animate={{
-                      borderColor: step >= s.id ? "var(--accent)" : "var(--border)",
-                      backgroundColor: step >= s.id ? "var(--accent)" : "var(--card)"
+                      width: step === 1 ? "0%" : step === 2 ? "50%" : "100%"
                     }}
-                    className={`w-10 h-10 md:w-12 md:h-12 rounded-full border-2 flex items-center justify-center transition-colors duration-300
-                        ${step >= s.id ? "shadow-[0_0_15px_var(--accent)]" : "shadow-none"}
-                      `}
-                  >
-                    <s.icon className={`text-lg md:text-xl ${step >= s.id ? "text-white" : "text-[var(--muted)]"}`} />
-                  </motion.div>
-                  <span className={`hidden md:block text-xs font-bold uppercase tracking-wider ${step >= s.id ? "text-[var(--accent)]" : "text-[var(--muted)]"}`}>
-                    {s.label}
-                  </span>
+                    transition={{ duration: 0.6, ease: "circOut" }}
+                  />
                 </div>
-              ))}
+
+                {/* Steps */}
+                {[
+                  { id: 1, label: "Verify", icon: FiUserCheck },
+                  { id: 2, label: "Confirm", icon: FiShoppingBag },
+                  { id: 3, label: "Pay", icon: FiCreditCard },
+                ].map((s) => {
+                  const isActive = step === s.id;
+                  const isCompleted = step > s.id;
+
+                  return (
+                    <div key={s.id} className="flex flex-col items-center gap-2">
+                      <div className="relative">
+                        {/* Elegant Active Glow */}
+                        {isActive && (
+                          <motion.div
+                            layoutId="step-glow"
+                            className="absolute -inset-1.5 bg-[var(--accent)]/15 blur-md rounded-full"
+                          />
+                        )}
+
+                        <motion.div
+                          animate={{
+                            scale: isActive ? 1.05 : 1,
+                            borderColor: isActive || isCompleted ? "var(--accent)" : "rgba(255,255,255,0.05)"
+                          }}
+                          className={`
+                            w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-500 relative z-10 backdrop-blur-md
+                            ${isCompleted
+                              ? "bg-[var(--accent)] text-white shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
+                              : isActive
+                                ? "bg-white text-black shadow-xl border-white/20"
+                                : "bg-white/[0.03] text-[var(--muted)] border-white/5"
+                            }
+                          `}
+                        >
+                          {isCompleted ? (
+                            <FiCheck className="text-base stroke-[3]" />
+                          ) : (
+                            <s.icon className={`text-base ${isActive ? "opacity-100" : "opacity-30"}`} />
+                          )}
+                        </motion.div>
+                      </div>
+
+                      <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${isActive || isCompleted ? "text-[var(--foreground)] opacity-100" : "text-[var(--muted)] opacity-20"}`}>
+                        {s.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-start">
 
             {/* ================= ITEM SUMMARY CARD ================= */}
             {itemName && (
@@ -196,7 +226,7 @@ function BuyFlowContent() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)] rounded-[2rem] p-6 md:p-8 shadow-xl relative overflow-hidden"
+                      className="bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)] rounded-[2rem] p-5 md:p-6 shadow-xl relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 rounded-full blur-3xl -z-10" />
                       <ValidationStep
