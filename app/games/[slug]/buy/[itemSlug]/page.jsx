@@ -219,15 +219,15 @@ function BuyFlowContent() {
                         <motion.div
                           animate={{
                             scale: isActive ? 1.05 : 1,
-                            borderColor: isActive || isCompleted ? "var(--accent)" : "rgba(255,255,255,0.05)"
+                            borderColor: isActive || isCompleted ? "var(--accent)" : "var(--border)"
                           }}
                           className={`
                             w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-500 relative z-10 backdrop-blur-md
                             ${isCompleted
-                              ? "bg-[var(--accent)] text-white shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
+                              ? "bg-[var(--accent)] text-[var(--background)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
                               : isActive
-                                ? "bg-white text-black shadow-xl border-white/20"
-                                : "bg-white/[0.03] text-[var(--muted)] border-white/5"
+                                ? "bg-[var(--foreground)] text-[var(--background)] shadow-xl border-[var(--foreground)]/20"
+                                : "bg-[var(--foreground)]/[0.03] text-[var(--muted)] border-[var(--foreground)]/5"
                             }
                           `}
                         >
@@ -258,12 +258,12 @@ function BuyFlowContent() {
                 animate={{ opacity: 1, x: 0 }}
                 className="w-full md:w-1/3 order-1 md:order-2"
               >
-                <div className="sticky top-24 bg-[var(--card)]/50 backdrop-blur-xl border border-[var(--border)] rounded-2xl p-4 shadow-2xl overflow-hidden relative">
+                <div className="sticky top-24 bg-[var(--card)]/50 backdrop-blur-xl border border-[var(--foreground)]/5 rounded-2xl p-3.5 shadow-2xl overflow-hidden relative group/card">
                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
-                  <div className="absolute -top-10 -right-10 w-24 h-24 bg-[var(--accent)]/10 blur-2xl rounded-full" />
+                  <div className="absolute -top-10 -right-10 w-24 h-24 bg-[var(--accent)]/10 blur-2xl rounded-full transition-transform duration-700 group-hover/card:scale-150" />
 
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-[var(--border)] shrink-0 group">
+                  <div className="flex items-center gap-3.5">
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-[var(--foreground)]/10 shrink-0 group">
                       {(item?.itemImageId?.image || fallbackImage) && (
                         <img
                           src={item?.itemImageId?.image || fallbackImage || ""}
@@ -271,18 +271,22 @@ function BuyFlowContent() {
                           className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                         />
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-[10px] font-[900] uppercase tracking-widest text-[var(--muted)] mb-1 flex items-center gap-2">
-                        <FiShoppingBag /> Pack Details
-                      </h3>
-                      <h4 className="font-[900] text-sm leading-tight uppercase tracking-tight truncate">{item?.itemName || fallbackName}</h4>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
+                        <h3 className="text-[9px] font-[900] uppercase tracking-[0.2em] text-[var(--muted)]/80 italic">
+                          Pack Details
+                        </h3>
+                      </div>
+                      <h4 className="font-[900] text-[13px] leading-tight uppercase tracking-tight truncate text-[var(--foreground)]/90 mb-1">{item?.itemName || fallbackName}</h4>
 
-                      <div className="flex items-center gap-3 mt-1">
-                        <span className="text-xl font-[900] text-[var(--accent)]">₹{totalPrice}</span>
+                      <div className="flex items-end gap-2">
+                        <span className="text-lg font-[900] text-[var(--accent)] leading-none">₹{totalPrice}</span>
                         {discount > 0 && (
-                          <span className="text-xs font-bold text-[var(--muted)] line-through decoration-red-500/50">
+                          <span className="text-[10px] font-bold text-[var(--muted)]/50 line-through decoration-red-500/30 pb-0.5">
                             ₹{price + discount}
                           </span>
                         )}
