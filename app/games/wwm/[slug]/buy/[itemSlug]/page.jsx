@@ -18,7 +18,7 @@ function BuyFlowContent() {
   const [step, setStep] = useState(1);
 
   const [playerId, setPlayerId] = useState("");
-  const [zoneId, setZoneId] = useState("");
+  const [zoneId, setZoneId] = useState("N/A");
 
   const [reviewData, setReviewData] = useState(null);
 
