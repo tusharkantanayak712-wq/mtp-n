@@ -35,14 +35,14 @@ const bottomRow = [
   { title: "Silver", href: "/games/membership/silver-membership", icon: Crown, color: "#94a3b8" },
   { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },
   { title: "Referral", href: "/dashboard/referral", icon: Users, color: "#ec4899" },
-  {
-    title: "Valentine",
-    icon: Heart,
-    href: "/special-leaderboard",
-    isColorful: true,
-    color: "#ff2e63",
-    accent: "from-rose-500 to-pink-500"
-  },
+  // {
+  //   title: "Valentine",
+  //   icon: Heart,
+  //   href: "/special-leaderboard",
+  //   isColorful: true,
+  //   color: "#ff2e63",
+  //   accent: "from-rose-500 to-pink-500"
+  // },
 ];
 
 /* ===================== COMPONENT ===================== */
