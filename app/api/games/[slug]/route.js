@@ -210,69 +210,69 @@ const OTTS = {
 };
 
 /* ================= COC CONFIG ================= */
-const COC_CONFIG = {
-  gameName: "Clash of Clans",
-  gameFrom: "Supercell",
-  gameImageId: {
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
-  },
-  gameDescription: "Clash of Clans Top-up (Manual Process). High-speed delivery.",
-  inputFieldOne: "Game ID (Player Tag)",
-  inputFieldTwo: "Mobile Number",
-  isValidationRequired: false,
-  gameAvailablity: true,
-  itemId: [
-    {
-      itemName: "Event Pass (India)",
-      itemSlug: "coc-event-pass-in",
-      sellingPrice: 230,
-      dummyPrice: 299,
-      itemAvailablity: true,
-      index: 1,
-      itemImageId: {
-        image:
-          "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
-      },
-    },
-    {
-      itemName: "Gold Pass (India)",
-      itemSlug: "coc-gold-pass-in",
-      sellingPrice: 330,
-      dummyPrice: 449,
-      itemAvailablity: true,
-      index: 2,
-      itemImageId: {
-        image:
-          "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
-      },
-    },
-    {
-      itemName: "Event Pass (Global)",
-      itemSlug: "coc-event-pass-global",
-      sellingPrice: 449,
-      dummyPrice: 549,
-      itemAvailablity: true,
-      index: 3,
-      itemImageId: {
-        image:
-          "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
-      },
-    },
-    {
-      itemName: "Gold Pass (Global)",
-      itemSlug: "coc-gold-pass-global",
-      sellingPrice: 599,
-      dummyPrice: 749,
-      itemAvailablity: true,
-      index: 4,
-      itemImageId: {
-        image:
-          "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
-      },
-    },
-  ],
-};
+// const COC_CONFIG = {
+//   gameName: "Clash of Clans",
+//   gameFrom: "Supercell",
+//   gameImageId: {
+//     image:
+//       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//   },
+//   gameDescription: "Clash of Clans Top-up (Manual Process). High-speed delivery.",
+//   inputFieldOne: "Game ID (Player Tag)",
+//   inputFieldTwo: "Mobile Number",
+//   isValidationRequired: false,
+//   gameAvailablity: true,
+//   itemId: [
+//     {
+//       itemName: "Event Pass (India)",
+//       itemSlug: "coc-event-pass-in",
+//       sellingPrice: 230,
+//       dummyPrice: 299,
+//       itemAvailablity: true,
+//       index: 1,
+//       itemImageId: {
+//         image:
+//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//       },
+//     },
+//     {
+//       itemName: "Gold Pass (India)",
+//       itemSlug: "coc-gold-pass-in",
+//       sellingPrice: 330,
+//       dummyPrice: 449,
+//       itemAvailablity: true,
+//       index: 2,
+//       itemImageId: {
+//         image:
+//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//       },
+//     },
+//     {
+//       itemName: "Event Pass (Global)",
+//       itemSlug: "coc-event-pass-global",
+//       sellingPrice: 449,
+//       dummyPrice: 549,
+//       itemAvailablity: true,
+//       index: 3,
+//       itemImageId: {
+//         image:
+//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//       },
+//     },
+//     {
+//       itemName: "Gold Pass (Global)",
+//       itemSlug: "coc-gold-pass-global",
+//       sellingPrice: 599,
+//       dummyPrice: 749,
+//       itemAvailablity: true,
+//       index: 4,
+//       itemImageId: {
+//         image:
+//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//       },
+//     },
+//   ],
+// };
 
 /* ================= STARLIGHT CONFIG ================= */
 const STARLIGHT_CONFIG = {
@@ -417,12 +417,12 @@ export async function GET(req, { params }) {
       });
     }
 
-    if (slug === "coc-manual") {
-      return NextResponse.json({
-        success: true,
-        data: { gameSlug: slug, ...COC_CONFIG },
-      });
-    }
+    // if (slug === "coc-manual") {
+    //   return NextResponse.json({
+    //     success: true,
+    //     data: { gameSlug: slug, ...COC_CONFIG },
+    //   });
+    // }
 
     if (slug === "starlight-card-manual") {
       return NextResponse.json({

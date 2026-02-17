@@ -199,21 +199,21 @@ export async function GET() {
         )
         ?.map(normalizeGame) || [];
 
-    // Add COC Manual
-    filteredGames.push({
-      gameName: "Clash of Clans",
-      gameSlug: "coc-manual",
-      gameFrom: "Supercell",
-      gameAvailablity: true,
-      gameImageId: {
-        image: COC_IMAGE,
-      },
-      tagId: {
-        tagName: "Manual",
-        tagBackground: "#f59e0b",
-        tagColor: "#ffffff",
-      },
-    });
+    // // Add COC Manual
+    // filteredGames.push({
+    //   gameName: "Clash of Clans",
+    //   gameSlug: "coc-manual",
+    //   gameFrom: "Supercell",
+    //   gameAvailablity: true,
+    //   gameImageId: {
+    //     image: COC_IMAGE,
+    //   },
+    //   tagId: {
+    //     tagName: "Manual",
+    //     tagBackground: "#f59e0b",
+    //     tagColor: "#ffffff",
+    //   },
+    // });
 
     // Add Starlight Card
     filteredGames.push({
