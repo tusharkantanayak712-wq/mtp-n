@@ -19,12 +19,24 @@ const MEMBERSHIPS = {
     gameAvailablity: true,
     itemId: [
       {
-        itemName: "1 Month",
-        itemSlug: "silver-1m",
-        sellingPrice: 100,
-        dummyPrice: 299,
+        itemName: "6 Months",
+        itemSlug: "silver-6m",
+        sellingPrice: 550,
+        dummyPrice: 1794,
         itemAvailablity: true,
         index: 1,
+        itemImageId: {
+          image:
+            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+        },
+      },
+      {
+        itemName: "12 Months",
+        itemSlug: "silver-12m",
+        sellingPrice: 1000,
+        dummyPrice: 3588,
+        itemAvailablity: true,
+        index: 2,
         itemImageId: {
           image:
             "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
@@ -47,12 +59,24 @@ const MEMBERSHIPS = {
     gameAvailablity: true,
     itemId: [
       {
-        itemName: "1 Month",
-        itemSlug: "reseller-1m",
-        sellingPrice: 99,
-        dummyPrice: 299,
+        itemName: "6 Months",
+        itemSlug: "reseller-6m",
+        sellingPrice: 500,
+        dummyPrice: 1794,
         itemAvailablity: true,
         index: 1,
+        itemImageId: {
+          image:
+            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+        },
+      },
+      {
+        itemName: "12 Months",
+        itemSlug: "reseller-12m",
+        sellingPrice: 900,
+        dummyPrice: 3588,
+        itemAvailablity: true,
+        index: 2,
         itemImageId: {
           image:
             "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
