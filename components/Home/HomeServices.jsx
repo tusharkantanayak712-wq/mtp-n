@@ -28,55 +28,55 @@ export default function HomeServices() {
   const whatsappLink = "https://wa.me/919178521537";
 
   return (
-    <section className="py-12 bg-[var(--background)] px-6 relative overflow-hidden">
+    <section className="py-12 bg-[var(--background)] relative overflow-hidden">
       {/* Background Lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[40%] bg-[var(--accent)]/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 px-4">
         {/* HEADER SECTION - COMPACT */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-10 text-center"
+          className="mb-8 px-4"
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 mb-3">
-            <span className="text-[var(--accent)] text-[8px] font-black uppercase tracking-widest italic">Expansion Pack</span>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-8 h-[1px] bg-[var(--accent)]/30 sm:block hidden" />
+            <span className="text-[var(--accent)] text-[9px] font-black uppercase tracking-[0.3em] italic">Partnership Program</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-[900] italic tracking-tighter uppercase leading-none mb-2">
-            ELITE <span className="text-[var(--accent)]">SOLUTIONS</span>
+          <h2 className="text-3xl font-[900] italic tracking-tighter uppercase leading-none">
+            GROW YOUR <span className="text-[var(--accent)] text-shadow-glow">EMPIRE</span>
           </h2>
-          <p className="text-[var(--muted)] text-[9px] font-black uppercase tracking-[0.3em] opacity-40 italic">
-            Professional Tools for Professional Scale
-          </p>
         </motion.div>
 
-        {/* SERVICES GRID - COMPACT */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* HORIZONTAL SCROLLABLE FLEX */}
+        <div className="flex overflow-x-auto gap-4 pb-8 px-4 no-scrollbar -mx-4 scroll-smooth snap-x snap-mandatory">
           {SERVICES.map((service, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="group relative p-6 rounded-[32px] bg-[var(--card)]/40 backdrop-blur-sm border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all duration-300 flex flex-col items-center text-center shadow-lg hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]"
+              className="min-w-[280px] md:min-w-[320px] snap-center group relative p-6 rounded-[32px] bg-gradient-to-br from-[var(--card)]/60 to-transparent backdrop-blur-md border border-white/5 hover:border-[var(--accent)]/30 transition-all duration-500 flex flex-col items-start shadow-2xl"
             >
-              {/* Icon Container - Smaller */}
-              <div className="w-14 h-14 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)]/60 group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-all shadow-md group-hover:scale-110 mb-5">
-                <service.icon size={24} />
+              {/* Icon Container */}
+              <div className="w-12 h-12 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 group-hover:bg-[var(--accent)] group-hover:text-black transition-all duration-500 mb-6">
+                <service.icon size={20} />
               </div>
 
               {/* Content */}
-              <div className="space-y-2 mb-6">
-                <span className="text-[7px] font-black px-2 py-0.5 rounded bg-[var(--accent)]/5 text-[var(--accent)]/60 border border-[var(--accent)]/10 tracking-widest uppercase italic">
-                  {service.badge}
-                </span>
-                <h3 className="text-lg font-[900] uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none">
+              <div className="space-y-2 mb-8 text-left">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
+                  <span className="text-[8px] font-black italic text-[var(--accent)]/80 tracking-widest uppercase">
+                    {service.badge}
+                  </span>
+                </div>
+                <h3 className="text-xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
                   {service.title}
                 </h3>
-                <p className="text-[10px] text-[var(--muted)] leading-relaxed opacity-60 italic max-w-[240px]">
+                <p className="text-[11px] text-[var(--muted)] leading-relaxed italic line-clamp-2">
                   {service.desc}
                 </p>
               </div>
@@ -84,33 +84,35 @@ export default function HomeServices() {
               {/* Action Link */}
               <button
                 onClick={() => window.open(whatsappLink, "_blank")}
-                className="mt-auto inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-all"
+                className="mt-auto flex items-center gap-3 py-2 px-4 rounded-full bg-[var(--foreground)]/[0.05] border border-[var(--border)] text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/60 group-hover:bg-[var(--accent)] group-hover:text-black group-hover:border-[var(--accent)] transition-all"
               >
-                CONNECT NOW <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                Inquire Now <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
               </button>
 
-              {/* Accent Bar */}
-              <div className="absolute inset-x-12 bottom-0 h-[2px] bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
+              {/* Decorative Blur */}
+              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-[var(--accent)]/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-[var(--accent)]/10 transition-all duration-500" />
             </motion.div>
           ))}
         </div>
 
-        {/* BOTTOM CTA STRIP - COMPACT */}
+        {/* COMPACT BOTTOM BAR */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-10 text-center"
+          className="flex flex-wrap items-center justify-between gap-4 py-4 px-6 rounded-3xl bg-[var(--card)]/40 border border-white/5 border-dashed"
         >
+          <p className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] italic">
+            Custom infrastructure & business solutions available
+          </p>
           <button
             onClick={() => window.open(whatsappLink, "_blank")}
-            className="px-6 py-3 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/30 transition-all flex items-center gap-2 mx-auto shadow-md group active:scale-95"
+            className="flex items-center gap-2 text-[var(--accent)] hover:brightness-125 transition-all text-[10px] font-black uppercase tracking-widest"
           >
-            <FiMessageCircle size={14} className="group-hover:rotate-12 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest italic">Discuss Custom Architecture</span>
+            <FiMessageCircle size={14} /> Talk to an Expert
           </button>
         </motion.div>
       </div>
     </section>
   );
 }
+

@@ -10,6 +10,7 @@ import ScrollingNoticeBand from "./ScrollingNoticeBand";
 import StorySlider from "./StorySlider";
 import HomeQuickActions from "./HomeQuickActions";
 import HomeReferralStats from "./HomeReferralStats";
+import PromoBanner from "./PromoBanner";
 
 export default function HeroSection() {
 
@@ -29,12 +30,14 @@ export default function HeroSection() {
 
       {/* <ScrollingNoticeBand/> */}
       <GamesPage />
-      <ScrollingNoticeBand />
-      <div className="p-4 m-2">
-      </div>
+      <PromoBanner />
+
+
 
       <HomeServices />
       <TrustHighlights />
+      <ScrollingNoticeBand />
+
 
 
     </>

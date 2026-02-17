@@ -30,18 +30,6 @@ const MEMBERSHIPS = {
             "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
         },
       },
-      {
-        itemName: "3 Month",
-        itemSlug: "silver-3m",
-        sellingPrice: 200,
-        dummyPrice: 1099,
-        itemAvailablity: true,
-        index: 3,
-        itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
-        },
-      },
     ],
   },
 
@@ -70,18 +58,6 @@ const MEMBERSHIPS = {
             "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
         },
       },
-      {
-        itemName: "3 Month",
-        itemSlug: "reseller-3m",
-        sellingPrice: 299,
-        dummyPrice: 1099,
-        itemAvailablity: true,
-        index: 3,
-        itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
-        },
-      },
     ],
   },
 };
@@ -104,22 +80,10 @@ const OTTS = {
       {
         itemName: "1 Month",
         itemSlug: "yt-1m",
-        sellingPrice: 30,
+        sellingPrice: 25,
         dummyPrice: 199,
         itemAvailablity: true,
         index: 1,
-        itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/aa_avjoox.jpg",
-        },
-      },
-      {
-        itemName: "3 Months",
-        itemSlug: "yt-3m",
-        sellingPrice: 90,
-        dummyPrice: 499,
-        itemAvailablity: true,
-        index: 2,
         itemImageId: {
           image:
             "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/aa_avjoox.jpg",
@@ -144,7 +108,7 @@ const OTTS = {
       {
         itemName: "1 Month",
         itemSlug: "nf-1m",
-        sellingPrice: 99,
+        sellingPrice: 105,
         dummyPrice: 299,
         itemAvailablity: true,
         index: 1,
@@ -153,56 +117,32 @@ const OTTS = {
             "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/s_d5mln0.jpg",
         },
       },
-      {
-        itemName: "3 Months",
-        itemSlug: "nf-3m",
-        sellingPrice: 249,
-        dummyPrice: 799,
-        itemAvailablity: true,
-        index: 2,
-        itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/s_d5mln0.jpg",
-        },
-      },
     ],
   },
 
-  instagram: {
-    gameName: "Instagram Services",
-    gameFrom: "Meta",
+  spotify: {
+    gameName: "Spotify Premium",
+    gameFrom: "Spotify",
     gameImageId: {
       image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/a_jnlvg0.jpg",
+        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771319767/sporytyf_d59bfc.png",
     },
-    gameDescription: "Followers, likes & engagement services.",
-    inputFieldOne: "Username",
+    gameDescription: "Premium music streaming subscription.",
+    inputFieldOne: "Email / Phone",
     inputFieldTwoOption: [],
     isValidationRequired: false,
     gameAvailablity: true,
     itemId: [
       {
-        itemName: "1K Followers",
-        itemSlug: "ig-1k",
-        sellingPrice: 249,
-        dummyPrice: 499,
+        itemName: "1 Month",
+        itemSlug: "spot-1m",
+        sellingPrice: 30,
+        dummyPrice: 179,
         itemAvailablity: true,
         index: 1,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/a_jnlvg0.jpg",
-        },
-      },
-      {
-        itemName: "5K Followers",
-        itemSlug: "ig-5k",
-        sellingPrice: 1099,
-        dummyPrice: 1999,
-        itemAvailablity: true,
-        index: 2,
-        itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/a_jnlvg0.jpg",
+            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771319767/sporytyf_d59bfc.png",
         },
       },
     ],

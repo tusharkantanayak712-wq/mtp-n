@@ -56,11 +56,11 @@ const OTTS = [
     isManual: true,
   },
   {
-    name: "Instagram Services",
-    slug: "instagram",
+    name: "Spotify Premium",
+    slug: "spotify",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/a_jnlvg0.jpg",
-    category: "Social",
+      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771319767/sporytyf_d59bfc.png",
+    category: "OTT",
     available: true,
     isManual: true,
   },
@@ -316,7 +316,7 @@ export async function GET() {
 
         // 🔥 OTT SECTION
         otts: {
-          title: "OTT & Social Subscriptions",
+          title: "OTT Subscriptions",
           items: OTTS.filter((o) => o.available),
           total: OTTS.filter((o) => o.available).length,
         },

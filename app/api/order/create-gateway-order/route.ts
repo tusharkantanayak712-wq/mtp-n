@@ -24,29 +24,24 @@ const MEMBERSHIPS: Record<string, MembershipConfig> = {
   "silver-membership": {
     items: {
       "silver-1m": 100,
-      "silver-3m": 200,
     },
   },
   "reseller-membership": {
     items: {
       "reseller-1m": 99,
-      "reseller-3m": 299,
     },
   },
 };
 
 const OTTS: Record<string, OTTConfig> = {
   "youtube-premium": {
-    "yt-1m": 30,
-    "yt-3m": 90,
+    "yt-1m": 25,
   },
   netflix: {
-    "nf-1m": 99,
-    "nf-3m": 249,
+    "nf-1m": 105,
   },
-  instagram: {
-    "ig-1k": 249,
-    "ig-5k": 1099,
+  spotify: {
+    "spot-1m": 30,
   },
 };
 

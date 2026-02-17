@@ -59,7 +59,7 @@ export default function TrustHighlights() {
   return (
     <section className="py-12 bg-[var(--background)] px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {HIGHLIGHTS.map((item, i) => (
             <motion.div
               key={i}
