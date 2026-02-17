@@ -18,24 +18,26 @@ export default function HeroSection() {
   return (
     <>
       <TopNoticeBanner />
-
       <GameBannerCarousel />
 
-      <StorySlider />
+      <div className="space-y-2 mt-4">
+        <StorySlider />
+        <FlashSale />
+      </div>
 
-      <HomeQuickActions />
-      <FlashSale />
-      <HomeReferralStats />
-
-
-      {/* <ScrollingNoticeBand/> */}
-      <GamesPage />
       <PromoBanner />
 
+      <div className="space-y-2">
+        <HomeQuickActions />
+        <HomeReferralStats />
+      </div>
 
+      <GamesPage />
 
-      <HomeServices />
-      <TrustHighlights />
+      <div className="mt-1 space-y-12 pb-10">
+        <HomeServices />
+        <TrustHighlights />
+      </div>
       <ScrollingNoticeBand />
 
 
