@@ -158,21 +158,21 @@ export default function GamesPage() {
       <div className="absolute bottom-[10%] left-[-10%] w-[400px] h-[400px] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* ================= TOP SEARCH & CONTROLS ================= */}
+        {/* ================= COMPACT SEARCH & CONTROLS ================= */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[var(--card)]/40 backdrop-blur-xl border border-[var(--border)] rounded-[2rem] p-4 sm:p-6 mb-12 shadow-2xl"
+          className="sticky top-4 z-50 mb-10 group"
         >
-          <div className="flex flex-col md:flex-row gap-6 items-center">
+          <div className="bg-[var(--card)]/60 backdrop-blur-2xl border border-white/5 rounded-[1.5rem] p-2 sm:p-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col md:flex-row gap-2 transition-all group-hover:border-[var(--accent)]/20">
             {/* SEARCH */}
-            <div className="relative w-full flex-1">
-              <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--accent)] text-lg transition-transform group-focus-within:scale-110" />
+            <div className="relative flex-1 group/search">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within/search:text-[var(--accent)] transition-colors" />
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Find your favorite games..."
-                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-[var(--background)]/50 border border-[var(--border)] hover:border-[var(--accent)]/30 focus:border-[var(--accent)] outline-none text-sm font-bold tracking-wide transition-all placeholder:text-[var(--muted)]/50"
+                placeholder="Search Armory..."
+                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[var(--background)]/40 border border-transparent focus:bg-[var(--background)]/80 focus:border-[var(--accent)]/30 outline-none text-xs font-bold tracking-wide transition-all placeholder:text-[var(--muted)]/40"
               />
               <AnimatePresence>
                 {searchQuery && (
@@ -181,47 +181,51 @@ export default function GamesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-white/5 text-red-500/60 hover:text-red-500 transition-colors"
                   >
-                    <FiX size={16} />
+                    <FiX size={14} />
                   </motion.button>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* ACTION BUTTONS */}
-            <div className="flex items-center gap-3 w-full md:w-auto">
+            {/* ACTION GRID */}
+            <div className="flex items-center gap-2">
               {/* VIEW TOGGLE */}
-              <div className="flex p-1.5 rounded-2xl bg-[var(--background)]/50 border border-[var(--border)]">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2.5 rounded-xl transition-all ${viewMode === "grid" ? "bg-[var(--accent)] text-black shadow-lg" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
-                >
-                  <FiGrid size={18} />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2.5 rounded-xl transition-all ${viewMode === "list" ? "bg-[var(--accent)] text-black shadow-lg" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
-                >
-                  <FiList size={18} />
-                </button>
+              <div className="flex p-1 rounded-xl bg-[var(--background)]/40 border border-white/5">
+                {[
+                  { id: "grid", icon: FiGrid },
+                  { id: "list", icon: FiList },
+                ].map((mode) => (
+                  <button
+                    key={mode.id}
+                    onClick={() => setViewMode(mode.id)}
+                    className={`p-2 rounded-lg transition-all ${viewMode === mode.id
+                        ? "bg-[var(--accent)] text-black shadow-lg"
+                        : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                      }`}
+                  >
+                    <mode.icon size={14} />
+                  </button>
+                ))}
               </div>
 
               {/* FILTER BUTTON */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <button
                 onClick={() => setShowFilter(true)}
-                className={`flex-1 md:flex-none relative flex items-center gap-3 px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] italic border transition-all ${activeFilterCount > 0 ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]" : "border-[var(--border)] bg-[var(--background)]/50 text-[var(--muted)] hover:border-[var(--accent)]/40 hover:text-[var(--foreground)]"}`}
+                className={`relative flex items-center gap-2 px-4 py-3 rounded-xl font-black uppercase tracking-widest text-[9px] italic border transition-all ${activeFilterCount > 0
+                    ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.2)]"
+                    : "border-white/5 bg-[var(--background)]/40 text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
+                  }`}
               >
-                <FiFilter size={14} />
-                Filter
+                <FiFilter size={12} className={activeFilterCount > 0 ? "animate-pulse" : ""} />
+                <span className="hidden sm:inline">Advanced</span> Filter
                 {activeFilterCount > 0 && (
-                  <span className="w-5 h-5 flex items-center justify-center bg-[var(--accent)] text-black rounded-full text-[9px] shadow-lg">
+                  <span className="flex h-4 w-4 items-center justify-center bg-[var(--accent)] text-black rounded-full text-[8px] font-bold">
                     {activeFilterCount}
                   </span>
                 )}
-              </motion.button>
+              </button>
             </div>
           </div>
         </motion.div>
