@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mlbbtopup.in - API Documentation</title>
+    <style>
+        :root {
+            --primary: #00e5ff;
+            --bg: #050b15;
+            --card-bg: #0a1220;
+            --text: #ffffff;
+            --text-muted: #94a3b8;
+            --code-bg: #0d1b2e;
+            --border: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 24px;
+            margin-bottom: 48px;
+        }
+
+        .header h1 {
+            font-style: italic;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -2px;
+            font-size: 2.5rem;
+            margin: 0 0 8px;
+            background: linear-gradient(135deg, #fff 40%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+            letter-spacing: 1px;
+        }
+
+        /* Section headings */
+        h2 {
+            border-left: 4px solid var(--primary);
+            padding-left: 16px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            margin: 48px 0 20px;
+            letter-spacing: 2px;
+            color: var(--primary);
+        }
+
+        /* Endpoint block */
+        .endpoint-block {
+            margin-bottom: 48px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .method {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .get {
+            background: #0ea5e9;
+            color: #fff;
+        }
+
+        .post {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .put {
+            background: #f59e0b;
+            color: #000;
+        }
+
+        .endpoint-path {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .endpoint-desc {
+            padding: 14px 20px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .endpoint-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Code blocks */
+        .code-label {
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin: 0;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+        .key {
+            color: #94a3b8;
+        }
+
+        .str {
+            color: #a5f3fc;
+        }
+
+        .num {
+            color: #fde68a;
+        }
+
+        .bool {
+            color: #86efac;
+        }
+
+        .null {
+            color: #f87171;
+        }
+
+        .cm {
+            color: #475569;
+            font-style: italic;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 0.85rem;
+        }
+
+        .info-box strong {
+            color: var(--primary);
+        }
+
+        .warn-box {
+            background: rgba(245, 158, 11, 0.07);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 0.85rem;
+        }
+
+        .warn-box strong {
+            color: #fbbf24;
+        }
+
+        /* Error table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        th {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            background: var(--card-bg);
+        }
+
+        td:first-child {
+            font-family: monospace;
+            font-weight: 700;
+            color: #f87171;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            font-size: 0.78rem;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+
+            .header h1 {
+                -webkit-text-fill-color: #000;
+            }
+
+            pre {
+                background: #f1f5f9;
+                border-color: #cbd5e1;
+            }
+
+            .key {
+                color: #475569;
+            }
+
+            .str {
+                color: #0369a1;
+            }
+
+            .num {
+                color: #b45309;
+            }
+
+            .bool {
+                color: #15803d;
+            }
+
+            .cm {
+                color: #94a3b8;
+            }
+
+            .endpoint-block {
+                border-color: #cbd5e1;
+            }
+
+            .endpoint-header {
+                background: #f8fafc;
+            }
+
+            h2 {
+                color: #0369a1;
+                border-color: #0369a1;
+            }
+
+            .info-box {
+                background: #f0f9ff;
+                border-color: #bae6fd;
+            }
+
+            .warn-box {
+                background: #fffbeb;
+                border-color: #fde68a;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>mlbbtopup.in <span class="badge">API v1.0</span></h1>
+            <p>Official Service API Documentation &mdash; For Members &amp; Owners Only</p>
+        </div>
+
+        <!-- SECTION 1: AUTHENTICATION -->
+        <h2>1. Authentication</h2>
+        <div class="info-box">
+            Every request <strong>must</strong> include your API key in the request header. Your key starts with <code
+                style="color:var(--primary);background:#0d1b2e;padding:2px 6px;border-radius:4px;">TK_</code>
+            and is shown only once when created. Keep it secret &mdash; treat it like a password.
+        </div>
+        <div class="endpoint-body" style="padding:0;margin-top:16px;">
+            <div class="code-label">Required Header for ALL Requests</div>
+            <pre><span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span>
+<span class="key">Content-Type</span><span class="str">: application/json</span></pre>
+        </div>
+
+        <!-- SECTION 2: SECURITY -->
+        <h2>2. Security Layers</h2>
+        <div class="warn-box">
+            <strong>3-Layer Protection:</strong>
+            <ul style="margin:8px 0 0;padding-left:20px;line-height:2;">
+                <li><strong>IP Whitelisting</strong> — Restrict your key to specific server IPs via the Dashboard.
+                    Requests from other IPs are instantly rejected.</li>
+                <li><strong>Daily Spend Limit</strong> — Automated daily cap (default ₹25,000). Resets every midnight.
+                </li>
+                <li><strong>Rate Limiting</strong> — 2-second cooldown between requests to prevent loops.</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 3: ENDPOINTS -->
+        <h2>3. API Endpoints</h2>
+
+        <!-- ── BALANCE ── -->
+        <div class="endpoint-block">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/service/balance</span>
+            </div>
+            <div class="endpoint-desc">Returns your wallet balance, user profile, and current API key usage stats.</div>
+            <div class="endpoint-body">
+                <div>
+                    <div class="code-label">Sample Request</div>
+                    <pre>GET https://mlbbtopup.in/api/service/balance
+<span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span></pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"user"</span>: {
+    <span class="key">"userId"</span>: <span class="str">"TK1001"</span>,
+    <span class="key">"name"</span>: <span class="str">"John Doe"</span>,
+    <span class="key">"userType"</span>: <span class="str">"member"</span>,
+    <span class="key">"wallet"</span>: <span class="num">4850.00</span>
+  },
+  <span class="key">"apiKey"</span>: {
+    <span class="key">"name"</span>: <span class="str">"My Website"</span>,
+    <span class="key">"dailyLimit"</span>: <span class="num">25000</span>,
+    <span class="key">"usedToday"</span>: <span class="num">150</span>
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── GAMES LIST ── -->
+        <div class="endpoint-block">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/service/games</span>
+            </div>
+            <div class="endpoint-desc">Returns all available games, OTT services, and memberships with their slugs.
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <div class="code-label">Sample Request</div>
+                    <pre>GET https://mlbbtopup.in/api/service/games
+<span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span></pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"games"</span>: [
+    {
+      <span class="key">"slug"</span>: <span class="str">"mobile-legends988"</span>,
+      <span class="key">"name"</span>: <span class="str">"Mobile Legends: Bang Bang"</span>,
+      <span class="key">"category"</span>: <span class="str">"game"</span>
+    },
+    {
+      <span class="key">"slug"</span>: <span class="str">"free-fire"</span>,
+      <span class="key">"name"</span>: <span class="str">"Free Fire"</span>,
+      <span class="key">"category"</span>: <span class="str">"game"</span>
+    },
+    {
+      <span class="key">"slug"</span>: <span class="str">"netflix"</span>,
+      <span class="key">"name"</span>: <span class="str">"Netflix"</span>,
+      <span class="key">"category"</span>: <span class="str">"ott"</span>
+    }
+  ]
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── GAME DETAILS ── -->
+        <div class="endpoint-block">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/service/games/{gameSlug}</span>
+            </div>
+            <div class="endpoint-desc">Returns all purchasable items for a specific game with your member pricing
+                applied.</div>
+            <div class="endpoint-body">
+                <div>
+                    <div class="code-label">Sample Request</div>
+                    <pre>GET https://mlbbtopup.in/api/service/games/mobile-legends988
+<span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span></pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"game"</span>: {
+    <span class="key">"slug"</span>: <span class="str">"mobile-legends988"</span>,
+    <span class="key">"name"</span>: <span class="str">"Mobile Legends: Bang Bang"</span>
+  },
+  <span class="key">"items"</span>: [
+    {
+      <span class="key">"slug"</span>: <span class="str">"weekly-pass816"</span>,
+      <span class="key">"name"</span>: <span class="str">"Weekly Diamond Pass"</span>,
+      <span class="key">"price"</span>: <span class="num">165</span>,       <span class="cm">// Your member price in ₹</span>
+      <span class="key">"currency"</span>: <span class="str">"INR"</span>
+    },
+    {
+      <span class="key">"slug"</span>: <span class="str">"86-diamonds"</span>,
+      <span class="key">"name"</span>: <span class="str">"86 Diamonds"</span>,
+      <span class="key">"price"</span>: <span class="num">90</span>,
+      <span class="key">"currency"</span>: <span class="str">"INR"</span>
+    }
+  ]
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── VALIDATE ── -->
+        <div class="endpoint-block">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/service/validate</span>
+            </div>
+            <div class="endpoint-desc">Validates a player's game account before placing an order. Returns the player's
+                in-game name.</div>
+            <div class="endpoint-body">
+                <div>
+                    <div class="code-label">Sample Request</div>
+                    <pre>POST https://mlbbtopup.in/api/service/validate
+<span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span>
+
+{
+  <span class="key">"gameSlug"</span>: <span class="str">"mobile-legends988"</span>,
+  <span class="key">"playerId"</span>: <span class="str">"12345678"</span>,
+  <span class="key">"zoneId"</span>: <span class="str">"1234"</span>
+}</pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"playerName"</span>: <span class="str">"ProGamer123"</span>,
+  <span class="key">"playerId"</span>: <span class="str">"12345678"</span>
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── ORDER ── -->
+        <div class="endpoint-block">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/service/order</span>
+            </div>
+            <div class="endpoint-desc">
+                Places an order. Funds are instantly deducted from your wallet and the top-up is
+                <strong>auto-executed</strong> in real-time.
+                No manual processing required.
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <div class="code-label">Sample Request</div>
+                    <pre>POST https://mlbbtopup.in/api/service/order
+<span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span>
+
+{
+  <span class="key">"gameSlug"</span>: <span class="str">"mobile-legends988"</span>,   <span class="cm">// from /games list</span>
+  <span class="key">"itemSlug"</span>: <span class="str">"weekly-pass816"</span>,     <span class="cm">// from /games/{slug} items</span>
+  <span class="key">"playerId"</span>: <span class="str">"12345678"</span>,
+  <span class="key">"zoneId"</span>: <span class="str">"1234"</span>              <span class="cm">// required for ML, optional for others</span>
+}</pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response — Success (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Order fulfilled successfully"</span>,
+  <span class="key">"order"</span>: {
+    <span class="key">"orderId"</span>: <span class="str">"API-XK9P2A1B"</span>,
+    <span class="key">"itemName"</span>: <span class="str">"Weekly Diamond Pass"</span>,
+    <span class="key">"price"</span>: <span class="num">165</span>,
+    <span class="key">"status"</span>: <span class="str">"success"</span>,
+    <span class="key">"topupStatus"</span>: <span class="str">"success"</span>
+  }
+}</pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response — Fulfillment Failed (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"message"</span>: <span class="str">"Payment deducted, but fulfillment failed"</span>,
+  <span class="key">"order"</span>: {
+    <span class="key">"orderId"</span>: <span class="str">"API-XK9P2A1B"</span>,
+    <span class="key">"status"</span>: <span class="str">"failed"</span>,
+    <span class="key">"topupStatus"</span>: <span class="str">"failed"</span>
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── ORDER STATUS ── -->
+        <div class="endpoint-block">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/service/status/{orderId}</span>
+            </div>
+            <div class="endpoint-desc">Check the current status of a previously placed order using its Order ID.</div>
+            <div class="endpoint-body">
+                <div>
+                    <div class="code-label">Sample Request</div>
+                    <pre>GET https://mlbbtopup.in/api/service/status/API-XK9P2A1B
+<span class="key">x-api-key</span><span class="str">: TK_your_api_key_here</span></pre>
+                </div>
+                <div>
+                    <div class="code-label">Sample Response (200 OK)</div>
+                    <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"order"</span>: {
+    <span class="key">"orderId"</span>: <span class="str">"API-XK9P2A1B"</span>,
+    <span class="key">"gameSlug"</span>: <span class="str">"mobile-legends988"</span>,
+    <span class="key">"itemName"</span>: <span class="str">"Weekly Diamond Pass"</span>,
+    <span class="key">"playerId"</span>: <span class="str">"12345678"</span>,
+    <span class="key">"price"</span>: <span class="num">165</span>,
+    <span class="key">"status"</span>: <span class="str">"success"</span>,
+    <span class="key">"topupStatus"</span>: <span class="str">"success"</span>,
+    <span class="key">"createdAt"</span>: <span class="str">"2026-02-18T07:15:00.000Z"</span>
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: ERROR CODES -->
+        <h2>4. Error Codes</h2>
+        <div class="endpoint-block">
+            <table>
+                <thead>
+                    <tr>
+                        <th>HTTP Status</th>
+                        <th>Reason</th>
+                        <th>How to Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>401</td>
+                        <td>Missing or invalid API key</td>
+                        <td>Check your <code>x-api-key</code> header. Ensure the key is active.</td>
+                    </tr>
+                    <tr>
+                        <td>401</td>
+                        <td>IP not whitelisted</td>
+                        <td>Add your server IP to the Allowed IPs list in the Dashboard.</td>
+                    </tr>
+                    <tr>
+                        <td>403</td>
+                        <td>Daily spend limit reached</td>
+                        <td>Increase your daily cap in the Dashboard or wait until midnight reset.</td>
+                    </tr>
+                    <tr>
+                        <td>403</td>
+                        <td>Rate limit — too fast</td>
+                        <td>Wait 2 seconds between consecutive requests.</td>
+                    </tr>
+                    <tr>
+                        <td>403</td>
+                        <td>Insufficient wallet balance</td>
+                        <td>Top up your wallet before placing orders.</td>
+                    </tr>
+                    <tr>
+                        <td>404</td>
+                        <td>Invalid game or item slug</td>
+                        <td>Use <code>GET /api/service/games/{slug}</code> to get valid slugs.</td>
+                    </tr>
+                    <tr>
+                        <td>500</td>
+                        <td>Internal server error</td>
+                        <td>Retry after a few seconds. Contact support if it persists.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SECTION 5: WORKFLOW -->
+        <h2>5. Recommended Integration Flow</h2>
+        <div class="info-box">
+            <strong>Step-by-step for building your reseller website:</strong>
+            <ol style="margin:10px 0 0;padding-left:20px;line-height:2.2;">
+                <li>Call <code>GET /games</code> → Show game list to your customer</li>
+                <li>Call <code>GET /games/{slug}</code> → Show items &amp; your prices</li>
+                <li>Call <code>POST /validate</code> → Verify player ID before payment</li>
+                <li>Collect payment from your customer on your site</li>
+                <li>Call <code>POST /order</code> → Auto-executes top-up instantly</li>
+                <li>Call <code>GET /status/{orderId}</code> → Show delivery confirmation</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            mlbbtopup.in Official API Documentation v1.0 &mdash; Press <kbd>Ctrl+P</kbd> → "Save as PDF" to export.
+        </div>
+
+    </div>
+</body>
+
+</html>
