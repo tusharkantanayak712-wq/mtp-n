@@ -1,5 +1,8 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+🚀 **Service API Active**: Members and Owners can now use external integrations. See [API_USAGE.md](./API_USAGE.md) for full documentation.
+
+
 ## Getting Started
 
 First, run the development server:

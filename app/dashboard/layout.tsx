@@ -3,7 +3,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { motion } from "framer-motion";
 import AuthGuard from "../../components/AuthGuard";
-import { FiZap, FiInbox, FiHelpCircle, FiZap as FiZapIcon, FiUser, FiCreditCard, FiUsers } from "react-icons/fi";
+import { FiZap, FiInbox, FiHelpCircle, FiZap as FiZapIcon, FiUser, FiCreditCard, FiUsers, FiKey } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import DashboardCard from "../../components/Dashboard/DashboardCard";
@@ -14,6 +14,7 @@ interface UserContextType {
         email: string;
         phone: string;
         userId: string;
+        userType: string;
         referralUsed: boolean;
         referralCount: number;
     };
@@ -40,6 +41,7 @@ export default function DashboardLayout({
         email: "",
         phone: "",
         userId: "",
+        userType: "user",
         referralUsed: false,
         referralCount: 0,
     });
@@ -65,6 +67,7 @@ export default function DashboardLayout({
                         email: data.user.email,
                         phone: data.user.phone,
                         userId: data.user.userId,
+                        userType: data.user.userType,
                         referralUsed: data.user.referralUsed,
                         referralCount: data.user.referralCount,
                     });
@@ -101,6 +104,10 @@ export default function DashboardLayout({
         { key: "referral", label: "Network", value: "Referral", icon: FiUsers, href: "/dashboard/referral" },
         // { key: "account", label: "Identity", value: "Profile", icon: FiUser, href: "/dashboard/account" },
     ];
+
+    if (userDetails.userType === "member" || userDetails.userType === "owner") {
+        tabCards.push({ key: "api-keys", label: "Access", value: "API Keys", icon: FiKey, href: "/dashboard/api-keys" });
+    }
 
     return (
         <AuthGuard>
