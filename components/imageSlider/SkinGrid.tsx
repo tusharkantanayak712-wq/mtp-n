@@ -60,7 +60,7 @@ export default function SkinGrid() {
                 src={skin.image}
                 alt=""
                 className="
-                  w-full h-auto
+                  w-full aspect-[3/4]
                   object-cover
                   transition
                 "

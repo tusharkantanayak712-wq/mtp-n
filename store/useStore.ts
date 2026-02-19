@@ -48,6 +48,7 @@ type Store = {
 
   /* -------- FILTER -------- */
   activeCategory: SkinCategory;
+  searchQuery: string;
 
   /* -------- ACTIONS -------- */
   setColumns: (n: number) => void;
@@ -72,6 +73,7 @@ type Store = {
   removeMiscImage: (index: number) => void;
 
   setCategory: (cat: SkinCategory) => void;
+  setSearchQuery: (query: string) => void;
 };
 
 /* ---------------- STORE ---------------- */
@@ -95,6 +97,7 @@ export const useStore = create<Store>((set) => ({
   miscImages: [],
 
   activeCategory: "all",
+  searchQuery: "",
 
   /* -------- ACTIONS -------- */
 
@@ -170,4 +173,5 @@ export const useStore = create<Store>((set) => ({
     })),
 
   setCategory: (activeCategory) => set({ activeCategory }),
+  setSearchQuery: (searchQuery) => set({ searchQuery }),
 }));

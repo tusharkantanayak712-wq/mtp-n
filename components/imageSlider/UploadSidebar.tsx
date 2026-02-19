@@ -60,7 +60,7 @@ export default function UploadSidebar({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex">
+    <div className="fixed inset-0 z-[2001] flex">
       {/* OVERLAY */}
       <div
         className="flex-1 bg-black/70 backdrop-blur-sm"

@@ -74,19 +74,18 @@ function FilterChip({
     <button
       onClick={onClick}
       className={`
-        flex items-center gap-1.5
-        px-3 py-1.5
-        rounded-full
-        text-xs capitalize whitespace-nowrap
-        border transition-all
-        ${
-          active
-            ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow"
-            : "bg-[var(--card)] text-[var(--muted)] border-white/10 hover:border-[var(--accent)]/50"
+        flex items-center gap-2
+        px-4 py-2
+        rounded-xl
+        text-[11px] font-bold uppercase tracking-wider whitespace-nowrap
+        border transition-all duration-300
+        ${active
+          ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)] scale-[1.05]"
+          : "bg-white/[0.03] text-white/40 border-white/5 hover:border-white/20 hover:bg-white/5 hover:text-white/60"
         }
       `}
     >
-      <Icon size={14} />
+      <Icon size={14} className={active ? "text-black" : "text-[var(--accent)]/60"} />
       {label}
     </button>
   );

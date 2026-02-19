@@ -11,28 +11,29 @@ export default function ColumnControl() {
   return (
     <div
       className="
-        bg-[var(--card)]
-        border border-white/10
+        bg-white/[0.03]
+        border border-white/5
         rounded-2xl
         p-4
-        space-y-3
+        space-y-4
       "
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-[var(--muted)]">
-          <Grid3X3 size={16} />
+        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/30">
+          <Grid3X3 size={14} className="text-[var(--accent)]/60" />
           Grid Columns
         </div>
 
         <div
           className="
-            px-2 py-0.5
-            rounded-md
-            bg-black/40
-            text-xs
-            font-semibold
+            px-3 py-1
+            rounded-lg
+            bg-[var(--accent)]/10
+            text-[11px]
+            font-bold
             text-[var(--accent)]
+            border border-[var(--accent)]/20
           "
         >
           {columns}
@@ -40,22 +41,25 @@ export default function ColumnControl() {
       </div>
 
       {/* Slider */}
-      <input
-        type="range"
-        min={1}
-        max={15}
-        value={columns}
-        onChange={(e) => setColumns(Number(e.target.value))}
-        className="
-          w-full
-          accent-[var(--accent)]
-        "
-      />
-
-      {/* Helper text (mobile friendly) */}
-      <p className="text-xs text-[var(--muted)]">
-        Adjust how many skins appear in each row
-      </p>
+      <div className="relative h-6 flex items-center">
+        <input
+          type="range"
+          min={1}
+          max={15}
+          value={columns}
+          onChange={(e) => setColumns(Number(e.target.value))}
+          className="
+            w-full h-1.5
+            bg-white/5
+            rounded-lg
+            appearance-none
+            cursor-pointer
+            accent-[var(--accent)]
+            hover:accent-[var(--accent)]/80
+            transition-all
+          "
+        />
+      </div>
     </div>
   );
 }
