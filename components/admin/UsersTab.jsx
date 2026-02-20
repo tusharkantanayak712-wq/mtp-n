@@ -21,7 +21,8 @@ import {
   IdCard,
   Crown,
   Type,
-  Activity
+  Activity,
+  Globe
 } from "lucide-react";
 
 export default function UsersTab() {
@@ -29,6 +30,16 @@ export default function UsersTab() {
   const [loading, setLoading] = useState(true);
   const [updatingUserId, setUpdatingUserId] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [activeStats, setActiveStats] = useState({
+    last24h: 0,
+    last7d: 0,
+    last30d: 0,
+  });
+  const [newStats, setNewStats] = useState({
+    last24h: 0,
+    last7d: 0,
+    last30d: 0,
+  });
 
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -72,6 +83,8 @@ export default function UsersTab() {
 
       const data = await res.json();
       setUsers(data?.data || []);
+      setActiveStats(data?.activeStats || { last24h: 0, last7d: 0, last30d: 0 });
+      setNewStats(data?.newStats || { last24h: 0, last7d: 0, last30d: 0 });
       setPagination(
         data?.pagination || { total: 0, page: 1, totalPages: 1 }
       );
@@ -151,6 +164,35 @@ export default function UsersTab() {
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
+        </div>
+      </div>
+
+      {/* ================= STATS GRID ================= */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Active Users Column */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 px-1">
+            <Activity size={14} className="text-[var(--accent)]" />
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">Active Users</h4>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <StatCard label="Today" value={activeStats.last24h} compact />
+            <StatCard label="Week" value={activeStats.last7d} compact />
+            <StatCard label="Month" value={activeStats.last30d} compact />
+          </div>
+        </div>
+
+        {/* New Registrations Column */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 px-1">
+            <Users size={14} className="text-emerald-500" />
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">New Registered</h4>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <StatCard label="Today" value={newStats.last24h} compact color="emerald" />
+            <StatCard label="Week" value={newStats.last7d} compact color="emerald" />
+            <StatCard label="Month" value={newStats.last30d} compact color="emerald" />
+          </div>
         </div>
       </div>
 
@@ -250,6 +292,9 @@ export default function UsersTab() {
                           <span className="text-[10px] text-[var(--muted)]/60">
                             {u.lastLogin ? new Date(u.lastLogin).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : ""}
                           </span>
+                          {u.lastLoginIp && (
+                            <span className="text-[9px] text-[var(--accent)]/50 font-mono mt-0.5">{u.lastLoginIp.split(',')[0]}</span>
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
@@ -428,6 +473,7 @@ export default function UsersTab() {
                       : "No record found"
                     }
                   />
+                  <DrawerDetail label="Last Login IP" value={selectedUser.lastLoginIp || "Not recorded"} />
                 </DrawerSection>
 
                 <DrawerSection icon={<Shield size={18} />} title="Account Management">
@@ -681,5 +727,42 @@ function DrawerDetail({ label, value }) {
         {value || "Not available"}
       </span>
     </div>
+  );
+}
+
+function StatCard({ label, value, icon, subtext, compact, color = "blue" }) {
+  const colorClasses = {
+    blue: "text-[var(--accent)] border-[var(--accent)]/10 bg-[var(--accent)]/5",
+    emerald: "text-emerald-500 border-emerald-500/10 bg-emerald-500/5",
+  };
+
+  if (compact) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`px-4 py-3 rounded-xl border ${colorClasses[color]} flex flex-col items-center justify-center text-center`}
+      >
+        <span className="text-[9px] font-bold uppercase tracking-tighter opacity-60 mb-0.5">{label}</span>
+        <span className="text-base font-extrabold tabular-nums">{value}</span>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] flex items-start gap-4 shadow-sm"
+    >
+      <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
+        {icon}
+      </div>
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]/60 mb-1">{label}</p>
+        <p className="text-2xl font-extrabold text-[var(--foreground)]">{value}</p>
+        <p className="text-[11px] text-[var(--muted)] mt-0.5">{subtext}</p>
+      </div>
+    </motion.div>
   );
 }

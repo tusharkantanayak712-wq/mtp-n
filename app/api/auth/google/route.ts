@@ -44,7 +44,9 @@ export async function POST(req: Request) {
       });
     } else {
       /* ================= UPDATE LAST LOGIN ================= */
+      const ip = req.headers.get("x-forwarded-for") || "unknown";
       user.lastLogin = new Date();
+      user.lastLoginIp = ip;
       await user.save();
     }
 

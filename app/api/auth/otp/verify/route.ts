@@ -22,9 +22,11 @@ export async function POST(request: Request) {
         }
 
         // Clear OTP after success
+        const ip = request.headers.get("x-forwarded-for") || "unknown";
         user.resetOtp = null;
         user.resetOtpExpiry = null;
         user.lastLogin = new Date();
+        user.lastLoginIp = ip;
         await user.save();
 
         const token = jwt.sign(

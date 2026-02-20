@@ -66,7 +66,9 @@ export async function POST(request: Request) {
     }
 
     /* ================= UPDATE LAST LOGIN ================= */
+    const ip = request.headers.get("x-forwarded-for") || "unknown";
     foundUser.lastLogin = new Date();
+    foundUser.lastLoginIp = ip;
     await foundUser.save();
 
     /* ================= JWT GENERATION ================= */

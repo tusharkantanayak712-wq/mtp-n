@@ -54,20 +54,42 @@ export async function GET(req) {
       if (to) filter.createdAt.$lte = new Date(to);
     }
 
+    /* ================= STATS (ACTIVE & NEW USERS) ================= */
+    const now = new Date();
+    const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const last7d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const last30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
     /* ================= QUERY ================= */
-    const [users, total] = await Promise.all([
+    const [users, total, active24h, active7d, active30d, new24h, new7d, new30d] = await Promise.all([
       User.find(filter, "-password")
         .sort({ lastLogin: -1, createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean(),
       User.countDocuments(filter),
+      User.countDocuments({ lastLogin: { $gte: last24h } }),
+      User.countDocuments({ lastLogin: { $gte: last7d } }),
+      User.countDocuments({ lastLogin: { $gte: last30d } }),
+      User.countDocuments({ createdAt: { $gte: last24h } }),
+      User.countDocuments({ createdAt: { $gte: last7d } }),
+      User.countDocuments({ createdAt: { $gte: last30d } }),
     ]);
 
     /* ================= RESPONSE ================= */
     return Response.json({
       success: true,
       data: users,
+      activeStats: {
+        last24h: active24h,
+        last7d: active7d,
+        last30d: active30d,
+      },
+      newStats: {
+        last24h: new24h,
+        last7d: new7d,
+        last30d: new30d,
+      },
       pagination: {
         total,
         page,
