@@ -25,51 +25,21 @@ export async function GET(req) {
     await connectDB();
     verifyAdmin(req);
 
-    const { searchParams } = new URL(req.url);
-
-    const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 10;
-    const search = searchParams.get("search");
-
-    const query = {};
-
-    // -------- SEARCH (optional) --------
-    if (search) {
-      query.$or = [
-        { email: { $regex: search, $options: "i" } },
-        { phone: { $regex: search, $options: "i" } },
-        { message: { $regex: search, $options: "i" } },
-        { type: { $regex: search, $options: "i" } },
-      ];
-    }
-
     /* ================= STATS ================= */
     const startOfDay = new Date(new Date().setHours(0, 0, 0, 0));
 
-    const [data, total, openCount, todayCount] = await Promise.all([
-      SupportQuery.find(query)
-        .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean(),
-      SupportQuery.countDocuments(query),
+    const [totalQueries, openCount, todayCount] = await Promise.all([
+      SupportQuery.countDocuments({}),
       SupportQuery.countDocuments({ status: { $in: ["open", "in_progress"] } }),
       SupportQuery.countDocuments({ createdAt: { $gte: startOfDay } }),
     ]);
 
     return Response.json({
       success: true,
-      data,
       stats: {
-        total,
+        total: totalQueries,
         open: openCount,
         today: todayCount,
-      },
-      pagination: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
       },
     });
   } catch (err) {

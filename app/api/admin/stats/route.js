@@ -18,29 +18,12 @@ export async function GET(req) {
         if (decoded.userType !== "owner")
             return Response.json({ message: "Forbidden" }, { status: 403 });
 
-        /* ================= QUERY PARAMS ================= */
-        const { searchParams } = new URL(req.url);
-        const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
-        const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
-        const search = searchParams.get("search") || "";
-        const skip = (page - 1) * limit;
-
-        /* ================= AGGREGATION & FETCH ================= */
-        // Base query: wallet > 0
-        const query = { wallet: { $gt: 0 } };
-
-        if (search) {
-            query.$or = [
-                { name: { $regex: search, $options: "i" } },
-                { email: { $regex: search, $options: "i" } },
-                { userId: { $regex: search, $options: "i" } }
-            ];
-        }
+        /* ================= STATS ================= */
 
         const now = new Date();
         const startOfDay = new Date(new Date().setHours(0, 0, 0, 0));
 
-        const [totalBalanceAgg, todayCreditsAgg, todayDebitsAgg, wallets, totalCount] = await Promise.all([
+        const [totalBalanceAgg, todayCreditsAgg, todayDebitsAgg, totalCount] = await Promise.all([
             // Sum all user wallets
             User.aggregate([
                 { $match: { wallet: { $gt: 0 } } },
@@ -56,15 +39,8 @@ export async function GET(req) {
                 { $match: { createdAt: { $gte: startOfDay }, type: "debit", status: "success" } },
                 { $group: { _id: null, total: { $sum: "$amount" } } }
             ]),
-            // Paginated wallets
-            User.find(query)
-                .sort({ wallet: -1 })
-                .skip(skip)
-                .limit(limit)
-                .select("name userId wallet email userType")
-                .lean(),
-            // Count for pagination
-            User.countDocuments(query)
+            // Count active wallets for stats card
+            User.countDocuments({ wallet: { $gt: 0 } })
         ]);
 
         /* ================= RESPONSE ================= */
@@ -74,14 +50,7 @@ export async function GET(req) {
                 totalBalance: totalBalanceAgg[0]?.total || 0,
                 activeWallets: totalCount,
                 todayDeposits: todayCreditsAgg[0]?.total || 0,
-                todayUsage: todayDebitsAgg[0]?.total || 0,
-                wallets: wallets || [],
-                pagination: {
-                    total: totalCount,
-                    page,
-                    limit,
-                    totalPages: Math.ceil(totalCount / limit)
-                }
+                todayUsage: todayDebitsAgg[0]?.total || 0
             },
         });
     } catch (err) {

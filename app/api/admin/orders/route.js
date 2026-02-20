@@ -30,51 +30,6 @@ export async function GET(req) {
     await connectDB();
     verifyOwner(req);
 
-    /* ================= QUERY PARAMS ================= */
-    const { searchParams } = new URL(req.url);
-
-    const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
-    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
-    const search = searchParams.get("search")?.trim();
-
-    // 🔽 FILTERS
-    const status = searchParams.get("status");
-    const gameSlug = searchParams.get("gameSlug");
-    const from = searchParams.get("from");
-    const to = searchParams.get("to");
-
-    const skip = (page - 1) * limit;
-
-    /* ================= FILTER ================= */
-    let filter = {};
-
-    // 🔍 Text search
-    if (search) {
-      filter.$or = [
-        { orderId: { $regex: search, $options: "i" } },
-        { gameSlug: { $regex: search, $options: "i" } },
-        { itemName: { $regex: search, $options: "i" } },
-        { playerId: { $regex: search, $options: "i" } },
-      ];
-    }
-
-    // 📌 Status filter
-    if (status) {
-      filter.status = status;
-    }
-
-    // 🎮 Game filter
-    if (gameSlug) {
-      filter.gameSlug = gameSlug;
-    }
-
-    // 📅 Date range filter
-    if (from || to) {
-      filter.createdAt = {};
-      if (from) filter.createdAt.$gte = new Date(from);
-      if (to) filter.createdAt.$lte = new Date(to);
-    }
-
     /* ================= STATS (ORDERS) ================= */
     const now = new Date();
     const startOfDay = new Date(new Date().setHours(0, 0, 0, 0));
@@ -82,13 +37,7 @@ export async function GET(req) {
     const startOfMonth = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
     /* ================= QUERY ================= */
-    const [orders, total, rev1dAgg, rev1wAgg, rev1mAgg, todayOrders] = await Promise.all([
-      Order.find(filter)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      Order.countDocuments(filter),
+    const [rev1dAgg, rev1wAgg, rev1mAgg, todayOrders, totalOrders] = await Promise.all([
       // Revenue Aggregations
       Order.aggregate([
         { $match: { createdAt: { $gte: startOfDay }, status: "success" } },
@@ -102,7 +51,8 @@ export async function GET(req) {
         { $match: { createdAt: { $gte: startOfMonth }, status: "success" } },
         { $group: { _id: null, total: { $sum: "$price" } } }
       ]),
-      Order.countDocuments({ createdAt: { $gte: startOfDay } })
+      Order.countDocuments({ createdAt: { $gte: startOfDay } }),
+      Order.countDocuments({})
     ]);
 
     const revenue = {
@@ -113,17 +63,11 @@ export async function GET(req) {
 
     return Response.json({
       success: true,
-      data: orders,
+      total: totalOrders,
       orderStats: {
         revenue,
         todayCount: todayOrders,
-      },
-      pagination: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      }
     });
 
   } catch (err) {

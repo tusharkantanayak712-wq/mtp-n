@@ -56,11 +56,32 @@ export default function OrdersTab() {
   });
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrdersStats();
+  }, []);
+
+  useEffect(() => {
+    fetchOrdersList();
   }, [page, limit, search, filters]);
 
-  /* ================= FETCH ORDERS ================= */
-  const fetchOrders = async () => {
+  /* ================= FETCH ORDERS STATS ================= */
+  const fetchOrdersStats = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`/api/admin/orders`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrderStats(data.orderStats || { revenue: { day: 0, week: 0, month: 0 }, todayCount: 0 });
+        setPagination(prev => ({ ...prev, total: data.total }));
+      }
+    } catch (err) {
+      console.error("Fetch orders stats failed", err);
+    }
+  };
+
+  /* ================= FETCH ORDERS LIST ================= */
+  const fetchOrdersList = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -76,19 +97,17 @@ export default function OrdersTab() {
       });
 
       const res = await fetch(
-        `/api/admin/orders?${params.toString()}`,
+        `/api/admin/orders/data?${params.toString()}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const data = await res.json();
-
       setOrders(data?.data || []);
-      setOrderStats(data?.orderStats || { revenue: { day: 0, week: 0, month: 0 }, todayCount: 0 });
       setPagination(
         data?.pagination || { total: 0, page: 1, totalPages: 1 }
       );
     } catch (err) {
-      console.error("Fetch orders failed", err);
+      console.error("Fetch orders list failed", err);
       setOrders([]);
     } finally {
       setLoading(false);
@@ -116,7 +135,8 @@ export default function OrdersTab() {
         return;
       }
 
-      fetchOrders();
+      fetchOrdersList();
+      fetchOrdersStats(); // Refresh stats too as status change affects revenue
     } finally {
       setUpdating(false);
     }
@@ -164,7 +184,7 @@ export default function OrdersTab() {
             </span>
           </div>
           <button
-            onClick={fetchOrders}
+            onClick={() => { fetchOrdersStats(); fetchOrdersList(); }}
             className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />

@@ -45,16 +45,36 @@ export default function TransactionsTab() {
   });
 
   useEffect(() => {
-    fetchTransactions();
+    fetchTransactionsStats();
+  }, []);
+
+  useEffect(() => {
+    fetchTransactionsList();
   }, [page, limit, search]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactionsStats = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`/api/admin/transactions`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.stats || { count1d: 0, count7d: 0, count30d: 0 });
+        setPagination(prev => ({ ...prev, total: data.total }));
+      }
+    } catch (err) {
+      console.error("Fetch transactions stats failed", err);
+    }
+  };
+
+  const fetchTransactionsList = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `/api/admin/transactions?page=${page}&limit=${limit}&search=${search}`,
+        `/api/admin/transactions/data?page=${page}&limit=${limit}&search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,7 +85,6 @@ export default function TransactionsTab() {
       const data = await res.json();
 
       setTransactions(data?.data || []);
-      setStats(data?.stats || { count1d: 0, count7d: 0, count30d: 0 });
       setPagination(
         data?.pagination || {
           total: 0,
@@ -118,7 +137,7 @@ export default function TransactionsTab() {
             </span>
           </div>
           <button
-            onClick={fetchTransactions}
+            onClick={() => { fetchTransactionsStats(); fetchTransactionsList(); }}
             className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />

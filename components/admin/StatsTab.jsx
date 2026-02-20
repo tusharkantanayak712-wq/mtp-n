@@ -52,8 +52,33 @@ export default function StatsTab() {
     const [historyStatus, setHistoryStatus] = useState(""); // success | failed | pending
     const [historyTotalPages, setHistoryTotalPages] = useState(1);
 
-    /* ================= FETCH STATS & WALLETS ================= */
+    /* ================= FETCH STATS ================= */
     const fetchStats = async () => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem("token");
+            const res = await fetch(`/api/admin/stats`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const json = await res.json();
+            if (json.success) {
+                setData(prev => ({
+                    ...prev,
+                    totalBalance: json.data.totalBalance,
+                    activeWallets: json.data.activeWallets,
+                    todayDeposits: json.data.todayDeposits,
+                    todayUsage: json.data.todayUsage
+                }));
+            }
+        } catch (err) {
+            console.error("Failed to fetch statistics", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    /* ================= FETCH WALLET LIST ================= */
+    const fetchWallets = async () => {
         try {
             setWalletLoading(true);
             const token = localStorage.getItem("token");
@@ -63,17 +88,20 @@ export default function StatsTab() {
                 search: walletSearch
             });
 
-            const res = await fetch(`/api/admin/stats?${params}`, {
+            const res = await fetch(`/api/admin/stats/data?${params}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const json = await res.json();
             if (json.success) {
-                setData(json.data || { totalBalance: 0, wallets: [], pagination: { total: 0, page: 1, limit: 10, totalPages: 1 } });
+                setData(prev => ({
+                    ...prev,
+                    wallets: json.data || [],
+                    pagination: json.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 }
+                }));
             }
         } catch (err) {
-            console.error("Failed to fetch stats", err);
+            console.error("Failed to fetch wallet list", err);
         } finally {
-            setLoading(false);
             setWalletLoading(false);
         }
     };
@@ -139,6 +167,7 @@ export default function StatsTab() {
                 setManageEmail("");
                 setManageAmount("");
                 fetchStats(); // Refresh stats
+                fetchWallets(); // Refresh wallet list
                 fetchHistory(); // Refresh history
             }
         } catch (err) {
@@ -169,6 +198,7 @@ export default function StatsTab() {
                 alert(json.message);
                 fetchHistory();
                 fetchStats(); // Update stats as balance might change
+                fetchWallets(); // Update wallet list
             } else {
                 alert(json.message || "Failed to update status");
             }
@@ -182,6 +212,7 @@ export default function StatsTab() {
     // Initial load
     useEffect(() => {
         fetchStats();
+        fetchWallets();
         fetchHistory();
     }, []);
 
@@ -192,7 +223,7 @@ export default function StatsTab() {
 
     // Fetch on wallet list change
     useEffect(() => {
-        fetchStats();
+        fetchWallets();
     }, [walletPage, walletSearch]);
 
     return (
@@ -208,7 +239,7 @@ export default function StatsTab() {
                 </div>
 
                 <button
-                    onClick={() => { fetchStats(); fetchHistory(); }}
+                    onClick={() => { fetchStats(); fetchWallets(); fetchHistory(); }}
                     disabled={loading}
                     className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none disabled:opacity-50"
                 >

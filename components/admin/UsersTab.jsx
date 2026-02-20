@@ -60,10 +60,32 @@ export default function UsersTab() {
   });
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsersStats();
+  }, []);
+
+  useEffect(() => {
+    fetchUsersList();
   }, [page, limit, search, filters]);
 
-  const fetchUsers = async () => {
+  const fetchUsersStats = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`/api/admin/users`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setActiveStats(data.activeStats || { last24h: 0, last7d: 0, last30d: 0 });
+        setNewStats(data.newStats || { last24h: 0, last7d: 0, last30d: 0 });
+        setPagination(prev => ({ ...prev, total: data.total }));
+      }
+    } catch (err) {
+      console.error("Fetch users stats failed", err);
+    }
+  };
+
+  const fetchUsersList = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -77,19 +99,17 @@ export default function UsersTab() {
         ...(filters.to && { to: filters.to }),
       });
 
-      const res = await fetch(`/api/admin/users?${params.toString()}`, {
+      const res = await fetch(`/api/admin/users/data?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
       setUsers(data?.data || []);
-      setActiveStats(data?.activeStats || { last24h: 0, last7d: 0, last30d: 0 });
-      setNewStats(data?.newStats || { last24h: 0, last7d: 0, last30d: 0 });
       setPagination(
         data?.pagination || { total: 0, page: 1, totalPages: 1 }
       );
     } catch (err) {
-      console.error("Fetch users failed", err);
+      console.error("Fetch users list failed", err);
       setUsers([]);
     } finally {
       setLoading(false);
@@ -116,7 +136,7 @@ export default function UsersTab() {
         return;
       }
 
-      fetchUsers();
+      fetchUsersList();
     } finally {
       setUpdatingUserId(null);
     }
@@ -159,7 +179,7 @@ export default function UsersTab() {
             </span>
           </div>
           <button
-            onClick={fetchUsers}
+            onClick={() => { fetchUsersStats(); fetchUsersList(); }}
             className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />

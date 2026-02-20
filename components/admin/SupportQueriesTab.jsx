@@ -42,29 +42,48 @@ export default function SupportQueriesTab() {
   });
 
   useEffect(() => {
-    fetchQueries();
+    fetchQueriesStats();
+  }, []);
+
+  useEffect(() => {
+    fetchQueriesList();
   }, [page, limit, search]);
 
-  /* ================= FETCH QUERIES ================= */
-  const fetchQueries = async () => {
+  /* ================= FETCH QUERIES STATS ================= */
+  const fetchQueriesStats = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`/api/admin/support-queries`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.stats || { total: 0, open: 0, today: 0 });
+        setPagination(prev => ({ ...prev, total: data.stats?.total || 0 }));
+      }
+    } catch (err) {
+      console.error("Fetch queries stats failed", err);
+    }
+  };
+
+  /* ================= FETCH QUERIES LIST ================= */
+  const fetchQueriesList = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `/api/admin/support-queries?page=${page}&limit=${limit}&search=${search}`,
+        `/api/admin/support-queries/data?page=${page}&limit=${limit}&search=${search}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const data = await res.json();
-
       setQueries(data?.data || []);
-      setStats(data?.stats || { total: 0, open: 0, today: 0 });
       setPagination(
         data?.pagination || { total: 0, page: 1, totalPages: 1 }
       );
     } catch (err) {
-      console.error("Fetch support queries failed", err);
+      console.error("Fetch support queries data failed", err);
       setQueries([]);
     } finally {
       setLoading(false);
@@ -92,7 +111,8 @@ export default function SupportQueriesTab() {
         return;
       }
 
-      fetchQueries();
+      fetchQueriesList();
+      fetchQueriesStats();
     } finally {
       setUpdating(false);
     }
@@ -141,7 +161,7 @@ export default function SupportQueriesTab() {
             </span>
           </div>
           <button
-            onClick={fetchQueries}
+            onClick={() => { fetchQueriesStats(); fetchQueriesList(); }}
             className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />

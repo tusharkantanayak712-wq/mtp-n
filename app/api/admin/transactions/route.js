@@ -20,44 +20,19 @@ export async function GET(req) {
       return Response.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    /* ================= QUERY PARAMS ================= */
-    const { searchParams } = new URL(req.url);
-
-    const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
-    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
-    const search = searchParams.get("search")?.trim();
-
-    const skip = (page - 1) * limit;
-
-    /* ================= BASE FILTER ================= */
-    let filter = {
-      paymentStatus: { $in: ["success", "completed", "paid"] },
-    };
-
-    /* ================= SEARCH FILTER ================= */
-    if (search) {
-      filter.$or = [
-        { orderId: { $regex: search, $options: "i" } },
-        { gameSlug: { $regex: search, $options: "i" } },
-        { itemName: { $regex: search, $options: "i" } },
-        { playerId: { $regex: search, $options: "i" } },
-        { paymentMethod: { $regex: search, $options: "i" } },
-      ];
-    }
-
     /* ================= STATS ================= */
     const now = new Date();
     const startOfDay = new Date(new Date().setHours(0, 0, 0, 0));
     const startOfWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const startOfMonth = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
+    /* ================= BASE FILTER ================= */
+    let filter = {
+      paymentStatus: { $in: ["success", "completed", "paid"] },
+    };
+
     /* ================= QUERY ================= */
-    const [transactions, total, count1d, count7d, count30d] = await Promise.all([
-      Order.find(filter)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
+    const [totalTx, count1d, count7d, count30d] = await Promise.all([
       Order.countDocuments(filter),
       Order.countDocuments({ ...filter, createdAt: { $gte: startOfDay } }),
       Order.countDocuments({ ...filter, createdAt: { $gte: startOfWeek } }),
@@ -66,18 +41,12 @@ export async function GET(req) {
 
     return Response.json({
       success: true,
-      data: transactions,
+      total: totalTx,
       stats: {
         count1d,
         count7d,
         count30d,
-      },
-      pagination: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      }
     });
   } catch (err) {
     console.error("Transaction API Error:", err);
