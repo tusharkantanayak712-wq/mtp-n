@@ -29,8 +29,8 @@ const MEMBERSHIPS: Record<string, MembershipConfig> = {
   },
   "reseller-membership": {
     items: {
-      "reseller-6m": 500,
-      "reseller-12m": 900,
+      "reseller-6m": 550,
+      "reseller-12m": 1000,
     },
   },
 };
@@ -40,7 +40,7 @@ const OTTS: Record<string, OTTConfig> = {
     "yt-1m": 25,
   },
   netflix: {
-    "nf-1m": 105,
+    "nf-1m": 110,
   },
   spotify: {
     "spot-1m": 30,
@@ -56,12 +56,12 @@ const MANUAL_GAMES: Record<string, MembershipConfig> = {
   },
   "bgmi-manual": {
     items: {
-      "bgmi-60-uc": 72,
-      "bgmi-325-uc": 360,
-      "bgmi-660-uc": 700,
-      "bgmi-1800-uc": 1760,
-      "bgmi-3850-uc": 3600,
-      "bgmi-8100-uc": 7200,
+      "bgmi-60-uc": 75,
+      "bgmi-325-uc": 380,
+      "bgmi-660-uc": 760,
+      "bgmi-1800-uc": 1970,
+      "bgmi-3850-uc": 3950,
+      "bgmi-8100-uc": 8100,
     },
   },
 };
