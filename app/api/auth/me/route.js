@@ -22,10 +22,16 @@ export async function GET(req) {
     // 🔎 Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 👤 Fetch user
-    const user = await User.findById(decoded.userId).select(
-      "-password -__v"
-    );
+    // 👤 Update activity and fetch user
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    const user = await User.findByIdAndUpdate(
+      decoded.userId,
+      {
+        lastLogin: new Date(),
+        lastLoginIp: ip
+      },
+      { new: true }
+    ).select("-password -__v");
 
     if (!user) {
       return NextResponse.json(
