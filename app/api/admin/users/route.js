@@ -24,29 +24,52 @@ export async function GET(req) {
     const last30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
     /* ================= QUERY ================= */
-    const [totalUsers, active24h, active7d, active30d, new24h, new7d, new30d] = await Promise.all([
+    /* ================= SINGLE OPTIMIZED AGGREGATION ================= */
+    const [statsResult, totalUsers] = await Promise.all([
+      User.aggregate([
+        {
+          $facet: {
+            "active": [
+              {
+                $group: {
+                  _id: null,
+                  day: { $sum: { $cond: [{ $gte: ["$lastLogin", last24h] }, 1, 0] } },
+                  week: { $sum: { $cond: [{ $gte: ["$lastLogin", last7d] }, 1, 0] } },
+                  month: { $sum: { $cond: [{ $gte: ["$lastLogin", last30d] }, 1, 0] } }
+                }
+              }
+            ],
+            "new": [
+              {
+                $group: {
+                  _id: null,
+                  day: { $sum: { $cond: [{ $gte: ["$createdAt", last24h] }, 1, 0] } },
+                  week: { $sum: { $cond: [{ $gte: ["$createdAt", last7d] }, 1, 0] } },
+                  month: { $sum: { $cond: [{ $gte: ["$createdAt", last30d] }, 1, 0] } }
+                }
+              }
+            ]
+          }
+        }
+      ]),
       User.countDocuments({}),
-      User.countDocuments({ lastLogin: { $gte: last24h } }),
-      User.countDocuments({ lastLogin: { $gte: last7d } }),
-      User.countDocuments({ lastLogin: { $gte: last30d } }),
-      User.countDocuments({ createdAt: { $gte: last24h } }),
-      User.countDocuments({ createdAt: { $gte: last7d } }),
-      User.countDocuments({ createdAt: { $gte: last30d } }),
     ]);
+
+    const stats = statsResult[0];
 
     /* ================= RESPONSE ================= */
     return Response.json({
       success: true,
       total: totalUsers,
       activeStats: {
-        day: active24h,
-        week: active7d,
-        month: active30d,
+        day: stats.active[0]?.day || 0,
+        week: stats.active[0]?.week || 0,
+        month: stats.active[0]?.month || 0,
       },
       newStats: {
-        day: new24h,
-        week: new7d,
-        month: new30d,
+        day: stats.new[0]?.day || 0,
+        week: stats.new[0]?.week || 0,
+        month: stats.new[0]?.month || 0,
       },
     });
   } catch (err) {

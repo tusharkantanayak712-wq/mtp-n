@@ -27,8 +27,8 @@ export default function StatsTab() {
     const [data, setData] = useState({
         totalBalance: 0,
         activeWallets: 0,
-        todayDeposits: 0,
-        todayUsage: 0,
+        deposits: { day: 0, week: 0, month: 0 },
+        usage: { day: 0, week: 0, month: 0 },
         wallets: [],
         pagination: { total: 0, page: 1, limit: 10, totalPages: 1 }
     });
@@ -66,8 +66,8 @@ export default function StatsTab() {
                     ...prev,
                     totalBalance: json.data.totalBalance,
                     activeWallets: json.data.activeWallets,
-                    todayDeposits: json.data.todayDeposits,
-                    todayUsage: json.data.todayUsage
+                    deposits: json.data.deposits || { day: 0, week: 0, month: 0 },
+                    usage: json.data.usage || { day: 0, week: 0, month: 0 }
                 }));
             }
         } catch (err) {
@@ -258,8 +258,8 @@ export default function StatsTab() {
                 </div>
             ) : (
                 <>
-                    {/* STATS GRID */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {/* TOP LEVEL OVERVIEW */}
+                    <div className="grid grid-cols-2 lg:grid-cols-2 gap-4">
                         <InsightCard
                             label="Wallet Liability"
                             value={`₹${(data.totalBalance || 0).toLocaleString()}`}
@@ -272,19 +272,67 @@ export default function StatsTab() {
                             icon={<FiUser size={14} />}
                             color="amber"
                         />
-                        <InsightCard
-                            label="Today's Deposits"
-                            value={`₹${(data.todayDeposits || 0).toLocaleString()}`}
-                            icon={<FiArrowUp size={14} />}
-                            color="emerald"
-                            pulse={data.todayDeposits > 0}
-                        />
-                        <InsightCard
-                            label="Today's Usage"
-                            value={`₹${(data.todayUsage || 0).toLocaleString()}`}
-                            icon={<FiArrowDown size={14} />}
-                            color="purple"
-                        />
+                    </div>
+
+                    {/* SNAPSHOT GRID */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Deposits Volume Column */}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2 px-1">
+                                <FiArrowUp size={14} className="text-emerald-500" />
+                                <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">Deposit Stream</h4>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3">
+                                <InsightCard
+                                    label="24h"
+                                    value={`₹${(data.deposits?.day || 0).toLocaleString()}`}
+                                    color="emerald"
+                                    compact
+                                    pulse={data.deposits?.day > 0}
+                                />
+                                <InsightCard
+                                    label="7d"
+                                    value={`₹${(data.deposits?.week || 0).toLocaleString()}`}
+                                    color="emerald"
+                                    compact
+                                />
+                                <InsightCard
+                                    label="30d"
+                                    value={`₹${(data.deposits?.month || 0).toLocaleString()}`}
+                                    color="emerald"
+                                    compact
+                                />
+                            </div>
+                        </div>
+
+                        {/* Usage Snapshot Column */}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2 px-1">
+                                <FiArrowDown size={14} className="text-purple-500" />
+                                <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">Usage Snapshot</h4>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3">
+                                <InsightCard
+                                    label="24h"
+                                    value={`₹${(data.usage?.day || 0).toLocaleString()}`}
+                                    color="purple"
+                                    compact
+                                    pulse={data.usage?.day > 0}
+                                />
+                                <InsightCard
+                                    label="7d"
+                                    value={`₹${(data.usage?.week || 0).toLocaleString()}`}
+                                    color="purple"
+                                    compact
+                                />
+                                <InsightCard
+                                    label="30d"
+                                    value={`₹${(data.usage?.month || 0).toLocaleString()}`}
+                                    color="purple"
+                                    compact
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     {/* MANUAL WALLET ADJUSTMENT */}
@@ -803,13 +851,25 @@ export default function StatsTab() {
     );
 }
 
-function InsightCard({ label, value, icon, color, pulse }) {
+function InsightCard({ label, value, icon, color, pulse, compact }) {
     const colors = {
         blue: "text-blue-500 bg-blue-500/5 border-blue-500/10",
         amber: "text-amber-500 bg-amber-500/5 border-amber-500/10",
         purple: "text-purple-500 bg-purple-500/5 border-purple-500/10",
         emerald: "text-emerald-500 bg-emerald-500/5 border-emerald-500/10",
     };
+
+    if (compact) {
+        return (
+            <div className={`px-4 py-3 rounded-xl border ${colors[color]} flex flex-col items-center justify-center text-center relative overflow-hidden bg-[var(--card)]`}>
+                {pulse && (
+                    <span className="absolute top-1 right-1 w-1 h-1 rounded-full bg-current animate-ping" />
+                )}
+                <span className="text-[9px] font-bold uppercase tracking-tighter opacity-60 mb-0.5">{label}</span>
+                <span className="text-base font-extrabold tabular-nums whitespace-nowrap">{value}</span>
+            </div>
+        );
+    }
 
     return (
         <div className={`p-4 rounded-2xl border ${colors[color]} flex flex-col gap-2 relative overflow-hidden bg-[var(--card)]`}>

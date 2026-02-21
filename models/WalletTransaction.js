@@ -52,5 +52,9 @@ const WalletTransactionSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+// Optimize Wallet Manager queries
+WalletTransactionSchema.index({ createdAt: -1 });
+WalletTransactionSchema.index({ type: 1, status: 1, createdAt: -1 });
+
 export default mongoose.models.WalletTransaction ||
     mongoose.model("WalletTransaction", WalletTransactionSchema);

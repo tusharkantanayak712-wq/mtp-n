@@ -31,45 +31,44 @@ export async function GET(req) {
       paymentStatus: { $in: ["success", "completed", "paid"] },
     };
 
-    /* ================= QUERY ================= */
-    const [
-      vol1dAgg, vol7dAgg, vol30dAgg,
-      count1d, count7d, count30d,
-      totalTx
-    ] = await Promise.all([
-      // Volume Aggregations (Successful Transactions Only)
+    /* ================= SINGLE OPTIMIZED AGGREGATION ================= */
+    const [statsResult, totalTx] = await Promise.all([
       Order.aggregate([
-        { $match: { ...filter, createdAt: { $gte: last24h } } },
-        { $group: { _id: null, total: { $sum: "$price" } } }
+        {
+          $facet: {
+            "day": [
+              { $match: { ...filter, createdAt: { $gte: last24h } } },
+              { $group: { _id: null, count: { $sum: 1 }, volume: { $sum: "$price" } } }
+            ],
+            "week": [
+              { $match: { ...filter, createdAt: { $gte: last7d } } },
+              { $group: { _id: null, count: { $sum: 1 }, volume: { $sum: "$price" } } }
+            ],
+            "month": [
+              { $match: { ...filter, createdAt: { $gte: last30d } } },
+              { $group: { _id: null, count: { $sum: 1 }, volume: { $sum: "$price" } } }
+            ]
+          }
+        }
       ]),
-      Order.aggregate([
-        { $match: { ...filter, createdAt: { $gte: last7d } } },
-        { $group: { _id: null, total: { $sum: "$price" } } }
-      ]),
-      Order.aggregate([
-        { $match: { ...filter, createdAt: { $gte: last30d } } },
-        { $group: { _id: null, total: { $sum: "$price" } } }
-      ]),
-      // Transaction Counts
-      Order.countDocuments({ ...filter, createdAt: { $gte: last24h } }),
-      Order.countDocuments({ ...filter, createdAt: { $gte: last7d } }),
-      Order.countDocuments({ ...filter, createdAt: { $gte: last30d } }),
       Order.countDocuments(filter)
     ]);
+
+    const statsResultData = statsResult[0];
 
     return Response.json({
       success: true,
       total: totalTx,
       stats: {
         counts: {
-          day: count1d,
-          week: count7d,
-          month: count30d,
+          day: statsResultData.day[0]?.count || 0,
+          week: statsResultData.week[0]?.count || 0,
+          month: statsResultData.month[0]?.count || 0,
         },
         volume: {
-          day: vol1dAgg[0]?.total || 0,
-          week: vol7dAgg[0]?.total || 0,
-          month: vol30dAgg[0]?.total || 0,
+          day: statsResultData.day[0]?.volume || 0,
+          week: statsResultData.week[0]?.volume || 0,
+          month: statsResultData.month[0]?.volume || 0,
         }
       }
     });

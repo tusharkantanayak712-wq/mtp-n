@@ -36,42 +36,59 @@ export async function GET(req) {
     const last7d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const last30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-    /* ================= QUERY ================= */
-    const [
-      rev1dAgg, rev7dAgg, rev30dAgg,
-      count1d, count7d, count30d,
-      totalOrders
-    ] = await Promise.all([
-      // Revenue Aggregations (Successful Orders Only)
+    /* ================= SINGLE OPTIMIZED AGGREGATION ================= */
+    const [statsResult, totalOrders] = await Promise.all([
       Order.aggregate([
-        { $match: { createdAt: { $gte: last24h }, status: "success" } },
-        { $group: { _id: null, total: { $sum: "$price" } } }
+        {
+          $facet: {
+            "day": [
+              { $match: { createdAt: { $gte: last24h } } },
+              {
+                $group: {
+                  _id: null,
+                  count: { $sum: 1 },
+                  revenue: { $sum: { $cond: [{ $eq: ["$status", "success"] }, "$price", 0] } }
+                }
+              }
+            ],
+            "week": [
+              { $match: { createdAt: { $gte: last7d } } },
+              {
+                $group: {
+                  _id: null,
+                  count: { $sum: 1 },
+                  revenue: { $sum: { $cond: [{ $eq: ["$status", "success"] }, "$price", 0] } }
+                }
+              }
+            ],
+            "month": [
+              { $match: { createdAt: { $gte: last30d } } },
+              {
+                $group: {
+                  _id: null,
+                  count: { $sum: 1 },
+                  revenue: { $sum: { $cond: [{ $eq: ["$status", "success"] }, "$price", 0] } }
+                }
+              }
+            ]
+          }
+        }
       ]),
-      Order.aggregate([
-        { $match: { createdAt: { $gte: last7d }, status: "success" } },
-        { $group: { _id: null, total: { $sum: "$price" } } }
-      ]),
-      Order.aggregate([
-        { $match: { createdAt: { $gte: last30d }, status: "success" } },
-        { $group: { _id: null, total: { $sum: "$price" } } }
-      ]),
-      // Order Counts (All Status)
-      Order.countDocuments({ createdAt: { $gte: last24h } }),
-      Order.countDocuments({ createdAt: { $gte: last7d } }),
-      Order.countDocuments({ createdAt: { $gte: last30d } }),
       Order.countDocuments({})
     ]);
 
+    const stats = statsResult[0];
+
     const revenue = {
-      day: rev1dAgg[0]?.total || 0,
-      week: rev7dAgg[0]?.total || 0,
-      month: rev30dAgg[0]?.total || 0,
+      day: stats.day[0]?.revenue || 0,
+      week: stats.week[0]?.revenue || 0,
+      month: stats.month[0]?.revenue || 0,
     };
 
     const counts = {
-      day: count1d,
-      week: count7d,
-      month: count30d,
+      day: stats.day[0]?.count || 0,
+      week: stats.week[0]?.count || 0,
+      month: stats.month[0]?.count || 0,
     };
 
     return Response.json({
