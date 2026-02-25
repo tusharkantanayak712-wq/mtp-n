@@ -347,45 +347,46 @@ export default function UsersTab() {
                   onClick={() => setSelectedUser(u)}
                   className="p-5 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.04] transition-all relative"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
+                  <div className="flex justify-between items-start mb-4 gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <Avatar user={u} />
                       <div className="min-w-0">
-                        <p className="font-semibold text-[var(--foreground)] text-sm truncate">{u.name}</p>
-                        <p className="text-[11px] text-[var(--muted)]/60 font-mono truncate">{u.userId}</p>
+                        <p className="font-bold text-[var(--foreground)] text-[13px] truncate">{u.name}</p>
+                        <p className="text-[10px] text-[var(--muted)]/40 font-mono truncate">{u.userId}</p>
                       </div>
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[10px] font-semibold capitalize ${getRoleClass(u.userType)}`}>
+                    <span className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[9px] font-black uppercase tracking-widest ${getRoleClass(u.userType)}`}>
                       {getRoleIcon(u.userType)}
                       {u.userType}
                     </span>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-[var(--muted)]">
-                        <Mail size={12} className="shrink-0" />
-                        <span className="text-xs truncate">{u.email}</span>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2.5 text-[var(--muted)]/60">
+                        <Mail size={12} className="shrink-0 text-[var(--accent)]" />
+                        <span className="text-[11px] font-medium break-all">{u.email}</span>
                       </div>
                       {u.phone && (
-                        <div className="flex items-center gap-2 text-[var(--muted)]">
-                          <Phone size={12} className="shrink-0" />
-                          <span className="text-xs">{u.phone}</span>
+                        <div className="flex items-center gap-2.5 text-[var(--muted)]/60">
+                          <Phone size={12} className="shrink-0 text-[var(--accent)]" />
+                          <span className="text-[11px] font-medium">{u.phone}</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-2 text-[var(--muted)]/60">
-                        <Calendar size={12} />
-                        <span className="text-xs">{new Date(u.createdAt).toLocaleDateString()}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-[var(--accent)]/80">
-                        <Activity size={12} />
-                        <span className="text-xs font-semibold">
-                          {u.lastLogin ? new Date(u.lastLogin).toLocaleDateString() : "Never"}
-                        </span>
+                    <div className="flex items-center justify-between gap-4 pt-3 border-t border-[var(--border)]" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5 text-[var(--muted)]/40">
+                          <Calendar size={10} />
+                          <span className="text-[9px] font-bold uppercase tracking-tighter">{new Date(u.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[var(--accent)]/40">
+                          <Activity size={10} />
+                          <span className="text-[9px] font-bold uppercase tracking-tighter">
+                            {u.lastLogin ? new Date(u.lastLogin).toLocaleDateString() : "Never"}
+                          </span>
+                        </div>
                       </div>
                       <RoleDropdown
                         value={u.userType}
@@ -435,7 +436,7 @@ export default function UsersTab() {
       </AnimatePresence>
 
       {/* ================= DRAWER (User Info) ================= */}
-      <AnimatePresence>
+      < AnimatePresence >
         {selectedUser && (
           <>
             <motion.div
@@ -522,10 +523,10 @@ export default function UsersTab() {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence >
 
       {/* ================= FILTER MODAL ================= */}
-      <AnimatePresence>
+      < AnimatePresence >
         {showFilters && (
           <div className="fixed inset-0 z-[1200] flex items-center justify-end">
             <motion.div
@@ -616,8 +617,8 @@ export default function UsersTab() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
-    </div>
+      </AnimatePresence >
+    </div >
   );
 }
 
@@ -654,10 +655,10 @@ function RoleDropdown({ value, onChange, disabled, compact }) {
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={`
-          flex items-center justify-between gap-3 px-5
-          ${compact ? "h-9 min-w-[110px]" : "h-11 min-w-[130px] w-full"}
+          flex items-center justify-between gap-3 px-4
+          ${compact ? "h-9 w-[100px]" : "h-11 min-w-[130px] w-full"}
           rounded-full border border-[var(--border)] bg-[var(--foreground)]/[0.03]
-          text-xs font-semibold transition-all outline-none
+          text-[10px] font-black uppercase tracking-tight transition-all outline-none
           ${disabled ? "opacity-40 cursor-not-allowed" : "hover:bg-[var(--foreground)]/[0.06]"}
           ${isOpen ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/30" : "text-[var(--foreground)]"}
         `}

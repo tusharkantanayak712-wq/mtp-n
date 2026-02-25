@@ -9,31 +9,31 @@ export default function ServicesPage() {
   const services = [
     {
       title: "Reseller Program",
-      desc: "Scale your business with the market's lowest rates. Bulk top-up solutions with instant delivery and high profit margins.",
+      desc: "Grow your business with our lowest prices. Fast delivery and big profit margins for you.",
       icon: FiUsers,
       badge: "ELITE PRICING",
       active: true,
     },
     {
       title: "Whitelabel Solution",
-      desc: "Launch your own branded empire. Fully hosted, customizable platform with your own domain and integrated payments.",
+      desc: "Start your own brand. Get a full website with your own name and easy payments.",
       icon: FiGlobe,
       badge: "FAST SETUP",
       active: true,
     },
     {
-      title: "Custom Development",
-      desc: "Tailor-made top-up portals designed for specific business needs. Advanced UI/UX and unique feature integrations.",
+      title: "Custom Design",
+      desc: "We build special top-up websites just for you with look and features you want.",
       icon: FiZap,
       badge: "BESPOKE",
       active: true,
     },
     {
-      title: "Advanced API",
-      desc: "Powerful endpoint connectivity for seamless service automation. Integrate our infrastructure directly into your ecosystem.",
+      title: "Membership API",
+      desc: "Connect your system to ours for automatic orders. Available for Elite Members with top support.",
       icon: FiCode,
-      badge: "DEVELOPMENT",
-      active: false,
+      badge: "MEMBER ONLY",
+      active: true,
     },
   ];
 
