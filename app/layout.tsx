@@ -15,6 +15,8 @@ import ValentinePopup from "@/components/Seasonal/ValentinePopup";
 import ValentineEffect from "@/components/Seasonal/ValentineEffect";
 import Maintaince from "@/components/Seasonal/Maintaince";
 import { FEATURE_FLAGS } from "@/lib/featureFlags";
+import BottomNav from "@/components/Layout/BottomNav";
+
 
 
 export const metadata: Metadata = {
@@ -80,10 +82,16 @@ export default function RootLayout({
           {/* <ValentineEffect /> */}
           {/* <ValentinePopup /> */}
           {FEATURE_FLAGS.MAINTENANCE_MODE && <Maintaince />}
-          <main className="pt-20">{children}</main>
+          <main className="pt-16 pb-24 md:pb-0">{children}</main>
+
+
+
+
           <Footer />
           <SocialFloat />
           <ChatbotWrapper />
+          <BottomNav />
+
 
           <div />
         </GoogleOAuthProvider>

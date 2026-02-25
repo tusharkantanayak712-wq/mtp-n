@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUIStore } from "@/store/useUIStore";
+
 import {
   FaXTwitter,
   FaInstagram,
@@ -47,8 +49,11 @@ export default function SocialFloat() {
   if (!ALLOWED_ROUTES.includes(pathname)) return null;
 
   /* ---------- STATE ---------- */
-  const [isOpen, setIsOpen] = useState(false);
+  const { isSocialMenuOpen: isOpen, setSocialMenuOpen, toggleSocialMenu } = useUIStore();
+
   const [isVisible, setIsVisible] = useState(true);
+
+
 
   /* ---------- REFS ---------- */
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,8 +68,9 @@ export default function SocialFloat() {
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setSocialMenuOpen(false);
       }
+
     };
 
     document.addEventListener("mousedown", handleClick);
@@ -122,7 +128,13 @@ export default function SocialFloat() {
         scale: isVisible ? 1 : 0.9,
       }}
       transition={{ duration: 0.2 }}
-      className="fixed bottom-6 right-6 z-50"
+      className="fixed bottom-[5rem] md:bottom-6 right-6 z-50"
+
+
+
+
+
+
       style={{ pointerEvents: isVisible ? "auto" : "none" }}
     >
       {/* ================= FLOATING MENU ================= */}
@@ -133,7 +145,8 @@ export default function SocialFloat() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-16 right-0 flex flex-col gap-2 mb-2"
+            className="absolute bottom-4 md:bottom-16 right-0 flex flex-col gap-2 mb-2"
+
           >
             {socialLinks.map((social, index) => {
               const Icon = social.icon;
@@ -208,12 +221,13 @@ export default function SocialFloat() {
 
       {/* ================= TOGGLE BUTTON ================= */}
       <motion.button
-        onClick={() => setIsOpen((v) => !v)}
+        onClick={() => toggleSocialMenu()}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative"
+        className="relative hidden md:flex"
         aria-label="Toggle social menu"
       >
+
         <div className="w-12 h-12 rounded-full bg-[var(--accent)] text-white shadow-xl flex items-center justify-center">
           <motion.div
             animate={{ rotate: isOpen ? 90 : 0 }}
