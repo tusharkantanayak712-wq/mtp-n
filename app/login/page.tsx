@@ -107,6 +107,7 @@ function AuthContent() {
     localStorage.setItem("userName", data.user.name);
     localStorage.setItem("email", data.user.email);
     localStorage.setItem("userId", data.user.userId);
+    localStorage.setItem("userType", data.user.userType);
     localStorage.setItem("phone", data.user.phone || "");
     localStorage.setItem("avatar", data.user.avatar || "");
     setUserName(data.user.name);

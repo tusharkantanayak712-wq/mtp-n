@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   FiSearch,
   FiChevronLeft,
@@ -19,7 +20,40 @@ import SettingsTab from "@/components/admin/SettingsTab";
 
 
 export default function AdminPanalPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("users");
+  const [isOwner, setIsOwner] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const role = localStorage.getItem("userType");
+    if (role === "owner") {
+      setIsOwner(true);
+      setLoading(false);
+    } else {
+      // For extra security, verify with API
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.user?.userType === "owner") {
+            setIsOwner(true);
+            localStorage.setItem("userType", "owner");
+          } else {
+            router.push("/");
+          }
+        })
+        .catch(() => router.push("/"))
+        .finally(() => setLoading(false));
+    }
+  }, []);
 
   const [queries, setQueries] = useState([]);
 
@@ -138,9 +172,18 @@ export default function AdminPanalPage() {
 
 
   useEffect(() => {
-
     if (activeTab === "pricing") fetchPricing(pricingType);
   }, [activeTab, pricingType, page, search]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isOwner) return null;
 
   return (
     <AuthGuard>

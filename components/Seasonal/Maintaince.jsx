@@ -5,20 +5,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiSettings, FiTool, FiClock, FiLogOut, FiActivity } from "react-icons/fi";
 
 export default function Maintaince() {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(true);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        // Show after 1 second
-        const timer = setTimeout(() => setShow(true), 1000);
-        return () => clearTimeout(timer);
+        // Overlay is visible immediately
+        setIsLoggedIn(!!localStorage.getItem("token"));
     }, []);
 
     const handleLoggingOff = () => {
         setIsLoggingOut(true);
 
         // Clear storage as seen in Header.jsx
-        const keysToRemove = ["token", "userName", "email", "userId", "phone", "pending_topup_order", "avatar"];
+        const keysToRemove = ["token", "userName", "email", "userId", "phone", "userType", "walletBalance", "pending_topup_order", "avatar"];
         keysToRemove.forEach(key => localStorage.removeItem(key));
         localStorage.removeItem("mlbb_verified_players");
 
@@ -26,6 +26,10 @@ export default function Maintaince() {
         setTimeout(() => {
             window.location.href = "/";
         }, 2500);
+    };
+
+    const handleLogin = () => {
+        window.location.href = "/login";
     };
 
     return (
@@ -110,15 +114,25 @@ export default function Maintaince() {
 
                             {/* Dynamic Action Area */}
                             <div className="w-full">
-                                {!isLoggingOut ? (
+                                {!isLoggedIn ? (
                                     <motion.button
-                                        onClick={handleLoggingOff}
+                                        onClick={handleLogin}
                                         whileHover={{ scale: 1.02, y: -2 }}
                                         whileTap={{ scale: 0.98 }}
                                         className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-[800] uppercase tracking-wider text-xs shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all flex items-center justify-center gap-2 group"
                                     >
+                                        <FiLock className="text-sm group-hover:scale-110 transition-transform" />
+                                        Secure Login
+                                    </motion.button>
+                                ) : !isLoggingOut ? (
+                                    <motion.button
+                                        onClick={handleLoggingOff}
+                                        whileHover={{ scale: 1.02, y: -2 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-[800] uppercase tracking-wider text-xs hover:bg-white/10 transition-all flex items-center justify-center gap-2 group"
+                                    >
                                         <FiLogOut className="text-sm group-hover:-translate-x-1 transition-transform" />
-                                        So now logging off
+                                        Logout
                                     </motion.button>
                                 ) : (
                                     <div className="space-y-4">

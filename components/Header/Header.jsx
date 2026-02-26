@@ -116,6 +116,7 @@ export default function Header() {
           localStorage.setItem("email", d.user.email);
           localStorage.setItem("userId", d.user.id || d.user.userId);
           localStorage.setItem("avatar", d.user.avatar || "");
+          localStorage.setItem("userType", d.user.userType || "user");
           if (d.user.phone) localStorage.setItem("phone", d.user.phone);
 
           if (d.user.wallet !== undefined) {
@@ -146,7 +147,7 @@ export default function Header() {
   const [showLogoutToast, setShowLogoutToast] = useState(false);
 
   const handleLogout = () => {
-    ["token", "userName", "email", "userId", "phone", "pending_topup_order", "walletBalance", "mlbb_verified_players"].forEach(key => localStorage.removeItem(key));
+    ["token", "userName", "email", "userId", "phone", "userType", "pending_topup_order", "walletBalance", "mlbb_verified_players"].forEach(key => localStorage.removeItem(key));
     setUser(null);
     setWalletBalance(0);
     setShowLogoutToast(true);
