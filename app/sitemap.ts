@@ -99,6 +99,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     },
+    {
+      url: `${baseUrl}/blog/best-mlbb-diamond-packages-value-guide`,
+      lastModified: new Date("2026-02-26"),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
 
   ];
 

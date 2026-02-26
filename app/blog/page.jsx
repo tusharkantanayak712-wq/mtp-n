@@ -58,6 +58,17 @@ const BLOGS_DATA = [
     readingTime: "3 min read",
     featured: true,
   },
+  {
+    id: "5",
+    title: "Best MLBB Diamond Packages – Which Gives the Most Value? (2025)",
+    slug: "best-mlbb-diamond-packages-value-guide",
+    type: "Value Guide",
+    excerpt:
+      "Not all MLBB diamond packages are equal. Find out which bundle gives you the most diamonds per rupee and how to save more with bonus events.",
+    publishedAt: "2025-02-26",
+    readingTime: "5 min read",
+    featured: true,
+  },
 ];
 
 /* ================= SETTINGS ================= */
