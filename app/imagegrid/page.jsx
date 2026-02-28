@@ -7,15 +7,25 @@ import ExportCanvas from "@/components/imageSlider/ExportCanvas";
 import UploadSidebar from "@/components/imageSlider/UploadSidebar";
 import SkinFilter from "@/components/imageSlider/SkinFilter";
 import Templates from "@/components/imageSlider/Templates";
+import SelectedSkinsModal from "@/components/imageSlider/SelectedSkinsModal";
 import { downloadGrid } from "@/utils/download";
 import { saveTemplate } from "@/utils/templates";
 import { useStore } from "@/store/useStore";
-import { ImagePlus, Download, Save, Settings2, SlidersHorizontal } from "lucide-react";
+import {
+  ImagePlus,
+  Download,
+  Save,
+  Settings2,
+  SlidersHorizontal,
+  LayoutGrid,
+  ListFilter
+} from "lucide-react";
 
 export default function Page() {
   const exportRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { searchQuery, setSearchQuery } = useStore();
+  const [reorderOpen, setReorderOpen] = useState(false);
+  const { searchQuery, setSearchQuery, selectedSkins } = useStore();
 
   return (
     <main className="min-h-screen bg-[#050505] text-[#e5e5e5] p-4 sm:p-8 lg:p-12 space-y-8 relative overflow-x-hidden">
@@ -39,6 +49,19 @@ export default function Page() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setReorderOpen(true)}
+            className="
+              flex items-center gap-2.5 px-6 py-3
+              bg-white/5 hover:bg-white/10 border border-white/10
+              text-white rounded-2xl transition-all duration-300
+              hover:scale-[1.02] active:scale-[0.98] group
+            "
+          >
+            <ListFilter size={18} className="text-[var(--accent)]" />
+            <span className="font-semibold text-sm">Sort & Reorder ({selectedSkins.length})</span>
+          </button>
+
           <button
             onClick={() => setOpen(true)}
             className="
@@ -149,6 +172,7 @@ export default function Page() {
       </div>
 
       <UploadSidebar open={open} onClose={() => setOpen(false)} />
+      <SelectedSkinsModal open={reorderOpen} onClose={() => setReorderOpen(false)} />
     </main>
   );
 }

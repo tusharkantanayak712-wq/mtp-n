@@ -3,6 +3,7 @@ import type { SkinItem } from "./types";
 export const exquisiteSkins: SkinItem[] = [
   {
     id: "exquisite-luckybox-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "exquisite",
@@ -10,6 +11,7 @@ export const exquisiteSkins: SkinItem[] = [
   },
   {
     id: "exquisite-annualstar-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "exquisite",
@@ -17,6 +19,7 @@ export const exquisiteSkins: SkinItem[] = [
   },
   {
     id: "exquisite-collector-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "exquisite",
@@ -24,6 +27,7 @@ export const exquisiteSkins: SkinItem[] = [
   },
   {
     id: "exquisite-clouds-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "exquisite",

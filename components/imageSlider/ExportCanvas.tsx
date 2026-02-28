@@ -21,14 +21,14 @@ export default function ExportCanvas() {
   } = useStore();
 
   return (
-    <div className="bg-black w-full inline-block">
-      {/* ================= PROFILE BASE ================= */}
-      {profileImage && (
+    <div className="bg-[#e9e9e9] w-full inline-block min-h-[500px] border border-white/5 shadow-2xl overflow-hidden">
+      {/* ================= PROFILE BASE / PLACEHOLDER ================= */}
+      {profileImage ? (
         <div className="relative">
           {/* PROFILE */}
           <img
             src={profileImage}
-            className="w-full max-h-60 object-cover rounded-md"
+            className="w-full max-h-60 object-cover"
           />
 
           {/* ========== LEFT STACK ========== */}
@@ -59,7 +59,7 @@ export default function ExportCanvas() {
                 {doubleDiamondImage && (
                   <img
                     src={doubleDiamondImage}
-                    className="w-28 h-10 object-cover rounded-sm border border-black"
+                    className="w-28 h-10 object-center rounded-sm border border-black"
                   />
                 )}
 
@@ -68,7 +68,7 @@ export default function ExportCanvas() {
                   <img
                     key={`fs-${i}`}
                     src={img}
-                    className="w-28 h-10 object-cover rounded-sm border border-black"
+                    className="w-28 h-10 object-center rounded-sm border border-black"
                   />
                 ))}
 
@@ -126,33 +126,43 @@ export default function ExportCanvas() {
             </div>
           )}
         </div>
+      ) : (
+        <div className="w-full h-60 flex flex-col items-center justify-center text-center p-8">
+          <h3 className="text-[#a0a0a0] text-2xl font-bold tracking-tight mb-1">MLBB Account Screenshot Goes Here</h3>
+          <p className="text-[#b0b0b0] text-sm">(Upload account screenshot, will appear here)</p>
+        </div>
       )}
 
-      {/* SPACER */}
-      {profileImage && miscImages.length > 0 && (
-        <div className="h-5" />
+      {/* SEPARATOR */}
+      <div className="h-[2px] w-full bg-[#ccc]" />
+
+      {/* ================= SKIN GRID / PLACEHOLDER ================= */}
+      {selectedSkins.length > 0 ? (
+        <div
+          className="grid gap-[2px]"
+          style={{
+            gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+          }}
+        >
+          {selectedSkins.map((id) => {
+            const skin = skins.find((s) => s.id === id);
+            if (!skin) return null;
+
+            return (
+              <img
+                key={id}
+                src={skin.image}
+                className="w-full aspect-[4/5] object-cover object-center"
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="w-full flex-1 min-h-[300px] flex flex-col items-center justify-center text-center p-8">
+          <h3 className="text-[#a0a0a0] text-3xl font-bold tracking-tight mb-2">MLBB Skin Collage Goes Here</h3>
+          <p className="text-[#b0b0b0] font-medium">(Select from our MLBB skin library, it will create collage automatically!)</p>
+        </div>
       )}
-
-      {/* ================= SKIN GRID ================= */}
-      <div
-        className="grid gap-[2px]"
-        style={{
-          gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-        }}
-      >
-        {selectedSkins.map((id) => {
-          const skin = skins.find((s) => s.id === id);
-          if (!skin) return null;
-
-          return (
-            <img
-              key={id}
-              src={skin.image}
-              className="w-full aspect-[3/4] object-cover"
-            />
-          );
-        })}
-      </div>
     </div>
   );
 }

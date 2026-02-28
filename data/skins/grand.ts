@@ -3,6 +3,7 @@ import type { SkinItem } from "./types";
 export const grandSkins: SkinItem[] = [
   {
     id: "grand-kof-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -10,6 +11,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-zenith-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -17,6 +19,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-transformer-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -24,6 +27,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-11-11-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -31,6 +35,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-sanrio-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -38,6 +43,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-panda-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -45,6 +51,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-prime-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -52,6 +59,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-mistbender-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -59,6 +67,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-starwar-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -66,6 +75,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-dawning-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -73,6 +83,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-aspirants-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -80,6 +91,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-aot-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -87,6 +99,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-exorcists-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -94,6 +107,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-naruto-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -101,6 +115,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-saintseiya-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -108,6 +123,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-abyss-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -115,6 +131,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-allstar-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -122,6 +139,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-metrozero-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -129,6 +147,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-kissin-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -136,6 +155,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-ducati-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -143,6 +163,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-neobeast-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -150,6 +171,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-soulvessel-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -157,6 +179,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-hunter-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -164,6 +187,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-jjs-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",
@@ -171,6 +195,7 @@ export const grandSkins: SkinItem[] = [
   },
   {
     id: "grand-nexussee-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "grand",

@@ -15,6 +15,7 @@ export type SkinSubCategory = string;
 
 export type SkinItem = {
   id: string;
+  hero: string;
   name: string;
   image: string;
   category: SkinCategory;

@@ -3,6 +3,7 @@ import type { SkinItem } from "./types";
 export const commonSkins: SkinItem[] = [
   {
     id: "common-elite-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "common",
@@ -10,6 +11,7 @@ export const commonSkins: SkinItem[] = [
   },
   {
     id: "common-limited-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "common",
@@ -17,6 +19,7 @@ export const commonSkins: SkinItem[] = [
   },
   {
     id: "common-painted-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "common",
@@ -24,6 +27,7 @@ export const commonSkins: SkinItem[] = [
   },
   {
     id: "common-seasonal-1",
+    hero: "name",
     name: "name",
     image: "/skins/logo.png",
     category: "common",

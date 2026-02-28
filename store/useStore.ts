@@ -74,6 +74,8 @@ type Store = {
 
   setCategory: (cat: SkinCategory) => void;
   setSearchQuery: (query: string) => void;
+  reorderSkins: (skinIds: string[]) => void;
+  batchSelect: (ids: string[], select: boolean) => void;
 };
 
 /* ---------------- STORE ---------------- */
@@ -174,4 +176,11 @@ export const useStore = create<Store>((set) => ({
 
   setCategory: (activeCategory) => set({ activeCategory }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
+  reorderSkins: (selectedSkins) => set({ selectedSkins }),
+  batchSelect: (ids, select) =>
+    set((s) => ({
+      selectedSkins: select
+        ? Array.from(new Set([...s.selectedSkins, ...ids]))
+        : s.selectedSkins.filter((id) => !ids.includes(id)),
+    })),
 }));

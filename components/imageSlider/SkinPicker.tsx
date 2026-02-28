@@ -5,7 +5,7 @@ import { useStore } from "@/store/useStore";
 import { Check, Search } from "lucide-react";
 
 export default function SkinPicker() {
-  const { selectedSkins, toggleSkin, activeCategory, searchQuery, setSearchQuery } = useStore();
+  const { selectedSkins, toggleSkin, activeCategory, searchQuery, setSearchQuery, batchSelect } = useStore();
 
   const query = searchQuery.toLowerCase();
 
@@ -35,6 +35,30 @@ export default function SkinPicker() {
             transition-all duration-300 placeholder:text-white/10
           "
         />
+      </div>
+
+      {/* SELECT ALL & COUNT */}
+      <div className="flex items-center justify-between pb-2 border-b border-white/5 mx-1">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-white/20">
+          Showing {visibleSkins.length} items
+        </span>
+
+        <button
+          onClick={() => {
+            const visibleIds = visibleSkins.map((s) => s.id);
+            const allSelected = visibleIds.every((id) => selectedSkins.includes(id));
+            batchSelect(visibleIds, !allSelected);
+          }}
+          className={`
+            text-[9px] font-black uppercase px-2.5 py-1 rounded-md border transition-all
+            ${visibleSkins.length > 0 && visibleSkins.every((s) => selectedSkins.includes(s.id))
+              ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
+              : "bg-white/5 text-[var(--accent)] border-white/5 hover:border-[var(--accent)]/40 hover:bg-white/10"
+            }
+          `}
+        >
+          {visibleSkins.length > 0 && visibleSkins.every((s) => selectedSkins.includes(s.id)) ? "Deselect All" : "Select All Items"}
+        </button>
       </div>
 
       {/* SCROLL CONTAINER */}
@@ -82,7 +106,7 @@ export default function SkinPicker() {
                   src={skin.image}
                   alt=""
                   className={`
-                  w-full aspect-square object-cover
+                  w-full aspect-square object-cover object-center
                   transition
                   ${active ? "brightness-110" : "opacity-80"}
                 `}
