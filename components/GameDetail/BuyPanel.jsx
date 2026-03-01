@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function BuyPanel({
   activeItem,
+  gameAvailablity,
   redirecting,
   goBuy,
   calculateDiscount,
@@ -22,6 +23,8 @@ export default function BuyPanel({
     activeItem.sellingPrice,
     activeItem.dummyPrice
   );
+
+  const isUnavailable = gameAvailablity === false || activeItem.itemAvailablity === false;
 
   return (
     <motion.div
@@ -94,17 +97,19 @@ export default function BuyPanel({
 
               <button
                 onClick={() => goBuy(activeItem)}
-                disabled={redirecting}
+                disabled={redirecting || isUnavailable}
                 className={`
                   relative group/btn h-11 md:h-12 px-6 rounded-xl overflow-hidden flex items-center justify-center gap-2 transition-all duration-500 active:scale-95
-                  ${redirecting
-                    ? 'bg-[var(--muted)]/10 text-[var(--muted)] cursor-not-allowed'
+                  ${redirecting || isUnavailable
+                    ? 'bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed border border-white/5'
                     : 'bg-[var(--foreground)] text-[var(--background)] font-[1000] uppercase tracking-tighter text-xs'
                   }
                 `}
               >
                 {redirecting ? (
                   <div className="w-4 h-4 border-2 border-[var(--background)] border-t-transparent rounded-full animate-spin" />
+                ) : isUnavailable ? (
+                  <span>{gameAvailablity === false ? "Service Unavailable" : "Out of Stock"}</span>
                 ) : (
                   <>
                     <span>Order Now</span>

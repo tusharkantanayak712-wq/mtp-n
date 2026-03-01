@@ -279,6 +279,7 @@ function GameDetailContent() {
         {(isBGMI || isGenshin || isHOK) ? (
           <BuyPanelBgmi
             activeItem={activeItem}
+            gameAvailablity={game.gameAvailablity}
             redirecting={redirecting}
             goBuy={goBuy}
             calculateDiscount={calculateDiscount}
@@ -287,6 +288,7 @@ function GameDetailContent() {
         ) : (
           <BuyPanel
             activeItem={activeItem}
+            gameAvailablity={game.gameAvailablity}
             redirecting={redirecting}
             goBuy={goBuy}
             calculateDiscount={calculateDiscount}

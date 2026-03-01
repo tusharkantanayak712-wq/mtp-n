@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import PricingConfig from "@/models/PricingConfig";
+import { applyPricingToItems } from "@/lib/pricingUtils";
 
 /* ================= MEMBERSHIP CONFIG ================= */
 const MEMBERSHIPS = {
@@ -61,7 +62,7 @@ const MEMBERSHIPS = {
       {
         itemName: "6 Months",
         itemSlug: "reseller-6m",
-        sellingPrice: 500,
+        sellingPrice: 550,
         dummyPrice: 1794,
         itemAvailablity: true,
         index: 1,
@@ -73,7 +74,7 @@ const MEMBERSHIPS = {
       {
         itemName: "12 Months",
         itemSlug: "reseller-12m",
-        sellingPrice: 900,
+        sellingPrice: 1000,
         dummyPrice: 3588,
         itemAvailablity: true,
         index: 2,
@@ -132,7 +133,7 @@ const OTTS = {
       {
         itemName: "1 Month",
         itemSlug: "nf-1m",
-        sellingPrice: 105,
+        sellingPrice: 110,
         dummyPrice: 299,
         itemAvailablity: true,
         index: 1,
@@ -250,14 +251,14 @@ const STARLIGHT_CONFIG = {
   inputFieldOne: "Player ID (Server ID)",
   inputFieldTwo: "Mobile Number",
   isValidationRequired: false,
-  gameAvailablity: true,
+  gameAvailablity: false,
   itemId: [
     {
       itemName: "Normal Starlight",
       itemSlug: "starlight-normal",
       sellingPrice: 230,
       dummyPrice: 299,
-      itemAvailablity: true,
+      itemAvailablity: false,
       index: 1,
       itemImageId: {
         image:
@@ -269,7 +270,7 @@ const STARLIGHT_CONFIG = {
       itemSlug: "starlight-premium",
       sellingPrice: 500,
       dummyPrice: 599,
-      itemAvailablity: true,
+      itemAvailablity: false,
       index: 2,
       itemImageId: {
         image:
@@ -296,7 +297,7 @@ const BGMI_CONFIG = {
     {
       itemName: "60 UC",
       itemSlug: "bgmi-60-uc",
-      sellingPrice: 72,
+      sellingPrice: 75,
       dummyPrice: 95,
       itemAvailablity: true,
       index: 1,
@@ -307,56 +308,56 @@ const BGMI_CONFIG = {
     {
       itemName: "325 UC",
       itemSlug: "bgmi-325-uc",
-      sellingPrice: 360,
+      sellingPrice: 380,
       dummyPrice: 490,
       itemAvailablity: true,
       index: 2,
       itemImageId: {
-        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1773030230/bgmi_vwyq0p.webp",
       },
     },
     {
       itemName: "660 UC",
       itemSlug: "bgmi-660-uc",
-      sellingPrice: 700,
+      sellingPrice: 760,
       dummyPrice: 980,
       itemAvailablity: true,
       index: 3,
       itemImageId: {
-        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1773030230/bgmi_vwyq0p.webp",
       },
     },
     {
       itemName: "1800 UC",
       itemSlug: "bgmi-1800-uc",
-      sellingPrice: 1760,
+      sellingPrice: 1970,
       dummyPrice: 2400,
       itemAvailablity: true,
       index: 4,
       itemImageId: {
-        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1773030230/bgmi_vwyq0p.webp",
       },
     },
     {
       itemName: "3850 UC",
       itemSlug: "bgmi-3850-uc",
-      sellingPrice: 3600,
+      sellingPrice: 3950,
       dummyPrice: 4800,
       itemAvailablity: true,
       index: 5,
       itemImageId: {
-        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1773030230/bgmi_vwyq0p.webp",
       },
     },
     {
       itemName: "8100 UC",
       itemSlug: "bgmi-8100-uc",
-      sellingPrice: 7200,
+      sellingPrice: 8100,
       dummyPrice: 9400,
       itemAvailablity: true,
       index: 6,
       itemImageId: {
-        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+        image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1773030230/bgmi_vwyq0p.webp",
       },
     },
   ],
@@ -480,32 +481,7 @@ export async function GET(req, { params }) {
     }
 
     /* ===== APPLY PRICING ===== */
-    data.data.itemId = data.data.itemId.map((item) => {
-      const basePrice = Number(item.sellingPrice);
-      let finalPrice = basePrice;
-
-      const override = pricingConfig?.overrides?.find(
-        (o) =>
-          o.gameSlug === gameSlug &&
-          o.itemSlug === item.itemSlug
-      );
-
-      if (override?.fixedPrice != null) {
-        finalPrice = override.fixedPrice;
-      } else {
-        const slab = pricingConfig?.slabs?.find(
-          (s) => basePrice >= s.min && basePrice < s.max
-        );
-        if (slab) {
-          finalPrice = basePrice * (1 + slab.percent / 100);
-        }
-      }
-
-      return {
-        ...item,
-        sellingPrice: Math.ceil(finalPrice),
-      };
-    });
+    data.data.itemId = applyPricingToItems(data.data.itemId, gameSlug, pricingConfig);
 
     // Final sort to keep UI clean
     data.data.itemId.sort((a, b) => a.sellingPrice - b.sellingPrice);
