@@ -3,7 +3,7 @@ import type { SkinItem } from "./types";
 export const deluxeSkins: SkinItem[] = [
   {
     id: "deluxe-epic-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -11,7 +11,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-saber-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -19,7 +19,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-lightborn-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -27,7 +27,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-bledging-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -35,7 +35,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-anniversary-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -43,7 +43,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-neymarjs-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -51,7 +51,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-mythic-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -59,7 +59,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-valentine-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -67,7 +67,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-rising-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -75,7 +75,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-9thpeace-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -83,7 +83,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-stun-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -91,7 +91,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-dragon-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -99,7 +99,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-mseries-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -107,7 +107,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-zodiac-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -115,7 +115,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-venom-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -123,7 +123,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-create-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -131,7 +131,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-naruto-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -139,7 +139,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-sint-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -147,7 +147,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-champion-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -155,7 +155,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-meow-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -163,7 +163,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-atomic-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -171,7 +171,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-lunar-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -179,7 +179,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-sponze-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -187,7 +187,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-sparkerl-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -195,7 +195,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-convenant-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -203,7 +203,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-mworld-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -211,7 +211,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-scs-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -219,7 +219,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-fmvp-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",
@@ -227,7 +227,7 @@ export const deluxeSkins: SkinItem[] = [
   },
   {
     id: "deluxe-paquito-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "deluxe",

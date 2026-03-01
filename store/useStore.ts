@@ -48,6 +48,7 @@ type Store = {
 
   /* -------- FILTER -------- */
   activeCategory: SkinCategory;
+  selectedHero: string;
   searchQuery: string;
 
   /* -------- ACTIONS -------- */
@@ -73,6 +74,7 @@ type Store = {
   removeMiscImage: (index: number) => void;
 
   setCategory: (cat: SkinCategory) => void;
+  setSelectedHero: (hero: string) => void;
   setSearchQuery: (query: string) => void;
   reorderSkins: (skinIds: string[]) => void;
   batchSelect: (ids: string[], select: boolean) => void;
@@ -99,6 +101,7 @@ export const useStore = create<Store>((set) => ({
   miscImages: [],
 
   activeCategory: "all",
+  selectedHero: "all",
   searchQuery: "",
 
   /* -------- ACTIONS -------- */
@@ -174,7 +177,8 @@ export const useStore = create<Store>((set) => ({
       ),
     })),
 
-  setCategory: (activeCategory) => set({ activeCategory }),
+  setCategory: (activeCategory) => set({ activeCategory, selectedHero: "all" }), // reset hero on category change
+  setSelectedHero: (selectedHero) => set({ selectedHero }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
   reorderSkins: (selectedSkins) => set({ selectedSkins }),
   batchSelect: (ids, select) =>

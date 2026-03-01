@@ -3,7 +3,7 @@ import type { SkinItem } from "./types";
 export const exceptionalSkins: SkinItem[] = [
   {
     id: "exceptional-star-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -11,7 +11,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-special-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -19,7 +19,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-anniversary-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -27,7 +27,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-summer-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -35,7 +35,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-neymar-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -43,7 +43,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-christmas-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -51,7 +51,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-seasonal-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -59,7 +59,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-halloween-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -67,7 +67,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-create-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -75,7 +75,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-goldenm-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -83,7 +83,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-valentine-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -91,7 +91,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-rising-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -99,7 +99,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-mpl-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -107,7 +107,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-allstar-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -115,7 +115,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-mcgg-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",
@@ -123,7 +123,7 @@ export const exceptionalSkins: SkinItem[] = [
   },
   {
     id: "exceptional-lunar-1",
-    hero: "name",
+    hero: "Hero",
     name: "name",
     image: "/skins/logo.png",
     category: "exceptional",

@@ -109,17 +109,24 @@ export default function BannersTab({ banners, onRefresh }) {
     }
   };
 
-  const toggleShow = async (id, isShow) => {
-    await fetch(`/api/admin/banners/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ isShow: !isShow }),
-    });
+  const toggleShow = async (slug, isShow) => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/banners/editbanner", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ bannerSlug: slug, isShow: !isShow }),
+      });
 
-    onRefresh();
+      if (res.ok) {
+        onRefresh();
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {
@@ -252,17 +259,24 @@ export default function BannersTab({ banners, onRefresh }) {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-2">
-              <div className="flex bg-[var(--foreground)]/[0.03] p-1 rounded-xl border border-[var(--border)] self-start">
+              <div className="flex bg-[var(--foreground)]/[0.03] p-1.5 rounded-2xl border border-[var(--border)] self-start relative group/toggle">
+                <div
+                  className="absolute top-1.5 bottom-1.5 transition-all duration-500 rounded-xl bg-gradient-to-r from-[var(--accent)] to-purple-600 shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]"
+                  style={{
+                    left: form.isShow ? "6px" : "calc(50% + 1px)",
+                    width: "calc(50% - 7px)"
+                  }}
+                />
                 <button
                   onClick={() => setForm({ ...form, isShow: true })}
-                  className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${form.isShow ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20 font-black" : "text-[var(--muted)]"
+                  className={`relative z-10 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-500 ${form.isShow ? "text-white" : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
                   Visible
                 </button>
                 <button
                   onClick={() => setForm({ ...form, isShow: false })}
-                  className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${!form.isShow ? "bg-red-500 text-white shadow-lg shadow-red-500/20 font-black" : "text-[var(--muted)]"
+                  className={`relative z-10 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-500 ${!form.isShow ? "text-white" : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
                   Hidden
@@ -323,7 +337,7 @@ export default function BannersTab({ banners, onRefresh }) {
       <div className="space-y-5">
         <h3 className="text-sm font-bold ml-1 text-[var(--foreground)]">Banner List ({banners.length})</h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <AnimatePresence mode="popLayout">
             {banners.map((b, idx) => (
               <motion.div
@@ -359,8 +373,9 @@ export default function BannersTab({ banners, onRefresh }) {
 
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => toggleShow(b._id, b.isShow)}
-                      className="p-2 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                      onClick={() => toggleShow(b.bannerSlug, b.isShow)}
+                      disabled={isSubmitting}
+                      className="p-2 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-50"
                     >
                       {b.isShow ? <Eye size={14} /> : <EyeOff size={14} />}
                     </button>
@@ -377,6 +392,6 @@ export default function BannersTab({ banners, onRefresh }) {
           </AnimatePresence>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

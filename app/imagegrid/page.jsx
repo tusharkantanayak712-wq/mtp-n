@@ -78,8 +78,8 @@ export default function Page() {
       </div>
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* LEFT COLUMN: CONTROLS */}
-        <div className="lg:col-span-4 space-y-6">
+        {/* LEFT COLUMN: CONTROLS (Moved to bottom on mobile) */}
+        <div className="lg:col-span-4 order-2 lg:order-1 space-y-6">
           {/* SEARCH & FILTERS CARD */}
           <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
             <div className="flex items-center gap-2 text-white/60 mb-2">
@@ -106,8 +106,8 @@ export default function Page() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: PREVIEW & EXPORT */}
-        <div className="lg:col-span-8 space-y-6">
+        {/* RIGHT COLUMN: PREVIEW & EXPORT (Moved to top on mobile) */}
+        <div className="lg:col-span-8 order-1 lg:order-2 space-y-6">
           {/* EXPORT TARGET WINDOW */}
           <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-4 sm:p-8 shadow-inner overflow-hidden relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />

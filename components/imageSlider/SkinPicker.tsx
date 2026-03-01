@@ -5,18 +5,35 @@ import { useStore } from "@/store/useStore";
 import { Check, Search } from "lucide-react";
 
 export default function SkinPicker() {
-  const { selectedSkins, toggleSkin, activeCategory, searchQuery, setSearchQuery, batchSelect } = useStore();
+  const {
+    selectedSkins,
+    toggleSkin,
+    activeCategory,
+    selectedHero,
+    setSelectedHero,
+    searchQuery,
+    setSearchQuery,
+    batchSelect
+  } = useStore();
 
   const query = searchQuery.toLowerCase();
 
-  const visibleSkins = skins.filter((s) => {
+  // 1. Get all potential skins for the current category/search to find available heroes
+  const categorySkins = skins.filter((s) => {
     const matchesCategory = activeCategory === "all" || s.category === activeCategory;
     const matchesSearch =
       s.id.toLowerCase().includes(query) ||
       s.name.toLowerCase().includes(query) ||
-      s.subCategory.toLowerCase().includes(query);
-
+      s.subCategory.toLowerCase().includes(query) ||
+      s.hero.toLowerCase().includes(query);
     return matchesCategory && matchesSearch;
+  });
+
+  const availableHeroes = Array.from(new Set(categorySkins.map((s) => s.hero))).sort();
+
+  // 2. Filter final visible list by selected hero
+  const visibleSkins = categorySkins.filter((s) => {
+    return selectedHero === "all" || s.hero === selectedHero;
   });
 
   return (
@@ -36,6 +53,39 @@ export default function SkinPicker() {
           "
         />
       </div>
+
+      {/* HERO FILTER BAR */}
+      {availableHeroes.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 custom-scrollbar no-scrollbar">
+          <button
+            onClick={() => setSelectedHero("all")}
+            className={`
+              px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider whitespace-nowrap border transition-all
+              ${selectedHero === "all"
+                ? "bg-[var(--accent)] text-black border-[var(--accent)]"
+                : "bg-white/5 text-white/40 border-white/5 hover:border-white/20"
+              }
+            `}
+          >
+            All Heroes
+          </button>
+          {availableHeroes.map((hero) => (
+            <button
+              key={hero}
+              onClick={() => setSelectedHero(hero)}
+              className={`
+                px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider whitespace-nowrap border transition-all
+                ${selectedHero === hero
+                  ? "bg-[var(--accent)]/20 text-[var(--accent)] border-[var(--accent)]"
+                  : "bg-white/5 text-white/20 border-white/5 hover:border-white/20 hover:text-white/40"
+                }
+              `}
+            >
+              {hero}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* SELECT ALL & COUNT */}
       <div className="flex items-center justify-between pb-2 border-b border-white/5 mx-1">
@@ -113,7 +163,7 @@ export default function SkinPicker() {
                 </div>
 
                 {/* ITEMS GRID */}
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                <div className="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 px-0.5">
                   {items.map((skin) => {
                     const active = selectedSkins.includes(skin.id);
 
