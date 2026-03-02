@@ -1,36 +1,12 @@
 import type { SkinItem } from "./types";
+import { luckyboxSkins } from "./exquisite/luckybox";
+import { annualstarSkins } from "./exquisite/annualstar";
+import { collectorSkins } from "./exquisite/collector";
+import { cloudsSkins } from "./exquisite/clouds";
 
 export const exquisiteSkins: SkinItem[] = [
-  {
-    id: "exquisite-luckybox-1",
-    hero: "Hero",
-    name: "name",
-    image: "/skins/logo.png",
-    category: "exquisite",
-    subCategory: "luckybox",
-  },
-  {
-    id: "exquisite-annualstar-1",
-    hero: "Hero",
-    name: "name",
-    image: "/skins/logo.png",
-    category: "exquisite",
-    subCategory: "annualstar",
-  },
-  {
-    id: "exquisite-collector-1",
-    hero: "Hero",
-    name: "name",
-    image: "/skins/logo.png",
-    category: "exquisite",
-    subCategory: "collector",
-  },
-  {
-    id: "exquisite-clouds-1",
-    hero: "Hero",
-    name: "name",
-    image: "/skins/logo.png",
-    category: "exquisite",
-    subCategory: "clouds",
-  },
+  ...luckyboxSkins,
+  ...annualstarSkins,
+  ...collectorSkins,
+  ...cloudsSkins,
 ];
