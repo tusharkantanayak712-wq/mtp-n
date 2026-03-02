@@ -13,6 +13,12 @@ import { zodiacSkins } from "./deluxe/partone/zodiac";
 import { venomSkins } from "./deluxe/partone/venom";
 import { valentineSkins } from "./deluxe/partone/valentine";
 import { stunSkins } from "./deluxe/partone/stun";
+import { sparkleSkins } from "./deluxe/partone/sparkle";
+import { saintSkins } from "./deluxe/partone/saint";
+import { saberSkins } from "./deluxe/partone/saber";
+import { risingSkins } from "./deluxe/partone/rising";
+import { pacquiaoSkins } from "./deluxe/partone/pacquiao";
+import { neymarSkins } from "./deluxe/partone/neymar";
 
 export const deluxeSkins: SkinItem[] = [
   ...lightbornSkins,
@@ -29,4 +35,10 @@ export const deluxeSkins: SkinItem[] = [
   ...venomSkins,
   ...valentineSkins,
   ...stunSkins,
+  ...sparkleSkins,
+  ...saintSkins,
+  ...saberSkins,
+  ...risingSkins,
+  ...pacquiaoSkins,
+  ...neymarSkins,
 ];
