@@ -1,38 +1,26 @@
 import { NextResponse } from "next/server";
 
 /* ================= IMAGES ================= */
-const MLBB_MAIN_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769533093/WhatsApp_Image_2026-01-27_at_17.19.53_gfrfdn.jpg";
+const MLBB_MAIN_IMAGE = "/game-assets/mlbbindia.jpg";
 
-const MLBB_SMALL_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515220/WhatsApp_Image_2026-01-27_at_17.25.55_torxmi.jpg";
+const MLBB_SMALL_IMAGE = "/game-assets/mlbb-ph-small.jpg";
 
-const MLBB_DOUBLE_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515824/WhatsApp_Image_2026-01-27_at_17.39.55_w4gtnf.jpg";
+const MLBB_DOUBLE_IMAGE = "/game-assets/double-dias.jpg";
 
-const MLBB_MY_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769516571/WhatsApp_Image_2026-01-27_at_17.52.30_ophoce.jpg";
+const MLBB_MY_IMAGE = "/game-assets/all-region.jpg";
 
-const MLBB_RUSSIA_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769517478/WhatsApp_Image_2026-01-27_at_18.06.40_jbdmp0.jpg";
-const MLBB_INDO_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769517648/WhatsApp_Image_2026-01-27_at_18.10.21_njkud1.jpg";
+const MLBB_RUSSIA_IMAGE = "/game-assets/mlbb-russia.jpg";
+const MLBB_INDO_IMAGE = "/game-assets/mlbb-indo.jpg";
 
-const MAGIC_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769520322/WhatsApp_Image_2026-01-27_at_18.53.25_daldvs.jpg";
+const MAGIC_IMAGE = "/game-assets/magicchess.jpg";
 
-const HOK_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769530599/WhatsApp_Image_2026-01-27_at_19.26.11_vczosl.jpg";
+const HOK_IMAGE = "/game-assets/hok.jpg";
 
 
-const GENSIN_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769530599/WhatsApp_Image_2026-01-27_at_19.17.57_cjsh5f.jpg";
-const COC_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png";
-const STARLIGHT_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771308008/starkight_xk7xqv.webp";
-const WEEKLY_MONTHLY_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769872025/WhatsApp_Image_2026-01-31_at_20.33.31_nzn2ll.jpg";
+const GENSIN_IMAGE = "/game-assets/genshin.jpg";
+const COC_IMAGE = "/game-assets/coc_logo.png";
+const STARLIGHT_IMAGE = "/game-assets/starkight.webp";
+const WEEKLY_MONTHLY_IMAGE = "/game-assets/weekly-monthly-bundle.jpg";
 
 
 /* ================= OTT SECTION ================= */
@@ -190,6 +178,8 @@ export async function GET() {
     const excludedGameSlugs = [
       "test-1637",
       "mobile-legends-backup826",
+      "ph-value-pass588",
+      "value-pass-ml948"
     ];
 
     const filteredGames =

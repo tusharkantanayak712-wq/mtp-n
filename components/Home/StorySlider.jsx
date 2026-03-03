@@ -10,7 +10,7 @@ const storyData = [
     title: "Starlight",
     badge: "Hot",
     color: "#06b6d4", // Cyan
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771308008/starkight_xk7xqv.webp",
+    image: "/game-assets/starkight.webp",
     link: "/games/starlight-card-manual",
   },
   {
@@ -18,7 +18,7 @@ const storyData = [
     title: "Weekly Pass",
     badge: "Best",
     color: "#22c55e", // Green
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769514968/WhatsApp_Image_2026-01-27_at_17.05.34_1_wwfz3p.jpg",
+    image: "/game-assets/weeklypass.jpg",
     link: "/games/mobile-legends988?type=weekly-pass",
   },
   {
@@ -26,7 +26,7 @@ const storyData = [
     title: "Weekly Bundle",
     badge: "Hot",
     color: "#ff4d4d", // Red
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769872025/WhatsApp_Image_2026-01-31_at_20.33.31_nzn2ll.jpg",
+    image: "/game-assets/weekly-monthly-bundle.jpg",
     link: "/games/weeklymonthly-bundle931",
   },
   {
@@ -34,7 +34,7 @@ const storyData = [
     title: "MLBB India",
     badge: "Live",
     color: "#22c55e", // Green
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769533093/WhatsApp_Image_2026-01-27_at_17.19.53_gfrfdn.jpg",
+    image: "/game-assets/mlbbindia.jpg",
     link: "/games/mobile-legends988",
   },
   {
@@ -42,14 +42,14 @@ const storyData = [
     title: "MLBB Double",
     badge: "New",
     color: "#3b82f6", // Blue
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515824/WhatsApp_Image_2026-01-27_at_17.39.55_w4gtnf.jpg",
+    image: "/game-assets/double-dias.jpg",
     link: "/games/mlbb-double332",
   },
   {
     id: 4,
     title: "MLBB Small",
     color: "#a855f7", // Purple
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1769515220/WhatsApp_Image_2026-01-27_at_17.25.55_torxmi.jpg",
+    image: "/game-assets/mlbb-ph-small.jpg",
     link: "/games/mlbb-smallphp980",
   },
   {

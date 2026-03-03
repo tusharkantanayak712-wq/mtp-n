@@ -72,8 +72,7 @@ export default function GamesPage() {
               gameName: "Weekly Pass",
               _variant: "weekly-pass",
               gameImageId: {
-                image:
-                  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768536006/WhatsApp_Image_2026-01-16_at_08.50.36_tviv2b.jpg",
+                image: "/game-assets/weeklypass.jpg",
               },
             });
           }
@@ -201,8 +200,8 @@ export default function GamesPage() {
                     key={mode.id}
                     onClick={() => setViewMode(mode.id)}
                     className={`p-2 rounded-lg transition-all ${viewMode === mode.id
-                        ? "bg-[var(--accent)] text-black shadow-lg"
-                        : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                      ? "bg-[var(--accent)] text-black shadow-lg"
+                      : "text-[var(--muted)] hover:text-[var(--foreground)]"
                       }`}
                   >
                     <mode.icon size={14} />
@@ -214,8 +213,8 @@ export default function GamesPage() {
               <button
                 onClick={() => setShowFilter(true)}
                 className={`relative flex items-center gap-2 px-4 py-3 rounded-xl font-black uppercase tracking-widest text-[9px] italic border transition-all ${activeFilterCount > 0
-                    ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.2)]"
-                    : "border-white/5 bg-[var(--background)]/40 text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
+                  ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.2)]"
+                  : "border-white/5 bg-[var(--background)]/40 text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
                   }`}
               >
                 <FiFilter size={12} className={activeFilterCount > 0 ? "animate-pulse" : ""} />

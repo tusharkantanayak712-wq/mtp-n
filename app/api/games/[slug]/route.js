@@ -178,10 +178,7 @@ const OTTS = {
 // const COC_CONFIG = {
 //   gameName: "Clash of Clans",
 //   gameFrom: "Supercell",
-//   gameImageId: {
-//     image:
-//       "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
-//   },
+//     image: "/game-assets/coc_logo.png",
 //   gameDescription: "Clash of Clans Top-up (Manual Process). High-speed delivery.",
 //   inputFieldOne: "Game ID (Player Tag)",
 //   inputFieldTwo: "Mobile Number",
@@ -196,8 +193,7 @@ const OTTS = {
 //       itemAvailablity: true,
 //       index: 1,
 //       itemImageId: {
-//         image:
-//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//         image: "/game-assets/coc_logo.png",
 //       },
 //     },
 //     {
@@ -208,8 +204,7 @@ const OTTS = {
 //       itemAvailablity: true,
 //       index: 2,
 //       itemImageId: {
-//         image:
-//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//         image: "/game-assets/coc_logo.png",
 //       },
 //     },
 //     {
@@ -220,8 +215,7 @@ const OTTS = {
 //       itemAvailablity: true,
 //       index: 3,
 //       itemImageId: {
-//         image:
-//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//         image: "/game-assets/coc_logo.png",
 //       },
 //     },
 //     {
@@ -232,8 +226,7 @@ const OTTS = {
 //       itemAvailablity: true,
 //       index: 4,
 //       itemImageId: {
-//         image:
-//           "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771307213/coc_dqjjc0.png",
+//         image: "/game-assets/coc_logo.png",
 //       },
 //     },
 //   ],
@@ -244,8 +237,7 @@ const STARLIGHT_CONFIG = {
   gameName: "Starlight Card",
   gameFrom: "Moonton",
   gameImageId: {
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771308008/starkight_xk7xqv.webp",
+    image: "/game-assets/starkight.webp",
   },
   gameDescription: "Mobile Legends Starlight Membership (Manual Process).",
   inputFieldOne: "Player ID (Server ID)",
@@ -261,8 +253,7 @@ const STARLIGHT_CONFIG = {
       itemAvailablity: false,
       index: 1,
       itemImageId: {
-        image:
-          "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771308008/starkight_xk7xqv.webp",
+        image: "/game-assets/starkight.webp",
       },
     },
     {
@@ -273,8 +264,7 @@ const STARLIGHT_CONFIG = {
       itemAvailablity: false,
       index: 2,
       itemImageId: {
-        image:
-          "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771308008/starkight_xk7xqv.webp",
+        image: "/game-assets/starkight.webp",
       },
     },
   ],
