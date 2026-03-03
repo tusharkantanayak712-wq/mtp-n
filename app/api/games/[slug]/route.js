@@ -263,7 +263,7 @@ const BGMI_CONFIG = {
   gameName: "BGMI",
   gameFrom: "Krafton",
   gameImageId: {
-    image: "/game-assets/bgmi.webp",
+    image: "/game-assets/bgmi-logo.webp",
   },
   gameDescription: "Battlegrounds Mobile India (Manual Process). High-speed delivery.",
   inputFieldOne: "Character ID",
