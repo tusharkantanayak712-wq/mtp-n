@@ -65,7 +65,7 @@ const storyData = [
     title: "Membership",
     badge: "VIP",
     color: "#ec4899", // Pink
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+    image: "/membership/silver-m.png",
     link: "/games/membership/silver-membership",
   },
 ];

@@ -10,8 +10,7 @@ const MEMBERSHIPS = {
     gameName: "Silver Membership",
     gameFrom: "Your Platform",
     gameImageId: {
-      image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+      image: "/membership/silver-m.png",
     },
     gameDescription: "Unlock premium pricing and basic benefits.",
     inputFieldOne: "User Email / Phone",
@@ -27,8 +26,7 @@ const MEMBERSHIPS = {
         itemAvailablity: true,
         index: 1,
         itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+          image: "/membership/silver-m.png",
         },
       },
       {
@@ -39,8 +37,7 @@ const MEMBERSHIPS = {
         itemAvailablity: true,
         index: 2,
         itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+          image: "/membership/silver-m.png",
         },
       },
     ],
@@ -50,8 +47,7 @@ const MEMBERSHIPS = {
     gameName: "Reseller Membership",
     gameFrom: "Your Platform",
     gameImageId: {
-      image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+      image: "/membership/reseller-m.png",
     },
     gameDescription: "Get reseller pricing, bulk access & dashboard.",
     inputFieldOne: "User Email / Phone",
@@ -67,8 +63,7 @@ const MEMBERSHIPS = {
         itemAvailablity: true,
         index: 1,
         itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+          image: "/membership/reseller-m.png",
         },
       },
       {
@@ -79,8 +74,7 @@ const MEMBERSHIPS = {
         itemAvailablity: true,
         index: 2,
         itemImageId: {
-          image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+          image: "/membership/reseller-m.png",
         },
       },
     ],

@@ -58,8 +58,7 @@ const MEMBERSHIPS = [
   {
     name: "Silver Membership",
     slug: "silver-membership",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+    image: "/membership/silver-m.png",
     type: "silver",
     category: "Membership",
     available: true,
@@ -68,8 +67,7 @@ const MEMBERSHIPS = [
   {
     name: "Reseller Membership",
     slug: "reseller-membership",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+    image: "/membership/reseller-m.png",
     type: "reseller",
     category: "Membership",
     available: true,
@@ -305,11 +303,11 @@ export async function GET() {
         // regionalGames,
 
         // 🔥 OTT SECTION
-        otts: {
-          title: "OTT Subscriptions",
-          items: OTTS.filter((o) => o.available),
-          total: OTTS.filter((o) => o.available).length,
-        },
+        // otts: {
+        //   title: "OTT Subscriptions",
+        //   items: OTTS.filter((o) => o.available),
+        //   total: OTTS.filter((o) => o.available).length,
+        // },
         // 🔥 MEMBERSHIP SECTION
         memberships: {
           title: "Memberships & Passes",
