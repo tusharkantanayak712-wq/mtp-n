@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSettings, FiTool, FiClock, FiLogOut, FiActivity } from "react-icons/fi";
+import { FiSettings, FiTool, FiClock, FiLogOut, FiActivity, FiLock } from "react-icons/fi";
 
 export default function Maintaince() {
     const [show, setShow] = useState(true);

@@ -176,41 +176,41 @@ export default function UsersTab() {
   };
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-4 sm:space-y-6 pb-10">
       {/* ================= HEADER ================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">User Management</h2>
-          <p className="text-sm text-[var(--muted)] mt-1">
+          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">User Management</h2>
+          <p className="hidden sm:block text-sm text-[var(--muted)] mt-1">
             Browse and manage all registered users and their roles.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
-            <Users size={14} className="text-[var(--accent)]" />
-            <span className="text-sm font-semibold text-[var(--muted)]">
+        <div className="flex items-center justify-between sm:justify-end gap-3">
+          <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
+            <Users size={12} className="text-[var(--accent)]" />
+            <span className="text-xs sm:text-sm font-semibold text-[var(--muted)]">
               {pagination.total} Users Total
             </span>
           </div>
           <button
             onClick={() => { fetchUsersStats(); fetchUsersList(); }}
-            className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+            className="p-2 sm:p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
-            <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
 
       {/* ================= STATS GRID ================= */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Active Users Column */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <div className="flex items-center gap-2 px-1">
-            <Activity size={14} className="text-[var(--accent)]" />
+            <Activity size={12} className="text-[var(--accent)]" />
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">Active Users</h4>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <InsightCard
               label="24h"
               value={activeStats.day}
@@ -224,12 +224,12 @@ export default function UsersTab() {
         </div>
 
         {/* New Registrations Column */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <div className="flex items-center gap-2 px-1">
-            <Users size={14} className="text-emerald-500" />
+            <Users size={12} className="text-emerald-500" />
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">New Registered</h4>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <InsightCard label="24h" value={newStats.day} compact color="emerald" pulse={newStats.day > 0} />
             <InsightCard label="7d" value={newStats.week} compact color="emerald" />
             <InsightCard label="30d" value={newStats.month} compact color="emerald" />
@@ -830,13 +830,13 @@ function InsightCard({ label, value, icon, color, pulse, compact }) {
       <motion.div
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`px-4 py-3 rounded-xl border ${colorClasses[color]} flex flex-col items-center justify-center text-center relative overflow-hidden`}
+        className={`px-2 py-2.5 sm:px-4 sm:py-3 rounded-xl border ${colorClasses[color]} flex flex-col items-center justify-center text-center relative overflow-hidden`}
       >
         {pulse && (
           <span className="absolute top-1 right-1 w-1 h-1 rounded-full bg-current animate-ping" />
         )}
-        <span className="text-[9px] font-bold uppercase tracking-tighter opacity-60 mb-0.5">{label}</span>
-        <span className="text-base font-extrabold tabular-nums whitespace-nowrap">{value}</span>
+        <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-tighter opacity-60 mb-0.5">{label}</span>
+        <span className="text-sm sm:text-base font-extrabold tabular-nums whitespace-nowrap">{value}</span>
       </motion.div>
     );
   }

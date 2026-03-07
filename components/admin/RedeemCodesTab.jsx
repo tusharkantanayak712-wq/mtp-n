@@ -96,61 +96,61 @@ export default function RedeemCodesTab() {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* SUMMARY CARDS */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-                    <p className="text-[10px] font-black uppercase text-[var(--muted)] tracking-widest mb-1">Total Generated</p>
-                    <p className="text-2xl font-black italic">{summary.total}</p>
+            <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
+                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col justify-center text-center sm:text-left">
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-[var(--muted)] tracking-widest mb-0.5 sm:mb-1">Total</p>
+                    <p className="text-lg sm:text-2xl font-black italic">{summary.total}</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-green-500/5 border border-green-500/10">
-                    <p className="text-[10px] font-black uppercase text-green-500/60 tracking-widest mb-1">Claimed Codes</p>
-                    <p className="text-2xl font-black italic text-green-500">{summary.totalUsed}</p>
+                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-green-500/5 border border-green-500/10 flex flex-col justify-center text-center sm:text-left">
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-green-500/60 tracking-widest mb-0.5 sm:mb-1">Claimed</p>
+                    <p className="text-lg sm:text-2xl font-black italic text-green-500">{summary.totalUsed}</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10">
-                    <p className="text-[10px] font-black uppercase text-blue-500/60 tracking-widest mb-1">Remaining</p>
-                    <p className="text-2xl font-black italic text-blue-400">{summary.total - summary.totalUsed}</p>
+                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-500/5 border border-blue-500/10 flex flex-col justify-center text-center sm:text-left">
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-blue-500/60 tracking-widest mb-0.5 sm:mb-1">Left</p>
+                    <p className="text-lg sm:text-2xl font-black italic text-blue-400">{summary.total - summary.totalUsed}</p>
                 </div>
             </div>
 
             {/* GENERATOR CARD */}
-            <div className="p-6 rounded-3xl bg-blue-500/5 border border-blue-500/10 transition-all">
-                <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
-                        <FiGift size={24} />
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-blue-500/5 border border-blue-500/10 transition-all">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                        <FiGift size={20} className="sm:w-6 sm:h-6" />
                     </div>
                     <div>
-                        <h3 className="text-xl font-black italic uppercase tracking-tight">Redeem Code Generator</h3>
-                        <p className="text-[var(--muted)] text-[10px] font-bold uppercase tracking-widest opacity-60">Create single-use credit codes for users</p>
+                        <h3 className="text-base sm:text-xl font-black italic uppercase tracking-tight">Redeem Code Generator</h3>
+                        <p className="text-[var(--muted)] text-[8px] sm:text-[10px] font-bold uppercase tracking-widest opacity-60">Create single-use credit codes</p>
                     </div>
                 </div>
 
-                <form className="grid sm:grid-cols-3 gap-4" onSubmit={handleGenerate}>
+                <form className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4" onSubmit={handleGenerate}>
                     <div className="space-y-1">
-                        <label className="text-[10px] font-black uppercase text-[var(--muted)] ml-1 tracking-widest">Amount (₹)</label>
+                        <label className="text-[9px] sm:text-[10px] font-black uppercase text-[var(--muted)] ml-1 tracking-widest">Amount (₹)</label>
                         <input
                             type="number"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="e.g. 500"
-                            className="w-full bg-black/20 border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-blue-500/40 outline-none transition-all font-bold"
+                            className="w-full h-10 sm:h-12 bg-black/20 border border-[var(--border)] rounded-xl px-4 text-sm focus:border-blue-500/40 outline-none transition-all font-bold"
                             required
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-[10px] font-black uppercase text-[var(--muted)] ml-1 tracking-widest">Quantity</label>
+                        <label className="text-[9px] sm:text-[10px] font-black uppercase text-[var(--muted)] ml-1 tracking-widest">Quantity</label>
                         <input
                             type="number"
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
                             placeholder="e.g. 10"
-                            className="w-full bg-black/20 border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-blue-500/40 outline-none transition-all font-bold"
+                            className="w-full h-10 sm:h-12 bg-black/20 border border-[var(--border)] rounded-xl px-4 text-sm focus:border-blue-500/40 outline-none transition-all font-bold"
                             required
                         />
                     </div>
-                    <div className="flex items-end">
+                    <div className="flex items-end pt-1 sm:pt-0">
                         <button
                             type="submit"
                             disabled={isGenerating}
-                            className="w-full bg-blue-500 text-white font-black italic uppercase text-xs py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95 disabled:opacity-50"
+                            className="w-full h-10 sm:h-12 bg-blue-500 text-white font-black italic uppercase text-[10px] sm:text-xs rounded-xl flex items-center justify-center gap-2 hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95 disabled:opacity-50"
                         >
                             {isGenerating ? "Processing..." : <><FiPlus /> Generate Codes</>}
                         </button>
