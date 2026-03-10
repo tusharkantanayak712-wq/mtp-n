@@ -19,10 +19,10 @@ const MEMBERSHIPS = {
     gameAvailablity: true,
     itemId: [
       {
-        itemName: "6 Months",
-        itemSlug: "silver-6m",
-        sellingPrice: 550,
-        dummyPrice: 1794,
+        itemName: "1 Month",
+        itemSlug: "silver-1m",
+        sellingPrice: 99,
+        dummyPrice: 299,
         itemAvailablity: true,
         index: 1,
         itemImageId: {
@@ -30,19 +30,40 @@ const MEMBERSHIPS = {
         },
       },
       {
-        itemName: "12 Months",
-        itemSlug: "silver-12m",
-        sellingPrice: 1000,
-        dummyPrice: 3588,
+        itemName: "3 Months",
+        itemSlug: "silver-3m",
+        sellingPrice: 249,
+        dummyPrice: 749,
         itemAvailablity: true,
         index: 2,
         itemImageId: {
           image: "/membership/silver-m.png",
         },
       },
+      {
+        itemName: "6 Months",
+        itemSlug: "silver-6m",
+        sellingPrice: 499,
+        dummyPrice: 1499,
+        itemAvailablity: true,
+        index: 3,
+        itemImageId: {
+          image: "/membership/silver-m.png",
+        },
+      },
+      {
+        itemName: "12 Months",
+        itemSlug: "silver-12m",
+        sellingPrice: 899,
+        dummyPrice: 2699,
+        itemAvailablity: true,
+        index: 4,
+        itemImageId: {
+          image: "/membership/silver-m.png",
+        },
+      },
     ],
   },
-
   "reseller-membership": {
     gameName: "Reseller Membership",
     gameFrom: "Your Platform",
@@ -56,10 +77,10 @@ const MEMBERSHIPS = {
     gameAvailablity: true,
     itemId: [
       {
-        itemName: "6 Months",
-        itemSlug: "reseller-6m",
-        sellingPrice: 550,
-        dummyPrice: 1794,
+        itemName: "1 Month",
+        itemSlug: "reseller-1m",
+        sellingPrice: 99,
+        dummyPrice: 299,
         itemAvailablity: true,
         index: 1,
         itemImageId: {
@@ -67,12 +88,34 @@ const MEMBERSHIPS = {
         },
       },
       {
-        itemName: "12 Months",
-        itemSlug: "reseller-12m",
-        sellingPrice: 1000,
-        dummyPrice: 3588,
+        itemName: "3 Months",
+        itemSlug: "reseller-3m",
+        sellingPrice: 249,
+        dummyPrice: 749,
         itemAvailablity: true,
         index: 2,
+        itemImageId: {
+          image: "/membership/reseller-m.png",
+        },
+      },
+      {
+        itemName: "6 Months",
+        itemSlug: "reseller-6m",
+        sellingPrice: 499,
+        dummyPrice: 1499,
+        itemAvailablity: true,
+        index: 3,
+        itemImageId: {
+          image: "/membership/reseller-m.png",
+        },
+      },
+      {
+        itemName: "12 Months",
+        itemSlug: "reseller-12m",
+        sellingPrice: 899,
+        dummyPrice: 2699,
+        itemAvailablity: true,
+        index: 4,
         itemImageId: {
           image: "/membership/reseller-m.png",
         },
