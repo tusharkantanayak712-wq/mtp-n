@@ -206,7 +206,9 @@ export async function POST(req: Request) {
     const lockedOrder = await Order.findOneAndUpdate(
       {
         orderId,
-        topupStatus: { $nin: ["success", "processing"] },
+        // CRITICAL: Only pick up orders that are PENDING. 
+        // IF success, processing, or ALREADY FAILED, do not touch.
+        topupStatus: { $nin: ["success", "processing", "failed", "FAILED", "refund", "REFUND"] },
       },
       {
         $set: updateFields,
@@ -215,35 +217,36 @@ export async function POST(req: Request) {
     );
 
     if (!lockedOrder) {
-      // The order is ALREADY 'success' or 'processing'.
+      // The order is ALREADY 'success', 'processing', or 'failed'.
       const currentOrder = await Order.findOne({ orderId });
 
-      if (currentOrder?.topupStatus === "processing") {
-        // Check for Timeout (90 seconds)
-        const lastUpdate = new Date(currentOrder.updatedAt).getTime();
-        if (Date.now() - lastUpdate > 90000) {
-          currentOrder.status = "failed";
-          currentOrder.topupStatus = "failed";
-          currentOrder.paymentStatus = "success"; // Payment was success, fulfillment failed
-          await currentOrder.save();
-
-          return NextResponse.json({
-            success: false,
-            message: "Order processing timed out",
-            paymentStatus: "success",
-            topupStatus: "failed",
-          });
-        }
+      // If it's already success, return success
+      if (currentOrder?.status === "success" || currentOrder?.topupStatus === "success") {
+        return NextResponse.json({
+          success: true,
+          message: "Topup already completed",
+          paymentStatus: currentOrder.paymentStatus,
+          topupStatus: currentOrder.topupStatus,
+          topupResponse: currentOrder.externalResponse,
+        });
       }
 
+      // If it's processing, just tell the client to keep waiting
+      if (currentOrder?.topupStatus === "processing") {
+        return NextResponse.json({
+          success: false,
+          message: "Topup processing",
+          paymentStatus: currentOrder.paymentStatus,
+          topupStatus: "processing",
+        });
+      }
+
+      // If it's failed, return failed (don't retry automatically!)
       return NextResponse.json({
-        success: currentOrder?.status === "success",
-        message:
-          currentOrder?.status === "success"
-            ? "Topup already completed"
-            : "Topup processing",
+        success: false,
+        message: "Topup failed. Please contact support.",
         paymentStatus: currentOrder?.paymentStatus || "success",
-        topupStatus: currentOrder?.topupStatus || "processing",
+        topupStatus: currentOrder?.topupStatus || "failed",
         topupResponse: currentOrder?.externalResponse,
       });
     }

@@ -136,7 +136,7 @@ export default function TopupComplete() {
     return () => {
       isMounted = false;
     };
-  }, [orderId, pollInterval, fetchOrderDetails, status, message]);
+  }, [orderId, pollInterval, fetchOrderDetails]);
 
   // --- Variants ---
   const containerVariants = {
