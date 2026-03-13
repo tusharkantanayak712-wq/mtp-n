@@ -317,7 +317,7 @@ const BGMI_CONFIG = {
     {
       itemName: "60 UC",
       itemSlug: "bgmi-60-uc",
-      sellingPrice: 75,
+      sellingPrice: 73,
       dummyPrice: 95,
       itemAvailablity: true,
       index: 1,
@@ -328,7 +328,7 @@ const BGMI_CONFIG = {
     {
       itemName: "325 UC",
       itemSlug: "bgmi-325-uc",
-      sellingPrice: 380,
+      sellingPrice: 375,
       dummyPrice: 490,
       itemAvailablity: true,
       index: 2,
@@ -339,7 +339,7 @@ const BGMI_CONFIG = {
     {
       itemName: "660 UC",
       itemSlug: "bgmi-660-uc",
-      sellingPrice: 760,
+      sellingPrice: 729,
       dummyPrice: 980,
       itemAvailablity: true,
       index: 3,
@@ -350,7 +350,7 @@ const BGMI_CONFIG = {
     {
       itemName: "1800 UC",
       itemSlug: "bgmi-1800-uc",
-      sellingPrice: 1970,
+      sellingPrice: 1849,
       dummyPrice: 2400,
       itemAvailablity: true,
       index: 4,
@@ -361,7 +361,7 @@ const BGMI_CONFIG = {
     {
       itemName: "3850 UC",
       itemSlug: "bgmi-3850-uc",
-      sellingPrice: 3950,
+      sellingPrice: 3749,
       dummyPrice: 4800,
       itemAvailablity: true,
       index: 5,
@@ -372,7 +372,7 @@ const BGMI_CONFIG = {
     {
       itemName: "8100 UC",
       itemSlug: "bgmi-8100-uc",
-      sellingPrice: 8100,
+      sellingPrice: 7299,
       dummyPrice: 9400,
       itemAvailablity: true,
       index: 6,

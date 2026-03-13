@@ -60,12 +60,12 @@ const MANUAL_GAMES: Record<string, MembershipConfig> = {
   },
   "bgmi-manual": {
     items: {
-      "bgmi-60-uc": 75,
-      "bgmi-325-uc": 380,
-      "bgmi-660-uc": 760,
-      "bgmi-1800-uc": 1970,
-      "bgmi-3850-uc": 3950,
-      "bgmi-8100-uc": 8100,
+      "bgmi-60-uc": 73,
+      "bgmi-325-uc": 375,
+      "bgmi-660-uc": 729,
+      "bgmi-1800-uc": 1849,
+      "bgmi-3850-uc": 3749,
+      "bgmi-8100-uc": 7299,
     },
   },
 };
