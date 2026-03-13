@@ -159,7 +159,8 @@ export async function POST(req: Request) {
       "scammer@gmail.com",
       "anyemchi@gmail.com",
       "knishan777@gmail.com",
-      "git67485@gmail.com"
+      "git67485@gmail.com",
+      "athoiningthouja8@gmail.com"
     ];
 
     const BLACKLIST_PLAYER_IDS = [
@@ -167,7 +168,8 @@ export async function POST(req: Request) {
       "87654321",
       "1478544003",
       "1703098323",
-      "1223693807"
+      "1223693807",
+      "365070273"
     ];
 
     if (
