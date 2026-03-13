@@ -24,7 +24,7 @@ export async function POST(req) {
         const { gameSlug } = body;
 
         // ⚡ REGION RESTRICTION CHECK for mobile-legends988 via Service API
-        if (gameSlug === "mobile-legends988" && data.success === 200) {
+        if ((gameSlug === "mobile-legends988" || gameSlug === "mlbb-double332") && data.success === 200) {
             const playerRegion = data.data?.region?.toUpperCase();
             const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
 

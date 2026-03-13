@@ -131,7 +131,7 @@ function BuyFlowContent() {
         const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
         const playerRegion = data.data.region?.toUpperCase();
 
-        if (slug === "mobile-legends988" && restrictedRegions.includes(playerRegion)) {
+        if ((slug === "mobile-legends988" || slug === "mlbb-double332") && restrictedRegions.includes(playerRegion)) {
           setError(`Orders from ${playerRegion} region are not allowed for this product.`);
           setLoading(false);
           return;
