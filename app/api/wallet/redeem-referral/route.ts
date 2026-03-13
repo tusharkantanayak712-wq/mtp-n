@@ -89,8 +89,8 @@ export async function POST(req: Request) {
         }
 
         // ============ PROCESS REWARD ============
-        // 1 Coin Reward
-        const REWARD_AMOUNT = 1;
+        // 0 Coin Reward (Tracking only)
+        const REWARD_AMOUNT = 0;
 
         // 🔒 ATOMIC UPDATE: Prevent Race Conditions
         // Only update if referralUsed is FALSE
@@ -117,18 +117,20 @@ export async function POST(req: Request) {
         }
 
         // Create Transaction for User
-        await WalletTransaction.create({
-            transactionId: `REF-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-            userId: updatedUser.userId,
-            userObjectId: updatedUser._id,
-            type: "credit",
-            amount: REWARD_AMOUNT,
-            balanceBefore: updatedUser.wallet - REWARD_AMOUNT,
-            balanceAfter: updatedUser.wallet,
-            description: `Referral Bonus (Used code: ${referralCode})`,
-            status: "success",
-            performedBy: "system"
-        });
+        if (REWARD_AMOUNT > 0) {
+            await WalletTransaction.create({
+                transactionId: `REF-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+                userId: updatedUser.userId,
+                userObjectId: updatedUser._id,
+                type: "credit",
+                amount: REWARD_AMOUNT,
+                balanceBefore: updatedUser.wallet - REWARD_AMOUNT,
+                balanceAfter: updatedUser.wallet,
+                description: `Referral Bonus (Used code: ${referralCode})`,
+                status: "success",
+                performedBy: "system"
+            });
+        }
 
         // Update Referrer (Atomic $inc)
         // We don't worry as much about race conditions here since counting multiple is "okay" 
@@ -145,7 +147,7 @@ export async function POST(req: Request) {
         );
 
         // Create Transaction for Referrer
-        if (updatedReferrer) {
+        if (updatedReferrer && REWARD_AMOUNT > 0) {
             await WalletTransaction.create({
                 transactionId: `REF-${Date.now()}-${Math.random().toString(36).substring(7)}-R`,
                 userId: updatedReferrer.userId,
@@ -162,7 +164,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({
             success: true,
-            message: "Referral code redeemed! 1 coin added to your wallet.",
+            message: "Referral code added successfully.",
             newBalance: updatedUser.wallet
         });
 

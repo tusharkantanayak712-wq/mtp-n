@@ -194,7 +194,7 @@ export default function ReferralTab({
                                         Monthly Rewards
                                     </span>
                                     <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider">
-                                        1 Referral = 1 Coin + Bonus
+                                        Invite friends & grow your network
                                     </span>
                                 </div>
                             </div>
