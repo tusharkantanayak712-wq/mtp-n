@@ -46,7 +46,6 @@ export default function Header() {
   const [walletBalance, setWalletBalance] = useState(0);
 
   const dropdownRef = useRef(null);
-  const logoRef = useRef(null);
 
   /* ================= PUSH NOTIFICATIONS ================= */
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -163,9 +162,6 @@ export default function Header() {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 20);
-      if (logoRef.current) {
-        logoRef.current.style.transform = `rotate(${y * 0.1}deg)`;
-      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -210,7 +206,6 @@ export default function Header() {
           <Link href="/" className="relative z-10 flex-shrink-0">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Image
-                ref={logoRef}
                 src={HEADER_CONFIG.logo.src}
                 alt={HEADER_CONFIG.logo.alt}
                 width={HEADER_CONFIG.logo.width}
@@ -387,62 +382,49 @@ export default function Header() {
                           </div>
 
                           {user?.userType === "owner" && (
-                            <Link
-                              href="/owner-panal"
-                              onClick={() => setUserMenuOpen(false)}
-                              className="flex items-center justify-between p-5 rounded-[2rem] bg-gradient-to-br from-[var(--accent)] to-orange-600 text-white shadow-[0_20px_40px_-10px_rgba(var(--accent-rgb),0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all mt-6 group overflow-hidden relative border border-white/10"
-                            >
-                              {/* Shimmer Effect */}
-                              <motion.div
-                                animate={{ x: [-300, 300] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-20 pointer-events-none"
-                              />
-
-                              <div className="flex items-center gap-4 relative z-10">
-                                <div className="relative flex-shrink-0">
-                                  <div className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
-                                    <FiZap size={22} className="text-white drop-shadow-lg" />
+                            <div className="relative mt-8 group">
+                              <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-purple-600 rounded-[1.5rem] blur opacity-30 group-hover:opacity-60 transition duration-500 group-hover:duration-200"></div>
+                              <Link
+                                href="/owner-panal"
+                                onClick={() => setUserMenuOpen(false)}
+                                className="relative flex items-center justify-between p-4 bg-[var(--background)] border border-[var(--border)] rounded-[1.5rem] overflow-hidden transition-all duration-300"
+                              >
+                                <motion.div
+                                  animate={{ x: ["-100%", "200%"] }}
+                                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                  className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-[var(--foreground)]/5 to-transparent -skew-x-12"
+                                />
+                                <div className="flex items-center gap-3 relative z-10 w-full">
+                                  <div className="relative flex-shrink-0">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent)] to-purple-600 flex items-center justify-center shadow-lg">
+                                      <FiZap size={18} className="text-white" />
+                                    </div>
+                                    <div className="absolute -bottom-1 -right-1 flex h-3 w-3">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 border-2 border-[var(--background)]"></span>
+                                    </div>
                                   </div>
-                                  <div className="absolute -top-1 -right-1 flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+
+                                  <div className="flex flex-col min-w-0 flex-1">
+                                    <h4 className="text-xs font-black uppercase tracking-widest text-[var(--foreground)] mb-1">Admin Console</h4>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[9px] font-bold text-[var(--accent)] bg-[var(--accent)]/10 px-1.5 py-0.5 rounded-md border border-[var(--accent)]/20 uppercase">Elite Access</span>
+                                      <span className="text-[9px] font-bold text-[#22c55e] flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-[#22c55e]"></span>Active</span>
+                                    </div>
+                                  </div>
+
+                                  <div className="w-8 h-8 rounded-full bg-[var(--foreground)]/5 group-hover:bg-[var(--accent)]/10 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-all flex-shrink-0">
+                                    <FiChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
                                   </div>
                                 </div>
-
-                                <div className="flex flex-col min-w-0">
-                                  <h4 className="text-sm font-black uppercase tracking-widest leading-none mb-2">Admin Console</h4>
-                                  <div className="flex flex-wrap items-center gap-2">
-                                    <span className="text-[8px] font-black bg-black/30 px-2 py-0.5 rounded-md border border-white/10 whitespace-nowrap">ELITE ACCESS</span>
-                                    <span className="text-[9px] font-bold opacity-80 whitespace-nowrap">System Active</span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors relative z-10 flex-shrink-0">
-                                <FiChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                              </div>
-                            </Link>
+                              </Link>
+                            </div>
                           )}
                         </>
                       )}
                     </div>
 
-                    <div className="relative z-10 p-5 bg-[var(--foreground)]/[0.01] border-t border-[var(--border)] flex flex-col gap-3 mt-auto">
-                      <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
-                          <span className="text-[10px] font-medium text-[var(--muted)]">Status: Operational</span>
-                        </div>
-                        <span className="text-[9px] font-mono text-[var(--muted)] opacity-20 tracking-wider font-bold">v3.1.2B</span>
-                      </div>
 
-                      {user && (
-                        <div className="text-[9px] font-medium text-[var(--muted)] italic opacity-40 leading-tight px-1 text-center">
-                          "Welcome back, Hero. Your next legendary victory starts with a single top-up. We're here to power your journey."
-                        </div>
-                      )}
-                    </div>
                   </motion.div>
                 </>
               )}

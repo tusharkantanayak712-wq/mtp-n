@@ -95,7 +95,7 @@ export default function ThemeToggle() {
         onClick={() => setOpen(!open)}
         className={`relative flex items-center gap-2 px-1.5 py-1.5 rounded-full transition-all duration-300 group border ${open
           ? "bg-[var(--accent)]/10 border-[var(--accent)]/50 shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]"
-          : "bg-[var(--background)]/50 border-white/10 hover:border-white/20 hover:bg-[var(--background)]/80"
+          : "bg-[var(--background)]/50 border-[var(--border)]/30 hover:border-[var(--border)] hover:bg-[var(--background)]/80"
           } backdrop-blur-md`}
         title="Change Interface Theme"
       >
@@ -154,7 +154,7 @@ export default function ThemeToggle() {
               animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, scale: 0.95, y: 10, filter: "blur(10px)" }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="fixed top-24 left-1/2 -translate-x-1/2 w-[90vw] max-w-[340px] md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:mt-3 md:w-80 bg-[#0f0f11]/95 backdrop-blur-xl rounded-[24px] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden z-[100]"
+              className="fixed top-24 left-1/2 -translate-x-1/2 w-[90vw] max-w-[340px] md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:mt-3 md:w-80 bg-[var(--card)]/95 backdrop-blur-xl rounded-[24px] border border-[var(--border)] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden z-[100]"
             >
               {/* DECORATIVE ELEMENTS */}
               <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
@@ -175,33 +175,22 @@ export default function ThemeToggle() {
 
               {/* SCROLLABLE GRID */}
               <div className="px-3 pb-3 max-h-[320px] overflow-y-auto custom-scrollbar">
-                <motion.div
-                  className="grid grid-cols-2 gap-2"
-                  initial="hidden"
-                  animate="visible"
-                  variants={{
-                    visible: { transition: { staggerChildren: 0.03 } }
-                  }}
-                >
+                <div className="grid grid-cols-2 gap-2">
                   {themes.map((t) => (
-                    <motion.button
+                    <button
                       key={t.id}
-                      variants={{
-                        hidden: { opacity: 0, y: 10 },
-                        visible: { opacity: 1, y: 0 }
-                      }}
                       onClick={() => changeTheme(t.id)}
                       className={`relative group overflow-hidden flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-300 border ${theme === t.id
                         ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-[0_4px_12px_rgba(var(--accent-rgb),0.3)]"
-                        : "bg-white/5 text-[var(--foreground)] border-white/5 hover:bg-white/10 hover:border-white/10"
+                        : "bg-[var(--foreground)]/5 text-[var(--foreground)] border-transparent hover:bg-[var(--foreground)]/10 hover:border-[var(--border)]"
                         }`}
                     >
                       {/* HOVER GLOW */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[var(--foreground)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                       <span className="text-base relative z-10 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">{t.icon}</span>
                       <div className="flex flex-col items-start relative z-10 flex-1 min-w-0">
-                        <span className={`text-[10px] font-[800] uppercase tracking-wide leading-none ${theme === t.id ? "text-white" : "text-white/90"}`}>
+                        <span className={`text-[10px] font-[800] uppercase tracking-wide leading-none ${theme === t.id ? "text-white" : "text-[var(--foreground)]/90"}`}>
                           {t.label}
                         </span>
                         {theme === t.id && (
@@ -212,24 +201,16 @@ export default function ThemeToggle() {
                       </div>
 
                       {theme === t.id && (
-                        <motion.div
-                          layoutId="active-dot"
+                        <div
                           className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_white]"
                         />
                       )}
-                    </motion.button>
+                    </button>
                   ))}
-                </motion.div>
+                </div>
               </div>
 
-              {/* STATUS FOOTER */}
-              <div className="p-3 bg-white/5 border-t border-white/5 flex items-center justify-between text-[9px] text-[var(--foreground)]/40 font-mono">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  UI.VS.{themes.length}
-                </span>
-                <span className="opacity-50 tracking-widest text-right">OPTICAL SYSTEMS</span>
-              </div>
+
             </motion.div>
           </>
         )}
@@ -240,14 +221,14 @@ export default function ThemeToggle() {
           width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255,255,255,0.02);
+          background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255,255,255,0.1);
+          background: var(--border);
           border-radius: 20px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255,255,255,0.2);
+          background: var(--muted);
         }
       `}</style>
     </div>

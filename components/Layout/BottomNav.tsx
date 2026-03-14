@@ -1,62 +1,73 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { FiHome, FiCreditCard, FiShoppingBag, FiUsers, FiHeadphones, FiMessageSquare, FiGrid, FiTarget, FiGift } from "react-icons/fi";
+import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones } from "react-icons/fi";
 
-import { useUIStore } from "@/store/useUIStore";
 
 const BottomNav = () => {
     const pathname = usePathname();
     const router = useRouter();
-    const { toggleChatbot, isChatbotOpen } = useUIStore();
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 30);
+        };
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     // Hide BottomNav on certain pages if needed
     const hideOnRoutes = ["/admin", "/owner"];
     if (hideOnRoutes.some(route => pathname?.startsWith(route))) return null;
 
+    // Retained 7 items, preserving symmetry around the Home button
     const navItems = [
         { label: "Wallet", icon: FiCreditCard, path: "/dashboard/wallet", action: () => router.push("/dashboard/wallet") },
-        { label: "Redeem", icon: FiGift, path: "/dashboard/redeem", action: () => router.push("/dashboard/redeem") },
         { label: "Games", icon: FiGrid, path: "/games", action: () => router.push("/games") },
         { label: "Region", icon: FiTarget, path: "/region", action: () => router.push("/region") },
         { label: "Home", icon: FiHome, path: "/", isHome: true, action: () => router.push("/") },
         { label: "Orders", icon: FiShoppingBag, path: "/dashboard/orders", action: () => router.push("/dashboard/orders") },
-        { label: "Referral", icon: FiUsers, path: "/dashboard/referral", action: () => router.push("/dashboard/referral") },
+        { label: "Redeem", icon: FiGift, path: "/dashboard/redeem", action: () => router.push("/dashboard/redeem") },
         { label: "Support", icon: FiHeadphones, path: "/dashboard/support", action: () => router.push("/dashboard/support") },
-        { label: "AI Chat", icon: FiMessageSquare, action: () => toggleChatbot() },
     ];
 
     return (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-[var(--card)]/80 backdrop-blur-2xl border-t border-[var(--border)] pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
-            <div className="flex items-center justify-around h-14 px-1">
+        <div className="md:hidden fixed bottom-1 left-1/2 -translate-x-1/2 z-[100] pointer-events-none w-full flex justify-center px-1">
+            <div className={`relative flex items-center justify-between gap-0.5 sm:gap-1.5 px-1.5 py-0.5 rounded-[1.25rem] transition-all duration-500 pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] ${scrolled ? 'bg-[var(--card)]/80 backdrop-blur-2xl border border-[var(--border)]/70' : 'bg-[var(--card)]/95 backdrop-blur-2xl border border-[var(--border)] shadow-2xl'}`}>
+
+                {/* Ambient glow behind dock */}
+                <div className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-r from-[var(--accent)]/10 via-[var(--foreground)]/5 to-[var(--accent)]/10 blur-xl z-[-1] opacity-50"></div>
+                {/* Subtle inner top highlight */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--foreground)]/10 to-transparent"></div>
+
                 {navItems.map((item, idx) => {
-                    const isActive = item.label === "AI Chat"
-                        ? isChatbotOpen
-                        : item.isHome
-                            ? (pathname === "/" || pathname === "/home")
-                            : (item.path && (pathname === item.path || pathname.startsWith(item.path + "/")));
+                    const isActive = item.isHome
+                        ? (pathname === "/" || pathname === "/home")
+                        : (item.path && (pathname === item.path || pathname.startsWith(item.path + "/")));
 
                     const Icon = item.icon;
 
                     if (item.isHome) {
                         return (
-                            <div key={idx} className="relative -top-3.5 flex-shrink-0">
-                                <motion.button
-                                    onClick={item.action}
-                                    whileTap={{ scale: 0.9 }}
-                                    className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg border-[3px] border-[var(--card)] transition-all duration-300 ${isActive
-                                        ? "bg-[var(--accent)] text-white"
-                                        : "bg-[var(--foreground)] text-[var(--background)]"
-                                        }`}
-                                >
-                                    <Icon className="text-xl" />
-                                </motion.button>
-                                {isActive && (
-                                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[var(--accent)] rounded-full shadow-[0_0_5px_var(--accent)]" />
-                                )}
-                            </div>
+                            <button
+                                key={idx}
+                                onClick={item.action}
+                                className="relative flex flex-col items-center justify-end w-[46px] h-[40px] sm:w-[48px] sm:h-[42px] rounded-xl transition-all duration-300 group"
+                                aria-label={item.label}
+                            >
+                                {/* Distinctive Prominent Floating Circle */}
+                                <div className="absolute -top-3 z-20">
+                                    <div className={`flex items-center justify-center w-[36px] h-[36px] sm:w-[38px] sm:h-[38px] rounded-full shadow-[0_4px_16px_rgba(var(--accent-rgb),0.5)] border-[3px] border-[var(--card)] transition-transform duration-300 ${isActive ? 'bg-gradient-to-br from-[var(--accent)] to-indigo-600 scale-105' : 'bg-[var(--accent)] hover:scale-105'}`}>
+                                        <Icon className="text-[1.05rem] sm:text-[1.1rem] text-white" />
+                                    </div>
+                                </div>
+                                <span className={`absolute bottom-0.5 text-[5.5px] sm:text-[6px] font-[900] uppercase tracking-wider transition-all duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)]/80 group-hover:text-[var(--foreground)]/90"}`}>
+                                    {item.label}
+                                </span>
+                            </button>
                         );
                     }
 
@@ -64,14 +75,20 @@ const BottomNav = () => {
                         <button
                             key={idx}
                             onClick={item.action}
-                            className="flex flex-col items-center justify-center gap-0.5 w-10 transition-all active:scale-90"
+                            className="relative flex flex-col items-center justify-center w-[46px] h-[40px] sm:w-[48px] sm:h-[42px] rounded-xl transition-all duration-300 group overflow-hidden"
+                            aria-label={item.label}
                         >
-                            <div className={`transition-colors duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}>
-                                <Icon className="text-base" />
+                            {/* Animated indicator pill */}
+                            {isActive && (
+                                <motion.div layoutId="nav-pill" className="absolute inset-0 bg-[var(--foreground)]/5 border border-[var(--border)]/40 rounded-xl pointer-events-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]" />
+                            )}
+
+                            <div className="flex flex-col items-center gap-[2px] z-10 w-full mt-0.5">
+                                <Icon className={`text-[1.1rem] transition-all duration-300 ${isActive ? "text-[var(--accent)] drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)] -translate-y-0.5 scale-110" : "text-[var(--muted)] group-hover:text-[var(--foreground)]/80 group-hover:-translate-y-0.5"}`} />
+                                <span className={`text-[5.5px] sm:text-[6px] font-[900] uppercase tracking-wider transition-all duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)]/80 group-hover:text-[var(--foreground)]/90"}`}>
+                                    {item.label}
+                                </span>
                             </div>
-                            <span className={`text-[6px] font-black uppercase tracking-tighter truncate w-full text-center ${isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]/60"}`}>
-                                {item.label}
-                            </span>
                         </button>
                     );
                 })}
