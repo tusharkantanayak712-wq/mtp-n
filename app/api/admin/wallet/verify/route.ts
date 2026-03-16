@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
         console.log(`Verifying Order ${orderId} with Gateway...`);
 
-        const resp = await fetch("https://xyzpay.site/api/check-order-status", {
+        const resp = await fetch("https://chuimei-pe.in/api/check-order-status", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: formData.toString(),

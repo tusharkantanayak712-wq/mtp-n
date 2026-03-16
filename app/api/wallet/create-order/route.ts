@@ -110,7 +110,7 @@ export async function POST(req: Request) {
     // Explicitly tell gateway where to send webhook for wallet top-ups
     formData.append("webhook_url", `${process.env.NEXT_PUBLIC_BASE_URLU}/api/webhook`);
 
-    const resp = await fetch("https://xyzpay.site/api/create-order", {
+    const resp = await fetch("https://chuimei-pe.in/api/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),
