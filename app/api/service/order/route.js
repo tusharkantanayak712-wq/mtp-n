@@ -85,25 +85,6 @@ export async function POST(req) {
             }, { status: 403 });
         }
 
-        // ⚡ ATOMIC DAILY LIMIT INCREMENT
-        const updatedKey = await ApiKey.findOneAndUpdate(
-            {
-                _id: auth.key.id,
-                $expr: { $lte: [{ $add: ["$usedToday", price] }, "$dailyLimit"] }
-            },
-            { $inc: { usedToday: price } },
-            { new: true }
-        );
-
-        if (!updatedKey) {
-            // Daily limit hit — refund immediately
-            await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } });
-            return NextResponse.json({
-                success: false,
-                status: "failed",
-                message: `Daily API spend limit reached. Order cancelled and wallet refunded.`
-            }, { status: 403 });
-        }
 
         let newOrder;
         const orderId = `API-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
@@ -185,7 +166,6 @@ export async function POST(req) {
 
                 // ⚡ AUTOMATIC REFUND: Fulfillment failed
                 await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } });
-                await ApiKey.findByIdAndUpdate(auth.key.id, { $inc: { usedToday: -price } });
                 console.log(`[Service API] Order ${orderId} failed. Automatically refunded ₹${price}.`);
             }
 
@@ -211,7 +191,6 @@ export async function POST(req) {
 
             // ⚡ EMERGENCY AUTOMATIC REFUND: Technical crash during processing
             await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } });
-            await ApiKey.findByIdAndUpdate(auth.key.id, { $inc: { usedToday: -price } });
 
             if (newOrder) {
                 newOrder.status = "failed";
