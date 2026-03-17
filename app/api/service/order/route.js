@@ -4,6 +4,7 @@ import Order from "@/models/Order";
 import User from "@/models/User";
 import ApiKey from "@/models/ApiKey";
 import { validateApiKey } from "@/lib/apiKeyAuth";
+import { ensureDailyReset } from "@/lib/apiKeyUtils";
 import { calculateItemPrice } from "@/lib/pricingUtils";
 import { getAppSettings } from "@/lib/settings";
 import { placeSmileOrder } from "@/lib/smileOne";
@@ -14,6 +15,12 @@ export async function POST(req) {
         if (!auth.success) {
             return NextResponse.json({ success: false, status: "failed", message: auth.message }, { status: 401 });
         }
+
+        // 🛡️ API Spend Limit Calculation (Non-blocking)
+        const keyDocRaw = await ApiKey.findById(auth.key.id);
+        const keyDoc = await ensureDailyReset(keyDocRaw);
+        const usedToday = keyDoc?.usedToday || 0;
+        const dailyLimit = keyDoc?.dailyLimit || 0;
 
         const body = await req.json();
         const { gameSlug, itemSlug, playerId, zoneId } = body;
@@ -159,6 +166,9 @@ export async function POST(req) {
             if (isSuccess) {
                 newOrder.status = "success";
                 newOrder.topupStatus = "success";
+
+                // ⚡ Record usage (Calculate usage but do not validate/block)
+                await ApiKey.findByIdAndUpdate(auth.key.id, { $inc: { usedToday: price } });
             } else {
                 newOrder.status = "failed";
                 newOrder.topupStatus = "failed";
@@ -183,6 +193,12 @@ export async function POST(req) {
                     status: newOrder.status,
                     topupStatus: newOrder.topupStatus,
                     deliveryResponse: gameData
+                },
+                usage: {
+                    usedToday: usedToday + (isSuccess ? price : 0),
+                    dailyLimit,
+                    remaining: Math.max(0, dailyLimit - (usedToday + (isSuccess ? price : 0))),
+                    isLimitReached: (usedToday + (isSuccess ? price : 0)) >= dailyLimit
                 }
             });
 
