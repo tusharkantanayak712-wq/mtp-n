@@ -15,6 +15,10 @@ export async function GET() {
       success: true,
       message: "All banners retrieved",
       data: banners,
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=59'
+      }
     });
   } catch (error) {
     return NextResponse.json(

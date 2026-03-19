@@ -81,7 +81,7 @@ export async function GET() {
       headers: {
         "x-api-key": process.env.API_SECRET_KEY!,
       },
-      cache: "no-store",
+      next: { revalidate: 300 } // Cache list for 5 minutes instead of fetching every request
     });
 
     const data = await response.json();
@@ -315,6 +315,10 @@ export async function GET() {
         },
 
       },
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=59'
+      }
     });
   } catch (error) {
     console.error("GAME API ERROR:", error);
