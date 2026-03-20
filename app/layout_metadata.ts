@@ -7,10 +7,19 @@ export const metadata: Metadata = {
         template: "%s | MLBB Topup India",
     },
     description:
-        "MLBB Topup India – Buy Mobile Legends diamonds instantly with fast delivery, secure payments, and best prices. Trusted MLBB diamond top-up platform.",
+        "MLBB Topup India - Get the cheapest Mobile Legends diamonds instantly. Trusted website for fast MLBB recharge with UPI, lowest prices, and 24/7 instant delivery. Buy ML diamonds in India without login at Blue Buff!",
     keywords: [
+        "mlbb recharge india cheap",
+        "mlbb top up india instant",
+        "buy ml diamonds india low price",
+        "mlbb recharge with upi",
+        "cheapest mlbb recharge website",
+        "mlbb recharge trusted site india",
+        "mlbb diamonds instant delivery india",
+        "mobile legends recharge india fast",
+        "mlbb top up india no login",
+        "mlbb recharge website india cheap",
         "mlbb topup",
-        "mlbb topup india",
         "mlbb diamond topup",
         "mlbb diamond recharge",
         "buy mlbb diamonds",
@@ -21,7 +30,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "MLBB Topup India | Buy MLBB Diamonds Instantly",
         description:
-            "Instant MLBB diamond top-up in India. Secure payments, fast delivery, and best prices.",
+            "Instant & cheapest MLBB diamond top-up in India. Secure UPI payments, fast delivery, and lowest prices. Buy Mobile Legends diamonds without login!",
         url: "https://mlbbtopup.in",
         siteName: "MLBB Topup India",
         type: "website",

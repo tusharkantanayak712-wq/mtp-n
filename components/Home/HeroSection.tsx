@@ -11,6 +11,7 @@ import StorySlider from "./StorySlider";
 import HomeQuickActions from "./HomeQuickActions";
 import HomeReferralStats from "./HomeReferralStats";
 import PromoBanner from "./PromoBanner";
+import SEOContent from "./SEOContent";
 
 export default function HeroSection() {
 
@@ -38,7 +39,10 @@ export default function HeroSection() {
         <HomeServices />
         <TrustHighlights />
       </div>
-      <ScrollingNoticeBand />
+
+      <SEOContent />
+
+      {/* <ScrollingNoticeBand /> */}
 
 
 

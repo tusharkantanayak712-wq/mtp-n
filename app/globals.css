@@ -258,6 +258,18 @@ html[data-theme="plasma"] {
   --card: #12002e;
 }
 
+/* 💎 Blue Buff Elite (Signature) */
+html[data-theme="elite"] {
+  --background: #02040a;
+  --foreground: #f1f5f9;
+  --accent: #2dd4bf;
+  --accent-hover: #0d9488;
+  --muted: #94a3b8;
+  --border: #134e4a;
+  --card: #0a0f1a;
+}
+
+
 /* ================= MANLY / STRONG THEMES ================= */
 
 /* 🔩 Steel Gray */
@@ -498,6 +510,22 @@ a:hover {
   opacity: 0.65;
   z-index: -1;
 }
+
+/* Blue Buff Elite Utilities */
+.text-shadow-glow {
+  text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.5);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.premium-gradient {
+  background: linear-gradient(to bottom right, var(--card), transparent);
+}
+
 
 @keyframes fadeUp {
   from {

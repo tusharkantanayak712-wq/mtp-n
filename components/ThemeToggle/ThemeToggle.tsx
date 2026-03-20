@@ -12,7 +12,7 @@ interface ThemeItem {
 }
 
 const themes: ThemeItem[] = [
-  { id: "light", icon: "☀️", label: "Light" },
+  { id: "elite", icon: "💎", label: "Elite" },
   { id: "dark", icon: "🌙", label: "Dark" },
   { id: "cyber", icon: "💠", label: "Cyber" },
   { id: "neon-night", icon: "🟣", label: "Neon" },
@@ -58,7 +58,7 @@ export default function ThemeToggle() {
 
   // Load stored theme on mount
   useEffect(() => {
-    const stored = localStorage.getItem("theme") || "dark";
+    const stored = localStorage.getItem("theme") || "elite";
     setTheme(stored);
     document.documentElement.setAttribute("data-theme", stored);
   }, []);

@@ -29,10 +29,19 @@ export const metadata: Metadata = {
     template: "%s | MLBB Topup India",
   },
   description:
-    "MLBB Topup India – Buy Mobile Legends diamonds instantly with fast delivery, secure payments, and best prices. Trusted MLBB diamond top-up platform.",
+    "MLBB Topup India - Get the cheapest Mobile Legends diamonds instantly. Trusted website for fast MLBB recharge with UPI, lowest prices, and 24/7 instant delivery. Buy ML diamonds in India without login at Blue Buff!",
   keywords: [
+    "mlbb recharge india cheap",
+    "mlbb top up india instant",
+    "buy ml diamonds india low price",
+    "mlbb recharge with upi",
+    "cheapest mlbb recharge website",
+    "mlbb recharge trusted site india",
+    "mlbb diamonds instant delivery india",
+    "mobile legends recharge india fast",
+    "mlbb top up india no login",
+    "mlbb recharge website india cheap",
     "mlbb topup",
-    "mlbb topup india",
     "mlbb diamond topup",
     "mlbb diamond recharge",
     "buy mlbb diamonds",
@@ -43,16 +52,43 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MLBB Topup India | Buy MLBB Diamonds Instantly",
     description:
-      "Instant MLBB diamond top-up in India. Secure payments, fast delivery, and best prices.",
+      "Instant & cheapest MLBB diamond top-up in India. Secure UPI payments, fast delivery, and lowest prices. Buy Mobile Legends diamonds without login!",
     url: "https://mlbbtopup.in",
     siteName: "MLBB Topup India",
+    images: [
+      {
+        url: "/logoBB.png",
+        width: 800,
+        height: 600,
+        alt: "Blue Buff - MLBB Topup India",
+      },
+    ],
+    locale: "en_IN",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MLBB Topup India | Buy MLBB Diamonds Instantly",
+    description: "Cheap & Instant MLBB diamonds in India. UPI payments supported. Fast delivery!",
+    images: ["/logoBB.png"],
+    creator: "@bluebuff_india",
+  },
+  alternates: {
+    canonical: "https://mlbbtopup.in",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
+
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -72,6 +108,51 @@ export default async function RootLayout({
 
 
       <body className="bg-black text-white">
+        {/* Structured Data for SEO */}
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Blue Buff",
+              "url": "https://mlbbtopup.in",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://mlbbtopup.in/games?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
+        <Script
+          id="organization-data"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Blue Buff",
+              "url": "https://mlbbtopup.in",
+              "logo": "https://mlbbtopup.in/logoBB.png",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-9178521537",
+                "contactType": "customer service",
+                "areaServed": "IN",
+                "availableLanguage": "en"
+              },
+              "sameAs": [
+                "https://instagram.com/mlbbtopup.in",
+                "https://x.com/tk_dev_"
+              ]
+            })
+          }}
+        />
+        <GoogleAnalytics gaId="G-CKCKWLGJ9N" />
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
           <Header />
 
