@@ -144,7 +144,7 @@ export default function ReviewAndPaymentStep({
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">{isManual ? "Delivery Mode" : "Username"}</p>
+                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">{(isManual && slug !== 'bgmi-manual') ? "Delivery Mode" : "Username"}</p>
                   <p className="font-bold text-[var(--accent)] truncate text-sm">{reviewData.userName}</p>
                 </div>
                 <div className="flex gap-4">

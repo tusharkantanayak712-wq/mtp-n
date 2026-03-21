@@ -176,7 +176,8 @@ export async function GET() {
       "test-1637",
       "mobile-legends-backup826",
       "ph-value-pass588",
-      "value-pass-ml948"
+      "value-pass-ml948",
+
     ];
 
     const filteredGames =
@@ -227,11 +228,6 @@ export async function GET() {
       gameImageId: {
         image: "/game-assets/bgmi-logo.webp",
       },
-      tagId: {
-        tagName: "Manual",
-        tagBackground: "#f59e0b",
-        tagColor: "#ffffff",
-      },
     });
 
     /* ================= FILTER CATEGORY GAMES ================= */
@@ -248,7 +244,7 @@ export async function GET() {
 
     // Featured games
     const featuredGames = filteredGames.filter((g: any) =>
-      ["mobile-legends988", "pubg-mobile138", "genshin-impact742"].includes(
+      ["mobile-legends988", "bgmi-manual", "genshin-impact742"].includes(
         g.gameSlug
       )
     );

@@ -103,8 +103,8 @@ function BuyFlowContent() {
 
     if (game?.isValidationRequired === false) {
       setReviewData({
-        userName: "Manual Order",
-        region: "Manual",
+        userName: slug === 'bgmi-manual' ? "BGMI Player" : "Manual Order",
+        region: slug === 'bgmi-manual' ? "India" : "Manual",
         playerId,
         zoneId,
       });

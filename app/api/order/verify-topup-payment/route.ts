@@ -297,6 +297,23 @@ export async function POST(req: Request) {
           });
           gameData = smileResp.data;
           isSuccess = smileResp.success;
+        } else if (finalOrder.gameSlug === "bgmi-manual") {
+          console.log(`[fulfillment] Using MEWJI API for BGMI`);
+          const gameResp = await fetch(`${process.env.MEWJI_API_BASE}/order/create`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-KEY": process.env.MEWJI_API_KEY!,
+            },
+            body: JSON.stringify({
+              gameSlug: "bgmi-manual",
+              itemSlug: baseItemSlug,
+              playerId: String(finalOrder.playerId),
+            }),
+          });
+
+          gameData = await gameResp.json();
+          isSuccess = gameResp.ok && (gameData?.success === true || gameData?.status === "success" || gameData?.order?.status === "success");
         } else {
           // Default provider (1game)
           const gameResp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`, {

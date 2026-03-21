@@ -308,7 +308,7 @@ const BGMI_CONFIG = {
   gameImageId: {
     image: "/game-assets/bgmi-logo.webp",
   },
-  gameDescription: "Battlegrounds Mobile India (Manual Process). High-speed delivery.",
+  gameDescription: "Battlegrounds Mobile India. High-speed delivery.",
   inputFieldOne: "Character ID",
   inputFieldTwo: "Mobile Number",
   isValidationRequired: false,
@@ -316,7 +316,7 @@ const BGMI_CONFIG = {
   itemId: [
     {
       itemName: "60 UC",
-      itemSlug: "bgmi-60-uc",
+      itemSlug: "bgmi-60",
       sellingPrice: 73,
       dummyPrice: 95,
       itemAvailablity: true,
@@ -327,8 +327,8 @@ const BGMI_CONFIG = {
     },
     {
       itemName: "325 UC",
-      itemSlug: "bgmi-325-uc",
-      sellingPrice: 375,
+      itemSlug: "bgmi-325",
+      sellingPrice: 365,
       dummyPrice: 490,
       itemAvailablity: true,
       index: 2,
@@ -338,8 +338,8 @@ const BGMI_CONFIG = {
     },
     {
       itemName: "660 UC",
-      itemSlug: "bgmi-660-uc",
-      sellingPrice: 729,
+      itemSlug: "bgmi-660",
+      sellingPrice: 720,
       dummyPrice: 980,
       itemAvailablity: true,
       index: 3,
@@ -349,8 +349,8 @@ const BGMI_CONFIG = {
     },
     {
       itemName: "1800 UC",
-      itemSlug: "bgmi-1800-uc",
-      sellingPrice: 1849,
+      itemSlug: "bgmi-1800",
+      sellingPrice: 1800,
       dummyPrice: 2400,
       itemAvailablity: true,
       index: 4,
@@ -360,8 +360,8 @@ const BGMI_CONFIG = {
     },
     {
       itemName: "3850 UC",
-      itemSlug: "bgmi-3850-uc",
-      sellingPrice: 3749,
+      itemSlug: "bgmi-3850",
+      sellingPrice: 2650,
       dummyPrice: 4800,
       itemAvailablity: true,
       index: 5,
@@ -371,8 +371,8 @@ const BGMI_CONFIG = {
     },
     {
       itemName: "8100 UC",
-      itemSlug: "bgmi-8100-uc",
-      sellingPrice: 7299,
+      itemSlug: "bgmi-8100",
+      sellingPrice: 7200,
       dummyPrice: 9400,
       itemAvailablity: true,
       index: 6,
