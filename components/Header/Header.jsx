@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiBell, FiUsers, FiKey, FiGift } from "react-icons/fi";
+import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiBell, FiUsers, FiKey, FiGift, FiSearch } from "react-icons/fi";
 
 /* ================= CONFIG ================= */
 const HEADER_CONFIG = {
@@ -44,6 +44,12 @@ export default function Header() {
   const [user, setUser] = useState(null);
   const [activeNav, setActiveNav] = useState("/");
   const [walletBalance, setWalletBalance] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [allGames, setAllGames] = useState([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const dropdownRef = useRef(null);
 
@@ -145,6 +151,35 @@ export default function Header() {
     };
   }, []);
 
+  /* ================= GAME SEARCH LOGIC ================= */
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const res = await fetch("/api/games");
+        const data = await res.json();
+        if (data.success && data.data?.games) {
+          setAllGames(data.data.games);
+        }
+      } catch (err) {
+        console.error("Failed to fetch games for search", err);
+      }
+    };
+    fetchGames();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm.trim().length > 0) {
+      setIsSearching(true);
+      const filtered = allGames.filter(game =>
+        game.gameName.toLowerCase().includes(searchTerm.toLowerCase())
+      ).slice(0, 8);
+      setSearchResults(filtered);
+      setIsSearching(false);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchTerm, allGames]);
+
   const [showLogoutToast, setShowLogoutToast] = useState(false);
 
   const handleLogout = () => {
@@ -172,6 +207,11 @@ export default function Header() {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setUserMenuOpen(false);
+      }
+      // Click outside search
+      const searchContainer = document.querySelector('.lg\\:flex-1.max-w-md');
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        setIsSearchFocused(false);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -216,7 +256,7 @@ export default function Header() {
             </motion.div>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-1 flex-1 justify-center">
+          <nav className="hidden xl:flex items-center space-x-1 flex-1 justify-center mr-4">
             {HEADER_CONFIG.nav.map((item) => (
               <Link
                 key={item.href}
@@ -236,7 +276,7 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
+          <div className="flex-1 flex items-center justify-end gap-2 sm:gap-3 pr-2">
             {user && (
               <Link href="/dashboard/wallet">
                 <motion.button
@@ -250,6 +290,112 @@ export default function Header() {
               </Link>
             )}
 
+            <div className="lg:hidden">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--foreground)]/[0.05] text-[var(--foreground)]/60"
+              >
+                {mobileSearchOpen ? <FiX size={18} /> : <FiSearch size={18} />}
+              </motion.button>
+            </div>
+
+            <div className="hidden lg:flex max-w-[200px] xl:max-w-md relative group flex-1">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Search games..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  className={`w-full h-10 pl-10 pr-4 rounded-full bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-xs font-medium focus:bg-[var(--foreground)]/[0.08] focus:border-[var(--accent)]/30 focus:ring-4 focus:ring-[var(--accent)]/5 outline-none transition-all placeholder:text-[var(--muted)]/40`}
+                />
+                <FiSearch className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${isSearchFocused ? 'text-[var(--accent)]' : 'text-[var(--muted)]/40'}`} size={14} />
+
+              <AnimatePresence>
+                {searchTerm && isSearchFocused && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center bg-[var(--foreground)]/[0.05] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                  >
+                    <FiX size={10} />
+                  </button>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Global Search Results */}
+            <AnimatePresence>
+              {isSearchFocused && (searchTerm || isSearching) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 5, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                  className="absolute top-full left-0 w-full mt-2 bg-[var(--background)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden z-[1100] backdrop-blur-3xl"
+                >
+                  <div className="p-2 border-b border-[var(--border)] bg-[var(--foreground)]/[0.02]">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/60 px-2 italic">Global Game Library</span>
+                  </div>
+
+                  <div className="max-h-[60vh] overflow-y-auto custom-scrollbar">
+                    {searchResults.length > 0 ? (
+                      <div className="p-2 space-y-1">
+                        {searchResults.map((game, idx) => (
+                          <Link
+                            key={game.gameSlug}
+                            href={`/game/${game.gameSlug}`}
+                            onClick={() => {
+                              setIsSearchFocused(false);
+                              setSearchTerm("");
+                            }}
+                          >
+                            <motion.div
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: idx * 0.05 }}
+                              className="flex items-center gap-3 p-2 rounded-xl hover:bg-[var(--foreground)]/[0.04] transition-all group border border-transparent hover:border-[var(--border)]"
+                            >
+                              <div className="w-10 h-10 rounded-lg overflow-hidden border border-[var(--border)] shrink-0">
+                                <Image
+                                  src={game.gameImageId?.image || "/logoBB.png"}
+                                  alt={game.gameName}
+                                  width={40}
+                                  height={40}
+                                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                                />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-xs font-bold text-[var(--foreground)] truncate group-hover:text-[var(--accent)] transition-colors">{game.gameName}</p>
+                                <p className="text-[9px] text-[var(--muted)]/50 italic uppercase tracking-tighter truncate">{game.gameFrom}</p>
+                              </div>
+                              <FiChevronRight size={14} className="text-[var(--muted)] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </motion.div>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : searchTerm ? (
+                      <div className="py-10 text-center">
+                        <div className="w-12 h-12 rounded-2xl bg-[var(--foreground)]/[0.03] flex items-center justify-center mx-auto mb-3 text-[var(--muted)]/20">
+                          <FiSearch size={20} />
+                        </div>
+                        <p className="text-xs font-bold text-[var(--muted)]/40 uppercase tracking-widest">No games found</p>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="p-3 bg-[var(--foreground)]/[0.02] border-t border-[var(--border)] text-center">
+                    <p className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-widest italic flex items-center justify-center gap-1.5">
+                      <FiZap size={10} className="text-[var(--accent)]" /> Search Powered by Blue Buff Core
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
             <ThemeToggle />
 
             <motion.button
@@ -439,6 +585,64 @@ export default function Header() {
             <div className="px-6 py-3 rounded-full bg-[var(--card)] border border-green-500/20 flex items-center gap-3 shadow-xl backdrop-blur-xl">
               <FiCheckCircle className="text-green-500" size={18} />
               <span className="text-xs font-bold text-[var(--foreground)]">Logout Successful</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {mobileSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="lg:hidden absolute top-14 left-0 w-full bg-[var(--background)] border-b border-[var(--border)] shadow-2xl z-[900] p-4 space-y-4"
+          >
+            <div className="relative">
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search premium games..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full h-12 pl-12 pr-4 rounded-2xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-sm font-bold focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
+              />
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--accent)]" size={18} />
+              {searchTerm && (
+                <button onClick={() => setSearchTerm("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)]">
+                  <FiX size={16} />
+                </button>
+              )}
+            </div>
+
+            <div className="max-h-[60vh] overflow-y-auto custom-scrollbar space-y-2">
+              {searchResults.length > 0 ? (
+                searchResults.map((game) => (
+                  <Link
+                    key={game.gameSlug}
+                    href={`/games/${game.gameSlug}`}
+                    onClick={() => {
+                      setMobileSearchOpen(false);
+                      setSearchTerm("");
+                    }}
+                  >
+                    <div className="flex items-center gap-4 p-3 rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] active:bg-[var(--accent)]/5 transition-all">
+                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-[var(--border)]">
+                        <Image src={game.gameImageId?.image || "/logoBB.png"} alt={game.gameName} width={48} height={48} className="object-cover w-full h-full" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-xs text-[var(--foreground)] truncate">{game.gameName}</p>
+                        <p className="text-[10px] text-[var(--muted)] uppercase tracking-widest">{game.gameFrom}</p>
+                      </div>
+                      <FiChevronRight size={16} className="text-[var(--muted)]/30" />
+                    </div>
+                  </Link>
+                ))
+              ) : searchTerm ? (
+                <div className="py-10 text-center text-[var(--muted)]/40 text-[10px] font-black uppercase tracking-widest">No matching games found</div>
+              ) : (
+                <div className="py-6 text-center text-[var(--muted)]/30 text-[9px] font-black uppercase tracking-widest italic italic">Type to search global games</div>
+              )}
             </div>
           </motion.div>
         )}
