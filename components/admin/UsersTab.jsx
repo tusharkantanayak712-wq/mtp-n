@@ -22,7 +22,9 @@ import {
   Crown,
   Type,
   Activity,
-  Globe
+  Globe,
+  Tag,
+  Plus
 } from "lucide-react";
 
 export default function UsersTab() {
@@ -42,7 +44,7 @@ export default function UsersTab() {
   });
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(40);
+  const [limit] = useState(50);
   const [search, setSearch] = useState("");
 
   const [filters, setFilters] = useState({
@@ -61,6 +63,18 @@ export default function UsersTab() {
     page: 1,
     totalPages: 1,
   });
+
+  const ALLOWED_TAGS = ["premium", "rare", "new", "loyal", "vip", "special"];
+
+  const getTagColor = (tag) => {
+    const tagLower = tag.toLowerCase();
+    if (tagLower === 'premium' || tagLower === 'vip') return 'bg-amber-500/15 text-amber-600 border-amber-500/30';
+    if (tagLower === 'rare' || tagLower === 'special') return 'bg-indigo-500/15 text-indigo-600 border-indigo-500/30';
+    if (tagLower === 'new' || tagLower === 'latest') return 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30';
+    if (tagLower === 'loyal' || tagLower === 'topup') return 'bg-rose-500/15 text-rose-600 border-rose-500/30';
+    if (tagLower === 'external') return 'bg-blue-500/15 text-blue-600 border-blue-500/30';
+    return 'bg-[var(--foreground)]/[0.05] text-[var(--muted)] border-[var(--border)]';
+  };
 
   useEffect(() => {
     fetchUsersStats();
@@ -155,6 +169,44 @@ export default function UsersTab() {
     } finally {
       setUpdatingUserId(null);
     }
+  };
+
+  const handleUpdateTags = async (userId, tags) => {
+    try {
+      setUpdatingUserId(userId);
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/admin/users/tags", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId, tags }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUsers(prev => prev.map(u => u._id === userId ? { ...u, tags: data.tags } : u));
+        if (selectedUser?._id === userId) {
+          setSelectedUser(prev => ({ ...prev, tags: data.tags }));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUpdatingUserId(null);
+    }
+  };
+
+  const addTagToUser = (user, tag) => {
+    if (!tag || user.tags?.includes(tag)) return;
+    
+    // 1-Tag Limit: Simply replace the existing tags with the new one
+    handleUpdateTags(user._id, [tag]);
+  };
+
+  const removeTagFromUser = (user, tag) => {
+    const updatedTags = (user.tags || []).filter(t => t !== tag);
+    handleUpdateTags(user._id, updatedTags);
   };
 
   const getRoleIcon = (role) => {
@@ -317,7 +369,14 @@ export default function UsersTab() {
                           <Avatar user={u} />
                           <div className="flex flex-col">
                             <span className="text-[var(--foreground)] font-semibold text-sm">{u.name}</span>
-                            <span className="text-[11px] text-[var(--muted)]/60 font-mono truncate max-w-[120px]">{u.userId}</span>
+                            <span className="text-[11px] text-[var(--muted)]/60 font-mono truncate max-w-[120px] leading-none">{u.userId}</span>
+                            <div className="flex flex-wrap gap-1 mt-1.5">
+                               {u.tags?.map(tag => (
+                                 <span key={tag} className={`px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[8px] font-black lowercase tracking-tight ${getTagColor(tag).split(' ')[1]}`}>
+                                   #{tag}
+                                 </span>
+                               ))}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -389,11 +448,18 @@ export default function UsersTab() {
                   <div className="flex justify-between items-start mb-2.5 gap-3">
                     <div className="flex items-center gap-2.5 min-w-0">
                       <Avatar user={u} size="sm" />
-                      <div className="min-w-0">
-                        <p className="font-bold text-[var(--foreground)] text-xs truncate leading-tight">{u.name}</p>
-                        <p className="text-[10px] text-[var(--muted)]/40 font-mono truncate lowercase leading-tight">{u.userId}</p>
+                        <div className="min-w-0">
+                          <p className="font-bold text-[var(--foreground)] text-xs truncate leading-tight">{u.name}</p>
+                          <p className="text-[10px] text-[var(--muted)]/40 font-mono truncate lowercase leading-tight">{u.userId}</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                               {u.tags?.map(tag => (
+                                 <span key={tag} className={`px-1.5 py-0.5 rounded text-[7px] font-black lowercase tracking-tight ${getTagColor(tag)}`}>
+                                   #{tag}
+                                 </span>
+                               ))}
+                            </div>
+                        </div>
                       </div>
-                    </div>
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[8px] font-black uppercase tracking-wider ${getRoleClass(u.userType)}`}>
                         {u.userType}
@@ -517,6 +583,14 @@ export default function UsersTab() {
                       </span>
                       <span className="text-[10px] text-[var(--muted)]/60 font-mono tracking-tighter">{selectedUser.userId}</span>
                     </div>
+                    {/* Tags Display In Header */}
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {selectedUser.tags?.map(tag => (
+                        <span key={tag} className={`px-2 py-0.5 rounded-md border text-[8px] font-black lowercase tracking-tight ${getTagColor(tag)}`}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -536,6 +610,33 @@ export default function UsersTab() {
                     {selectedUser.userType === "owner" && (
                       <p className="text-[11px] text-rose-500 font-medium px-1 italic">Role is restricted and cannot be modified.</p>
                     )}
+                  </div>
+                </DrawerSection>
+
+                <DrawerSection icon={<Tag size={18} />} title="User Categories / Tags">
+                  <div className="space-y-4 pt-2">
+                    <p className="text-[10px] font-black lowercase tracking-tight text-[var(--accent)] flex items-center gap-1.5 ml-1">
+                      <Plus size={10} /> Select Category (1 Max)
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-1.5 p-3 rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
+                      {ALLOWED_TAGS.map(tag => {
+                        const isActive = selectedUser.tags?.includes(tag);
+                        return (
+                          <button
+                            key={tag}
+                            onClick={() => isActive ? removeTagFromUser(selectedUser, tag) : addTagToUser(selectedUser, tag)}
+                            className={`px-3 py-1.5 rounded-xl border text-[10px] font-black lowercase transition-all hover:scale-105 active:scale-95 shadow-sm ${
+                              isActive 
+                                ? getTagColor(tag).replace('15', '100').replace('600', 'white') + " border-transparent"
+                                : getTagColor(tag) + " opacity-40 hover:opacity-100"
+                            }`}
+                          >
+                            {isActive ? `✓ ${tag}` : `+ ${tag}`}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </DrawerSection>
 

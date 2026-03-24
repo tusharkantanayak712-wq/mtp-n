@@ -100,6 +100,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    tags: {
+      type: [String],
+      default: ["new"],
+    },
   },
   { timestamps: true }
 );

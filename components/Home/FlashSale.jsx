@@ -82,7 +82,7 @@ export default function FlashSale() {
 
             <div className="max-w-7xl mx-auto">
                 {/* Compact Header */}
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                         <div className="p-1 rounded-lg bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.3)] shrink-0">
                             <FiZap size={12} fill="currentColor" />
@@ -107,7 +107,7 @@ export default function FlashSale() {
 
                 {/* Compact Horizontal Slider */}
                 <div className="overflow-x-auto pb-4 custom-scrollbar-premium snap-x snap-mandatory">
-                    <div className="flex gap-4 md:gap-6 px-1 md:justify-center min-w-max md:min-w-0">
+                    <div className="flex gap-3 md:gap-4 px-1 md:justify-center min-w-max md:min-w-0">
                         {flashSaleData.map((item, index) => (
                             <motion.div
                                 key={item.id}
@@ -119,17 +119,17 @@ export default function FlashSale() {
                             >
                                 <Link
                                     href={`/games/${item.slug}`}
-                                    className="group relative block w-[150px] sm:w-[170px] md:w-[260px] bg-[var(--card)]/40 backdrop-blur-lg border border-white/5 rounded-[1.2rem] p-2 transition-all duration-500 hover:border-amber-500/30 hover:bg-amber-500/[0.04] shadow-lg"
+                                    className="group relative block w-[140px] sm:w-[160px] md:w-[210px] bg-[var(--card)]/40 backdrop-blur-lg border border-white/5 rounded-[1rem] p-2 transition-all duration-500 hover:border-amber-500/30 hover:bg-amber-500/[0.04] shadow-lg"
                                 >
                                     {/* Badge */}
                                     <div className="absolute top-3 left-3 z-20">
-                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md bg-amber-500 text-black shadow-lg">
+                                        <span className="text-[7px] md:text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500 text-black shadow-lg">
                                             {item.badge}
                                         </span>
                                     </div>
 
                                     {/* Image Container */}
-                                    <div className="relative aspect-square rounded-[1rem] overflow-hidden mb-3 ring-1 ring-white/5 bg-black/20">
+                                    <div className="relative aspect-square rounded-[0.8rem] overflow-hidden mb-2 ring-1 ring-white/5 bg-black/20">
                                         <Image
                                             src={item.image}
                                             alt={item.name}
@@ -140,17 +140,17 @@ export default function FlashSale() {
                                     </div>
 
                                     {/* Compact Info */}
-                                    <div className="space-y-1">
-                                        <p className="text-[8px] md:text-[10px] font-bold text-amber-500/80 uppercase tracking-widest truncate">{item.game}</p>
-                                        <h3 className="text-[12px] md:text-[15px] font-black uppercase tracking-tight text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
+                                    <div className="space-y-0.5">
+                                        <p className="text-[7px] md:text-[9px] font-bold text-amber-500/80 uppercase tracking-widest truncate">{item.game}</p>
+                                        <h3 className="text-[11px] md:text-[14px] font-black uppercase tracking-tight text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
                                             {item.name}
                                         </h3>
 
-                                        <div className="flex items-center justify-between pt-1">
-                                            <span className="text-[14px] md:text-[18px] font-black italic text-[var(--foreground)]">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[14px] md:text-[16px] font-black italic text-[var(--foreground)]">
                                                 {item.price}
                                             </span>
-                                            <span className="text-[10px] md:text-[12px] font-bold text-[var(--muted)] line-through opacity-50 decoration-red-500/50">
+                                            <span className="text-[9px] md:text-[11px] font-bold text-[var(--muted)] line-through opacity-50 decoration-red-500/50">
                                                 {item.originalPrice}
                                             </span>
                                         </div>

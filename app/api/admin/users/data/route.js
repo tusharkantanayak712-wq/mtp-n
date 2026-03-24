@@ -21,9 +21,10 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
 
         const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
-        const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
+        const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 10000);
         const search = searchParams.get("search")?.trim();
-        const userType = searchParams.get("userType")?.trim();
+        const userType = searchParams.get("userType")?.trim() || searchParams.get("role")?.trim();
+        const tag = searchParams.get("tag")?.trim();
 
         const from = searchParams.get("from");
         const to = searchParams.get("to");
@@ -57,8 +58,13 @@ export async function GET(req) {
         }
 
         // 👤 Filter by role
-        if (userType) {
+        if (userType && userType !== 'all') {
             filter.userType = userType;
+        }
+
+        // 🏷️ Filter by tag
+        if (tag) {
+            filter.tags = tag;
         }
 
         // 📅 Filter by createdAt date range
@@ -101,6 +107,7 @@ export async function GET(req) {
             },
             {
                 $addFields: {
+                    tags: { $ifNull: ["$tags", ["new"]] },
                     totalOrders: { $ifNull: [{ $arrayElemAt: ["$orderStats.count", 0] }, 0] }
                 }
             },
