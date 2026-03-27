@@ -30,6 +30,7 @@ export async function GET(req) {
         const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
         const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 50);
         const skip = (page - 1) * limit;
+        const filter = searchParams.get("filter") || "all"; // all, inr, usdt
 
         /* ================= QUERY ================= */
         // Get user details to filter by various user identifiers
@@ -40,32 +41,66 @@ export async function GET(req) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 
-        const query = {
+        const baseQuery = {
             $or: [
                 { userId: user.userId }, // Custom ID
                 { userObjectId: user._id } // Mongo ID
             ]
         };
 
-        const [transactions, total] = await Promise.all([
-            WalletTransaction.find(query)
+        let txnQuery = { ...baseQuery };
+        if (filter === "inr") {
+            // Filter out transactions that have a referenceId starting with "USDT" or are from UsdtDeposit
+            txnQuery.referenceId = { $not: /^USDT/ }; 
+        } else if (filter === "usdt") {
+            // Only transactions with referenceId starting with "USDT" 
+            txnQuery.referenceId = /^USDT/;
+        }
+
+        const [transactions, usdtDeposits, totalTransactionCount] = await Promise.all([
+            WalletTransaction.find(txnQuery)
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit)
-                .select("-userObjectId -__v") // Exclude internal fields
+                .select("-userObjectId -__v")
                 .lean(),
-            WalletTransaction.countDocuments(query),
+            (filter === "all" || filter === "usdt") 
+                ? mongoose.model("UsdtDeposit").find({ 
+                    ...baseQuery, 
+                    status: { $in: ["waiting", "submitted", "confirmed", "failed", "expired"] } 
+                }).lean() 
+                : Promise.resolve([]),
+            WalletTransaction.countDocuments(txnQuery),
         ]);
+
+        // Merge and Map
+        const mappedUsdt = usdtDeposits
+            .filter(d => d.status !== "confirmed") // confirmed ones are already in WalletTransaction
+            .map(d => ({
+                _id: d._id,
+                transactionId: d.depositId,
+                type: "credit",
+                amount: d.coinsToCredit,
+                description: `USDT Deposit (${d.usdtAmount} USDT via ${d.network})`,
+                status: d.status === "submitted" ? "pending" : d.status, // submitted -> pending, others kept as is
+                createdAt: d.createdAt,
+                updatedAt: d.updatedAt,
+                isUsdt: true
+            }));
+
+        const combined = [...mappedUsdt, ...transactions]
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, limit);
 
         /* ================= RESPONSE ================= */
         return NextResponse.json({
             success: true,
-            data: transactions,
+            data: combined,
             pagination: {
-                total,
+                total: totalTransactionCount + mappedUsdt.length,
                 page,
                 limit,
-                totalPages: Math.ceil(total / limit),
+                totalPages: Math.ceil((totalTransactionCount + mappedUsdt.length) / limit),
             },
         });
     } catch (err) {

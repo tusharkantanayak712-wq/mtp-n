@@ -59,7 +59,7 @@ export default function GameBannerCarousel() {
       zIndex: 0,
       x: direction < 0 ? "20%" : "-20%",
       opacity: 0,
-      scale: 0.95,
+      scale: 1.1,
       filter: "blur(8px)",
     }),
   };
@@ -96,14 +96,21 @@ export default function GameBannerCarousel() {
             }}
             className="absolute inset-0"
           >
-            <Link href="/" className="relative block w-full h-full">
-              <Image
-                src={currentBanner.bannerImage || logo}
-                alt={currentBanner.bannerTitle}
-                fill
-                priority
-                className="object-cover transition-transform duration-[8000ms] ease-out group-hover:scale-105"
-              />
+            <Link href="/" className="relative block w-full h-full overflow-hidden">
+              <motion.div
+                initial={{ scale: 1 }}
+                animate={{ scale: 1.25 }}
+                transition={{ duration: 6, ease: "linear" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={currentBanner.bannerImage || logo}
+                  alt={currentBanner.bannerTitle}
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </motion.div>
 
               {/* Tactical Overlays */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -121,16 +128,16 @@ export default function GameBannerCarousel() {
                   {/* Tactical Badge - Smaller */}
                   <div className="mb-3 sm:mb-4 flex items-center gap-2">
                     <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_6px_var(--accent)]" />
-                    <span className="text-[var(--accent)] text-[8px] font-black uppercase tracking-[0.2em] font-mono">Mission Active</span>
+                    <span className="text-[var(--accent)] text-[8px] font-black uppercase tracking-[0.2em] font-mono">LIVE</span>
                   </div>
 
                   <h2 className="text-white font-black text-2xl sm:text-3xl md:text-5xl tracking-tighter leading-[0.9] uppercase mb-2 sm:mb-3 italic">
                     {currentBanner.bannerTitle}
                   </h2>
 
-                  <p className="text-white/50 text-[8px] sm:text-[9px] md:text-[10px] font-bold tracking-[0.1em] uppercase leading-relaxed max-w-md line-clamp-2">
+                  {/* <p className="text-white/50 text-[8px] sm:text-[9px] md:text-[10px] font-bold tracking-[0.1em] uppercase leading-relaxed max-w-md line-clamp-2">
                     {currentBanner.bannerDescription || "Elite Gaming Access • Instant Provisioning • Zero Lag Connection Status: Optimal"}
-                  </p>
+                  </p> */}
                 </motion.div>
               </div>
             </Link>

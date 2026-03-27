@@ -13,6 +13,7 @@ export default function WalletPage() {
                 setWalletBalance={setWalletBalance}
                 userReferral={{
                     userId: userDetails.userId,
+                    userType: userDetails.userType,
                     referralUsed: userDetails.referralUsed,
                     referralCount: userDetails.referralCount,
                 }}
