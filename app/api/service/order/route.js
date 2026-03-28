@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
 import ApiKey from "@/models/ApiKey";
+import WalletTransaction from "@/models/WalletTransaction";
 import { validateApiKey } from "@/lib/apiKeyAuth";
 import { ensureDailyReset } from "@/lib/apiKeyUtils";
 import { calculateItemPrice } from "@/lib/pricingUtils";
@@ -77,6 +78,8 @@ export async function POST(req) {
 
         const { price, itemName } = priceData;
 
+        const orderId = `API-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
         // ⚡ ATOMIC WALLET DEDUCTION
         const updatedUser = await User.findOneAndUpdate(
             { _id: auth.user.id, wallet: { $gte: price } },
@@ -92,9 +95,24 @@ export async function POST(req) {
             }, { status: 403 });
         }
 
+        // 🛡️ Record Wallet Transaction (Debit)
+        const txnId = `TXN${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+        await WalletTransaction.create({
+            transactionId: txnId,
+            userId: user.userId,
+            userObjectId: user._id,
+            type: "debit",
+            amount: price,
+            balanceBefore: updatedUser.wallet + price,
+            balanceAfter: updatedUser.wallet,
+            description: `Order: ${itemName}`,
+            status: "success",
+            referenceId: orderId,
+            performedBy: "user",
+        });
+
 
         let newOrder;
-        const orderId = `API-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
         try {
             // 🛡️ Create Order Record
@@ -175,8 +193,24 @@ export async function POST(req) {
                 newOrder.paymentStatus = "failed"; // Money is being returned
 
                 // ⚡ AUTOMATIC REFUND: Fulfillment failed
-                await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } });
+                const refundedUser = await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } }, { new: true });
                 console.log(`[Service API] Order ${orderId} failed. Automatically refunded ₹${price}.`);
+
+                // 🛡️ Record Wallet Transaction (Refund)
+                const refundTxId = `TXN${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+                await WalletTransaction.create({
+                    transactionId: refundTxId,
+                    userId: user.userId,
+                    userObjectId: user._id,
+                    type: "credit",
+                    amount: price,
+                    balanceBefore: refundedUser.wallet - price,
+                    balanceAfter: refundedUser.wallet,
+                    description: `Refund (Order ${orderId} Failed)`,
+                    status: "success",
+                    referenceId: orderId,
+                    performedBy: "system",
+                });
             }
 
             newOrder.externalResponse = [gameData];
@@ -206,7 +240,23 @@ export async function POST(req) {
             console.error("Internal Order Processing Error:", error);
 
             // ⚡ EMERGENCY AUTOMATIC REFUND: Technical crash during processing
-            await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } });
+            const crashRefundUser = await User.findByIdAndUpdate(auth.user.id, { $inc: { wallet: price } }, { new: true });
+
+            // 🛡️ Record Wallet Transaction (Emergency Refund)
+            const crashRefundId = `TXN${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+            await WalletTransaction.create({
+                transactionId: crashRefundId,
+                userId: user.userId,
+                userObjectId: user._id,
+                type: "credit",
+                amount: price,
+                balanceBefore: crashRefundUser.wallet - price,
+                balanceAfter: crashRefundUser.wallet,
+                description: `Emergency Refund (Error: ${orderId})`,
+                status: "success",
+                referenceId: orderId,
+                performedBy: "system",
+            });
 
             if (newOrder) {
                 newOrder.status = "failed";

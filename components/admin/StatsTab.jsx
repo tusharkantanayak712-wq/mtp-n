@@ -57,7 +57,7 @@ export default function StatsTab() {
     const [historyTotalPages, setHistoryTotalPages] = useState(1);
 
     // Tab State
-    const [activeTab, setActiveTab] = useState("wallets"); // history | wallets
+    const [activeTab, setActiveTab] = useState("history"); // history | wallets
 
     // Modal State
     const [selectedUserForWallet, setSelectedUserForWallet] = useState(null);
