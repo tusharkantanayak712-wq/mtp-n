@@ -6,6 +6,7 @@ export interface BlogPost {
   excerpt: string;
   publishedAt: string;
   readingTime: string;
+  image: string;
   featured?: boolean;
 }
 
@@ -19,6 +20,7 @@ export const BLOGS_DATA: BlogPost[] = [
       "Master the hidden mechanics of Mobile Legends that pro players use to dominate Every match. Learn advanced minimap tricks, jungle pathing, and item countering.",
     publishedAt: "2026-03-29",
     readingTime: "6 min read",
+    image: "/blog/mlbb-tricks.png",
     featured: true,
   },
   {
@@ -30,6 +32,7 @@ export const BLOGS_DATA: BlogPost[] = [
       "Learn the latest MLBB weekly pass price in India and whether it's worth buying.",
     publishedAt: "2026-01-10",
     readingTime: "4 min read",
+    image: "/blog/weekly-pass-price.png",
     featured: true,
   },
   {
@@ -41,6 +44,7 @@ export const BLOGS_DATA: BlogPost[] = [
       "Step-by-step guide to buying MLBB diamonds safely in India.",
     publishedAt: "2025-01-12",
     readingTime: "5 min read",
+    image: "/blog/buy-safely.png",
     featured: true,
   },
   {
@@ -52,6 +56,7 @@ export const BLOGS_DATA: BlogPost[] = [
       "Understand whether MLBB top-ups are legal in India.",
     publishedAt: "2025-01-05",
     readingTime: "3 min read",
+    image: "/blog/legal-india.png",
   },
   {
     id: "4",
@@ -62,6 +67,7 @@ export const BLOGS_DATA: BlogPost[] = [
       "A complete guide on how to safely gift Mobile Legends diamonds to your friends using their Player ID.",
     publishedAt: "2025-02-07",
     readingTime: "3 min read",
+    image: "/blog/gift-guide.png",
     featured: true,
   },
   {
@@ -73,6 +79,7 @@ export const BLOGS_DATA: BlogPost[] = [
       "Not all MLBB diamond packages are equal. Find out which bundle gives you the most diamonds per rupee and how to save more with bonus events.",
     publishedAt: "2025-02-26",
     readingTime: "5 min read",
+    image: "/blog/best-value.png",
     featured: true,
   },
 ];
