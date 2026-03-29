@@ -1,0 +1,298 @@
+"use client";
+
+import { useState, useMemo, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import {
+  FiSearch,
+  FiClock,
+  FiChevronLeft,
+  FiChevronRight,
+  FiArrowRight,
+  FiList,
+  FiPlay,
+} from "react-icons/fi";
+
+import { BLOGS_DATA } from "@/lib/blogData";
+
+/* ================= SETTINGS ================= */
+const POSTS_PER_PAGE = 6;
+
+export default function BlogListing({ initialGame = "all" }) {
+  const [search, setSearch] = useState("");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedGame, setSelectedGame] = useState(initialGame);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const categories = useMemo(() => {
+    return ["all", ...new Set(BLOGS_DATA.map((b) => b.type))];
+  }, []);
+
+  const games = useMemo(() => {
+    return ["all", ...new Set(BLOGS_DATA.map((b) => b.game))];
+  }, []);
+
+  const filteredBlogs = useMemo(() => {
+    let blogs = [...BLOGS_DATA];
+    if (search) {
+      blogs = blogs.filter((b) =>
+        b.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    if (selectedType !== "all") {
+      blogs = blogs.filter((b) => b.type === selectedType);
+    }
+    if (selectedGame !== "all") {
+      blogs = blogs.filter((b) => b.game === selectedGame);
+    }
+    blogs.sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
+    return blogs;
+  }, [search, selectedType, selectedGame]);
+
+  const totalPages = Math.ceil(filteredBlogs.length / POSTS_PER_PAGE);
+
+  const paginatedBlogs = filteredBlogs.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedType, selectedGame]);
+
+  return (
+    <section className="min-h-screen bg-[var(--background)] relative pb-32 transition-colors duration-300 px-6">
+
+      <div className="max-w-4xl mx-auto pt-8 md:pt-12 relative z-10">
+
+        <motion.div
+          className="mb-10"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-[1px] bg-[var(--accent)]" />
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] italic">
+                <Link href="/blog" className="hover:opacity-60 transition-opacity whitespace-nowrap">News & Blogs</Link>
+                {initialGame !== "all" && (
+                    <>
+                        <span className="opacity-20 translate-y-[1px]">/</span>
+                        <span className="text-[var(--muted)] opacity-50 whitespace-nowrap">{initialGame}</span>
+                    </>
+                )}
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="text-2xl md:text-5xl font-[1000] italic tracking-tighter uppercase leading-none">
+              {initialGame === "all" ? "Latest" : initialGame} <span className="text-[var(--accent)]">News</span>
+            </h2>
+            
+            {/* 🔍 SEARCH - COMPACT */}
+            <div className="relative w-full md:w-64">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                <FiSearch className="text-[var(--muted)] opacity-50" size={14} />
+              </div>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="SEARCH..."
+                className="w-full h-11 pl-10 pr-6 rounded-xl bg-[var(--card)] border border-[var(--border)] outline-none text-[10px] font-bold tracking-widest uppercase focus:border-[var(--accent)]/40 transition-all font-sans"
+              />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* 🔖 FILTERS SECTION */}
+        <div className="space-y-6 mb-12">
+            
+            {/* 🎮 GAME FILTER - ONLY SHOW IF NOT IN SPECIFIC GAME PAGE */}
+            {initialGame === "all" && (
+                <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40 italic">
+                        <FiPlay size={10} className="fill-current" /> SELECT GAME
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {games.map((game) => (
+                            <Link
+                                key={game}
+                                href={game === "all" ? "/blog" : `/blog/${game}`}
+                                className={`px-5 py-2 rounded-xl text-[10px] font-[1000] uppercase tracking-tighter transition-all border ${
+                                    selectedGame === game
+                                        ? "bg-[var(--accent)] border-[var(--accent)] text-black italic scale-105 shadow-lg shadow-[var(--accent)]/20"
+                                        : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
+                                }`}
+                            >
+                                {game === "all" ? "All Games" : game}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* 🏷️ CATEGORY FILTER */}
+            <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40 italic">
+                    <FiList size={10} /> TOPICS
+                </div>
+                <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 no-scrollbar">
+                    {categories.map((type) => (
+                        <button
+                            key={type}
+                            onClick={() => setSelectedType(type)}
+                            className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
+                                selectedType === type
+                                    ? "bg-[var(--foreground)] border-[var(--foreground)] text-[var(--background)] italic"
+                                    : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/20"
+                            }`}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        {/* 📄 BLOG GRID */}
+        <div className="space-y-3">
+          <AnimatePresence mode="wait">
+            {paginatedBlogs.length > 0 ? (
+              paginatedBlogs.map((blog, index) => (
+                <BlogCard key={blog.id} blog={blog} index={index} />
+              ))
+            ) : (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-20 text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] italic opacity-20"
+              >
+                No Articles Discovered
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* 🔢 PAGINATION - NUMBERED */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-12 mb-20">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+              className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] disabled:opacity-20 transition-all hover:border-[var(--accent)]/30 hover:text-[var(--accent)]"
+            >
+              <FiChevronLeft size={16} />
+            </button>
+            
+            <div className="flex items-center gap-1 mx-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                <button
+                  key={num}
+                  onClick={() => setCurrentPage(num)}
+                  className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all border ${
+                    currentPage === num 
+                      ? "bg-[var(--accent)] border-[var(--accent)] text-black scale-110 shadow-lg shadow-[var(--accent)]/20" 
+                      : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--accent)]"
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] disabled:opacity-20 transition-all hover:border-[var(--accent)]/30 hover:text-[var(--accent)]"
+            >
+              <FiChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
+        {/* 🏔️ SEO FOOTER */}
+        <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="mt-32 pt-16 border-t border-[var(--border)]/30"
+        >
+            <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none mb-6 opacity-20">
+                {initialGame === "all" ? "MLBB" : initialGame.toUpperCase()} <span className="text-[var(--accent)]">NEWS & BLOGS</span>
+            </h1>
+            <p className="text-sm md:text-base text-[var(--muted)] leading-relaxed italic max-w-2xl opacity-40">
+                Your definitive collection of <strong className="text-[var(--foreground)]">{initialGame === "all" ? "game" : initialGame} top up guides</strong>, pricing analysis, and safety protocols. Stay updated with the latest <strong className="text-[var(--foreground)]">mobile legends recharge india fast</strong> tips and diamond bundle value comparisons. We provide the most accurate information for <strong>Mobile Legends players in India</strong> to ensure safe and cheap diamond top-ups.
+            </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ================= BLOG CARD ================= */
+function BlogCard({ blog, index }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+    >
+      <Link
+        href={`/blog/${blog.game}/${blog.slug}`}
+        className="group block relative rounded-xl bg-[var(--card)] border border-[var(--border)] p-3 hover:border-[var(--accent)]/30 transition-all duration-300"
+      >
+        <div className="flex items-center gap-4">
+          {/* 🖼️ THUMBNAIL - SMALLER */}
+          <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden flex-shrink-0 border border-[var(--border)] bg-[var(--card)] group-hover:border-[var(--accent)]/40 transition-colors">
+            <img 
+              src={blog.image} 
+              alt={blog.title} 
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+          </div>
+
+          {/* 📝 CONTENT - TIGHTER */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-[7px] md:text-[8px] font-black text-[var(--accent)] uppercase tracking-[0.1em] italic">
+                {blog.type}
+              </span>
+              <span className="w-0.5 h-0.5 rounded-full bg-[var(--border)]" />
+              <span className="text-[7px] md:text-[8px] font-bold text-[var(--muted)] opacity-40 uppercase tracking-[0.05em]">
+                {new Date(blog.publishedAt).toLocaleDateString()}
+              </span>
+            </div>
+
+            <h2 className="text-base md:text-lg font-[900] uppercase tracking-tighter italic text-[var(--foreground)] leading-tight group-hover:text-[var(--accent)] transition-colors mb-0.5 line-clamp-1">
+              {blog.title}
+            </h2>
+
+            <div className="flex items-center gap-2">
+              <p className="text-[var(--muted)] text-[10px] leading-none opacity-50 line-clamp-1 flex-1">
+                {blog.excerpt}
+              </p>
+              
+              {/* 🏷️ TAGS - INLINE */}
+              <div className="flex items-center gap-1">
+                {blog.tags?.slice(0, 1).map(tag => (
+                  <span key={tag} className="text-[7px] font-bold text-[var(--muted)] opacity-20 border border-[var(--border)] px-1.5 py-0 rounded-md uppercase tracking-tighter">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ➡️ ACTION - MICRO */}
+          <div className="hidden sm:flex items-center gap-3 text-right">
+            <div className="w-8 h-8 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/40 transition-all group-hover:scale-105">
+              <FiArrowRight size={14} />
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}

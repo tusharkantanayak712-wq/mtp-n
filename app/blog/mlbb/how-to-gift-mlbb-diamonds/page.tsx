@@ -4,7 +4,7 @@ import BlogPostLayout from "@/components/Blog/BlogPostLayout";
 export const metadata: Metadata = {
     title: "How to Gift MLBB Diamonds to Friends – Easy 2026 Guide",
     description: "Step-by-step guide on gifting MLBB diamonds safely using Player ID. Surprising your friends with skins and passes has never been easier in 2026.",
-    alternates: { canonical: "https://mlbbtopup.in/blog/how-to-gift-mlbb-diamonds" },
+    alternates: { canonical: "https://mlbbtopup.in/blog/mlbb/how-to-gift-mlbb-diamonds" },
 };
 
 export default function BlogPage() {
@@ -15,6 +15,7 @@ export default function BlogPage() {
             readTime="5 min read"
             date="Feb 07, 2026"
             image="/blog/gift-guide.png"
+            game="MLBB"
         >
             <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
                 Surprise your squad with the gift of diamonds! <strong>Gifting MLBB diamonds</strong> is the perfect way to help your friends unlock their dream skins or the latest Starlight Pass.

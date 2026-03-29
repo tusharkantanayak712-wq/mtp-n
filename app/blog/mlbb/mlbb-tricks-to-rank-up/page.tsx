@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "99% Players Don’t Know These MLBB Tricks (Rank Up Instantly) – 2026",
   description: "Master the hidden mechanics of Mobile Legends that pro players use to dominate Every match. Learn advanced minimap tricks, jungle pathing, and item countering.",
-  alternates: { canonical: "https://mlbbtopup.in/blog/mlbb-tricks-to-rank-up" },
+  alternates: { canonical: "https://mlbbtopup.in/blog/mlbb/mlbb-tricks-to-rank-up" },
 };
 
 export default function BlogPage() {
@@ -16,6 +16,7 @@ export default function BlogPage() {
       readTime="6 min read"
       date="March 29, 2026"
       image="/blog/mlbb-tricks.png"
+      game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         Are you stuck in Epic or Legend rank? Most players think they need "fast hands" to win. But the real secret to reaching Mythic is knowing the hidden tricks. Here’s how you can rank up fast in 2026.

@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "How to Buy MLBB Diamonds Safely in India – 2026 Guide",
   description: "Learn the safest way to recharge MLBB diamonds in India. Protect your account from scams and identify trusted top-up websites like Blue Buff.",
-  alternates: { canonical: "https://mlbbtopup.in/blog/how-to-buy-mlbb-diamonds-safely-in-india" },
+  alternates: { canonical: "https://mlbbtopup.in/blog/mlbb/how-to-buy-mlbb-diamonds-safely-in-india" },
 };
 
 export default function BlogPage() {
@@ -16,6 +16,7 @@ export default function BlogPage() {
       readTime="5 min read"
       date="Jan 12, 2026"
       image="/blog/buy-safely.png"
+      game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         Buying <strong>MLBB diamonds online in India</strong> is easy — but you must be careful. There are many fake sellers and scams on social media today.

@@ -4,7 +4,7 @@ import BlogPostLayout from "@/components/Blog/BlogPostLayout";
 export const metadata: Metadata = {
     title: "Best MLBB Diamond Packages in India – Real Price & Value Guide (2026)",
     description: "Actual MLBB diamond prices in India with real cost-per-diamond breakdown. Find out which package gives you maximum value for your rupee in 2026.",
-    alternates: { canonical: "https://mlbbtopup.in/blog/best-mlbb-diamond-packages-value-guide" },
+    alternates: { canonical: "https://mlbbtopup.in/blog/mlbb/best-mlbb-diamond-packages-value-guide" },
 };
 
 export default function BlogPage() {
@@ -15,6 +15,7 @@ export default function BlogPage() {
             readTime="5 min read"
             date="Feb 26, 2026"
             image="/blog/best-value.png"
+            game="MLBB"
         >
             <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
                 Want to get the most <strong>MLBB diamonds</strong> for your money? We compared all the diamond packs in India to find out which one is the best deal for you in 2026.

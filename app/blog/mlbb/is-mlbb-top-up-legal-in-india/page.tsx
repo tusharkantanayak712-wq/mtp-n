@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Is MLBB Top Up Legal in India? – Everything You Need to Know (2026)",
   description: "Answering the common question: Is Mobile Legends recharge legal in India? Understand the regulations, official partners, and safe practices for 2026.",
-  alternates: { canonical: "https://mlbbtopup.in/blog/is-mlbb-top-up-legal-in-india" },
+  alternates: { canonical: "https://mlbbtopup.in/blog/mlbb/is-mlbb-top-up-legal-in-india" },
 };
 
 export default function BlogPage() {
@@ -16,6 +16,7 @@ export default function BlogPage() {
       readTime="3 min read"
       date="Jan 5, 2026"
       image="/blog/legal-india.png"
+      game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         Many Mobile Legends (MLBB) players in India ask: "Is it legal to buy diamonds online?" With so many recharge websites available, it’s important to know the rules for 2026.

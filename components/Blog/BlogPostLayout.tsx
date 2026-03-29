@@ -14,6 +14,8 @@ interface BlogPostLayoutProps {
     readTime: string;
     date: string;
     image: string;
+    author?: string;
+    game?: string;
     children: ReactNode;
     backHref?: string;
 }
@@ -24,13 +26,16 @@ export default function BlogPostLayout({
     readTime,
     date,
     image,
+    author = "Admin",
+    game,
     children,
     backHref = "/blog",
 }: BlogPostLayoutProps) {
     const pathname = usePathname();
 
     const relatedArticles = useMemo(() => {
-        const currentSlug = pathname.split("/").pop();
+        const parts = pathname.split("/");
+        const currentSlug = parts[parts.length - 1];
         const filtered = BLOGS_DATA.filter((b) => b.slug !== currentSlug);
         // Shuffle and take 3
         return filtered.sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -56,9 +61,15 @@ export default function BlogPostLayout({
                     <Link href="/blog" className="flex items-center justify-center w-6 h-6 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/30 transition-all mr-1">
                         <FiArrowLeft size={14} />
                     </Link>
-                    <Link href="/" className="hover:text-[var(--accent)] transition-colors">Home</Link>
-                    <span className="opacity-20">/</span>
-                    <Link href="/blog" className="hover:text-[var(--accent)] transition-colors">Insights</Link>
+                    <Link href="/blog" className="hover:text-[var(--accent)] transition-colors">News</Link>
+                    {game && (
+                        <>
+                            <span className="opacity-20">/</span>
+                            <Link href={`/blog/${game.toLowerCase()}`} className="text-[var(--accent)] hover:underline underline-offset-4 decoration-[var(--accent)]/30 transition-all">
+                                {game}
+                            </Link>
+                        </>
+                    )}
                     <span className="opacity-20">/</span>
                     <span className="text-[var(--muted)] line-clamp-1 italic">{title}</span>
                 </motion.div>
@@ -70,14 +81,16 @@ export default function BlogPostLayout({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="flex items-center gap-3 mb-6">
-                            <span className="px-4 py-1.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-[9px] font-black uppercase tracking-widest border border-[var(--accent)]/10">
-                                {category}
+                        <div className="flex flex-wrap items-center gap-4 mb-6 mt-1 text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em]">
+                            <span className="text-[var(--accent)] italic"># {category}</span>
+                            <span className="opacity-10 text-[var(--foreground)]">|</span>
+                            <span className="flex items-center gap-1.5 text-[var(--muted)] opacity-50"><FiClock size={11} className="text-[var(--accent)] opacity-40" /> {readTime}</span>
+                            <span className="opacity-10 text-[var(--foreground)]">|</span>
+                            <span className="flex items-center gap-1.5 text-[var(--muted)] opacity-50"><FiCalendar size={11} className="text-[var(--accent)] opacity-40" /> {date}</span>
+                            <span className="opacity-10 text-[var(--foreground)]">|</span>
+                            <span className="text-[var(--accent)] opacity-80 group-hover:opacity-100 transition-opacity">
+                                BY <span className="underline decoration-[var(--accent)]/30">{author}</span>
                             </span>
-                            <div className="flex items-center gap-4 text-[var(--muted)] opacity-50 text-[10px] font-black uppercase tracking-widest ml-2">
-                                <span className="flex items-center gap-1.5"><FiClock size={12} /> {readTime}</span>
-                                <span className="flex items-center gap-1.5"><FiCalendar size={12} /> {date}</span>
-                            </div>
                         </div>
 
                         <h1 className="text-3xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-[0.9] text-[var(--foreground)] mb-6 drop-shadow-sm">
@@ -117,22 +130,38 @@ export default function BlogPostLayout({
                         <div className="w-10 h-[1px] bg-[var(--accent)]" />
                         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] italic">Elevate your game</span>
                     </div>
-                    <h3 className="text-2xl md:text-4xl font-black italic tracking-tighter uppercase mb-10">Related <span className="text-[var(--accent)]">Insights</span></h3>
+                    <h3 className="text-2xl md:text-4xl font-black italic tracking-tighter uppercase mb-10">Related <span className="text-[var(--accent)]">News</span></h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {relatedArticles.map((blog) => (
                             <Link
                                 key={blog.id}
-                                href={`/blog/${blog.slug}`}
+                                href={`/blog/${blog.game}/${blog.slug}`}
                                 className="group block h-full p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all flex flex-col justify-between"
                             >
-                                <div className="space-y-4">
-                                    <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-wider italic">{blog.type}</span>
-                                    <h4 className="text-sm md:text-base font-black uppercase italic tracking-tighter leading-tight group-hover:text-[var(--accent)] transition-colors">{blog.title}</h4>
-                                </div>
-                                <div className="mt-6 flex items-center justify-between text-[var(--muted)] opacity-40 group-hover:opacity-100 transition-opacity">
-                                    <span className="text-[8px] font-black uppercase">{blog.readingTime}</span>
-                                    <FiArrowRight size={14} />
+                                <div className="flex items-center gap-4">
+                                    {/* 🖼️ MINI THUMBNAIL ON LEFT */}
+                                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--background)] flex-shrink-0">
+                                        <img 
+                                            src={blog.image} 
+                                            alt={blog.title} 
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                        />
+                                    </div>
+
+                                    {/* 📝 COMPACT CONTENT ON RIGHT */}
+                                    <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-1">
+                                        <div className="space-y-1.5">
+                                            <span className="text-[7px] font-black text-[var(--accent)] uppercase tracking-wider italic">{blog.type}</span>
+                                            <h4 className="text-xs md:text-sm font-black uppercase italic tracking-tighter leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2 md:line-clamp-3">
+                                                {blog.title}
+                                            </h4>
+                                        </div>
+                                        <div className="flex items-center justify-between text-[var(--muted)] opacity-30 group-hover:opacity-100 transition-opacity mt-2">
+                                            <span className="text-[7px] font-black uppercase tracking-widest">{blog.readingTime}</span>
+                                            <FiArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
                                 </div>
                             </Link>
                         ))}

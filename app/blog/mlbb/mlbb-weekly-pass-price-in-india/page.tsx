@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "MLBB Weekly Pass Price in India 2026 – Is it Worth Buying?",
   description: "Discover the current MLBB Weekly Diamond Pass price in India for 2026. Compare rewards, benefits, and find the cheapest way to buy diamonds instantly.",
-  alternates: { canonical: "https://mlbbtopup.in/blog/mlbb-weekly-pass-price-in-india" },
+  alternates: { canonical: "https://mlbbtopup.in/blog/mlbb/mlbb-weekly-pass-price-in-india" },
 };
 
 export default function BlogPage() {
@@ -16,6 +16,7 @@ export default function BlogPage() {
       readTime="4 min read"
       date="Jan 10, 2026"
       image="/blog/weekly-pass-price.png"
+      game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         The <strong>MLBB Weekly Diamond Pass</strong> is the best way to get cheap diamonds in India. It gives you small rewards every day for 7 days, and it costs much less than buying diamonds directly.
