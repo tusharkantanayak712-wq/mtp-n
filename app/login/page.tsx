@@ -16,7 +16,36 @@ import {
 } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
 
-import { Suspense } from "react";
+import { Suspense, useRef } from "react";
+
+function ParticleBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{
+            y: [0, -100, 0],
+            x: [0, Math.random() * 50 - 25, 0],
+            opacity: [0.1, 0.3, 0.1],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 10 + Math.random() * 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.5,
+          }}
+          className="absolute w-1 h-1 bg-[var(--accent)] rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 function AuthContent() {
   const [loading, setLoading] = useState(false);
@@ -24,8 +53,40 @@ function AuthContent() {
   const [success, setSuccess] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [showOtpField, setShowOtpField] = useState(false);
+  const otpInputs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const handleOtpChange = (index: number, value: string) => {
+    if (value.length > 1) {
+      // Handle paste
+      const pastedData = value.slice(0, 6).split("");
+      const newOtp = [...otp];
+      pastedData.forEach((char, i) => {
+        if (index + i < 6) newOtp[index + i] = char;
+      });
+      setOtp(newOtp);
+      // Focus last filled or next input
+      const nextIndex = Math.min(index + pastedData.length, 5);
+      otpInputs.current[nextIndex]?.focus();
+      return;
+    }
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Auto-focus next
+    if (value && index < 5) {
+      otpInputs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpInputs.current[index - 1]?.focus();
+    }
+  };
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
 
@@ -88,7 +149,7 @@ function AuthContent() {
       const res = await fetch("/api/auth/otp/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ email, otp: otp.join("") }),
       });
       const data = await res.json();
       if (data.success) {
@@ -141,6 +202,7 @@ function AuthContent() {
           className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(var(--accent-rgb),0.15),transparent_70%)]"
         />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)] opacity-20" />
+        <ParticleBackground />
       </div>
 
       <motion.div
@@ -160,20 +222,21 @@ function AuthContent() {
             <div className="flex flex-col items-center text-center mb-8">
               <motion.div
                 variants={itemVariants}
-                animate={{ y: [0, -8, 0] }}
-                transition={{
-                  y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-                }}
-                className="relative mb-4"
+                className="relative mb-6"
               >
                 <div className="absolute inset-0 bg-[var(--accent)] blur-2xl opacity-20 animate-pulse" />
-                <Image
-                  src="/logoBB.png"
-                  alt="Logo"
-                  width={64}
-                  height={64}
-                  className="relative z-10"
-                />
+                <div className="relative p-1 rounded-full overflow-hidden">
+                  <div className="absolute inset-0 animate-rotate-gradient bg-[conic-gradient(from_0deg,transparent,var(--accent),transparent)] opacity-40" />
+                  <div className="relative bg-[var(--background)] p-2 rounded-full border border-[var(--border)] shadow-xl">
+                    <Image
+                      src="/logoBB.png"
+                      alt="Logo"
+                      width={64}
+                      height={64}
+                      className="relative z-10"
+                    />
+                  </div>
+                </div>
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-2">
@@ -245,12 +308,12 @@ function AuthContent() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         disabled={showOtpField}
-                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-5 text-sm font-bold focus:outline-none focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
+                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-5 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
                       />
                       {showOtpField && (
                         <button
                           type="button"
-                          onClick={() => { setShowOtpField(false); setOtp(""); setSuccess(""); }}
+                          onClick={() => { setShowOtpField(false); setOtp(["", "", "", "", "", ""]); setSuccess(""); }}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-[var(--accent)] hover:underline"
                         >
                           Change
@@ -266,20 +329,29 @@ function AuthContent() {
                           exit={{ opacity: 0, height: 0, y: -10 }}
                           className="overflow-hidden space-y-4"
                         >
-                          <div className="relative group">
-                            <div className="absolute inset-y-0 left-4 flex items-center text-[var(--muted)] pointer-events-none group-focus-within:text-[var(--accent)] transition-colors">
-                              <FiShield size={18} />
-                            </div>
-                            <input
-                              type="text"
-                              placeholder="Enter 6-Digit Code"
-                              value={otp}
-                              onChange={(e) => setOtp(e.target.value)}
-                              maxLength={6}
-                              required
-                              autoFocus
-                              className="w-full bg-[var(--foreground)]/[0.03] border border-[var(--accent)]/30 rounded-2xl pl-12 pr-5 py-5 text-lg font-black tracking-[0.3em] focus:outline-none focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/20 shadow-inner"
-                            />
+                          <div className="grid grid-cols-6 gap-2">
+                            {otp.map((digit, idx) => (
+                              <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                              >
+                                <input
+                                  ref={(el) => {
+                                    otpInputs.current[idx] = el;
+                                  }}
+                                  type="text"
+                                  maxLength={1}
+                                  value={digit}
+                                  onChange={(e) => handleOtpChange(idx, e.target.value)}
+                                  onKeyDown={(e) => handleKeyDown(idx, e)}
+                                  required
+                                  autoFocus={idx === 0}
+                                  className="w-full aspect-square text-center bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-xl text-xl font-black focus:outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/10 transition-all shadow-sm"
+                                />
+                              </motion.div>
+                            ))}
                           </div>
                           <div className="flex justify-between items-center px-1">
                             <p className="text-[10px] text-[var(--muted)]/60 font-medium italic">Didn't get it?</p>
@@ -293,13 +365,14 @@ function AuthContent() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[var(--accent)] text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
+                    className="w-full relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
                   >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite]" />
                     {loading ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        <span>{showOtpField ? "Verify & Login" : "Send Access Code"}</span>
+                        <span className="relative z-10">{showOtpField ? "Verify & Login" : "Send Access Code"}</span>
                       </>
                     )}
                   </button>
@@ -313,17 +386,20 @@ function AuthContent() {
                 </div>
 
                 {/* GOOGLE SECTION (Always Available) */}
-                <motion.div variants={itemVariants} className={`relative flex justify-center w-full ${loading ? "opacity-50 pointer-events-none" : ""}`}>
-                  <div className="w-full max-w-xs transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                    <GoogleLogin
-                      onSuccess={(res) => res.credential && handleGoogleLogin(res.credential)}
-                      onError={() => setError("Connection Failed")}
-                      theme="filled_black"
-                      size="large"
-                      shape="pill"
-                      width="300"
-                      text="signin_with"
-                    />
+                 <motion.div variants={itemVariants} className={`relative flex justify-center w-full ${loading ? "opacity-50 pointer-events-none" : ""}`}>
+                  <div className="w-full max-w-xs transition-transform hover:scale-[1.02] active:scale-[0.98] relative group">
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-indigo-500 rounded-full blur opacity-20 group-hover:opacity-60 transition duration-500" />
+                    <div className="relative bg-[var(--background)] rounded-full border border-[var(--border)] overflow-hidden shadow-sm">
+                      <GoogleLogin
+                        onSuccess={(res) => res.credential && handleGoogleLogin(res.credential)}
+                        onError={() => setError("Connection Failed")}
+                        theme="filled_black"
+                        size="large"
+                        shape="pill"
+                        width="300"
+                        text="signin_with"
+                      />
+                    </div>
                   </div>
                 </motion.div>
 

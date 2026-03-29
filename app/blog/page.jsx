@@ -13,63 +13,8 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 
-/* ================= BLOG DATA ================= */
-const BLOGS_DATA = [
-  {
-    id: "1",
-    title: "MLBB Weekly Pass Price in India (2025)",
-    slug: "mlbb-weekly-pass-price-in-india",
-    type: "Guide",
-    excerpt:
-      "Learn the latest MLBB weekly pass price in India and whether it's worth buying.",
-    publishedAt: "2025-01-10",
-    readingTime: "4 min read",
-    featured: true,
-  },
-  {
-    id: "2",
-    title: "How to Buy MLBB Diamonds Safely in India",
-    slug: "how-to-buy-mlbb-diamonds-safely-in-india",
-    type: "Safety",
-    excerpt:
-      "Step-by-step guide to buying MLBB diamonds safely in India.",
-    publishedAt: "2025-01-12",
-    readingTime: "5 min read",
-    featured: true,
-  },
-  {
-    id: "3",
-    title: "Is MLBB Top-Up Legal in India?",
-    slug: "is-mlbb-top-up-legal-in-india",
-    type: "Info",
-    excerpt:
-      "Understand whether MLBB top-ups are legal in India.",
-    publishedAt: "2025-01-05",
-    readingTime: "3 min read",
-  },
-  {
-    id: "4",
-    title: "How to Gift MLBB Diamonds to Friends (2025)",
-    slug: "how-to-gift-mlbb-diamonds",
-    type: "Guide",
-    excerpt:
-      "A complete guide on how to safely gift Mobile Legends diamonds to your friends using their Player ID.",
-    publishedAt: "2025-02-07",
-    readingTime: "3 min read",
-    featured: true,
-  },
-  {
-    id: "5",
-    title: "Best MLBB Diamond Packages – Which Gives the Most Value? (2025)",
-    slug: "best-mlbb-diamond-packages-value-guide",
-    type: "Value Guide",
-    excerpt:
-      "Not all MLBB diamond packages are equal. Find out which bundle gives you the most diamonds per rupee and how to save more with bonus events.",
-    publishedAt: "2025-02-26",
-    readingTime: "5 min read",
-    featured: true,
-  },
-];
+import { BLOGS_DATA } from "@/lib/blogData";
+
 
 /* ================= SETTINGS ================= */
 const POSTS_PER_PAGE = 6;
@@ -111,10 +56,10 @@ export default function BlogPage() {
   return (
     <section className="min-h-screen bg-[var(--background)] relative pb-32 transition-colors duration-300 px-6">
 
-      <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
+      <div className="max-w-4xl mx-auto pt-8 md:pt-12 relative z-10">
 
         <motion.div
-          className="mb-12"
+          className="mb-8"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -122,7 +67,7 @@ export default function BlogPage() {
             <div className="w-10 h-[1px] bg-[var(--accent)]" />
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] italic">Insights & Intel</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-[1000] italic tracking-tighter uppercase leading-none mb-4">
+          <h1 className="text-3xl md:text-5xl font-[1000] italic tracking-tighter uppercase leading-none mb-4">
             MLBB <span className="text-[var(--accent)]">INSIGHTS & GUIDES</span>
           </h1>
           <p className="text-sm text-[var(--muted)] leading-relaxed italic max-w-xl opacity-70">
@@ -135,7 +80,7 @@ export default function BlogPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="relative mb-16"
+          className="relative mb-8"
         >
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <FiSearch className="text-[var(--muted)] opacity-50" size={16} />
@@ -149,7 +94,7 @@ export default function BlogPage() {
         </motion.div>
 
         {/* 📄 BLOG GRID - SINGLE COLUMN FOR SIMPLICITY */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <AnimatePresence mode="wait">
             {paginatedBlogs.length > 0 ? (
               paginatedBlogs.map((blog, index) => (
@@ -205,11 +150,11 @@ function BlogCard({ blog, index }) {
     >
       <Link
         href={`/blog/${blog.slug}`}
-        className="group block relative rounded-2xl bg-[var(--card)] border border-[var(--border)] p-6 md:p-8 hover:border-[var(--accent)]/30 transition-all duration-300"
+        className="group block relative rounded-2xl bg-[var(--card)] border border-[var(--border)] p-4 md:p-6 hover:border-[var(--accent)]/30 transition-all duration-300"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-[0.15em] italic">
                 {blog.type}
               </span>

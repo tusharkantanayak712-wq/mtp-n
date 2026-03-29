@@ -139,6 +139,12 @@ export async function GET(req: Request) {
         const page = parseInt(url.searchParams.get("page") || "1");
         const limit = 20;
 
+        // Auto-expire
+        await UsdtDeposit.updateMany(
+            { status: "waiting", expiresAt: { $lt: new Date() } },
+            { $set: { status: "expired" } }
+        );
+
         const total = await UsdtDeposit.countDocuments({ status });
         const deposits = await UsdtDeposit.find({ status })
             .sort({ createdAt: -1 })

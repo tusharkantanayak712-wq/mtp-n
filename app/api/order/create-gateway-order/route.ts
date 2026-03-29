@@ -23,18 +23,18 @@ type OTTConfig = Record<string, number>;
 const MEMBERSHIPS: Record<string, MembershipConfig> = {
   "silver-membership": {
     items: {
-      "silver-1m": 99,
-      "silver-3m": 249,
-      "silver-6m": 499,
-      "silver-12m": 899,
+      "silver-1m": 29,
+      "silver-3m": 100,
+      "silver-6m": 150,
+      "silver-12m": 300,
     },
   },
   "reseller-membership": {
     items: {
-      "reseller-1m": 99,
-      "reseller-3m": 249,
-      "reseller-6m": 499,
-      "reseller-12m": 899,
+      "reseller-1m": 29,
+      "reseller-3m": 100,
+      "reseller-6m": 150,
+      "reseller-12m": 300,
     },
   },
 };

@@ -57,6 +57,17 @@ export async function GET(req) {
             txnQuery.referenceId = /^USDT/;
         }
 
+        // Update any waiting USDT deposits that have expired
+        const now = new Date();
+        await mongoose.model("UsdtDeposit").updateMany(
+            { 
+                ...baseQuery,
+                status: "waiting", 
+                expiresAt: { $lt: now } 
+            },
+            { $set: { status: "expired" } }
+        );
+
         const [transactions, usdtDeposits, totalTransactionCount] = await Promise.all([
             WalletTransaction.find(txnQuery)
                 .sort({ createdAt: -1 })

@@ -61,7 +61,6 @@ const UsdtDepositSchema = new mongoose.Schema(
         expiresAt: {
             type: Date,
             default: () => new Date(Date.now() + 20 * 60 * 1000),
-            index: { expireAfterSeconds: 0 },
         },
     },
     { timestamps: true }
