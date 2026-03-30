@@ -14,6 +14,58 @@ export interface BlogPost {
 
 export const BLOGS_DATA: BlogPost[] = [
   {
+    id: "21",
+    title: "Step-by-Step Guide: How to Buy MLBB Diamonds Safely",
+    slug: "step-by-step-guide-to-buy-diamonds-safely",
+    type: "Tutorial",
+    excerpt: "Want to buy MLBB diamonds but don't know how? Our 2026 guide provides a step-by-step process for a safe top-up with zero risk.",
+    publishedAt: "2026-03-31",
+    readingTime: "11 min read",
+    image: "/blog/mlbb-buy-safely-guide.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["tutorial", "safety", "diamonds"]
+  },
+  {
+    id: "20",
+    title: "The 2026 Diamond Spending Blueprint: How to Spend Like a Pro & Save Money",
+    slug: "how-to-spend-diamonds-wisely-in-mlbb",
+    type: "Strategy Guide",
+    excerpt: "Most players waste half of their diamonds. Learn the blueprint to spend wisely, avoid traps, and use the 'Daily Discount' trick.",
+    publishedAt: "2026-03-31",
+    readingTime: "13 min read",
+    image: "/blog/mlbb-wise-spending.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["diamonds", "savings", "blueprint"]
+  },
+  {
+    id: "19",
+    title: "Weekly Diamond Pass vs. Direct Recharge in MLBB: Which is Better?",
+    slug: "weekly-diamond-pass-vs-direct-recharge",
+    type: "Value Comparison",
+    excerpt: "Should you buy the Weekly Diamond Pass or direct diamonds? Our 2026 guide breaks down the value, ROI, and best way to spend.",
+    publishedAt: "2026-03-31",
+    readingTime: "12 min read",
+    image: "/blog/mlbb-wdp-vs-diamonds.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["diamonds", "value", "comparison"]
+  },
+  {
+    id: "18",
+    title: "Is MLBB Worth Spending Money On? The 2026 Honest Review",
+    slug: "is-mlbb-worth-spending-money-on",
+    type: "Opinion",
+    excerpt: "Should you buy diamonds in Mobile Legends? Our 2026 guide explores if MLBB is worth spending money on, covering Starlight and skin perks.",
+    publishedAt: "2026-03-31",
+    readingTime: "11 min read",
+    image: "/blog/mlbb-worth-it.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["opinion", "worth-it", "diamonds"]
+  },
+  {
     id: "17",
     title: "How to Avoid Scams While Buying MLBB Diamonds: The 2026 Safety Guide",
     slug: "how-to-avoid-scams-while-buying-diamonds",
