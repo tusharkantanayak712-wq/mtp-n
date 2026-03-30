@@ -19,6 +19,7 @@ const HEADER_CONFIG = {
   nav: [
     { label: "Region Check", href: "/region", icon: <FiCompass size={14} /> },
     { label: "Services", href: "/services", icon: <FiGrid size={14} /> },
+    { label: "Blog", href: "/blog", icon: <FiLayers size={14} /> },
   ],
 
   userMenu: {

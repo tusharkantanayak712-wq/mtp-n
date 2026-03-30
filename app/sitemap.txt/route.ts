@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { BLOGS_DATA } from "@/lib/blogData";
 
 export const revalidate = 3600; // Revalidate every hour
 
 export async function GET() {
     const baseUrl = "https://mlbbtopup.in";
 
-    // 1. Static Routes (Must match sitemap.ts)
+    // 1. Static Core Routes
     const staticUrls = [
         `${baseUrl}/`,
         `${baseUrl}/games`,
@@ -17,17 +18,16 @@ export async function GET() {
         `${baseUrl}/terms-and-conditions`,
         `${baseUrl}/refund-policy`,
         `${baseUrl}/blog`,
+        `${baseUrl}/blog/mlbb`,
         `${baseUrl}/idsonsell`,
         `${baseUrl}/leaderboard`,
         `${baseUrl}/check`,
-        `${baseUrl}/blog/is-mlbb-top-up-legal-in-india`,
-        `${baseUrl}/blog/how-to-buy-mlbb-diamonds-safely-in-india`,
-        `${baseUrl}/blog/mlbb-weekly-pass-price-in-india`,
-        `${baseUrl}/blog/how-to-gift-mlbb-diamonds`,
-        `${baseUrl}/blog/best-mlbb-diamond-packages-value-guide`,
     ];
 
-    /* ================= OTT & MEMBERSHIP STATIC DATA ================= */
+    // 2. Dynamic Blog Routes
+    const blogUrls = BLOGS_DATA.map((blog) => `${baseUrl}/blog/${blog.game}/${blog.slug}`);
+
+    /* ================= OTT & MEMBERSHIP DATA ================= */
     const OTTS = [
         { slug: "youtube-premium" },
         { slug: "netflix" },
@@ -73,6 +73,7 @@ export async function GET() {
 
     const allUrls = [
         ...staticUrls,
+        ...blogUrls,
         ...gameUrls,
         ...manualUrls,
         ...ottUrls,
