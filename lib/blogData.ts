@@ -1,5 +1,5 @@
 export interface BlogPost {
-  game: any;
+  game: string;
   id: string;
   title: string;
   slug: string;
@@ -9,20 +9,73 @@ export interface BlogPost {
   readingTime: string;
   image: string;
   featured?: boolean;
+  tags?: string[];
 }
 
 export const BLOGS_DATA: BlogPost[] = [
+  {
+    id: "11",
+    title: "How to Win More Matches Consistently in MLBB (Ultimate Ranking Strategy)",
+    slug: "how-to-win-more-matches-consistently",
+    type: "Pro Tips",
+    excerpt: "Win-streaks are not about luck. Consistently winning in Mobile Legends requires discipline, drafting, and a winner mindset.",
+    publishedAt: "2026-03-31",
+    readingTime: "12 min read",
+    image: "/blog/mlbb-win-consistently.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["tips", "win", "rank"]
+  },
+  {
+    id: "10",
+    title: "The Complete Mobile Legends Gameplay Guide: Lanes, Jungle & Objectives",
+    slug: "complete-mlbb-gameplay-guide",
+    type: "Game Guide",
+    excerpt: "Master the core mechanics of Mobile Legends. Learn the secrets of laning, jungle rotations, and capturing key map objectives like Turtle and Lord.",
+    publishedAt: "2026-03-31",
+    readingTime: "15 min read",
+    image: "/blog/mlbb-gameplay-guide.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["guide", "gameplay", "strategy"]
+  },
+  {
+    id: "9",
+    title: "How to Farm Gold Fast in MLBB (Mobile Legends Farming Guide)",
+    slug: "how-to-farm-gold-fast-in-mlbb",
+    type: "Strategy",
+    excerpt: "Want to get your core items before anyone else? Learn the best strategies for farming gold fast in Mobile Legends.",
+    publishedAt: "2026-03-31",
+    readingTime: "7 min read",
+    image: "/blog/mlbb-gold-farm.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["strategy", "farming", "gold"]
+  },
+  {
+    id: "8",
+    title: "MLBB Roles Explained: Tank, Fighter, Mage, Assassin, Marksman, Support",
+    slug: "mlbb-roles-guide",
+    type: "Game Guide",
+    excerpt: "Learn the 6 main roles in Mobile Legends: Bang Bang. Understand how each role works to win more games.",
+    publishedAt: "2026-03-30",
+    readingTime: "5 min read",
+    image: "/blog/mlbb-roles.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["guide", "roles"]
+  },
   {
     id: "6",
     title: "99% Players Don’t Know These MLBB Tricks (Rank Up Instantly)",
     slug: "mlbb-tricks-to-rank-up",
     type: "Pro Tips",
-    excerpt: "Master the hidden mechanics of Mobile Legends that pro players use to dominate Every match. Learn advanced minimap tricks, jungle pathing, and item countering.",
+    excerpt: "Master the hidden mechanics of Mobile Legends that pro players use to dominate Every match.",
     publishedAt: "2026-03-29",
     readingTime: "6 min read",
     image: "/blog/mlbb-tricks.png",
     featured: true,
-    game: undefined
+    game: "mlbb"
   },
   {
     id: "1",
@@ -34,7 +87,7 @@ export const BLOGS_DATA: BlogPost[] = [
     readingTime: "4 min read",
     image: "/blog/weekly-pass-price.png",
     featured: true,
-    game: undefined
+    game: "mlbb"
   },
   {
     id: "2",
@@ -46,7 +99,7 @@ export const BLOGS_DATA: BlogPost[] = [
     readingTime: "5 min read",
     image: "/blog/buy-safely.png",
     featured: true,
-    game: undefined
+    game: "mlbb"
   },
   {
     id: "3",
@@ -57,7 +110,7 @@ export const BLOGS_DATA: BlogPost[] = [
     publishedAt: "2025-01-05",
     readingTime: "3 min read",
     image: "/blog/legal-india.png",
-    game: undefined
+    game: "mlbb"
   },
   {
     id: "4",
@@ -69,29 +122,29 @@ export const BLOGS_DATA: BlogPost[] = [
     readingTime: "3 min read",
     image: "/blog/gift-guide.png",
     featured: true,
-    game: undefined
+    game: "mlbb"
   },
   {
     id: "5",
-    title: "Best MLBB Diamond Packages – Which Gives the Most Value? (2025)",
+    title: "Best MLBB Diamond Packages – Value Guide (2025)",
     slug: "best-mlbb-diamond-packages-value-guide",
     type: "Value Guide",
-    excerpt: "Not all MLBB diamond packages are equal. Find out which bundle gives you the most diamonds per rupee and how to save more with bonus events.",
+    excerpt: "Find out which bundle gives you the most diamonds per rupee and how to save more.",
     publishedAt: "2025-02-26",
     readingTime: "5 min read",
     image: "/blog/best-value.png",
     featured: true,
-    game: undefined
+    game: "mlbb"
   },
   {
     id: "7",
     title: "Stop Losing in Mobile Legends – Fix These 7 Mistakes Now",
     slug: "stop-losing-mlbb-7-mistakes",
     type: "Guide",
-    excerpt: "Are you stuck in Epic or Legend rank? You might be making these 7 common mistakes. Learn how to fix your gameplay and start winning in Mobile Legends.",
+    excerpt: "Are you stuck in Epic or Legend rank? Learn how to fix your gameplay and start winning.",
     publishedAt: "2026-03-29",
     readingTime: "7 min read",
     image: "/blog/fix-mistakes.png",
-    game: undefined
+    game: "mlbb"
   },
 ];

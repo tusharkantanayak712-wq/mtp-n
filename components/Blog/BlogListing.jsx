@@ -16,7 +16,7 @@ import {
 import { BLOGS_DATA } from "@/lib/blogData";
 
 /* ================= SETTINGS ================= */
-const POSTS_PER_PAGE = 6;
+const POSTS_PER_PAGE = 20;
 
 export default function BlogListing({ initialGame = "all" }) {
   const [search, setSearch] = useState("");
