@@ -6,21 +6,21 @@ import { FiUsers, FiGlobe, FiZap, FiArrowRight, FiMessageCircle } from "react-ic
 const SERVICES = [
   {
     title: "Reseller Program",
-    desc: "Scale your business with market-leading rates. Bulk solutions with instant delivery.",
+    desc: "Get our lowest prices for your business. Fast delivery and big profits.",
     icon: FiUsers,
-    badge: "LOWEST RATES",
+    badge: "ELITE PRICE",
   },
   {
     title: "Whitelabel Site",
-    desc: "Launch your own branded empire. Fully hosted platform with integrated automation.",
+    desc: "Start your own brand. Get a full website with your name and automation.",
     icon: FiGlobe,
-    badge: "READY TO GO",
+    badge: "FAST SETUP",
   },
   {
-    title: "Enterprise Portals",
-    desc: "Tailor-made top-up portals designed for specific large-scale business needs.",
+    title: "Custom Portals",
+    desc: "We build special top-up websites with the look and features you want.",
     icon: FiZap,
-    badge: "CUSTOM BUILD",
+    badge: "BESPOKE",
   },
 ];
 
@@ -28,91 +28,83 @@ export default function HomeServices() {
   const whatsappLink = "https://wa.me/919178521537";
 
   return (
-    <section className="py-12 bg-[var(--background)] relative overflow-hidden">
-      {/* Background Lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[40%] bg-[var(--accent)]/5 rounded-full blur-[100px] pointer-events-none" />
+    <section className="py-8 bg-[var(--background)] relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[40%] bg-[var(--accent)]/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10 px-4">
-        {/* HEADER SECTION - COMPACT */}
+      <div className="max-w-6xl mx-auto relative z-10 px-6">
+        {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -10 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="mb-8 px-4"
+          className="mb-6"
         >
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-[1px] bg-[var(--accent)]/30 sm:block hidden" />
-            <span className="text-[var(--accent)] text-[9px] font-black uppercase tracking-[0.3em] italic">Partnership Program</span>
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-6 h-[1px] bg-[var(--accent)]/30" />
+            <span className="text-[var(--accent)] text-[8px] font-black uppercase tracking-widest italic opacity-40">Scale up</span>
           </div>
-          <h2 className="text-3xl font-[900] italic tracking-tighter uppercase leading-none">
-            GROW YOUR <span className="text-[var(--accent)] text-shadow-glow">EMPIRE</span>
+          <h2 className="text-2xl font-black italic tracking-tighter uppercase leading-none">
+            GROW YOUR <span className="text-[var(--accent)]">BUSINESS</span>
           </h2>
         </motion.div>
 
-        {/* HORIZONTAL SCROLLABLE FLEX */}
-        <div className="flex overflow-x-auto gap-4 pb-8 px-4 no-scrollbar -mx-4 scroll-smooth snap-x snap-mandatory">
+        {/* SERVICES CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
           {SERVICES.map((service, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="min-w-[280px] md:min-w-[320px] snap-center group relative p-6 rounded-[32px] bg-gradient-to-br from-[var(--card)]/60 to-transparent backdrop-blur-md border border-white/5 hover:border-[var(--accent)]/30 transition-all duration-500 flex flex-col items-start shadow-2xl"
+              transition={{ delay: i * 0.05 }}
+              onClick={() => window.open(whatsappLink, "_blank")}
+              className="group cursor-pointer p-4 sm:p-5 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-[var(--accent)]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col items-start"
             >
-              {/* Icon Container */}
-              <div className="w-12 h-12 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 group-hover:bg-[var(--accent)] group-hover:text-black transition-all duration-500 mb-6">
-                <service.icon size={20} />
+              {/* Icon */}
+              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all duration-300 mb-4">
+                <service.icon size={18} />
               </div>
 
               {/* Content */}
-              <div className="space-y-2 mb-8 text-left">
-                <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-                  <span className="text-[8px] font-black italic text-[var(--accent)]/80 tracking-widest uppercase">
+              <div className="space-y-1 mb-4">
+                <div className="flex items-center gap-1.5 opacity-40 group-hover:opacity-100 transition-opacity">
+                  <span className="text-[7px] font-black italic text-[var(--accent)] tracking-widest uppercase">
                     {service.badge}
                   </span>
                 </div>
-                <h3 className="text-xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                <h3 className="text-base font-black uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none">
                   {service.title}
                 </h3>
-                <p className="text-[11px] text-[var(--muted)] leading-relaxed italic line-clamp-2">
+                <p className="text-[10px] text-[var(--muted)] leading-tight italic opacity-40 font-bold uppercase tracking-tight">
                   {service.desc}
                 </p>
               </div>
 
-              {/* Action Link */}
-              <button
-                onClick={() => window.open(whatsappLink, "_blank")}
-                className="mt-auto flex items-center gap-3 py-2 px-4 rounded-full bg-[var(--foreground)]/[0.05] border border-[var(--border)] text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/60 group-hover:bg-[var(--accent)] group-hover:text-black group-hover:border-[var(--accent)] transition-all"
-              >
-                Inquire Now <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              {/* Decorative Blur */}
-              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-[var(--accent)]/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-[var(--accent)]/10 transition-all duration-500" />
+              {/* Action */}
+              <div className="mt-auto flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-[var(--accent)] italic">
+                Contact Us <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* COMPACT BOTTOM BAR */}
+        {/* BOTTOM STRIP */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="flex flex-wrap items-center justify-between gap-4 py-4 px-6 rounded-3xl bg-[var(--card)]/40 border border-white/5 border-dashed"
+          initial={{ opacity: 0, y: 5 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-white/[0.01] border border-white/5 border-dashed"
         >
-          <p className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] italic">
-            Custom infrastructure & business solutions available
+          <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40 italic">
+            Need custom deals?
           </p>
           <button
             onClick={() => window.open(whatsappLink, "_blank")}
-            className="flex items-center gap-2 text-[var(--accent)] hover:brightness-125 transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-2 text-[var(--accent)] hover:scale-105 transition-all text-[9px] font-black uppercase tracking-widest italic"
           >
-            <FiMessageCircle size={14} /> Talk to an Expert
+            <FiMessageCircle size={12} /> WhatsApp Us
           </button>
         </motion.div>
       </div>
     </section>
   );
 }
-

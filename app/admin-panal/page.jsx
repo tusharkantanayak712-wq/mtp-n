@@ -40,7 +40,7 @@ export default function AdminPanalPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -56,7 +56,7 @@ export default function AdminPanalPage() {
       ? "Reseller"
       : isSilver
         ? "Silver"
-        : "Free User";
+        : "Free";
 
   const daysLeft =
     expiry
@@ -66,224 +66,104 @@ export default function AdminPanalPage() {
       )
       : null;
 
+  const silverPerks = [
+    "Collage Maker",
+    "Lowest Prices",
+    "ID Rental",
+    "Priority Deal",
+    "API Access & Docs",
+    "All Games Included",
+    "Wallet Support",
+  ];
+
+  const resellerPerks = [
+    "Low Price",
+    "Discounted Offers",
+    "ID Rental",
+    "Priority Support",
+    "Wallet Support",
+  ];
+
   return (
     <AuthGuard>
-      <section className="min-h-screen flex items-center justify-center bg-[var(--background)] px-4 py-5">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-3xl bg-[var(--card)] border border-[var(--border)] rounded-3xl p-8 sm:p-12 shadow-2xl"
-        >
+      <section className="min-h-screen bg-black p-4 flex flex-col items-center pt-6">
+        <div className="w-full max-w-sm bg-neutral-900 border border-white/5 rounded-3xl p-5 shadow-2xl space-y-5">
 
-          {/* ================= CURRENT TIER ================= */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-8 border-b border-[var(--border)]"
-          >
-            <div>
-              <p className="text-sm text-[var(--muted)] mb-1">Your Membership</p>
-              <p className="text-3xl font-extrabold flex items-center gap-3">
-                {isOwner && <FaCrown className="text-yellow-400" />}
-                {isReseller && <FaUserTie className="text-yellow-500" />}
-                {isSilver && <FaStar className="text-gray-400" />}
+          {/* STATUS */}
+          <div className="flex justify-between items-center px-1">
+            <div className="space-y-0.5">
+              <p className="text-[8px] font-black uppercase tracking-[0.2em] text-[var(--accent)] italic opacity-40">Current Tier</p>
+              <h2 className="text-xl font-black italic uppercase tracking-tighter flex items-center gap-1.5 leading-none text-white">
+                {isOwner && <FaCrown size={14} className="text-yellow-400" />}
+                {isReseller && <FaUserTie size={14} className="text-yellow-500" />}
+                {isSilver && <FaStar size={14} className="text-gray-400" />}
                 {currentTier}
-              </p>
+              </h2>
             </div>
-
             {(isSilver || isReseller) && expiry && (
-              <div className="text-left sm:text-right">
-                <p className="text-xs text-[var(--muted)] mb-1">Expires in</p>
-                <p className="text-2xl font-bold text-[var(--accent)]">
-                  {daysLeft} days
-                </p>
+              <div className="text-right">
+                <p className="text-[8px] font-black uppercase tracking-[0.2em] text-neutral-500 opacity-40">Expiry</p>
+                <p className="text-xs font-black italic uppercase text-[var(--accent)] leading-none">{daysLeft}D Left</p>
               </div>
             )}
-          </motion.div>
+          </div>
 
-          {/* ================= OWNER VIEW ================= */}
-          {isOwner && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-center py-16"
-            >
-              <motion.div
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              >
-                <FaCrown className="text-7xl text-yellow-400 mx-auto mb-6" />
-              </motion.div>
-              <p className="text-2xl font-bold mb-2">
-                Lifetime Access Enabled
-              </p>
-              <p className="text-base text-[var(--muted)]">
-                You have full access to all features.
-              </p>
-            </motion.div>
-          )}
+          <div className="h-px bg-white/5 w-full" />
 
-          {/* ================= PLANS ================= */}
-          {!isOwner && (
-            <>
-              {/* Tabs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="flex justify-center gap-4 mb-10"
-              >
-                <PlanTab
-                  active={activeTab === "silver"}
-                  label="Silver"
-                  icon={<FaStar />}
+          {/* CONTENT */}
+          {isOwner ? (
+            <div className="text-center py-6 space-y-2">
+              <FaCrown className="text-3xl text-yellow-400 mx-auto" />
+              <p className="text-base font-black italic uppercase tracking-tighter text-white">Owner Access</p>
+              <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">Unlimited Enterprise Portal</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* TABS */}
+              <div className="flex p-0.5 bg-white/5 rounded-xl gap-0.5">
+                <button
                   onClick={() => setActiveTab("silver")}
-                />
-                <PlanTab
-                  active={activeTab === "reseller"}
-                  label="Reseller"
-                  icon={<FaUserTie />}
+                  className={`flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest italic transition-all ${activeTab === "silver" ? "bg-[var(--accent)] text-black" : "text-neutral-500 hover:text-[var(--accent)]"}`}
+                >
+                  Silver
+                </button>
+                <button
                   onClick={() => setActiveTab("reseller")}
-                />
-              </motion.div>
+                  className={`flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest italic transition-all ${activeTab === "reseller" ? "bg-[var(--accent)] text-black" : "text-neutral-500 hover:text-[var(--accent)]"}`}
+                >
+                  Reseller
+                </button>
+              </div>
 
-              <AnimatePresence mode="wait">
-                {/* Silver Plan */}
-                {activeTab === "silver" && (
-                  <motion.div
-                    key="silver"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
+              {/* LIST */}
+              <div className="space-y-4">
+                <div className="rounded-2xl border border-white/5 overflow-hidden">
+                  {(activeTab === "silver" ? silverPerks : resellerPerks).map((perk, i) => (
+                    <div key={i} className="flex items-center gap-3 px-4 py-2.5 bg-neutral-900/50 border-b border-white/5 last:border-0">
+                      <FaCheckCircle className="text-emerald-500/50 text-[10px]" />
+                      <span className="text-[10px] font-black italic uppercase tracking-tight text-neutral-400 leading-none">{perk}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* ACTION BUTTON - FORCED CONTRAST */}
+                {(isUser || (activeTab === "reseller" && isSilver)) && (
+                  <Link
+                    href={activeTab === "silver" ? "/games/membership/silver-membership" : "/games/membership/reseller-membership"}
+                    className="flex w-full h-11 rounded-xl bg-[var(--accent)] items-center justify-center gap-2 shadow-lg hover:brightness-110 active:scale-[0.98] transition-all"
+                    style={{ color: '#000000', textDecoration: 'none' }}
                   >
-                    <PerkList
-                      perks={[
-                        "Cheaper product pricing",
-                        "Collage / Profile Maker access",
-                        "ID Rent priority access",
-                      ]}
-                    />
-
-                    {(isUser || isSilver) && (
-                      <div className="flex justify-center mt-10">
-                        <ActionButton
-                          href={
-                            isSilver
-                              ? "/games/membership/reseller-membership"
-                              : "/games/membership/silver-membership"
-                          }
-                          label={
-                            isSilver
-                              ? "Upgrade to Reseller"
-                              : "Buy Silver Membership"
-                          }
-                          type="silver"
-                        />
-                      </div>
-                    )}
-                  </motion.div>
+                    <span className="text-[11px] font-[1000] italic uppercase tracking-[0.15em]" style={{ color: '#000000' }}>
+                      {activeTab === "silver" ? "Get Silver" : "Get Reseller"}
+                    </span>
+                    <FaArrowRight size={11} style={{ color: '#000000' }} />
+                  </Link>
                 )}
-
-                {/* Reseller Plan */}
-                {activeTab === "reseller" && (
-                  <motion.div
-                    key="reseller"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <PerkList
-                      perks={[
-                        "Lowest possible prices",
-                        "Bulk tools & reseller dashboard",
-                        "Collage / Profile Maker access",
-                        "Highest priority ID Rent access",
-                      ]}
-                    />
-
-                    {(isUser || isSilver) && (
-                      <div className="flex justify-center mt-10">
-                        <ActionButton
-                          href="/games/membership/reseller-membership"
-                          label="Buy Reseller Membership"
-                          type="gold"
-                        />
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </>
+              </div>
+            </div>
           )}
-        </motion.div>
+        </div>
       </section>
     </AuthGuard>
-  );
-}
-
-/* ================= SUB COMPONENTS ================= */
-
-function PlanTab({ active, label, icon, onClick }) {
-  return (
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onClick}
-      className={`px-8 py-3.5 rounded-full font-semibold text-sm
-                  flex items-center gap-2 transition-all shadow-sm
-        ${active
-          ? "bg-[var(--accent)] text-white shadow-lg"
-          : "bg-[var(--background)] border border-[var(--border)] hover:border-[var(--accent)]"
-        }`}
-    >
-      {icon}
-      {label}
-    </motion.button>
-  );
-}
-
-function PerkList({ perks }) {
-  return (
-    <div className="border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm">
-      {perks.map((perk, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.1 }}
-          className={`flex items-center gap-4 px-6 py-5 text-sm
-            ${i % 2 === 0 ? "bg-[var(--background)]" : "bg-[var(--card)]"}`}
-        >
-          <FaCheckCircle className="text-green-500 text-lg shrink-0" />
-          <span className="font-medium">{perk}</span>
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
-function ActionButton({ href, label, type }) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      <Link
-        href={href}
-        className={`px-10 py-4 rounded-xl font-bold text-center transition-all shadow-lg inline-flex items-center gap-2
-          ${type === "gold"
-            ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600"
-            : "bg-gradient-to-r from-gray-300 to-gray-400 text-black hover:from-gray-400 hover:to-gray-500"
-          }`}
-      >
-        {label}
-        <FaArrowRight />
-      </Link>
-    </motion.div>
   );
 }

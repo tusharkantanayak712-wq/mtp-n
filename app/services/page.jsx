@@ -9,120 +9,117 @@ export default function ServicesPage() {
   const services = [
     {
       title: "Reseller Program",
-      desc: "Grow your business with our lowest prices. Fast delivery and big profit margins for you.",
+      desc: "Get our lowest prices for your business. Fast delivery and big profits.",
       icon: FiUsers,
-      badge: "ELITE PRICING",
+      badge: "BEST PRICE",
       active: true,
     },
     {
-      title: "Whitelabel Solution",
-      desc: "Start your own brand. Get a full website with your own name and easy payments.",
+      title: "Whitelabel Site",
+      desc: "Start your own brand. Get a full website with your name and easy payments.",
       icon: FiGlobe,
       badge: "FAST SETUP",
       active: true,
     },
     {
       title: "Custom Design",
-      desc: "We build special top-up websites just for you with look and features you want.",
+      desc: "We build special top-up websites with the look and features you want.",
       icon: FiZap,
-      badge: "BESPOKE",
+      badge: "EXCLUSIVE",
       active: true,
     },
     {
-      title: "Membership API",
-      desc: "Connect your system to ours for automatic orders. Available for Elite Members with top support.",
+      title: "Business API",
+      desc: "Connect your system for automatic orders. Available for Elite Members.",
       icon: FiCode,
-      badge: "MEMBER ONLY",
+      badge: "API ACCESS",
       active: true,
     },
   ];
 
   return (
-    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pb-32 transition-colors duration-300 px-6">
+    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pb-20 transition-colors duration-300 px-6">
+      <div className="max-w-3xl mx-auto pt-12 md:pt-16 relative z-10">
 
-      <div className="max-w-4xl mx-auto pt-16 md:pt-24 relative z-10">
-
-        {/* HEADER SECTION - SIMPLER */}
+        {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-16"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="mb-10"
         >
-          <h1 className="text-4xl md:text-6xl font-[900] italic tracking-tighter uppercase leading-none mb-2">
-            OUR <span className="text-[var(--accent)]">SERVICES</span>
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 mb-2">
+            <FiZap className="text-[var(--accent)]" size={10} />
+            <span className="text-[8px] font-black uppercase tracking-widest text-[var(--accent)]">Enterprise</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-black italic tracking-tighter uppercase leading-none">
+            <span className="text-[var(--accent)]">OUR</span> SERVICES
           </h1>
-          <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic font-sans">
-            Solutions for Every Scale
+          <p className="text-[var(--muted)] text-[9px] font-bold uppercase tracking-widest opacity-40 mt-1 italic font-sans italic">
+            Scale your business.
           </p>
         </motion.div>
 
-        {/* SERVICES LIST - CLEANER CARDS */}
-        <div className="space-y-4">
+        {/* SERVICES LIST */}
+        <div className="space-y-3">
           {services.map((service, i) => {
             const Icon = service.icon;
-
             return (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                whileHover={service.active ? { x: 3, backgroundColor: "var(--card)" } : {}}
                 onClick={() => service.active && window.open(whatsappLink, "_blank")}
-                className={`group relative p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] transition-all duration-300 overflow-hidden flex flex-col md:flex-row items-start md:items-center gap-6 ${service.active
-                  ? "cursor-pointer hover:border-[var(--accent)]/30 hover:shadow-xl"
+                className={`group relative p-4 sm:p-5 rounded-2xl bg-[var(--card)]/30 border border-white/5 transition-all duration-300 flex items-center gap-5 ${service.active
+                  ? "cursor-pointer hover:border-[var(--accent)]/30 hover:bg-[var(--card)]/50"
                   : "opacity-30 grayscale cursor-not-allowed border-dashed"
                   }`}
               >
-                {/* Icon Container */}
-                <div className="w-14 h-14 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)]/60 group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-all shadow-lg flex-shrink-0">
-                  <Icon size={24} />
+                {/* Icon */}
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-[var(--accent)]/60 group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-all flex-shrink-0">
+                  <Icon size={18} />
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl md:text-2xl font-[900] uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm md:text-base font-black uppercase tracking-tighter italic text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none">
                       {service.title}
                     </h3>
-                    <span className="text-[8px] font-black px-2 py-0.5 rounded bg-[var(--accent)]/5 text-[var(--accent)]/60 border border-[var(--accent)]/10 tracking-widest uppercase">
+                    <span className="text-[7px] font-black px-1.5 py-0.5 rounded bg-[var(--accent)]/5 text-[var(--accent)]/40 border border-[var(--accent)]/10 tracking-widest uppercase">
                       {service.badge}
                     </span>
                   </div>
-                  <p className="text-[var(--muted)] text-xs md:text-sm leading-relaxed opacity-60">
+                  <p className="text-[var(--muted)] text-[10px] md:text-[11px] leading-tight opacity-40 font-bold uppercase tracking-tight">
                     {service.desc}
                   </p>
                 </div>
 
-                {/* Action Indicator */}
-                <div className="flex items-center gap-3 text-right flex-shrink-0 ml-auto md:ml-4">
-                  <div className="hidden md:flex flex-col items-end opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[9px] font-black uppercase text-[var(--accent)] tracking-widest">Connect Now</span>
-                  </div>
-                  <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/40 transition-all group-hover:scale-105">
-                    <FiArrowRight size={18} />
-                  </div>
+                {/* Arrow */}
+                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/30 transition-all flex-shrink-0">
+                  <FiArrowRight size={14} />
                 </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* BOTTOM CTA - MINIMALIST */}
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="mt-16 p-8 rounded-3xl border border-[var(--border)] bg-[var(--card)]/20 text-center"
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="mt-12 p-6 rounded-3xl border border-white/5 bg-[var(--card)]/20 text-center space-y-4"
         >
-          <h4 className="text-xl font-[900] italic uppercase tracking-tighter mb-2">Ready to expand?</h4>
-          <p className="text-[var(--muted)] text-[10px] opacity-60 mb-8 max-w-sm mx-auto uppercase tracking-widest font-black italic">Discuss custom configurations and bulk rates with our enterprise team.</p>
+          <div>
+            <h4 className="text-base font-black italic uppercase tracking-tighter mb-1">Need more?</h4>
+            <p className="text-[var(--muted)] text-[8px] font-black uppercase tracking-widest opacity-30 italic">Contact us for custom deals.</p>
+          </div>
           <button
             onClick={() => window.open(whatsappLink, "_blank")}
-            className="px-8 py-3.5 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-widest text-[10px] italic shadow-lg hover:scale-105 transition-all flex items-center gap-2 mx-auto"
-            style={{ backgroundColor: 'var(--accent)' }}
+            className="px-6 py-2.5 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-widest text-[9px] italic shadow-lg hover:scale-[1.03] active:scale-95 transition-all flex items-center gap-2 mx-auto"
           >
-            <FiMessageCircle size={14} />
-            Connect on WhatsApp
+            <FiMessageCircle size={12} />
+            WhatsApp Us
           </button>
         </motion.div>
 
