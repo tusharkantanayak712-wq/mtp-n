@@ -123,17 +123,17 @@ export default function DashboardLayout({
                             className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6"
                         >
                             <div className="space-y-2">
-                                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20">
-                                    <FiZap className="text-[var(--accent)] animate-pulse" size={10} />
-                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--accent)] italic">
+                                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10">
+                                    <FiZap className="text-[var(--accent)] animate-pulse" size={8} />
+                                    <span className="text-[8px] font-black uppercase tracking-[0.2em] text-[var(--accent)] italic">
                                         Systems Online
                                     </span>
                                 </div>
-                                <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none">
+                                <h1 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter leading-none">
                                     COMMAND <span className="text-[var(--accent)]">CENTER</span>
                                 </h1>
-                                <p className="text-[var(--muted)] text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] opacity-40 italic">
-                                    Operative: {userDetails.name || "UNIDENTIFIED"} • Data Sync Active
+                                <p className="text-[var(--muted)] text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em] opacity-30 italic">
+                                    Operative: {userDetails.name || "UNIDENTIFIED"} • Sync Active
                                 </p>
                             </div>
 
@@ -147,13 +147,13 @@ export default function DashboardLayout({
                         </motion.div>
 
                         {/* TACTICAL NAVIGATION */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 mb-6">
                             {tabCards.map((tab, index) => (
                                 <motion.div
                                     key={tab.key}
                                     initial={{ opacity: 0, scale: 0.95, y: 10 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    transition={{ delay: 0.1 + index * 0.05 }}
+                                    transition={{ delay: 0.05 + index * 0.03 }}
                                 >
                                     <Link href={tab.href} className="block w-full">
                                         <DashboardCard

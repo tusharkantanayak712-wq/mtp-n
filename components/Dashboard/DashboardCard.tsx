@@ -25,43 +25,43 @@ export default function DashboardCard({
 
   return (
     <motion.div
-      whileHover={{ y: -3, scale: 1.01 }}
+      whileHover={{ y: -2, scale: 1.01 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`relative w-full group p-4 rounded-2xl border transition-all duration-300 text-left overflow-hidden
+      className={`relative w-full group p-3.5 rounded-xl border transition-all duration-300 text-left overflow-hidden
         ${isActive
-          ? "bg-[var(--accent)] border-[var(--accent)] shadow-[0_12px_24px_-8px_rgba(var(--accent-rgb),0.4)]"
-          : "bg-[var(--card)]/40 backdrop-blur-md border-white/5 hover:border-[var(--accent)]/30"
+          ? "bg-[var(--accent)] border-[var(--accent)] shadow-[0_8px_16px_-6px_rgba(var(--accent-rgb),0.3)]"
+          : "bg-[var(--card)]/30 backdrop-blur-md border-white/5 hover:border-[var(--accent)]/20"
         }`}
     >
       <div className="relative z-10 flex items-center justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <span className={`text-[9px] font-bold uppercase tracking-widest
-            ${isActive ? "text-black/50" : "text-[var(--muted)]"}
+        <div className="flex flex-col gap-0.5">
+          <span className={`text-[8px] font-bold uppercase tracking-widest
+            ${isActive ? "text-black/40" : "text-[var(--muted)]/60"}
           `}>
             {tab.label}
           </span>
-          <h3 className={`text-xl font-[900] uppercase italic tracking-tighter leading-none
+          <h3 className={`text-base font-black uppercase italic tracking-tighter leading-none
             ${isActive ? "text-black" : "text-[var(--foreground)]"}
           `}>
             {tab.value}
           </h3>
         </div>
 
-        <div className={`p-2.5 rounded-xl transition-all duration-300
+        <div className={`p-2 rounded-lg transition-all duration-300
           ${isActive
             ? "bg-black/10 text-black"
             : "bg-[var(--background)] text-[var(--muted)] group-hover:text-[var(--accent)] border border-[var(--border)]"
           }`}
         >
-          <Icon size={20} />
+          <Icon size={16} />
         </div>
       </div>
 
       {isActive && (
         <motion.div
           layoutId="activeTabIndicator"
-          className="absolute bottom-0 left-0 h-1 w-full bg-white/20"
+          className="absolute bottom-0 left-0 h-0.5 w-full bg-white/20"
         />
       )}
     </motion.div>
