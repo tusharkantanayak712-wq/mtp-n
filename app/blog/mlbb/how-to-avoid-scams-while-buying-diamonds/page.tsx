@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BlogPostLayout from "@/components/Blog/BlogPostLayout";
 import Link from "next/link";
+import { FiShield, FiAlertTriangle, FiCheckCircle, FiInfo, FiLock } from "react-icons/fi";
 
 export const metadata: Metadata = {
   title: "How to Avoid Scams While Buying MLBB Diamonds: 2026 Safety Guide (India)",
@@ -27,106 +28,149 @@ export default function BlogPage() {
       image="/blog/mlbb-avoid-scams.png"
       game="MLBB"
     >
-      <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-        Every year, thousands of <strong>Mobile Legends players in India</strong> lose their hard-earned money and their prized accounts to sophisticated top-up scams. In 2026, scammers have become more dangerous than ever. This is your definitive guide to staying safe while building your skin collection.
-      </p>
-
-      <p>
-        Mobile Legends: Bang Bang (MLBB) diamonds are a premium currency that unlocks the most powerful visual effects and rarest heroes in the game. Because they are in such high demand within the <strong>Indian gaming community</strong>, scammers have built entire fake ecosystems—fake websites, fake WhatsApp "agents," and fake Facebook groups—to steal your money and your login credentials. 
-      </p>
-
-      <p>
-        If you want to protect your account and your finances, you must know how to distinguish a 100% legitimate platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a> from a predatory scam. This guide breaks down the most common 2026 scams and how to avoid them.
-      </p>
-
-      <h2>1. The "Too Good to be True" Pricing Trap</h2>
-      <p>
-        This is the most common scam targeting <strong>Indian players</strong> on social media. You might see an ad on Instagram or a message in a WhatsApp group offering "10,000 Diamonds for ₹499."
-      </p>
-      <ul>
-        <li><strong>The Reality:</strong> Moonton, the developer of MLBB, sets a strict baseline price for diamonds. While trusted third-party sellers like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> can offer significant discounts by buying in bulk, no one can offer 90% off the market price. If the price feels like a miracle, it is a scam.</li>
-        <li><strong>The Outcome:</strong> After you pay via UPI or Card, the "seller" will either block you immediately or provide you with "stolen" diamonds (bought with compromised credit cards). These diamonds will eventually lead to a "Negative Diamond" ban on your account.</li>
-      </ul>
-
-      <h2>2. The "Account Access" Danger: The Golden Rule</h2>
-      <p>
-        This is the most critical safety rule in MLBB: <strong>Never share your password.</strong>
-      </p>
-      <p>
-        Scammers will often tell you they need to log into your account to "manually process" a special diamond package. They may ask for your Moonton Email and Password, or your linked Google/Facebook/TikTok credentials.
-      </p>
-      <ul>
-        <li><strong>THE TRUTH:</strong> Legitimate top-up platforms <strong>NEVER</strong> need your password. Professional automated sites like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> only require your <strong>Player ID and Zone ID</strong> to send diamonds via the game's official API. If a site or person asks for your login, they are trying to steal your account to sell it or use it for botting.</li>
-      </ul>
-
-      <div className="bg-[var(--card)] border border-[var(--border)] p-10 rounded-[40px] my-16 shadow-xl relative overflow-hidden group">
-        <div className="absolute top-0 left-0 w-1 h-full bg-[var(--accent)]" />
-        <h3 className="italic font-black uppercase text-[var(--accent)] mb-4">Domain Verification Check 🛡️</h3>
-        <p className="text-sm italic opacity-70 m-0 leading-relaxed">
-          Before paying, always look at the <strong>browser address bar</strong>. Scammers use names that "look" official, like <em>"mlbb-free-rewards-india.net"</em> or <em>"topup-diamonds-cheap.shop"</em>. Always trust a clean, established domain like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> that uses HTTPS (the padlock icon) and have a professional user interface.
+      <div className="space-y-10">
+        {/* Simplified Intro */}
+        <p className="text-lg md:text-xl font-medium italic border-l-4 border-red-500 pl-6 py-2 bg-red-500/5 rounded-r-2xl">
+          Every year, thousands of <strong>Mobile Legends players in India</strong> lose their hard-earned money and their prized accounts to sophisticated top-up scams. In 2026, scammers have become more dangerous than ever, using deepfake ads and bot-filled groups. This guide is your definitive shield.
         </p>
-      </div>
 
-      <h2>3. Beware of WhatsApp and Telegram "Agents"</h2>
-      <p>
-        You have likely seen players in the MLBB World Chat or Facebook Groups screaming about "Cheap Diamond Services" via WhatsApp.
-      </p>
-      <p>
-        <strong>The "Negative Diamond" Nightmare:</strong> These individual agents often use "carding" (stolen credit cards) to buy diamonds for unsuspecting players. While the diamonds appear in your account initially, the real card owner will eventually report the fraud. When that happens, Moonton will deduct the stolen diamonds from your account. If you've already spent them, you will have a <strong>Negative Diamond Balance</strong> (e.g., -5,000 diamonds). Your account will be locked from playing matches until you pay back the full amount to Moonton.
-      </p>
+        <p className="text-lg leading-relaxed text-justify">
+          Mobile Legends: Bang Bang (MLBB) diamonds are a premium currency that unlocks the most powerful visual effects and rarest heroes in the game. Because they are in such high demand within the <strong>Indian gaming community</strong>, scammers have built entire fake ecosystems—fake websites, fake WhatsApp "agents," and fake Facebook groups—to steal your money and your login credentials. If you want to protect your account and your finances, you must know how to distinguish a 100% legitimate platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a> from a predatory scam. This guide breaks down the most common 2026 scams and how to avoid them.
+        </p>
 
-      <h2>4. Identifying Fake Admin Groups & "Official" Impersonators</h2>
-      <p>
-        Scammers create Discord and Telegram groups with 20,000+ "bot" members to create a false sense of popularity. They often set their profile pictures as the MLBB logo and call themselves "Admin_Rahul" or "Official_CS_Team."
-      </p>
-      <p>
-        <strong>The Fix:</strong> Legit site administrators from <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> will <strong>never DM you first</strong> asking you to buy a private package. If you receive an unsolicited message offering a deal that isn't on the website, it is a scam. Block and report them immediately to protect the community.
-      </p>
-
-      <h2>5. The Safe Platform Checklist: Don't Compromise</h2>
-      <p>
-        Before you spend a single rupee on a diamond recharge <strong>in India</strong>, ensure the platform passes these tests:
-      </p>
-      <ol>
-        <li><strong>ID-Only Architecture:</strong> The site never asks for a password. Only Player ID and Zone ID.</li>
-        <li><strong>Display Name Verification:</strong> The site must automatically fetch and show your In-Game Nickname (IGN) after you enter your ID. This proves they have a real connection to the game servers.</li>
-        <li><strong>Secure Payment Gateways:</strong> It should use verified <strong>Indian UPI</strong> systems (PhonePe, Google Pay, Paytm) rather than direct "Friends & Family" transfers to unknown personal accounts.</li>
-        <li><strong>Active Customer Support:</strong> Reliable sites like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> have a visible support system for transaction inquiries.</li>
-      </ol>
-
-      <h2>6. What to do if You Have Been Scammed?</h2>
-      <p>
-        If you unfortunately fall victim to a scam, act fast to minimize the damage:
-      </p>
-      <ul>
-        <li><strong>Immediate Password Reset:</strong> If you gave your credentials, change your Moonton password and all linked email/social passwords immediately. Enable 2-Factor Authentication (2FA) on everything.</li>
-        <li><strong>Bank/UPI Dispute:</strong> Contact your bank or UPI app support (GPay/PhonePe) and report the transaction as a <strong>Cyber Fraud</strong>. Provide them with the scammer's details and the fake website link.</li>
-        <li><strong>Contact Moonton Support:</strong> Send an in-game ticket explaining that you were tricked by a fraudulent 3rd party. If you are worried about a Negative Diamond ban, sometimes showing them you were a victim of fraud can help you avoid a permanent account suspension.</li>
-      </ul>
-
-      <h2>Conclusion: Safety is the Ultimate Rank-Up</h2>
-      <p>
-        Your Mobile Legends account is more than just a game profile; it's a collection of your time, skill, and achievements. Don't risk years of progress for a "cheap" offer that is destined to fail. Stay safe by sticking to verified, professional platforms <strong>in India</strong>.
-      </p>
-      
-      <p>
-        <strong>Want a Zero-Risk Recharge?</strong> Stop worrying about your account's safety. We provide the <strong>safest and fastest MLBB diamonds in India</strong>. No passwords, no risk—just instant delivery. Visit the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">MLBB Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> and buy with total confidence!
-      </p>
-
-      <div className="mt-20 pt-10 border-t border-[var(--border)]">
-        <h4 className="text-xl font-black italic uppercase tracking-widest mb-8 opacity-40 transition-colors">Safety FAQ</h4>
-        <div className="space-y-8">
-          <div className="group">
-            <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">Is it safe to share my Player ID?</h5>
-            <p className="text-sm opacity-60">Yes! Your Player ID is public information that any player can see after a match. Sharing your ID for a top-up on a secure site like <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a> is 100% safe. Scammers only gain power if you share your <strong>Password</strong> or <strong>OTP</strong>.</p>
+        <div className="space-y-6">
+          <h2 className="flex items-center gap-3">
+             <FiAlertTriangle className="text-red-500" />
+             1. The "Too Good to be True" Pricing Trap
+          </h2>
+          <p>
+            This is the most common scam targeting <strong>Indian players</strong> on social media. You might see an ad on Instagram or a message in a WhatsApp group offering "10,000 Diamonds for ₹499."
+          </p>
+          <p>
+            <strong>The Reality:</strong> Moonton, the developer of MLBB, sets a strict baseline price for diamonds. While trusted third-party sellers like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> can offer significant discounts by buying in bulk, no one can offer 90% off the market price. If the price feels like a miracle, it is a scam.
+          </p>
+          <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-3xl">
+             <p className="m-0 text-sm italic opacity-80 leading-relaxed text-justify">
+                <strong>The "Negative Diamond" Nightmare:</strong> When you pay a scammer, they often use stolen credit cards to buy diamonds for you. While the diamonds appear in your account initially, the real card owner will eventually report the fraud. When that happens, Moonton will deduct the stolen diamonds from your account. If you've already spent them, you will have a <strong>Negative Diamond Balance</strong>, and your account will be locked from playing matches until you pay back the full amount to Moonton.
+             </p>
           </div>
-          <div className="group">
-            <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">What if a site has the MLBB logo but is very cheap?</h5>
-            <p className="text-sm opacity-60">Logo usage does not equal legitimacy. Anyone can copy-paste a logo. Always judge a site by its <strong>Domain Name</strong>, its <strong>ID-only requirement</strong>, and its <strong>reputation in the Indian community</strong>. If it's significantly cheaper than everyone else, it's a scam.</p>
+        </div>
+
+        <div className="space-y-6">
+          <h2 className="flex items-center gap-3 text-[var(--accent)]">
+             <FiLock />
+             2. The Golden Rule: Never Share Your Password
+          </h2>
+          <p>
+            This is the most critical safety rule in MLBB: <strong>Never share your password.</strong> Scammers will often tell you they need to log into your account to "manually process" a special diamond package or bypass regional restrictions. 
+          </p>
+          <p>
+            <strong>The Truth:</strong> Professional automated platforms <strong>NEVER</strong> need your password. Sites like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a> only require your <strong>Player ID and Zone ID</strong> to send diamonds via the game's secure API. If a site or person asks for your Moonton Email, Facebook, or Google password, they are trying to steal your account to sell it or use it for botting.
+          </p>
+          <p className="border-l-2 border-[var(--accent)] pl-4 italic text-sm opacity-60 m-0">
+             If you have already shared your password, change it immediately and enable 2-Factor Authentication (2FA) on your Moonton and linked social accounts.
+          </p>
+        </div>
+
+        {/* Domain Verification remains as it's highly functional */}
+        <div className="bg-[var(--card)] border border-[var(--border)] p-10 rounded-[40px] my-4 shadow-xl relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-2 h-full bg-[var(--accent)]" />
+          <h3 className="italic font-black uppercase text-[var(--accent)] mb-4 tracking-tighter flex items-center gap-3">
+             <FiShield /> Domain Verification & SSL Check 🛡️
+          </h3>
+          <p className="text-base italic opacity-80 mb-6 leading-relaxed">
+             Before entering any details or paying, look at the address bar. Scammers use names like <em>"mlbb-free-rewards.net"</em>. Trust only established domains with active security certificates.
+          </p>
+          <div className="flex items-center gap-3 bg-[var(--background)] p-4 rounded-2xl border border-[var(--border)] w-fit">
+             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+             <span className="text-xs font-black tracking-widest text-green-500 italic">SECURE: bluebuff.in (Certified SSL)</span>
           </div>
-          <div className="group">
-            <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base mb-2 group-hover:translate-x-1 transition-transform italic">Can Moonton ban me for using 3rd party sites in India?</h5>
-            <p className="text-sm opacity-60">Moonton allows recharges through authorized 3rd party platforms. However, they will ban accounts that use <strong>illegal</strong> 3rd party sites (those using stolen cards or glitches). By using a verified platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a>, you are using the official API routes, which is completely safe for your account.</p>
+        </div>
+
+        <div className="space-y-6">
+          <h2 className="flex items-center gap-3">
+             <FiInfo className="text-[var(--accent)]" />
+             3. Beware of Fake "Verified" Admin Groups
+          </h2>
+          <p>
+            Scammers create Telegram and Discord groups with thousands of "bot" members to create a false sense of popularity. They often set their profile pictures as the MLBB logo and call themselves "Admin_Rahul" or "Verified_CS_Team."
+          </p>
+          <div className="flex items-start gap-4 p-6 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
+             <FiInfo className="text-yellow-500 shrink-0 mt-1" />
+             <p className="text-sm m-0 opacity-80 italic leading-relaxed text-justify">
+             <strong>The Golden Tip:</strong> Legit site administrators from <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> will <strong>NEVER DM you first</strong> asking you to buy a private package. If you receive an unsolicited message offering a deal that isn't on our website dashboard, it is a scam. Block and report them immediately to protect the community.
+             </p>
+          </div>
+        </div>
+
+        <section className="bg-[var(--card)] rounded-[40px] p-10 border border-[var(--border)] relative overflow-hidden">
+          <h2 className="relative z-10 flex items-center gap-3 !mt-0">
+            <FiShield className="text-[var(--accent)]" /> 
+            The 100% Safe Platform Checklist
+          </h2>
+          <p className="relative z-10 opacity-70 text-sm italic mb-6">Before you spend a single rupee on a diamond recharge in India, ensure the platform passes these tests:</p>
+          <ul className="space-y-5 m-0 p-0 list-none relative z-10 mt-6">
+            <li className="flex items-center gap-4 text-sm font-black italic uppercase tracking-tighter opacity-80">
+              <FiCheckCircle className="text-[var(--accent)] shrink-0" /> ID-Only Architecture (The site never asks for a password)
+            </li>
+            <li className="flex items-center gap-4 text-sm font-black italic uppercase tracking-tighter opacity-80">
+              <FiCheckCircle className="text-[var(--accent)] shrink-0" /> Display Name Verification (Must show your IGN before you pay)
+            </li>
+            <li className="flex items-center gap-4 text-sm font-black italic uppercase tracking-tighter opacity-80">
+              <FiCheckCircle className="text-[var(--accent)] shrink-0" /> Verified Indian UPI Gateways (PhonePe, GPay, Paytm)
+            </li>
+            <li className="flex items-center gap-4 text-sm font-black italic uppercase tracking-tighter opacity-80">
+              <FiCheckCircle className="text-[var(--accent)] shrink-0" /> Secure HTTPS Domain (Look for the padlock icon in the browser)
+            </li>
+          </ul>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="italic font-black flex items-center gap-2">
+             <FiAlertTriangle className="text-red-500" />
+             What to do if You Have Been Scammed?
+          </h2>
+          <p>If you unfortunately fall victim to a scam, act fast to minimize the damage:</p>
+          <ul className="space-y-6 opacity-80 list-none p-0 m-0">
+            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>1. Immediate Password Reset:</strong> Change your Moonton password and all linked email/social passwords. Enable 2-Factor Authentication (2FA) immediately.</li>
+            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>2. Bank/UPI Dispute:</strong> Contact your bank or UPI app support (GPay/PhonePe) and report the transaction as <strong>Cyber Fraud</strong>. Provide them with the scammer's bank details and the fake website link.</li>
+            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>3. Contact Moonton Support:</strong> Send an in-game ticket explaining that you were tricked by a fraudulent 3rd party. Showing them you were a victim of fraud can sometimes help you avoid a permanent account suspension.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Conclusion: Safety is the Ultimate Rank-Up</h2>
+          <p className="text-lg leading-relaxed text-justify">
+            Your Mobile Legends account represents more than just a collection of skins; it's a testament to your rank, your skill, and your dedication. Don't risk years of progress for a "cheap" offer that is destined to fail. Stay safe by sticking to verified, professional platforms <strong>in India</strong>.
+          </p>
+          
+          <p className="mt-12 text-lg leading-relaxed text-justify">
+            <strong>Ready for a Safe Recharge?</strong> Stop worrying about your account's safety. We provide the <strong>safest and fastest MLBB diamonds in India</strong>. No passwords, no risk—just instant delivery. Visit the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">MLBB Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> and buy with total confidence!
+          </p>
+        </section>
+
+        {/* Simplified FAQ */}
+        <div className="mt-20 pt-10 border-t border-[var(--border)] space-y-8">
+          <h4 className="flex items-center gap-3 text-xl font-black italic uppercase tracking-widest opacity-40">
+            Safe Top-Up FAQ
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="group space-y-3">
+              <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">Is sharing my Player ID safe?</h5>
+              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">Absolutely. Your ID is public match data that anyone can see. Sharing it on <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a> is safe because they use the game's main top-up gateway. Scammers only gain power if you share your <strong>Password</strong> or <strong>OTP</strong>.</p>
+            </div>
+            <div className="group space-y-3">
+              <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">Can Moonton ban me for 3rd party sites?</h5>
+              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">Moonton allows authorized platforms. They only ban accounts using <strong>illegal</strong> sources (using stolen cards or glitches). By using a verified platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a>, you are using direct API routes, which is 100% safe.</p>
+            </div>
+            <div className="group space-y-3">
+              <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">What is a 'Negative Diamond' ban?</h5>
+              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">This happens when a 3rd party seller reverses a payment or uses a fraudulent card. Moonton removes the diamonds, often leaving you with a negative balance. You must pay back the difference to unlock your account features.</p>
+            </div>
+            <div className="group space-y-3">
+              <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">Does bluebuff.in have support?</h5>
+              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">Yes. Unlike anonymous WhatsApp sellers, <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a> has active customer support to help with transaction inquiries, ensuring your money never disappears into a vacuum.</p>
+            </div>
           </div>
         </div>
       </div>

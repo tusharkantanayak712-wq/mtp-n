@@ -125,23 +125,23 @@ export default function BlogPostLayout({
                 </section>
 
                 {/* RELATED ARTICLES */}
-                <section className="mt-32 max-w-4xl mx-auto">
-                    <div className="flex items-center gap-3 mb-8">
-                        <div className="w-10 h-[1px] bg-[var(--accent)]" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] italic">Elevate your game</span>
+                <section className="mt-20 max-w-4xl mx-auto">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-8 h-[1px] bg-[var(--accent)]" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--accent)] italic">Elevate your game</span>
                     </div>
-                    <h3 className="text-2xl md:text-4xl font-black italic tracking-tighter uppercase mb-10">Related <span className="text-[var(--accent)]">News</span></h3>
+                    <h3 className="text-xl md:text-3xl font-black italic tracking-tighter uppercase mb-8">Related <span className="text-[var(--accent)]">News</span></h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {relatedArticles.map((blog) => (
                             <Link
                                 key={blog.id}
                                 href={`/blog/${blog.game}/${blog.slug}`}
-                                className="group block h-full p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all flex flex-col justify-between"
+                                className="group block h-full p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all flex flex-col justify-between shadow-sm"
                             >
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3">
                                     {/* 🖼️ MINI THUMBNAIL ON LEFT */}
-                                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--background)] flex-shrink-0">
+                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--background)] flex-shrink-0">
                                         <img 
                                             src={blog.image} 
                                             alt={blog.title} 
@@ -150,16 +150,16 @@ export default function BlogPostLayout({
                                     </div>
 
                                     {/* 📝 COMPACT CONTENT ON RIGHT */}
-                                    <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-1">
-                                        <div className="space-y-1.5">
-                                            <span className="text-[7px] font-black text-[var(--accent)] uppercase tracking-wider italic">{blog.type}</span>
-                                            <h4 className="text-xs md:text-sm font-black uppercase italic tracking-tighter leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2 md:line-clamp-3">
+                                    <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-0.5">
+                                        <div className="space-y-1">
+                                            <span className="text-[6px] font-black text-[var(--accent)] uppercase tracking-wider italic">{blog.type}</span>
+                                            <h4 className="text-[10px] md:text-xs font-black uppercase italic tracking-tighter leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2 md:line-clamp-3">
                                                 {blog.title}
                                             </h4>
                                         </div>
-                                        <div className="flex items-center justify-between text-[var(--muted)] opacity-30 group-hover:opacity-100 transition-opacity mt-2">
-                                            <span className="text-[7px] font-black uppercase tracking-widest">{blog.readingTime}</span>
-                                            <FiArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                                        <div className="flex items-center justify-between text-[var(--muted)] opacity-30 group-hover:opacity-100 transition-opacity mt-1.5">
+                                            <span className="text-[6px] font-black uppercase tracking-widest">{blog.readingTime}</span>
+                                            <FiArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                                         </div>
                                     </div>
                                 </div>
