@@ -108,45 +108,50 @@ export default function BlogListing({ initialGame = "all" }) {
 
         {/* 🔖 FILTERS SECTION */}
         <div className="space-y-6 mb-12">
-            
-            {/* 🎮 GAME FILTER - ONLY SHOW IF NOT IN SPECIFIC GAME PAGE */}
+            {/* 🎮 GAME FILTER - SIMPLE TEXT TABS */}
             {initialGame === "all" && (
-                <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40 italic">
-                        <FiPlay size={10} className="fill-current" /> SELECT GAME
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 italic">
+                        SELECT SOURCE
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap items-center gap-x-8 gap-y-4 border-b border-[var(--border)]/20 pb-4">
                         {games.map((game) => (
                             <Link
                                 key={game}
                                 href={game === "all" ? "/blog" : `/blog/${game}`}
-                                className={`px-5 py-2 rounded-xl text-[10px] font-[1000] uppercase tracking-tighter transition-all border ${
+                                className={`text-xs font-black uppercase tracking-tighter transition-all relative ${
                                     selectedGame === game
-                                        ? "bg-[var(--accent)] border-[var(--accent)] text-black italic scale-105 shadow-lg shadow-[var(--accent)]/20"
-                                        : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
+                                        ? "text-[var(--accent)] italic"
+                                        : "text-[var(--muted)] hover:text-[var(--foreground)]"
                                 }`}
                             >
-                                {game === "all" ? "All Games" : game}
+                                {game === "all" ? "ALL ARTICLES" : game}
+                                {selectedGame === game && (
+                                    <motion.div 
+                                        layoutId="gameUnderline"
+                                        className="absolute -bottom-[17px] left-0 right-0 h-[2px] bg-[var(--accent)]" 
+                                    />
+                                )}
                             </Link>
                         ))}
                     </div>
                 </div>
             )}
 
-            {/* 🏷️ CATEGORY FILTER */}
-            <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40 italic">
-                    <FiList size={10} /> TOPICS
+            {/* 🏷️ CATEGORY FILTER - SIMPLE TEXT CHIPS */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 italic">
+                    TOPICS
                 </div>
-                <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <div className="flex flex-nowrap gap-6 overflow-x-auto pb-4 no-scrollbar">
                     {categories.map((type) => (
                         <button
                             key={type}
                             onClick={() => setSelectedType(type)}
-                            className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
+                            className={`text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap px-0 py-1 border-b-2 ${
                                 selectedType === type
-                                    ? "bg-[var(--foreground)] border-[var(--foreground)] text-[var(--background)] italic"
-                                    : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/20"
+                                    ? "text-[var(--foreground)] border-[var(--foreground)] italic"
+                                    : "text-[var(--muted)] border-transparent hover:text-[var(--accent)]"
                             }`}
                         >
                             {type}
@@ -256,11 +261,11 @@ function BlogCard({ blog, index }) {
           {/* 📝 CONTENT - TIGHTER */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-[7px] md:text-[8px] font-black text-[var(--accent)] uppercase tracking-[0.1em] italic">
+              <span className="text-[9px] font-[1000] text-[var(--accent)] uppercase tracking-[0.05em] italic">
                 {blog.type}
               </span>
-              <span className="w-0.5 h-0.5 rounded-full bg-[var(--border)]" />
-              <span className="text-[7px] md:text-[8px] font-bold text-[var(--muted)] opacity-40 uppercase tracking-[0.05em]">
+              <span className="w-0.5 h-0.5 rounded-full bg-[var(--border)] opacity-30" />
+              <span className="text-[9px] font-bold text-[var(--muted)] opacity-60 uppercase tracking-tight">
                 {new Date(blog.publishedAt).toLocaleDateString()}
               </span>
             </div>
