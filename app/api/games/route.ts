@@ -171,63 +171,30 @@ export async function GET() {
     };
 
     /* ================= FILTER GAMES ================= */
-    const excludedGameSlugs = [
-      "test-1637",
-      "mobile-legends-backup826",
-      "ph-value-pass588",
-      "value-pass-ml948",
+    const ALLOWED_SLUGS = [
+      "mobile-legends988",
+      "mlbb-double332",
+      "sgmy-mlbb893",
+      "magic-chess-gogo-india924",
+      "mlbb-indo42",
+      "mlbb-russia953",
+      "pubg-mobile138",
 
+      "genshin-impact742",
+      "honor-of-kings57",
+      "wuthering-of-waves464",
+      "where-winds-meet280",
+      "mlbb-smallphp980",
+      "weeklymonthly-bundle931"
     ];
 
     const filteredGames =
       data?.data?.games
         ?.filter(
-          (game: any) => !excludedGameSlugs.includes(game.gameSlug)
+          (game: any) => ALLOWED_SLUGS.includes(game.gameSlug)
         )
         ?.map(normalizeGame) || [];
 
-    // Add COC Manual
-    filteredGames.push({
-      gameName: "Clash of Clans",
-      gameSlug: "coc-manual",
-      gameFrom: "Supercell",
-      gameAvailablity: true,
-      gameImageId: {
-        image: COC_IMAGE,
-      },
-      tagId: {
-        tagName: "Manual",
-        tagBackground: "#f59e0b",
-        tagColor: "#ffffff",
-      },
-    });
-
-    // Add Starlight Card
-    filteredGames.push({
-      gameName: "Starlight Card",
-      gameSlug: "starlight-card-manual",
-      gameFrom: "Moonton",
-      gameAvailablity: true,
-      gameImageId: {
-        image: STARLIGHT_IMAGE,
-      },
-      tagId: {
-        tagName: "Manual",
-        tagBackground: "#f59e0b",
-        tagColor: "#ffffff",
-      },
-    });
-
-    // Add BGMI Manual
-    filteredGames.push({
-      gameName: "BGMI",
-      gameSlug: "bgmi-manual",
-      gameFrom: "Krafton",
-      gameAvailablity: true,
-      gameImageId: {
-        image: "/game-assets/bgmi-logo.webp",
-      },
-    });
 
     /* ================= FILTER CATEGORY GAMES ================= */
     const filteredCategories =
@@ -243,7 +210,7 @@ export async function GET() {
 
     // Featured games
     const featuredGames = filteredGames.filter((g: any) =>
-      ["mobile-legends988", "bgmi-manual", "genshin-impact742"].includes(
+      ["mobile-legends988", "pubg-mobile138", "genshin-impact742"].includes(
         g.gameSlug
       )
     );
