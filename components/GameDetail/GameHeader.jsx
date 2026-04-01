@@ -46,9 +46,7 @@ export default function GameHeader({ game }) {
               <FiCheckCircle className="text-[var(--accent)]" size={12} />
             </div>
 
-            <p className="text-[9px] md:text-[10px] font-bold tracking-widest text-[var(--muted)] uppercase opacity-60">
-              {game.gameFrom || "Global Edition"}
-            </p>
+
             {game.isValidationRequired === false && game.gameDescription && (
               <p className="text-[8px] font-bold text-[var(--accent)] uppercase tracking-tight mt-0.5 opacity-80 italic line-clamp-1">
                 {game.gameDescription}

@@ -67,13 +67,6 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {!disabled && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--card)]/50 border border-[var(--border)] text-[8px] font-black uppercase tracking-[0.2em] text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors">
-                <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
-                {game.gameFrom || "Elite"}
-              </div>
-            )}
-
             {!disabled && game.tagId && (
               <span
                 className="text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/5 shadow-xl flex items-center gap-1.5 transition-all group-hover:translate-y-[-1px]"

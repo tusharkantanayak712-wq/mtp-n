@@ -81,7 +81,6 @@ export async function GET() {
       headers: {
         "x-api-key": process.env.API_SECRET_KEY!,
       },
-      next: { revalidate: 1800 } // Cache list for 30 minutes instead of fetching every request
     });
 
     const data = await response.json();

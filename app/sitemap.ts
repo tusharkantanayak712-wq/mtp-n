@@ -71,7 +71,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const response = await fetch("https://game-off-ten.vercel.app/api/v1/game", {
       headers: { "x-api-key": process.env.API_SECRET_KEY || "" },
-      next: { revalidate: 1800 },
     });
 
     if (response.ok) {
