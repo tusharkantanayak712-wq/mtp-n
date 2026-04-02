@@ -21,14 +21,14 @@ export default function HeroSection() {
       <TopNoticeBanner />
       <GameBannerCarousel />
 
-      <div className="space-y-2 mt-4">
+      <div className="space-y-1 mt-2">
         <StorySlider />
         <FlashSale />
       </div>
 
       {/* <PromoBanner /> */}
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <HomeQuickActions />
         <HomeReferralStats />
       </div>

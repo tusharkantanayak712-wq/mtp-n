@@ -80,10 +80,10 @@ export default function HomeQuickActions() {
       >
         <Link
           href={getTargetHref(item)}
-          className="group relative flex flex-col items-center justify-center py-2 px-1"
+          className="group relative flex flex-col items-center justify-center py-1.5 px-0.5"
         >
           {/* Enhanced Icon Section */}
-          <div className="relative flex items-center justify-center p-2 rounded-2xl transition-all duration-500">
+          <div className="relative flex items-center justify-center p-1.5 rounded-xl transition-all duration-500">
 
             {/* VALENTINE SPECIAL HIGHLIGHT */}
             {isColorful && (
@@ -96,14 +96,14 @@ export default function HomeQuickActions() {
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  className="absolute -inset-1 border border-dashed border-rose-500/30 rounded-2xl"
+                  className="absolute -inset-1 border border-dashed border-rose-500/30 rounded-xl"
                 />
               </>
             )}
 
             {/* Ultra-Subtle Hover Ring */}
             <div
-              className={`absolute inset-0 rounded-2xl border transition-all duration-500 scale-125 group-hover:scale-100 ${isColorful ? "border-rose-500/20 bg-rose-500/5" : "border-white/0 group-hover:border-white/5 group-hover:bg-white/[0.02]"
+              className={`absolute inset-0 rounded-xl border transition-all duration-500 scale-125 group-hover:scale-100 ${isColorful ? "border-rose-500/20 bg-rose-500/5" : "border-white/0 group-hover:border-white/5 group-hover:bg-white/[0.02]"
                 }`}
             />
 
@@ -120,7 +120,7 @@ export default function HomeQuickActions() {
               ${isColorful ? "text-rose-500" : ""}
             `}>
               <Icon
-                size={isColorful ? 24 : 22}
+                size={isColorful ? 22 : 20}
                 strokeWidth={isColorful ? 2 : 1.25}
                 style={{ color: isColorful ? undefined : item.color }}
                 className={`
@@ -134,7 +134,7 @@ export default function HomeQuickActions() {
           {/* Title */}
           <span
             className={`
-              mt-2 text-[9px] font-black tracking-[0.1em] uppercase transition-all duration-300
+              mt-1 text-[8px] sm:text-[9px] font-black tracking-[0.05em] uppercase transition-all duration-300
               ${isColorful ? "text-rose-500 scale-105" : "text-[var(--muted)] group-hover:text-[var(--foreground)]"}
             `}
           >
@@ -152,9 +152,9 @@ export default function HomeQuickActions() {
   };
 
   return (
-    <section className="relative max-w-7xl mx-auto px-4 mt-2">
+    <section className="relative max-w-7xl mx-auto px-4 mt-1">
       <div className="relative z-10 max-w-2xl mx-auto">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           {/* ================= TOP ROW ================= */}
           <div className="flex justify-between gap-1">
             {topRow.map((item, index) => (

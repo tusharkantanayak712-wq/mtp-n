@@ -12,7 +12,7 @@ const flashSaleData = [
         name: "Weekly Pass",
         game: "MLBB",
         image: "/game-assets/weeklypass.jpg",
-        price: "₹140",
+        price: "₹142",
         originalPrice: "₹175",
         slug: "mobile-legends988?type=weekly-pass",
         badge: "Hot"
@@ -76,13 +76,13 @@ export default function FlashSale() {
     }, []);
 
     return (
-        <section className="relative py-2 px-4 overflow-hidden border-b border-white/5 bg-black/10">
+        <section className="relative py-1.5 px-4 overflow-hidden border-b border-[var(--border)] bg-[var(--card)]/30">
             {/* Background Decorative */}
             <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-amber-500/5 blur-[80px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto">
                 {/* Compact Header */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2">
                         <div className="p-1 rounded-lg bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.3)] shrink-0">
                             <FiZap size={12} fill="currentColor" />
@@ -92,7 +92,7 @@ export default function FlashSale() {
                         </h2>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1 rounded-xl">
+                    <div className="flex items-center gap-2 bg-[var(--foreground)]/[0.03] backdrop-blur-md border border-[var(--border)] px-3 py-1 rounded-xl">
                         <FiClock className="text-amber-500 animate-pulse hidden sm:block" size={10} />
                         <div className="flex items-center gap-2 font-bold text-[10px] tabular-nums text-amber-500">
                             <span className="opacity-60 text-[8px] uppercase tracking-widest text-[var(--foreground)] mr-1 hidden md:block">Ends In</span>
@@ -106,7 +106,7 @@ export default function FlashSale() {
                 </div>
 
                 {/* Compact Horizontal Slider */}
-                <div className="overflow-x-auto pb-4 custom-scrollbar-premium snap-x snap-mandatory">
+                <div className="overflow-x-auto pb-2 custom-scrollbar-premium snap-x snap-mandatory">
                     <div className="flex gap-3 md:gap-4 px-1 md:justify-center min-w-max md:min-w-0">
                         {flashSaleData.map((item, index) => (
                             <motion.div
@@ -119,7 +119,7 @@ export default function FlashSale() {
                             >
                                 <Link
                                     href={`/games/${item.slug}`}
-                                    className="group relative block w-[140px] sm:w-[160px] md:w-[210px] bg-[var(--card)]/40 backdrop-blur-lg border border-white/5 rounded-[1rem] p-2 transition-all duration-500 hover:border-amber-500/30 hover:bg-amber-500/[0.04] shadow-lg"
+                                    className="group relative block w-[125px] sm:w-[150px] md:w-[200px] bg-[var(--card)]/40 backdrop-blur-lg border border-[var(--border)] rounded-[1rem] p-1.5 transition-all duration-500 hover:border-amber-500/30 hover:bg-amber-500/[0.04] shadow-lg"
                                 >
                                     {/* Badge */}
                                     <div className="absolute top-3 left-3 z-20">
@@ -129,7 +129,7 @@ export default function FlashSale() {
                                     </div>
 
                                     {/* Image Container */}
-                                    <div className="relative aspect-square rounded-[0.8rem] overflow-hidden mb-2 ring-1 ring-white/5 bg-black/20">
+                                    <div className="relative aspect-square rounded-[0.8rem] overflow-hidden mb-1.5 ring-1 ring-[var(--border)] bg-[var(--foreground)]/[0.05]">
                                         <Image
                                             src={item.image}
                                             alt={item.name}
@@ -166,11 +166,11 @@ export default function FlashSale() {
                         height: 3px;
                     }
                     .custom-scrollbar-premium::-webkit-scrollbar-track {
-                        background: rgba(255, 255, 255, 0.02);
+                        background: var(--border);
                         border-radius: 10px;
                     }
                     .custom-scrollbar-premium::-webkit-scrollbar-thumb {
-                        background: rgba(245, 158, 11, 0.2);
+                        background: var(--accent);
                         border-radius: 10px;
                     }
                     .custom-scrollbar-premium::-webkit-scrollbar-thumb:hover {

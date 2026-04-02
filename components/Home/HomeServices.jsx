@@ -58,10 +58,10 @@ export default function HomeServices() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
               onClick={() => window.open(whatsappLink, "_blank")}
-              className="group cursor-pointer p-4 sm:p-5 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-[var(--accent)]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col items-start"
+              className="group cursor-pointer p-4 sm:p-5 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] hover:border-[var(--accent)]/30 hover:bg-[var(--accent)]/5 transition-all duration-300 flex flex-col items-start"
             >
               {/* Icon */}
-              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all duration-300 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--foreground)]/[0.05] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 mb-4">
                 <service.icon size={18} />
               </div>
 
@@ -92,7 +92,7 @@ export default function HomeServices() {
         <motion.div
           initial={{ opacity: 0, y: 5 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-white/[0.01] border border-white/5 border-dashed"
+          className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[var(--card)]/20 border border-[var(--border)] border-dashed"
         >
           <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40 italic">
             Need custom deals?

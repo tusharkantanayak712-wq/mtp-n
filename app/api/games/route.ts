@@ -46,7 +46,7 @@ const OTTS = [
     slug: "spotify",
     image: "/ott/spotify.webp",
     category: "OTT",
-    available: true,
+    available: false,
     isManual: true,
   },
 ];
@@ -61,15 +61,15 @@ const MEMBERSHIPS = [
     available: true,
     isManual: true,
   },
-  {
-    name: "Reseller Membership",
-    slug: "reseller-membership",
-    image: "/membership/reseller-m.png",
-    type: "reseller",
-    category: "Membership",
-    available: true,
-    isManual: true,
-  },
+  // {
+  //   name: "Reseller Membership",
+  //   slug: "reseller-membership",
+  //   image: "/membership/reseller-m.png",
+  //   type: "reseller",
+  //   category: "Membership",
+  //   available: true,
+  //   isManual: true,
+  // },
 ];
 
 
@@ -174,10 +174,10 @@ export async function GET() {
     const ALLOWED_SLUGS = [
       "mobile-legends988",
       "mlbb-double332",
-      "sgmy-mlbb893",
+      // "sgmy-mlbb893",
       "magic-chess-gogo-india924",
       "mlbb-indo42",
-      "mlbb-russia953",
+      // "mlbb-russia953",
       "pubg-mobile138",
 
       "genshin-impact742",

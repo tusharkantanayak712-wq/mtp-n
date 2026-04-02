@@ -10,13 +10,17 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
   const disabled = isOutOfStock(game.gameName);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+    >
       <Link
         href={disabled ? "#" : `/games/${game.gameSlug}`}
-        className={`group relative flex items-center gap-5 p-3.5 rounded-[2.5rem] border transition-all duration-500 overflow-hidden
+        className={`group relative flex items-center gap-4.5 p-3 rounded-[2.5rem] border transition-all duration-500 overflow-hidden
         ${disabled
             ? "opacity-40 grayscale cursor-not-allowed border-[var(--border)] bg-[var(--card)]/50"
-            : "border-[var(--border)] bg-[var(--card)]/60 backdrop-blur-3xl hover:border-[var(--accent)]/30 hover:bg-[var(--card)]/80 hover:translate-x-1 shadow-2xl hover:shadow-[0_25px_50px_-15px_rgba(0,0,0,0.1)]"
+            : "border-[var(--border)] bg-[var(--card)]/40 backdrop-blur-2xl hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/80 hover:translate-x-1 shadow-sm hover:shadow-[0_15px_30px_-10px_rgba(var(--accent-rgb),0.15)] hover:scale-[1.01] active:scale-[0.99]"
           }`}
       >
         {/* LIGHT SWEEP EFFECT */}
@@ -29,7 +33,7 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
         {/* AVATAR SYSTEM */}
         <div className="relative flex-shrink-0">
           <div className={`
-            relative w-24 h-24 sm:w-28 sm:h-28 rounded-[2rem] overflow-hidden border z-10 transition-all duration-500
+            relative w-20 h-20 sm:w-24 sm:h-24 rounded-[1.8rem] overflow-hidden border z-10 transition-all duration-500
             ${disabled
               ? "border-white/10"
               : "border-white/10 group-hover:border-[var(--accent)]/30 group-hover:rounded-[1.2rem] group-hover:scale-95 group-hover:rotate-[-2deg]"
@@ -46,7 +50,7 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
             />
             {/* INNER GLOW */}
             {!disabled && (
-              <div className="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
+              <div className="absolute inset-0 rounded-[1.8rem] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
             )}
           </div>
           {/* Ambient Glow behind Image */}
@@ -57,9 +61,9 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
 
         {/* INFO SYSTEM */}
         <div className="flex-1 min-w-0 pr-2">
-          <div className="flex flex-col mb-2.5">
+          <div className="flex flex-col mb-1.5 sm:mb-2">
             <h3
-              className={`text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-[0.9] transition-all duration-300
+              className={`text-base sm:text-lg font-[1000] uppercase italic tracking-tighter leading-tight transition-all duration-300
               ${disabled ? "text-[var(--muted)]" : "text-[var(--foreground)] group-hover:text-[var(--accent)]"}`}
             >
               {game.gameName}
@@ -69,11 +73,12 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
           <div className="flex flex-wrap items-center gap-2">
             {!disabled && game.tagId && (
               <span
-                className="text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/5 shadow-xl flex items-center gap-1.5 transition-all group-hover:translate-y-[-1px]"
+                className="text-[7.5px] sm:text-[8px] font-black uppercase tracking-[0.12em] px-3 py-1 rounded-lg backdrop-blur-md border shadow-sm flex items-center gap-1.5 transition-all group-hover:translate-y-[-1px]"
                 style={{
-                  background: `${game.tagId.tagBackground}22`,
+                  background: `${game.tagId.tagBackground}55`,
                   color: game.tagId.tagColor,
-                  borderColor: `${game.tagId.tagBackground}44`,
+                  borderColor: `${game.tagId.tagBackground}77`,
+                  textShadow: '0 1px 2px rgba(0,0,0,0.15)'
                 }}
               >
                 {game.tagId.tagName === "Manual" && <FiZap size={12} fill="currentColor" className="animate-pulse" />}
@@ -81,7 +86,7 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
               </span>
             )}
             {disabled && (
-              <span className="px-3 py-1.5 rounded-xl bg-red-400/10 border border-red-400/20 text-red-500/60 text-[8px] font-black uppercase tracking-widest italic">
+              <span className="px-3 py-1 rounded-lg bg-red-400/10 border border-red-400/20 text-red-500/60 text-[7.5px] sm:text-[8px] font-black uppercase tracking-widest italic">
                 Out of Stock
               </span>
             )}
@@ -90,20 +95,20 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
 
         {/* ACTION SYSTEM */}
         {!disabled && (
-          <div className="relative shrink-0 pr-4">
-            <div className="absolute inset-0 bg-[var(--accent)]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-black group-hover:bg-[var(--accent)] transition-all duration-500 group-hover:shadow-[0_0_30px_rgba(var(--accent-rgb),0.4)] group-hover:rotate-[-45deg]">
-              <FiArrowRight size={24} className="transition-transform duration-500 group-hover:rotate-[45deg]" />
+          <div className="relative shrink-0 pr-3 sm:pr-4">
+            <div className="absolute inset-0 bg-[var(--accent)]/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--background)] group-hover:bg-[var(--accent)] transition-all duration-500 group-hover:shadow-[0_0_25px_rgba(var(--accent-rgb),0.3)] group-hover:rotate-[-45deg] group-hover:scale-105 active:scale-95">
+              <FiArrowRight size={20} className="transition-transform duration-500 group-hover:rotate-[45deg]" />
             </div>
           </div>
         )}
 
         {/* HOVER ACCENT LINE */}
         {!disabled && (
-          <div className="absolute left-[-2px] top-1/2 -translate-y-1/2 w-[3px] h-0 bg-[var(--accent)] group-hover:h-16 transition-all duration-700 rounded-r-full shadow-[0_0_20px_var(--accent)]" />
+          <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-r-full shadow-[0_0_15px_var(--accent)]" />
         )}
       </Link>
-    </div>
+    </motion.div>
   );
 }
 

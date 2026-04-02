@@ -51,8 +51,8 @@ export default function ServiceGridSection({
         </motion.div>
       )}
 
-      {/* GRID SYSTEM (Match GameCardGrid 3 in a Row) */}
-      <div className="grid grid-cols-3 gap-3 md:gap-5">
+      {/* GRID SYSTEM (Responsive Columns) */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-4">
         {items.map((item, index) => (
           <motion.div
             key={item.slug}
@@ -69,10 +69,10 @@ export default function ServiceGridSection({
           >
             <Link
               href={`${hrefPrefix}/${item.slug}`}
-              className="group relative block rounded-3xl overflow-hidden border border-[var(--border)] bg-[var(--card)]/40 backdrop-blur-xl transition-all duration-500 hover:border-[var(--accent)]/50 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.4)]"
+              className="group relative block rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--card)]/40 backdrop-blur-xl transition-all duration-500 hover:border-[var(--accent)]/50 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.4)]"
             >
               {/* IMAGE CONTAINER */}
-              <div className="relative w-full aspect-[16/10] overflow-hidden">
+              <div className="relative w-full aspect-square sm:aspect-video overflow-hidden">
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -103,17 +103,17 @@ export default function ServiceGridSection({
                 </div>
 
                 {/* VIEW BUTTON (MATCHING GAMECARD) */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-2xl">
-                    <FiEye size={20} />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-95">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-2xl">
+                    <FiEye size={18} />
                   </div>
                 </div>
               </div>
 
               {/* CONTENT */}
-              <div className="p-3 sm:p-4 relative">
-                <div className="mb-1 flex items-center justify-between gap-2">
-                  <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-widest italic leading-tight line-clamp-1 transition-colors text-[var(--foreground)] group-hover:text-[var(--accent)]">
+              <div className="p-2 sm:p-2.5 relative">
+                <div className="mb-1 flex items-start justify-between gap-2">
+                  <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-tight italic leading-tight line-clamp-2 transition-colors text-[var(--foreground)] group-hover:text-[var(--accent)]">
                     {item.name}
                   </h3>
                   <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] transition-all group-hover:translate-x-1" size={14} />

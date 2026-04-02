@@ -143,7 +143,7 @@ export default function GamesPage() {
         <Icon size={20} />
       </div>
       <div>
-        <h2 className="text-lg sm:text-xl font-black uppercase tracking-tighter italic text-white leading-none mb-1.5">
+        <h2 className="text-lg sm:text-xl font-black uppercase tracking-tighter italic text-[var(--foreground)] leading-none mb-1.5">
           {title}
         </h2>
         <div className="flex items-center gap-2.5">
@@ -153,7 +153,7 @@ export default function GamesPage() {
           </span>
         </div>
       </div>
-      <div className="flex-1 h-px bg-gradient-to-r from-white/5 to-transparent ml-2" />
+      <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] to-transparent ml-2" />
     </div>
   );
 
@@ -163,7 +163,7 @@ export default function GamesPage() {
       className={`flex-1 flex items-center justify-center gap-1.5 px-1.5 py-2 rounded-lg font-black uppercase tracking-tight text-[8px] sm:text-[9px] italic transition-all duration-300 border
         ${activeTab === id
           ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/40 shadow-[0_0_10px_rgba(var(--accent-rgb),0.1)]"
-          : "bg-black/20 text-[var(--muted)] border-white/5 hover:border-white/10 hover:bg-black/40"
+          : "bg-[var(--foreground)]/5 text-[var(--muted)] border-[var(--border)] hover:bg-[var(--foreground)]/10"
         }`}
     >
       <Icon size={12} className={`shrink-0 ${activeTab === id ? "fill-current" : ""}`} />
@@ -188,7 +188,7 @@ export default function GamesPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full pl-11 pr-10 py-3 rounded-[1.2rem] bg-[var(--background)] border border-[var(--border)] focus:bg-[var(--card)] focus:border-[var(--accent)]/30 outline-none text-[10px] sm:text-xs font-black tracking-widest transition-all placeholder:text-[var(--muted)]/30 uppercase italic text-[var(--foreground)]"
+                className="w-full pl-11 pr-10 py-3 rounded-[1.2rem] bg-[var(--background)] border border-[var(--border)] focus:bg-[var(--card)] focus:border-[var(--accent)]/30 outline-none text-[10px] sm:text-xs font-black tracking-widest transition-all placeholder:text-[var(--muted)]/50 uppercase italic text-[var(--foreground)]"
               />
               <AnimatePresence>
                 {searchQuery && (
@@ -217,7 +217,7 @@ export default function GamesPage() {
                     key={mode.id}
                     onClick={() => setViewMode(mode.id)}
                     className={`p-2 rounded-lg transition-all duration-300 ${viewMode === mode.id
-                      ? "bg-[var(--accent)] text-black shadow-lg"
+                      ? "bg-[var(--accent)] text-[var(--background)] shadow-lg"
                       : "text-[var(--muted)] hover:text-[var(--foreground)]"
                       }`}
                   >
@@ -249,8 +249,8 @@ export default function GamesPage() {
             <TabButton id="all" label="All" icon={FiGrid} />
             <TabButton id="mlbb" label="MLBB" icon={FiZap} />
             <TabButton id="others" label="Others" icon={FiPackage} />
-            <TabButton id="streaming" label="Streaming" icon={FiTv} />
-            <TabButton id="memberships" label="Membership" icon={FiTrendingUp} />
+            <TabButton id="streaming" label="Stream" icon={FiTv} />
+            <TabButton id="memberships" label="Members" icon={FiTrendingUp} />
           </div>
         </div>
 
@@ -280,7 +280,7 @@ export default function GamesPage() {
             ) : (
               <div>
                 {/* 1. FEATURED */}
-                {(activeTab === "all" || activeTab === "others") && (processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length > 0) && (
+                {/* {(activeTab === "all" || activeTab === "others") && (processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length > 0) && (
                   <div className="mb-20">
                     <SectionHeader
                       title="Elite Picks"
@@ -293,7 +293,7 @@ export default function GamesPage() {
                       : <GameList games={processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
                     }
                   </div>
-                )}
+                )} */}
 
                 {/* 2. MLBB VARIANT */}
                 {(activeTab === "all" || activeTab === "mlbb") && processedMlbbGames.length > 0 && (
@@ -329,7 +329,7 @@ export default function GamesPage() {
 
                 {/* 4. OTT SECTION */}
                 {(activeTab === "all" || activeTab === "streaming") && otts?.items?.length > 0 && !searchQuery && (
-                  <div className="mb-10 border-t border-white/5 pt-10">
+                  <div className="mb-10 border-t border-[var(--border)] pt-10">
                     <SectionHeader
                       title="Streaming Assets"
                       icon={FiTv}
@@ -347,7 +347,7 @@ export default function GamesPage() {
 
                 {/* 5. MEMBERSHIP SECTION */}
                 {(activeTab === "all" || activeTab === "memberships") && memberships?.items?.length > 0 && !searchQuery && (
-                  <div className="mb-10 border-t border-white/5 pt-10">
+                  <div className="mb-10 border-t border-[var(--border)] pt-10">
                     <SectionHeader
                       title="Elite Memberships"
                       icon={FiPackage}

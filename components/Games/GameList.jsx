@@ -4,7 +4,7 @@ import GameCardList from "./GameCardList";
 
 export default function GameList({ games, isOutOfStock }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {games.map((game, i) => (
         <GameCardList
           key={i}
