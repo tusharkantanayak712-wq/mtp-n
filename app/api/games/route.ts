@@ -179,6 +179,8 @@ export async function GET() {
       "mlbb-indo42",
       // "mlbb-russia953",
       "pubg-mobile138",
+      "mlbbtr112",
+      "mlbbglobal202",
 
       "genshin-impact742",
       "honor-of-kings57",
