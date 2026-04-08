@@ -53,11 +53,11 @@ export default function QueryTab() {
         }),
       });
       const data = await res.json();
-      if (data.success) setQuerySuccess("Message sent successfully!");
-      else setQuerySuccess(data.message || "Failed to send. Try again.");
+      if (data.success) setQuerySuccess("Message sent.");
+      else setQuerySuccess(data.message || "Could not send message. Try again.");
       setQueryType(""); setQueryMessage(""); setOrderId("");
     } catch {
-      setQuerySuccess("Connection error. Try again.");
+      setQuerySuccess("Connection error. Please try again.");
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setQuerySuccess(""), 4000);
@@ -114,7 +114,7 @@ export default function QueryTab() {
               <div className="w-1 h-1 rounded-full bg-green-500 animate-ping" />
               <span className="text-[8px] font-black tracking-widest text-[#22c55e] uppercase">Online Now</span>
             </div>
-            <span className="text-[8px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40">Response: ~15m</span>
+            <span className="text-[8px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40">Reply: ~15m</span>
           </div>
         </div>
 

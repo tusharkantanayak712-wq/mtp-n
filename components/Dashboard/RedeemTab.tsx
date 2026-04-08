@@ -39,7 +39,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                 setStatus({ type: 'error', message: data.message });
             }
         } catch (err) {
-            setStatus({ type: 'error', message: "Redemption failed. Try again." });
+            setStatus({ type: 'error', message: "Redeem failed. Please try again." });
         } finally {
             setLoading(false);
         }
@@ -59,7 +59,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                             <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">Rewards</span>
                         </div>
                         <h1 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Redeem <span className="text-blue-500">Code</span></h1>
-                        <p className="text-[10px] font-bold text-[var(--muted)] mt-2 uppercase tracking-wide opacity-50">Add money to your wallet instantly.</p>
+                        <p className="text-[10px] font-bold text-[var(--muted)] mt-2 uppercase tracking-wide opacity-50">Add money to your wallet fast.</p>
                     </motion.div>
 
                     <motion.div
@@ -151,7 +151,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                                 <div className="w-8 h-8 rounded-lg bg-blue-500/5 border border-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">3</div>
                                 <div>
                                     <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Use Instantly</p>
-                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Balance is added instantly to your wallet.</p>
+                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Balance is added to your wallet right away.</p>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
 
                     <div className="px-5 py-3.5 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex items-center gap-3">
                         <FiShield className="text-blue-500/60" size={12} />
-                        <p className="text-[8px] font-black text-blue-400/60 uppercase tracking-[0.2em]">Secure & Encrypted Processing</p>
+                        <p className="text-[8px] font-black text-blue-400/60 uppercase tracking-[0.2em]">Secure Processing</p>
                     </div>
                 </motion.div>
             </div>

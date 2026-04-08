@@ -65,7 +65,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "init",
-      text: "System Online. 👋 I'm your AI assistant. How can I help you today?",
+      text: "Hi 👋 I am your assistant. How can I help today?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -138,12 +138,12 @@ export default function ChatBot() {
 
     if (msg === "prices") {
       ctx.topic = "pricing";
-      return "I can certainly help with that! 💰 MLBB Diamonds start from ₹99. Which game package are you looking for?";
+      return "Sure! 💰 MLBB diamonds start from ₹99. Which package do you want?";
     }
 
     if (msg === "track") {
       ctx.topic = "tracking";
-      return "To track your order, please provide your Order ID. 📦 Most orders are delivered within 5-15 minutes.";
+      return "To track your order, share your Order ID. 📦 Most orders arrive in 5-15 minutes.";
     }
 
     if (msg === "support") {
@@ -152,11 +152,11 @@ export default function ChatBot() {
     }
 
     if (msg === "delivery") {
-      return "Delivery is near-instant! ⚡ Once your payment is confirmed, diamonds are typically credited within 2 to 10 minutes.";
+      return "Delivery is fast! ⚡ After payment is confirmed, diamonds usually arrive in 2 to 10 minutes.";
     }
 
     if (msg === "wallet") {
-      return `For wallet top-ups: Please contact support if you are facing a hard time or want to pay via methods other than INR. \n📞 WhatsApp: ${SUPPORT_PHONE}`;
+      return `For wallet top-ups: Contact support if you need help or want payment methods other than INR.\n📞 WhatsApp: ${SUPPORT_PHONE}`;
     }
 
     if (msg === "referral") {
@@ -167,35 +167,35 @@ export default function ChatBot() {
     if (nameMatch) {
       ctx.userName = nameMatch[1];
       ctx.unknownCount = 0;
-      return `Target identified: ${ctx.userName}. 🎯 Command acknowledged. How can I assist you?`;
+      return `Nice to meet you, ${ctx.userName}. 🎯 How can I help you?`;
     }
 
     if (/^(hi|hello|hey)/.test(msg)) {
       ctx.unknownCount = 0;
       return random([
-        "Greetings. 👋 Looking for top-ups or tactical support?",
-        "System ready. 😊 How can I help you today?",
-        "Connection established. Hello! How can I assist?",
+        "Hi 👋 Need help with top-up or support?",
+        "I am ready 😊 How can I help today?",
+        "Hello! How can I help?",
       ]);
     }
 
     if (msg.includes("price") || msg.includes("cost") || msg.includes("diamond")) {
       ctx.topic = "pricing";
       ctx.unknownCount = 0;
-      return "We offer the most competitive prices! 💎 Standard MLBB pack (284 Diamonds) is currently our best seller. Want to see all prices?";
+      return "We have good prices! 💎 The standard MLBB pack (284 Diamonds) is very popular. Want to see all prices?";
     }
 
     if (msg.includes("mlbb"))
-      return "MLBB Top-ups are processed instantly. ⚡ Just select your package and provide your Zone ID.";
+      return "MLBB top-ups are fast. ⚡ Select your package and enter your Zone ID.";
 
     if (msg.includes("support") || msg.includes("issue") || msg.includes("help")) {
       ctx.topic = "support";
       ctx.unknownCount = 0;
-      return "Understood. 🔧 If you're facing an issue, please contact us on WhatsApp for the fastest resolution.";
+      return "Got it. 🔧 If you have an issue, contact us on WhatsApp for quick help.";
     }
 
     if (msg.includes("wallet") || msg.includes("add money") || msg.includes("topup")) {
-      return `For wallet top-ups: Please contact support if you are facing a hard time or want to pay via methods other than INR. \n📞 WhatsApp: ${SUPPORT_PHONE}`;
+      return `For wallet top-ups: Contact support if you need help or want payment methods other than INR.\n📞 WhatsApp: ${SUPPORT_PHONE}`;
     }
 
     if (msg.includes("refer") || msg.includes("earn") || msg.includes("invite")) {
@@ -205,14 +205,14 @@ export default function ChatBot() {
     ctx.unknownCount++;
     if (ctx.unknownCount >= 2) {
       return (
-        "Tactical analysis inconclusive. 😅\n\n" +
+        "I could not fully understand that. 😅\n\n" +
         `Direct uplink for support:\n📞 ${SUPPORT_PHONE}\n📧 ${SUPPORT_EMAIL}`
       );
     }
 
     return random([
-      "Scanning message... Could you provide more details? 🤔",
-      "Acknowledged. Please elaborate for more accurate assistance. 🤖",
+      "Can you share a bit more detail? 🤔",
+      "Please explain a little more so I can help better. 🤖",
     ]);
   };
 
@@ -298,8 +298,8 @@ export default function ChatBot() {
                   <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[var(--card)] animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-[var(--foreground)] font-bold text-sm tracking-tight">TACTICAL AI</h3>
-                  <p className="text-[10px] text-[var(--muted)] uppercase tracking-widest font-medium">System Core v2.0</p>
+                  <h3 className="text-[var(--foreground)] font-bold text-sm tracking-tight">Support AI</h3>
+                  <p className="text-[10px] text-[var(--muted)] uppercase tracking-widest font-medium">Live Help v2.0</p>
                 </div>
               </div>
 
@@ -389,7 +389,7 @@ export default function ChatBot() {
                 <input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Initiate command..."
+                  placeholder="Type your message..."
                   className="w-full pl-4 pr-12 py-3.5 rounded-xl bg-[var(--muted)]/5 border border-[var(--border)] outline-none text-[13px] text-[var(--foreground)] placeholder:text-[var(--muted)] focus:border-[var(--accent)]/50 focus:ring-1 focus:ring-[var(--accent)]/20 transition-all"
                 />
                 <button

@@ -50,9 +50,9 @@ const SettingsTab = () => {
             const data = await res.json();
             if (data.success) {
                 setSettings(data.data);
-                setMessage({ type: "success", text: `Maintenance mode ${newValue ? "enabled" : "disabled"} successfully!` });
+                setMessage({ type: "success", text: `Maintenance mode ${newValue ? "enabled" : "disabled"}.` });
             } else {
-                setMessage({ type: "error", text: data.message || "Failed to update settings" });
+                setMessage({ type: "error", text: data.message || "Could not update settings" });
             }
         } catch (err) {
             console.error("Failed to update settings", err);
@@ -79,7 +79,7 @@ const SettingsTab = () => {
                     Main Settings
                 </h2>
                 <p className="text-sm text-[var(--muted)] mt-1">
-                    Manage your website status and background settings.
+                    Manage website status and settings.
                 </p>
             </div>
 
@@ -88,8 +88,8 @@ const SettingsTab = () => {
                     <div>
                         <h3 className="font-semibold text-[var(--foreground)]">Maintenance Mode</h3>
                         <p className="text-xs text-[var(--muted)] mt-1">
-                            When enabled, users will see a maintenance message and won't be able to access the site.
-                            Admin panel remains accessible for you.
+                            When enabled, users will see a maintenance message and cannot access the site.
+                            You can still access the admin panel.
                         </p>
                     </div>
 

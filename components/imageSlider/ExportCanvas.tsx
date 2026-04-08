@@ -128,8 +128,8 @@ export default function ExportCanvas() {
         </div>
       ) : (
         <div className="w-full h-60 flex flex-col items-center justify-center text-center p-8">
-          <h3 className="text-[#a0a0a0] text-2xl font-bold tracking-tight mb-1">MLBB Account Screenshot Goes Here</h3>
-          <p className="text-[#b0b0b0] text-sm">(Upload account screenshot, will appear here)</p>
+          <h3 className="text-[#a0a0a0] text-2xl font-bold tracking-tight mb-1">MLBB account screenshot will show here</h3>
+          <p className="text-[#b0b0b0] text-sm">(Upload screenshot to preview it here)</p>
         </div>
       )}
 
@@ -159,8 +159,8 @@ export default function ExportCanvas() {
         </div>
       ) : (
         <div className="w-full flex-1 min-h-[300px] flex flex-col items-center justify-center text-center p-8">
-          <h3 className="text-[#a0a0a0] text-3xl font-bold tracking-tight mb-2">MLBB Skin Collage Goes Here</h3>
-          <p className="text-[#b0b0b0] font-medium">(Select from our MLBB skin library, it will create collage automatically!)</p>
+          <h3 className="text-[#a0a0a0] text-3xl font-bold tracking-tight mb-2">MLBB skin collage will show here</h3>
+          <p className="text-[#b0b0b0] font-medium">(Select skins from the MLBB library to create a collage automatically.)</p>
         </div>
       )}
     </div>
