@@ -6,18 +6,20 @@ export async function POST(request) {
     await connectDB();
     const body = await request.json();
 
-    const { email, phone, type, message } = body;
+    const { email, phoneNo, orderId, type, message } = body;
 
-    if (!type || !message) {
+    if (!type || !message || !phoneNo) {
       return Response.json(
-        { success: false, message: "Query type and message are required" },
+        { success: false, message: "Phone number, query type and message are required" },
         { status: 400 }
       );
     }
 
     const newQuery = await SupportQuery.create({
       email: email || null,
-      phone: phone || null,
+      phone: phoneNo.trim(),
+      phoneNo: phoneNo.trim(),
+      orderId: orderId ? orderId.trim() : null,
       type,
       message,
     });

@@ -4,6 +4,8 @@ const SupportQuerySchema = new mongoose.Schema(
   {
     email: { type: String, default: null },
     phone: { type: String, default: null },
+    phoneNo: { type: String, required: true },
+    orderId: { type: String, default: null },
     type: { type: String, required: true },
     message: { type: String, required: true },
 

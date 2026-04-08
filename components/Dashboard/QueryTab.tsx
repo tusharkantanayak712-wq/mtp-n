@@ -31,24 +31,31 @@ const SUPPORT_CONFIG = {
 export default function QueryTab() {
   const [queryType, setQueryType] = useState("");
   const [queryMessage, setQueryMessage] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [orderId, setOrderId] = useState("");
   const [querySuccess, setQuerySuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!queryType || !queryMessage.trim()) return;
+    if (!queryType || !queryMessage.trim() || !phoneNo.trim()) return;
     setIsSubmitting(true);
     const storedEmail = localStorage.getItem("email");
-    const storedPhone = localStorage.getItem("phone");
     try {
       const res = await fetch("/api/support/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: storedEmail, phone: storedPhone, type: queryType, message: queryMessage }),
+        body: JSON.stringify({
+          email: storedEmail,
+          phoneNo: phoneNo.trim(),
+          orderId: orderId.trim() || null,
+          type: queryType,
+          message: queryMessage,
+        }),
       });
       const data = await res.json();
       if (data.success) setQuerySuccess("Message sent successfully!");
       else setQuerySuccess(data.message || "Failed to send. Try again.");
-      setQueryType(""); setQueryMessage("");
+      setQueryType(""); setQueryMessage(""); setOrderId("");
     } catch {
       setQuerySuccess("Connection error. Try again.");
     } finally {
@@ -148,8 +155,25 @@ export default function QueryTab() {
               onChange={(e) => setQueryMessage(e.target.value)}
             />
 
+            <input
+              type="tel"
+              className="w-full p-3.5 rounded-xl bg-[var(--background)]/50 border border-white/5 text-[10px] font-black tracking-widest outline-none focus:border-[var(--accent)] text-[var(--foreground)] placeholder:text-[var(--muted)]/40"
+              placeholder="Phone No *"
+              value={phoneNo}
+              onChange={(e) => setPhoneNo(e.target.value)}
+              required
+            />
+
+            <input
+              type="text"
+              className="w-full p-3.5 rounded-xl bg-[var(--background)]/50 border border-white/5 text-[10px] font-black tracking-widest outline-none focus:border-[var(--accent)] text-[var(--foreground)] placeholder:text-[var(--muted)]/40"
+              placeholder="Order ID (optional)"
+              value={orderId}
+              onChange={(e) => setOrderId(e.target.value)}
+            />
+
             <button
-              disabled={!queryType || !queryMessage || isSubmitting}
+              disabled={!queryType || !queryMessage || !phoneNo.trim() || isSubmitting}
               onClick={handleSubmit}
               className="w-full p-3.5 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-widest italic text-[10px] shadow-lg hover:shadow-[0_8px_16px_-4px_rgba(var(--accent-rgb),0.3)] hover:scale-[1.01] active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
             >

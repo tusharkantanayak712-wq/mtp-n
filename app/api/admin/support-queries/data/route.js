@@ -38,6 +38,8 @@ export async function GET(req) {
             query.$or = [
                 { email: { $regex: search, $options: "i" } },
                 { phone: { $regex: search, $options: "i" } },
+                { phoneNo: { $regex: search, $options: "i" } },
+                { orderId: { $regex: search, $options: "i" } },
                 { message: { $regex: search, $options: "i" } },
                 { type: { $regex: search, $options: "i" } },
             ];
