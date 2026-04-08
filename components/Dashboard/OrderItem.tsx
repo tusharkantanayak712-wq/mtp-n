@@ -209,7 +209,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
             {config.label === 'PENDING' && order.paymentMethod?.toLowerCase() === 'upi' && (
               <div className="mt-4 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
                 <p className="text-[9px] font-medium text-amber-500/80 uppercase tracking-widest leading-relaxed">
-                  If you have completed the **UPI payment** but the order is still pending, please click the **Verify Now** button above to manually sync your payment.
+                  If you already paid with **UPI** but this order still shows pending, click **Verify Now** above to check and update payment status.
                 </p>
               </div>
             )}

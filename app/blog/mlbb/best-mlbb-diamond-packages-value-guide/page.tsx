@@ -31,11 +31,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          Stop overpaying for your skins. In the <strong>Indian MLBB market</strong>, the difference between a "standard" recharge and a "strategic" top-up can save you over ₹2,000 per month. This is your definitive 2026 guide to getting the absolute best value for your rupee.
+          Do not overpay for skins. In the <strong>Indian MLBB market</strong>, choosing the right package can save a lot each month. This 2026 guide helps you get better value for your money.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          In Mobile Legends: Bang Bang (MLBB), diamonds are the premium currency that drives everything from aesthetic skins to hero unlocks. However, if you simply click the "+" icon in the game and buy whatever's first, you're likely losing 30-40% of your potential value. By using a specialized platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline font-black">bluebuff.in</a> and understanding the "Price-per-Diamond" ratio, you can build a Mythic-tier inventory on a budget.
+          Diamonds are MLBB's main paid currency. If you buy random packs in-game, you may pay more than needed. Using a platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline font-black">bluebuff.in</a> and checking price-per-diamond helps you save.
         </p>
 
         {/* Value Tiers Grid */}
@@ -43,17 +43,17 @@ export default function BlogPage() {
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiStar className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">The Efficiency King</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">The <strong>Weekly Diamond Pass</strong> offers 500% more value than raw recharges. It is the mandatory foundation for any player on a budget in India.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">The <strong>Weekly Diamond Pass</strong> gives much better value than direct recharge. It is a good base option for budget players in India.</p>
           </div>
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiPercent className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">Small Pack Trap</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Avoid buying small 86-diamond packs repeatedly. The "transaction fee" overhead makes small packs significantly more expensive per unit.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Avoid buying small 86-diamond packs again and again. Small packs usually cost more per diamond.</p>
           </div>
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiShield className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">Bulk Discount</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Large bundles (5,000+ diamonds) drop the price-per-diamond to its lowest possible rate, ideal for major Gacha events like Aspirants.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Large bundles (5,000+ diamonds) usually have lower price per diamond, useful for big events like Aspirants.</p>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export default function BlogPage() {
           <div className="flex items-start gap-4 p-6 bg-[var(--accent)]/5 border border-[var(--border)] rounded-2xl">
              <FiCheckCircle className="text-[var(--accent)] shrink-0 mt-1" />
              <p className="text-sm m-0 opacity-80 italic leading-relaxed text-justify">
-                <strong>The Strategy:</strong> During a Phase event, recharging just 250 diamonds often gives you 16-18 free event tokens (worth roughly 1,500 diamonds). By buying your 250 diamonds on <strong>bluebuff.in</strong> during these windows, you effectively quadruple your investment. 
+                <strong>Simple strategy:</strong> During a Phase event, topping up 250 diamonds can give 16-18 free tokens. Buying during these windows gives much better value.
              </p>
           </div>
         </section>
@@ -132,7 +132,7 @@ export default function BlogPage() {
         <section className="space-y-6">
           <h2>3. Why Local Indian Platforms Beat In-App Stores?</h2>
           <p className="text-lg leading-relaxed text-justify">
-             Buying diamonds directly through the App Store or Play Store often includes a <strong>"Platform Tax"</strong> of 15-30%. This is why localized Indian stores like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> can offer better rates. We work directly with authorized distributors to provide the wholesale price to the player.
+             Buying through app stores can include extra platform fees. That is why local Indian stores like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> can offer better rates.
           </p>
           <ul className="space-y-4 list-none p-0">
              <li className="flex items-center gap-3 text-sm opacity-70"><FiCheckCircle className="text-[var(--accent)]" /> No International Transaction Fees (Save ₹50-₹200)</li>

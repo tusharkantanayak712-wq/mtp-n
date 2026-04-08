@@ -31,11 +31,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          Are you trapped in a cycle of "Win one, Lose two"? In the <strong>competitive Indian MLBB scene</strong>, most players focus on "fast hands" while ignoring the fatal macro-mistakes that actually lose games. This is your 2026 blueprint to breaking the cycle and reaching Mythic.
+          Stuck in "win one, lose two"? In the <strong>Indian MLBB scene</strong>, many players focus only on mechanics and ignore macro mistakes that lose games.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          In Mobile Legends: Bang Bang (MLBB), mechanical skill is only 40% of the battle. The remaining 60% is pure decision-making. You can have the most expensive skins and the fastest reaction times, but if you don't understand <strong>Objective Priority</strong> or <strong>Map Rotation</strong>, you will stay stuck in the "Epic Hell" bracket. By identifying these 7 common mistakes and applying the 2026 "Pro Fixes," you can shift your win rate from 45% to a dominant 60%+. 
+          In MLBB, decisions matter as much as mechanics. Even with good aim, you can stay stuck if you ignore <strong>objective priority</strong> and <strong>map rotation</strong>.
         </p>
 
         {/* Mistakes Quick Grid */}
@@ -58,7 +58,7 @@ export default function BlogPage() {
              1. The Early Game "Feeding" Trap
           </h2>
           <p>
-            Dying in the first 5 minutes is significantly more punishing in 2026 than in previous seasons. When you die early, the enemy doesn't just get gold; they get <strong>Map Control</strong>.
+            Dying in the first 5 minutes is very costly. Early deaths give the enemy gold and <strong>map control</strong>.
           </p>
           <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl italic text-sm opacity-80 leading-relaxed text-justify">
             <strong>The Fix:</strong> If your health is below 30%, <strong>Recall Immediately</strong>. Losing one minion wave is better than giving the enemy Jungler a 200 gold lead and free roam of your lane.
@@ -118,7 +118,7 @@ export default function BlogPage() {
                <FiInfo /> Pro Insight: The 1-Minute Reset ⏳
             </h4>
             <p className="text-sm italic opacity-70 m-0 leading-relaxed text-justify">
-              Winning a teamfight near the 12-minute mark? <strong>Don't Recall.</strong> Push the nearest tower or start the Lord. If you win a fight and then immediately go back to base to buy items, you give the enemy a 60-second window to respawn and defend. Every second after a kill is a precious resource—don't waste it.
+              Win a teamfight near 12 minutes? <strong>Do not recall right away.</strong> Push tower or start Lord first. Use your advantage before enemies respawn.
             </p>
           </div>
         </section>
@@ -129,14 +129,14 @@ export default function BlogPage() {
              4. The "Mid-Lane Wanderer" Syndrome
           </h2>
           <p className="text-lg leading-relaxed text-justify">
-            Many <strong>Indian MLBB players</strong> spend too much time wandering in the mid-lane looking for a fight. This leads to shared EXP and Gold, making your whole team weaker. Stick to your lane rotations and only join a fight if it's over an objective like the Turtle or a Tower Siege.
+            Many <strong>Indian MLBB players</strong> spend too much time in mid looking for random fights. This shares EXP and gold and slows your team. Rotate for objectives like Turtle or towers.
           </p>
         </section>
 
         <section>
           <h2>Conclusion: Play with Intent</h2>
           <p className="text-lg leading-relaxed text-justify">
-            Fixing these 7 mistakes will instantly boost your ranking more than a 10-hour practice session. Rank up with discipline, track the map with clinical focus, and prioritize towers over kills. 
+            Fixing these mistakes can improve your rank quickly. Play with discipline, watch the map, and prioritize towers over kills.
           </p>
           <p className="mt-12 text-lg">
             <strong>Ready to dominate?</strong> Don't enter the Land of Dawn at a disadvantage. Unlock the newest meta-heroes and clean skins from our <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">Diamond Store</Link> now. Get the best rates <strong>in India</strong> with instant UPI delivery and start your win-streak on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic">bluebuff.in</a> today!

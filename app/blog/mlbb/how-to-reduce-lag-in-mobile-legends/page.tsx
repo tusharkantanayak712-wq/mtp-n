@@ -32,11 +32,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          Lag is the silent killer of your winning streak. Whether it's your screen "freezing" or your hero "teleporting," a 1-second lag spike can ruin a perfect setup. This is your definitive 2026 blueprint to achieving zero lag in MLBB for the <strong>Indian gaming community</strong>. 
+          Lag can ruin matches. A one-second freeze or ping spike can break your combo. This 2026 guide helps the <strong>Indian MLBB community</strong> reduce lag.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          In Mobile Legends: Bang Bang (MLBB), what players generically call "Lag" actually comes in two distinct forms: <strong>Ping Lag</strong> (related to your internet connection) and <strong>FPS Lag</strong> (related to your hardware's processing power). To truly enjoy a professional gaming experience, you must optimize both. A pro-tier player never steps into a competitive match with unstable performance. For players <strong>in India</strong>, network stability can be a challenge due to varying ISP routing. However, by using the right tweaks and ensuring your device is primed, you can eliminate these frustrations. 
+          In MLBB, "lag" is usually two things: <strong>Ping Lag</strong> (internet issue) and <strong>FPS Lag</strong> (phone performance issue). You need to improve both for smooth gameplay. For players <strong>in India</strong>, network routes can vary, but the right settings help a lot.
         </p>
 
         {/* Technical Split Grid */}
@@ -44,12 +44,12 @@ export default function BlogPage() {
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiWifi className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">Ping Lag (Network)</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Your ping indicator is Red (150ms+). Hero vibrates, skills delay. Usually caused by ISP routing or interference on your Wi-Fi/Data connection.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Your ping is red (150ms+), skills delay, and movement jumps. This is usually a network route or signal issue.</p>
           </div>
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiCpu className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">FPS Lag (Hardware)</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Choppy screen, flip-book animation. Hero looks slow even with green ping. Caused by overheating or outdated processors on mid-range Indian smartphones.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Screen feels choppy even with green ping. This is usually caused by phone heat or weaker hardware.</p>
           </div>
         </div>
 
@@ -59,16 +59,16 @@ export default function BlogPage() {
              1. Optimizing the "Network Tab" Settings
           </h2>
           <p>
-            Open the in-game settings and navigate to the <strong>Network</strong> tab. There are two "magic buttons" every serious player must keep active:
+            Open in-game settings and go to the <strong>Network</strong> tab. Keep these two options on:
           </p>
           <ul className="space-y-6 list-none p-0">
              <li className="p-6 bg-[var(--card)] border border-[var(--border)] rounded-[32px]">
                 <h5 className="text-[var(--accent)] font-black uppercase italic m-0 mb-3 text-sm">Speed Mode: Always ON</h5>
-                <p className="text-xs opacity-70 leading-relaxed m-0 text-justify">It uses slightly more data but significantly reduces packet loss on mobile networks like <strong>Jio or Airtel</strong>. This prevents your hero from 'reconnecting' during a teamfight.</p>
+                <p className="text-xs opacity-70 leading-relaxed m-0 text-justify">This uses a bit more data but can reduce packet loss on networks like <strong>Jio or Airtel</strong>.</p>
              </li>
              <li className="p-6 bg-[var(--card)] border border-[var(--border)] rounded-[32px]">
                 <h5 className="text-[var(--accent)] font-black uppercase italic m-0 mb-3 text-sm">Network Boost: THE FAILSAFE</h5>
-                <p className="text-xs opacity-70 leading-relaxed m-0 text-justify">This feature combines your <strong>4G/5G Data and Wi-Fi</strong> into a single hybrid connection. If your Wi-Fi suddenly wavers, your data takes over instantly with zero ping jump. It is the single best way to avoid the '999ms Heart Attack.'</p>
+                <p className="text-xs opacity-70 leading-relaxed m-0 text-justify">This combines <strong>4G/5G and Wi-Fi</strong>. If Wi-Fi drops, data can take over and reduce ping spikes.</p>
              </li>
           </ul>
         </section>
@@ -98,7 +98,7 @@ export default function BlogPage() {
              3. Graphics: Smooth vs. Ultra
           </h2>
           <p>
-             A pro player will always sacrifice "Ultra" graphics for high-frame rates. 2026 MLBB is visually sophisticated, meaning you must find your hardware's sweet spot.
+             For smoother gameplay, use stable frame rate over ultra graphics. Pick settings your phone can handle.
           </p>
           <ul className="space-y-4 list-none p-0">
              <li className="flex items-center gap-3 text-sm opacity-70"><FiCheckCircle className="text-[var(--accent)]" /> <strong>Graphics:</strong> Set to 'Smooth' or 'Medium' for better FPS stability.</li>
@@ -121,7 +121,7 @@ export default function BlogPage() {
         <section>
           <h2>Conclusion: Stability is Supremacy</h2>
           <p className="text-lg leading-relaxed text-justify">
-            Reducing lag is about finding the right balance between hardware and network management. By prioritizing your <strong>Refresh Rate</strong>, using <strong>Network Boost</strong>, and keeping your device cool in the <strong>Indian climate</strong>, you eliminate the barriers between you and victory. Remember: skill wins a match, but stability wins a season.
+            Reducing lag means balancing network and phone performance. Prioritize <strong>Refresh Rate</strong>, use <strong>Network Boost</strong>, and keep your phone cool.
           </p>
           <p className="mt-12 text-lg">
             <strong>Ready to win without the stutter?</strong> Once your lag is fixed and your frames are smooth, it's time to gear up. We provide the <strong>cheapest and safest MLBB diamonds in India</strong> via our secure, automated system. Head over to the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> and treat yourself to that legendary skin you deserve!

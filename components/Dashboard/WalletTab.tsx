@@ -520,8 +520,8 @@ export default function WalletTab({
             <div>
               <p className="text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-1">Important Note</p>
               <p className="text-[10px] font-medium text-[var(--muted)] leading-relaxed">
-                Pending orders are usually cleared automatically within <strong>30 minutes</strong>.
-                If your transaction is still pending after this time, please <a href="/support" className="text-[var(--accent)] underline hover:text-[var(--foreground)] transition-colors">contact support</a> with your order ID.
+                Pending orders are usually fixed within <strong>30 minutes</strong>.
+                If your payment is still pending after that, please <a href="/support" className="text-[var(--accent)] underline hover:text-[var(--foreground)] transition-colors">contact support</a> and share your order ID.
               </p>
             </div>
           </div>
@@ -587,7 +587,7 @@ export default function WalletTab({
                   <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex gap-2 items-start">
                     <FiAlertCircle size={12} className="text-amber-400 mt-0.5 flex-shrink-0" />
                     <p className="text-[9px] text-amber-300 leading-relaxed">
-                      Send <strong>exactly {usdtDeposit.usdtAmount} USDT</strong> on <strong>{usdtDeposit.network}</strong> only. Wrong network = lost funds. After sending, paste your TX hash below.
+                      Send <strong>exactly {usdtDeposit.usdtAmount} USDT</strong> on <strong>{usdtDeposit.network}</strong> only. If you use the wrong network, funds can be lost. After you send, paste your TX hash below.
                     </p>
                   </div>
 
@@ -627,11 +627,11 @@ export default function WalletTab({
                   </div>
                   <div>
                     <p className="font-black text-[var(--foreground)] text-sm">Verification Pending</p>
-                    <p className="text-[10px] text-[var(--muted)] mt-1">Your TX hash has been submitted. Our system will verify and credit <strong className="text-green-400">{usdtDeposit?.coinsToCredit} coins</strong> automatically.</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-1">We got your TX hash. We are checking it now and will add <strong className="text-green-400">{usdtDeposit?.coinsToCredit} coins</strong> automatically.</p>
                   </div>
                   <div className="flex items-center justify-center gap-2 text-[9px] text-[var(--muted)]">
                     <FiRefreshCw size={10} className="animate-spin" />
-                    Auto-checking every 15 seconds...
+                    Checking every 15 seconds...
                   </div>
                   <div className="p-3 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-left">
                     <p className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">Deposit ID</p>

@@ -31,11 +31,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          Nothing cements a squad bond like the gift of progress. Whether it's a birthday surprise, a reward for reaching Mythic, or helping a teammate secure a limited skin, <strong>gifting MLBB diamonds</strong> is the ultimate gesture in the Indian gaming community. 
+          Gifting diamonds is a great way to help your squad. It works for birthdays, rank rewards, or limited skins. <strong>MLBB diamond gifting</strong> is very popular in the Indian gaming community.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          In Mobile Legends: Bang Bang (MLBB), gifting used to be a frustrating process restricted by level caps and friend-list timers. In 2026, the game has evolved, and so have the methods. While the in-game system is great for skins, the <strong>API-driven gifting model</strong> via <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-bold">bluebuff.in</Link> has become the gold standard for speed and safety. This guide breaks down exactly how to surprise your friends instantly, skipping the wait times and maximizing your gifting budget.
+          In MLBB, gifting used to be slow because of level rules and friend timers. In 2026, gifting is easier. In-game gifting still works for skins, but <strong>API gifting</strong> via <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-bold">bluebuff.in</Link> is faster and safer. This guide shows how to send gifts quickly and save money.
         </p>
 
         {/* Gifting Methods Comparison Grid */}
@@ -48,7 +48,7 @@ export default function BlogPage() {
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiZap className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">Instant API Gifting</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">No friend-list timer. No level requirement. Uses the friend's <strong>Player ID</strong> to send Diamonds or Passes instantly via bluebuff.in. Perfect for flash events.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">No friend timer and no level requirement. Use your friend's <strong>Player ID</strong> to send diamonds or passes fast via bluebuff.in.</p>
           </div>
         </div>
 
@@ -88,12 +88,12 @@ export default function BlogPage() {
             <div className="relative">
               <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-[var(--accent)]" />
               <h4 className="text-sm font-black uppercase italic m-0 mb-2">Step 02: Verification</h4>
-              <p className="text-xs opacity-60 leading-relaxed text-justify">Enter their ID on <Link href="/games/mobile-legends988" className="text-[var(--accent)] font-bold">bluebuff.in</Link>. Our system will instantly fetch their <strong>IGN (In-Game Name)</strong>. Always double-check this to ensure you aren't gifting a complete stranger!</p>
+              <p className="text-xs opacity-60 leading-relaxed text-justify">Enter their ID on <Link href="/games/mobile-legends988" className="text-[var(--accent)] font-bold">bluebuff.in</Link>. Our system will fetch their <strong>IGN (In-Game Name)</strong>. Double-check it before you pay.</p>
             </div>
             <div className="relative">
               <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-[var(--accent)]" />
               <h4 className="text-sm font-black uppercase italic m-0 mb-2">Step 03: Delivery</h4>
-              <p className="text-xs opacity-60 leading-relaxed text-justify">Select the bundle and pay via your preferred <strong>Indian UPI app (PhonePe, GPay, Paytm)</strong>. The diamonds hit their account in under 60 seconds.</p>
+              <p className="text-xs opacity-60 leading-relaxed text-justify">Choose a bundle and pay with your <strong>UPI app (PhonePe, GPay, Paytm)</strong>. Diamonds usually arrive in under 60 seconds.</p>
             </div>
           </div>
         </section>
@@ -109,7 +109,7 @@ export default function BlogPage() {
                <FiUserCheck /> Zero Data Risk 🛡️
             </h4>
             <p className="text-sm italic opacity-70 m-0 leading-relaxed text-justify">
-              In 2026, account hijacking is a major concern. By using a Player ID-only gifting service, you ensure that you <strong>never</strong> need your friend's login details. You protect their privacy and their rank. Legitimate gifting platforms like <strong>bluebuff.in</strong> are authorized Moonton partners, meaning every diamond is legal and traceable.
+              Account safety is important. With Player ID gifting, you <strong>never</strong> need your friend's login details. This protects their privacy and account. Trusted platforms like <strong>bluebuff.in</strong> send legal and traceable diamonds.
             </p>
           </div>
         </section>
@@ -120,14 +120,14 @@ export default function BlogPage() {
              4. Gifting Across Servers (Global Squads)
           </h2>
           <p className="text-lg leading-relaxed text-justify">
-             Many Indian squads have members playing across different regional servers. The beauty of our 2026 gifting system is its <strong>Global Compatibility</strong>. As long as you have the recipient's Player ID, you can gift diamonds from India to a friend in any server globally. The diamonds are credited instantly regardless of geographical distance.
+             Many Indian squads have friends on different servers. With <strong>global support</strong>, you can gift from India to any server if you have the player's ID. The gift is delivered quickly.
           </p>
         </section>
 
         <section>
           <h2>Conclusion: Build Your Legacy Together</h2>
           <p className="text-lg leading-relaxed text-justify">
-            Gifting is more than just a transaction; it's a squad-building strategy. By skipping the 7-day friend limit and using secure API routes, you can keep your team equipped with the latest skins and passes. Remember: the best squads don't just play together; they grow together.
+            Gifting helps your whole team progress. By skipping the 7-day friend limit and using secure API routes, you can keep your squad ready with new skins and passes.
           </p>
           <p className="mt-12 text-lg">
             <strong>Ready to surprise your squad?</strong> Don't make your friends wait. Head over to the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> and send a gift that will be remembered in the Land of Dawn!
@@ -144,7 +144,7 @@ export default function BlogPage() {
             </div>
             <div className="group space-y-3">
               <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">How long do gifts take?</h5>
-              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">In 2026, manual processing is extinct. Our gifts are <strong>instant</strong>. Your friend will receive their diamonds or Weekly Pass within 60 seconds of checkout.</p>
+              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">No manual processing. Gifts are <strong>instant</strong>. Your friend usually receives diamonds or Weekly Pass within 60 seconds.</p>
             </div>
             <div className="group space-y-3">
               <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">Do I need their password?</h5>

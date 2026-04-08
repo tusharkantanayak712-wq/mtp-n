@@ -28,11 +28,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          In the Land of Dawn, your account is more than just a profile—it's a digital legacy of your skill, your time, and your collection. Don't risk it on shady "underground" sellers. This is the 2026 definitive guide for <strong>Indian Mobile Legends players</strong> who want 100% safe, instant, and authorized top-ups.
+          Your account matters. Do not risk it with shady sellers. This 2026 guide shows <strong>Indian Mobile Legends players</strong> how to top up safely and quickly.
         </p>
 
         <p className="text-lg leading-relaxed">
-          Mobile Legends: Bang Bang (MLBB) remains the titan of mobile MOBA <strong>in India</strong>. But as the player base grows, so does the risk of predatory scammers targeting players with the promise of "dirt cheap" diamonds. These scams often result in stolen accounts or permanent bans. This guide is built to protect you, walking you through the exact process of safe recharging so you can focus on ranking up instead of worrying about your wallet.
+          Mobile Legends: Bang Bang (MLBB) is very popular <strong>in India</strong>. As more people play, more scams appear with fake "cheap diamond" deals. These scams can steal your account or cause bans. This guide shows a safe top-up process so you can focus on the game.
         </p>
 
         {/* Highlights Section (Simplified) */}
@@ -41,21 +41,21 @@ export default function BlogPage() {
             <FiShield className="text-[var(--accent)] shrink-0 mt-1" />
             <div>
               <h4 className="text-xs font-black uppercase italic mb-1 tracking-widest">Zero Risk</h4>
-              <p className="text-[11px] opacity-60 m-0 leading-relaxed text-justify">Direct API routes. No login or password details required. We use your Player ID and Zone ID only for a direct transfer.</p>
+              <p className="text-[11px] opacity-60 m-0 leading-relaxed text-justify">Direct API route. No login or password needed. We only use your Player ID and Zone ID.</p>
             </div>
           </div>
           <div className="flex gap-3 items-start">
             <FiCheckCircle className="text-[var(--accent)] shrink-0 mt-1" />
             <div>
               <h4 className="text-xs font-black uppercase italic mb-1 tracking-widest">Instant Delivery</h4>
-              <p className="text-[11px] opacity-60 m-0 leading-relaxed text-justify">Automated servers deliver your diamonds in under 60 seconds. No waiting for human 'agents' to manually process your order.</p>
+              <p className="text-[11px] opacity-60 m-0 leading-relaxed text-justify">Diamonds are usually delivered in under 60 seconds. No manual waiting.</p>
             </div>
           </div>
           <div className="flex gap-3 items-start">
             <FiInfo className="text-[var(--accent)] shrink-0 mt-1" />
             <div>
               <h4 className="text-xs font-black uppercase italic mb-1 tracking-widest">Verified Account</h4>
-              <p className="text-[11px] opacity-60 m-0 leading-relaxed text-justify">Our system automatically fetches your In-Game Nickname. This double-check ensures your diamonds never go to the wrong account.</p>
+              <p className="text-[11px] opacity-60 m-0 leading-relaxed text-justify">Our system fetches your In-Game Nickname so you can double-check before paying.</p>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function BlogPage() {
         <section className="space-y-6">
           <h2 className="italic font-black text-2xl tracking-tighter">Step 01. Finding Your Unique Player ID</h2>
           <p>
-            Precision is everything. A single wrong digit could send your diamonds to a random stranger, and once delivered, diamonds cannot be reversed. To start, open the <strong>Mobile Legends</strong> app and tap on your <strong>Avatar</strong> in the top-left corner of the main dashboard.
+            Entering the right ID is important. One wrong digit can send diamonds to another player, and that cannot be reversed. Open <strong>Mobile Legends</strong> and tap your <strong>Avatar</strong> at the top-left.
           </p>
           <p>
             Under your name and Level, you will see a series of numbers, usually formatted like <strong>123456789 (1234)</strong>. The long string is your <strong>Player ID</strong>, and the four or five digits in the brackets are your <strong>Zone ID</strong>. 
@@ -80,7 +80,7 @@ export default function BlogPage() {
             The internet is flooded with "cheap" diamond offers, but in 2026, <strong>safety is the only true value</strong>. <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a> has built a reputation as the most reliable platform for the Indian community, offering direct API connections to Moonton servers.
           </p>
           <p>
-            Why does the provider matter? Because using an unauthorized seller who uses "stolen" credit cards will get your account flagged for <strong>Negative Diamonds</strong>. This results in your heroes being locked and your account being suspended until the stolen funds are repaid. Stick to authorized, secure platforms that offer direct Indian UPI support.
+            Why does provider choice matter? Unauthorized sellers may use stolen cards. That can cause <strong>Negative Diamonds</strong>, lock your heroes, and suspend your account. Use secure platforms with Indian UPI support.
           </p>
           <div className="p-8 rounded-[32px] bg-red-500/5 border border-red-500/10 space-y-4">
             <h4 className="text-red-500 font-black uppercase italic text-xs tracking-widest flex items-center gap-2">
@@ -101,17 +101,17 @@ export default function BlogPage() {
              <div className="relative">
                 <div className="absolute -left-10 top-0 w-4 h-4 rounded-full bg-[var(--accent)]" />
                 <h4 className="font-black italic uppercase text-xs tracking-widest text-[var(--accent)] mb-2">1. Input Details & Verify Nickname</h4>
-                <p className="text-sm opacity-60 leading-relaxed text-justify">Enter your Player ID and Zone ID. The system will then automatically query the game servers. <strong>Wait for your In-Game Nickname (IGN) to appear.</strong> If the name shown isn't yours, do not proceed; check your ID for typos.</p>
+                <p className="text-sm opacity-60 leading-relaxed text-justify">Enter your Player ID and Zone ID. Then wait for your <strong>In-Game Nickname (IGN)</strong> to appear. If it is not your name, stop and check your ID.</p>
              </div>
              <div className="relative">
                 <div className="absolute -left-10 top-0 w-4 h-4 rounded-full bg-[var(--accent)]" />
                 <h4 className="font-black italic uppercase text-xs tracking-widest text-[var(--accent)] mb-2">2. Secure UPI Gateway</h4>
-                <p className="text-sm opacity-60 leading-relaxed text-justify">Select your diamond bundle (Weekly Pass, Twilight Pass, or standard Recharge). Use a standard Indian payment app like <strong>Google Pay (GPay), PhonePe, or Paytm</strong>. These gateways are encrypted and ensure your financial data remains private.</p>
+                <p className="text-sm opacity-60 leading-relaxed text-justify">Choose your bundle (Weekly Pass, Twilight Pass, or recharge). Pay using <strong>GPay, PhonePe, or Paytm</strong>.</p>
              </div>
              <div className="relative">
                 <div className="absolute -left-10 top-0 w-4 h-4 rounded-full bg-[var(--accent)]" />
                 <h4 className="font-black italic uppercase text-xs tracking-widest text-[var(--accent)] mb-2">3. Instant In-Game Delivery</h4>
-                <p className="text-sm opacity-60 leading-relaxed text-justify">Unlike underground sellers who make you wait hours, our system is direct. Within 60 seconds of a successful payment, your diamonds will be added to your account balance. Check your in-game mail for a confirmation receipt from Moonton.</p>
+                <p className="text-sm opacity-60 leading-relaxed text-justify">After successful payment, diamonds are usually added within 60 seconds. Check in-game mail for confirmation.</p>
              </div>
           </div>
         </section>
@@ -136,7 +136,7 @@ export default function BlogPage() {
             </div>
             <div className="group">
               <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base mb-2 italic">What if my payment fails?</h5>
-              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">This is rare but happens with bank servers. Always contact support on <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a> with your transaction ID for a manual reconciliation or refund.</p>
+              <p className="text-sm opacity-60 leading-relaxed m-0 text-justify">This is rare but can happen. Contact support on <a href="https://bluebuff.in" className="text-[var(--accent)] underline">bluebuff.in</a> with your transaction ID for help or a refund.</p>
             </div>
           </div>
         </div>

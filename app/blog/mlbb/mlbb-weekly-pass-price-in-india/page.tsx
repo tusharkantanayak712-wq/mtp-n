@@ -31,22 +31,22 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          If you are looking for the absolute <strong>cheapest way to buy MLBB diamonds in India</strong>, your search ends here. For less than the price of a coffee, the Weekly Diamond Pass provides over 500% more value than any other package in the game.
+          If you want a <strong>cheap way to buy MLBB diamonds in India</strong>, Weekly Diamond Pass is one of the best options.
         </p>        <p className="text-lg leading-relaxed text-justify">
-          In Mobile Legends: Bang Bang (MLBB), the <strong>Weekly Diamond Pass</strong> is widely considered the "Monthly Subscription" for serious players. While raw recharges are great for instant needs, the Weekly Pass reward system is designed for maximum efficiency. In the <strong>Indian competitive scene</strong>, where players are always looking to optimize their spending, the Weekly Pass is the mandatory foundation for any account. By using a trusted platform like <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black font">bluebuff.in</Link>, you can secure these passes at the lowest possible rates with instant UPI delivery.
+          In MLBB, the <strong>Weekly Diamond Pass</strong> gives better long-term value than small direct recharges. It is popular in the <strong>Indian scene</strong> for players who want to save. On trusted platforms like <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black font">bluebuff.in</Link>, you can buy it with UPI and get fast delivery.
         </p>
 
         {/* Value Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10 border-y border-[var(--border)] py-10">
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiStar className="text-3xl text-[var(--accent)]" />
-             <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">The 500% Rule</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">For roughly ₹140, you receive a total of 400+ diamonds value. This is 5x more efficient than buying a raw ₹150 bundle.</p>
+             <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">High Value</h4>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Around ₹140 can give much better total value than a small raw recharge.</p>
           </div>
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiClock className="text-3xl text-[var(--accent)]" />
-             <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">The Stasking Trick</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">You can stack up to 10 Weekly Passes (70 days) at once. This instantly credits your account for recharge events while securing long-term daily diamonds.</p>
+             <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">Stacking Trick</h4>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">You can stack up to 10 Weekly Passes (70 days). This helps for recharge events and daily diamonds.</p>
           </div>
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiShield className="text-3xl text-[var(--accent)]" />
@@ -117,7 +117,7 @@ export default function BlogPage() {
                <FiShield /> Safety First 🛡️
             </h4>
             <p className="text-sm italic opacity-70 m-0 leading-relaxed text-justify">
-              Legitimate Weekly Pass purchases on <Link href="/games/mobile-legends988" className="text-[var(--accent)] font-bold italic">bluebuff.in</Link> only require your <strong>Player ID and Zone ID</strong>. If a site asks you to 'log in' or provide an 'OTP' for a Weekly Pass, it is a scam. Our API connects directly to the secure gateway, ensuring instant delivery without compromising your account's integrity.
+              Legit Weekly Pass purchases on <Link href="/games/mobile-legends988" className="text-[var(--accent)] font-bold italic">bluebuff.in</Link> only need your <strong>Player ID and Zone ID</strong>. If a site asks for login or OTP, it is likely a scam.
             </p>
           </div>
         </section>

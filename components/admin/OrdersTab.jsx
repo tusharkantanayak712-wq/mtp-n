@@ -180,7 +180,7 @@ export default function OrdersTab() {
         <div>
           <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Recent Orders</h2>
           <p className="text-xs text-[var(--muted)] font-medium mt-1">
-             Check and complete customer orders.
+             Check customer orders and update them.
           </p>
         </div>
 

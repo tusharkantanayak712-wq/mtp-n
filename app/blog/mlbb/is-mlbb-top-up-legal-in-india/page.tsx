@@ -32,11 +32,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Quote */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-          If you are a <strong>Mobile Legends: Bang Bang (MLBB) player in India</strong>, you've likely asked the same critical question: "Is it actually safe and legal to buy diamonds online?" With hundreds of unverified "agents" on social media in 2026, it is vital to know the rules to protect your hard-earned money. 
+          If you play <strong>MLBB in India</strong>, you may ask: "Is buying diamonds online legal and safe?" With many unverified social media agents in 2026, knowing the rules helps protect your money.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          The short answer is <strong>YES</strong>—MLBB top-ups are perfectly legal when performed through secure, tax-compliant platforms. Since the game is widely available and supported in the <strong>Indian territory</strong>, the purchase of digital items like skins and the Weekly Diamond Pass is considered a standard digital transaction. This guide breaks down the legal framework, safety protocols, and why <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a> is the most trusted destination for Indian gamers.
+          Short answer: <strong>YES</strong>. MLBB top-ups are legal when you use secure and compliant platforms. Since MLBB is available in <strong>India</strong>, buying skins and Weekly Pass is a normal digital purchase.
         </p>
 
         {/* Core Legality Grid */}
@@ -54,7 +54,7 @@ export default function BlogPage() {
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiShield className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">Account Safety</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0"> Moonton allows authorized 3rd-party distributors. Using a verified API-based site like bluebuff is not just legal, it is the 'pro' choice.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">Moonton allows authorized third-party distributors. Using a verified API site like bluebuff is legal and safer.</p>
           </div>
         </div>
 
@@ -84,7 +84,7 @@ export default function BlogPage() {
              2. The "No Password" Legal Mandate
           </h2>
           <p>
-             A key feature of a <strong>legal MLBB top-up site</strong> in India is the removal of the human element. You don't "send money" to a person; you interact with a system.
+             A key sign of a <strong>legal MLBB top-up site</strong> in India is that you use a proper system, not random personal payments.
           </p>
           <div className="p-8 rounded-[40px] bg-[var(--card)] border border-[var(--border)] relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-2 h-full bg-[var(--accent)]" />
@@ -92,7 +92,7 @@ export default function BlogPage() {
                <FiInfo /> Legality Litmus Test ⚖️
             </h4>
             <p className="text-sm italic opacity-70 m-0 leading-relaxed text-justify">
-              Legitimate API recharges on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> only require your public <strong>Player ID and Zone ID</strong>. These are pieces of data that anyone can see in your profile. If a site asks for your Moonton Password or a Gmail OTP, they are avoiding verified channels and trying to steal your account. Walk away immediately.
+              Legitimate API recharges on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> only need your public <strong>Player ID and Zone ID</strong>. If a site asks for password or OTP, leave right away.
             </p>
           </div>
         </section>
@@ -120,10 +120,10 @@ export default function BlogPage() {
         <section className="space-y-6">
           <h2 className="italic font-black text-2xl tracking-tighter">Final Conclusion: Security is Sovereignty</h2>
           <p className="text-lg leading-relaxed text-justify">
-            Buying MLBB diamonds in India is completely legal, safe, and encouraged as long as you follow standard routes. Your rank and your skins are an investment of your time—don't let an "underground deal" put your years of progress at risk for a few rupees. 
+            Buying MLBB diamonds in India is legal and safe when you use trusted routes. Do not risk your account for unsafe "underground" deals.
           </p>
           <p className="text-lg leading-relaxed text-justify">
-            Stick to verified, automated platforms that verify your IGN, use secure UPI gateways like GPay and PhonePe, and never ask for your password. <strong>Your account's safety is non-negotiable.</strong>
+            Use verified automated platforms that check your IGN, support secure UPI payments, and never ask for your password.
           </p>
           <p className="mt-12 text-lg">
             <strong>Ready for a legal and safe recharge?</strong> Don't settle for risky deals. Head over to our <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">MLBB Diamond Store</Link> now for the <strong>most trusted, 100% legal diamonds in India</strong>. Experience instant 24/7 delivery on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>!

@@ -16,23 +16,23 @@ export default function RefundPolicy() {
   const policies = [
     {
       icon: <FiCpu />,
-      title: "Digital Delivery Standard",
-      description: "All top-ups are digital assets delivered instantly to your account. Once the credits are successfully added, the transaction is considered final and generally non-refundable."
+      title: "Digital Delivery",
+      description: "Top-ups are digital and usually delivered right away. Once credits are added to your account, the order is final and normally cannot be refunded."
     },
     {
       icon: <FiAlertTriangle />,
-      title: "Eligible Refund Scenarios",
-      description: "Refunds are strictly limited to technical failures where payment was deducted from your bank but no in-game credit was received after 24 hours."
+      title: "When Refunds Apply",
+      description: "Refunds are only for technical issues where money was charged but no in-game credit was received after 24 hours."
     },
     {
       icon: <FiShield />,
-      title: "User Responsibility",
-      description: "Mistakes made by the user, such as entering an incorrect Player ID, Game Zone, or Region, are not eligible for refunds. Please double-check details before purchasing."
+      title: "Your Responsibility",
+      description: "If you enter the wrong Player ID, Zone, or Region, the order is not eligible for a refund. Please check details before you pay."
     },
     {
       icon: <FiRefreshCw />,
-      title: "Processing Timeline",
-      description: "Approved refunds are processed within 5–7 business days and will be reversed to the original payment method used during the transaction."
+      title: "Refund Time",
+      description: "Approved refunds are processed in 5-7 business days and sent back to your original payment method."
     }
   ];
 
@@ -62,7 +62,7 @@ export default function RefundPolicy() {
           </h1>
 
           <p className="max-w-xl mx-auto text-sm md:text-base text-[var(--muted)] font-medium leading-relaxed">
-            Clear guidelines on our refund process, user responsibilities, and service commitments. We value transparency in every transaction.
+            Simple rules about refunds, your responsibility, and what we promise.
           </p>
         </motion.div>
 
@@ -114,7 +114,7 @@ export default function RefundPolicy() {
             <div>
               <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">Still have questions?</h3>
               <p className="text-[var(--muted)] text-sm font-medium">
-                If you believe your transaction qualifies for a refund or need clarification, our support team is ready to assist you.
+                If you think your order qualifies for a refund or you need help, contact support.
               </p>
             </div>
 

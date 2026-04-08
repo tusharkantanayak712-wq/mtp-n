@@ -10,42 +10,42 @@ export default function TermsAndConditions() {
     {
       id: "01",
       title: "Eligibility",
-      content: "You must be at least 18 years old or have parental/guardian permission to use this platform. You are responsible for maintaining account confidentiality and all activities under your credentials."
+      content: "You must be at least 18 years old, or have permission from a parent or guardian. Keep your account details private. You are responsible for activity on your account."
     },
     {
       id: "02",
       title: "Platform Use",
-      content: "You agree to use Blue Buff only for lawful purposes. Accurate information (Game ID, Server/Zone) is required for order fulfillment. Incorrect data may lead to irreversible transaction failure."
+      content: "Use Blue Buff only for legal purposes. Enter correct details (Game ID, Server/Zone). Wrong details can cause a failed order that cannot be reversed."
     },
     {
       id: "03",
       title: "Digital Delivery",
-      content: "All products are digital services delivered instantly. Once processed, orders are final. We are not liable for user input errors or unauthorized account use after delivery."
+      content: "All products are digital services and are usually delivered right away. Once processed, orders are final. We are not responsible for wrong user input or unauthorized account use after delivery."
     },
     {
       id: "04",
       title: "Payments",
-      content: "Transactions are processed through encrypted third-party gateways. We do not store sensitive payment details. We reserve the right to audit or block suspicious transaction patterns."
+      content: "Payments are handled by secure third-party gateways. We do not store sensitive payment details. We may review or block suspicious payment activity."
     },
     {
       id: "05",
       title: "Refund Logic",
-      content: "Due to the instant nature of digital fulfillment, successful deliveries are non-refundable. Consideration is limited only to verified technical failures where no credit was issued."
+      content: "Because delivery is instant, successful orders are not refundable. Refunds are only considered for verified technical failures where no credit was given."
     },
     {
       id: "06",
       title: "Prohibited Acts",
-      content: "Exploiting system vulnerabilities, engaging in fraudulent chargebacks, or utilizing unauthorized automation/bots will result in immediate permanent suspension."
+      content: "If you exploit system issues, do fraudulent chargebacks, or use unauthorized bots/automation, your account may be suspended permanently."
     },
     {
       id: "07",
       title: "Intellectual Property",
-      content: "All Blue Buff branding remains our property. Game trademarks (Mobile Legends, etc.) belong to their respective publishers. We are an independent service provider."
+      content: "Blue Buff branding belongs to us. Game trademarks (Mobile Legends, etc.) belong to their publishers. We are an independent service provider."
     },
     {
       id: "08",
       title: "Liability Limits",
-      content: "We are not liable for losses due to user error, game server maintenance outages, account restrictions by developers, or indirect consequential damages."
+      content: "We are not responsible for losses caused by user errors, game server downtime, developer account restrictions, or indirect damages."
     }
   ];
 
@@ -67,7 +67,7 @@ export default function TermsAndConditions() {
             TERMS & <span className="text-[var(--accent)]">CONDITIONS</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">
-            Defining the Service Standards
+            Service Rules
           </p>
           <div className="flex items-center gap-4 mt-8 text-[9px] font-black uppercase tracking-widest opacity-30 italic justify-center md:justify-start">
             <FiFileText size={14} className="text-[var(--accent)]" />
@@ -107,21 +107,21 @@ export default function TermsAndConditions() {
               <FiAlertCircle className="text-rose-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="text-[10px] font-black uppercase text-rose-500 tracking-widest mb-2">Suspension Policy</h3>
-                <p className="text-[9px] font-bold text-[var(--muted)] opacity-50 uppercase leading-relaxed">Violations of these terms result in immediate termination of account access without prior warning.</p>
+                <p className="text-[9px] font-bold text-[var(--muted)] opacity-50 uppercase leading-relaxed">If you break these terms, your account can be closed immediately without warning.</p>
               </div>
             </div>
             <div className="p-8 rounded-2xl bg-[var(--accent)]/5 border border-[var(--accent)]/10 flex items-start gap-4">
               <FiGlobe className="text-[var(--accent)] mt-1 flex-shrink-0" />
               <div>
                 <h3 className="text-[10px] font-black uppercase text-[var(--accent)] tracking-widest mb-2">Governing Law</h3>
-                <p className="text-[9px] font-bold text-[var(--muted)] opacity-50 uppercase leading-relaxed">All agreements are interpreted under the local jurisdiction of our operational base.</p>
+                <p className="text-[9px] font-bold text-[var(--muted)] opacity-50 uppercase leading-relaxed">These terms are governed by the local laws where we operate.</p>
               </div>
             </div>
           </div>
 
           <div className="mt-12 text-center opacity-30 flex items-center justify-center gap-3">
             <FiInfo size={14} />
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] italic">Contact Support for technical clarifications.</span>
+            <span className="text-[9px] font-black uppercase tracking-[0.3em] italic">Contact support if you need help.</span>
           </div>
         </motion.div>
 

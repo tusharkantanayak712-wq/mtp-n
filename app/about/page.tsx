@@ -47,7 +47,7 @@ export default function AboutPage() {
             ABOUT <span className="text-[var(--accent)]">{BRAND.toUpperCase()}</span>
           </h1>
           <p className="text-[var(--muted)] text-[10px] md:text-xs font-[900] uppercase tracking-[0.4em] opacity-60 italic leading-relaxed max-w-xl">
-            DEFINING THE GOLD STANDARD IN AUTOMATED GAME TOP-UPS
+            FAST AND SAFE GAME TOP-UPS
           </p>
         </motion.div>
 
@@ -63,14 +63,14 @@ export default function AboutPage() {
               OUR <span className="text-[var(--accent)]">MISSION</span>
             </h2>
             <p className="text-[var(--muted)] text-base md:text-lg leading-relaxed opacity-70 mb-10 italic">
-              {BRAND} was engineered to eliminate the friction in premium gaming transactions. We believe that securing your diamonds, passes, and credits should be as fast as the games you play.
+              {BRAND} is built to make game top-ups easy and fast. Getting diamonds, passes, and credits should be simple and safe.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                "Instant automated delivery systems",
-                "24/7 high-availability infrastructure",
+                "Fast automatic delivery",
+                "24/7 reliable service",
                 "Secure Indian payment integrations",
-                "Transparent & market-leading rates"
+                "Clear and fair pricing"
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 py-3 border-b border-[var(--border)] last:border-0 md:last:border-b">
                   <div className="w-5 h-5 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
@@ -102,17 +102,17 @@ export default function AboutPage() {
               {
                 title: "Velocity",
                 icon: FiZap,
-                desc: "Automated processing ensures credits hit your ID within seconds of confirmation."
+                desc: "Credits are added to your ID quickly after payment confirmation."
               },
               {
                 title: "Fortress",
                 icon: FiShield,
-                desc: "Bank-grade encryption and verified gateways protect every single transaction."
+                desc: "Strong security and verified gateways protect every payment."
               },
               {
                 title: "Elite Rates",
                 icon: FiTrendingUp,
-                desc: "We negotiate the best deals to ensure you get maximum value for every rupee."
+                desc: "We keep prices low so you get better value for each rupee."
               }
             ].map((feature, i) => (
               <motion.div

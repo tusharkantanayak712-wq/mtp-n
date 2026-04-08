@@ -28,7 +28,7 @@ export default function BlogPage() {
       game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-        Every Mobile Legends player in India wants more diamonds for less money. But should you buy them instantly via a recharge, or wait for them through the Weekly Pass? This is the math-focused 2026 guide to getting the most for your rupee.
+        Every Mobile Legends player in India wants more diamonds for less money. Should you buy direct recharge now, or use Weekly Pass over time? This 2026 guide compares both clearly.
       </p>
 
       <p>
@@ -36,12 +36,12 @@ export default function BlogPage() {
       </p>
 
       <p>
-        For **Indian gamers** looking to build a premium skin collection, choosing the wrong method can cost you thousands of extra rupees over a year. By using a trusted platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a>, you already get the best prices, but combined with the right purchase method, you can achieve a "Whale" level inventory on a "Low Spender" budget.
+        For **Indian gamers**, choosing the wrong method can cost a lot over a year. Using a trusted platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a> and picking the right method helps you save more.
       </p>
 
       <h2>1. The Mathematical Deep Dive: Weekly Diamond Pass (WDP)</h2>
       <p>
-        The Weekly Diamond Pass is universally considered the #1 value purchase in the history of Mobile Legends. Let's look at the raw numbers that make this the favorite of the **Indian MLBB community**.
+        The Weekly Diamond Pass is one of the best value options in Mobile Legends. Here are the numbers.
       </p>
       <ul>
         <li><strong>Immediate Reward:</strong> As soon as you purchase the WDP on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>, you get <strong>80 diamonds</strong> instantly delivered to your in-game mail.</li>
@@ -50,11 +50,11 @@ export default function BlogPage() {
         <li><strong>The "Hidden" Rewards:</strong> You also receive a "Weekly Diamond Choice Bundle" every day, containing items like <strong>Crystal of Aurora (COA)</strong> or <strong>Starlight Fragments</strong>. In terms of value, these fragments and COA are worth an additional 50-70 diamonds total.</li>
         <li><strong>Total Value Estimate:</strong> ~290 Diamond Value.</li>
       </ul>
-      <p><em>The Math: A direct 220-diamond recharge would cost you nearly 4x more than the Weekly Pass. The Pass provides a staggering **445% Return on Investment (ROI)**.</em></p>
+      <p><em>The Math: A direct 220-diamond recharge can cost much more than the Weekly Pass.</em></p>
 
       <h2>2. Direct Recharge: The Instant Tactical Advantage</h2>
       <p>
-        Direct recharges are the standard "buy now, get now" method. When you use <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>, your diamonds appear in your account in seconds via our automated API.
+        Direct recharge is simple: buy now and get diamonds now. On <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>, delivery is usually in seconds.
       </p>
       <ul>
         <li><strong>When to use it:</strong> Direct recharge is for the finishing touch. If a "Limited Edition" skin event like <strong>The Aspirants</strong> or <strong>Transformers</strong> is ending in 2 hours and you are 50 diamonds away from the pity-guarantee, you cannot wait for a Weekly Pass.</li>
@@ -63,9 +63,9 @@ export default function BlogPage() {
 
       <div className="bg-[var(--card)] border border-[var(--border)] p-10 rounded-[40px] my-16 shadow-xl relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-1 h-full bg-[var(--accent)]" />
-        <h3 className="italic font-black uppercase text-[var(--accent)] mb-4">Pro Spending Strategy: The "Stacking" Logic ⚡</h3>
+        <h3 className="italic font-black uppercase text-[var(--accent)] mb-4">Simple Spending Strategy: "Stacking" ⚡</h3>
         <p className="text-sm italic opacity-70 m-0 leading-relaxed">
-          The <strong>"Stacking" Power</strong>: You can buy up to <strong>10 Weekly Diamond Passes</strong> at once on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>. This extends your "Total Diamond Days" to 70 and instantly rewards you with <strong>800 diamonds</strong> (80 x 10). This counts toward high-tier "Top-Up Event" milestones but costs significantly less than a 1000-diamond direct recharge. This is the secret "whale" strategy for smart spenders.
+          You can buy up to <strong>10 Weekly Diamond Passes</strong> at once on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>. This extends claims to 70 days and gives <strong>800 diamonds</strong> instantly (80 x 10).
         </p>
       </div>
 
@@ -136,7 +136,7 @@ export default function BlogPage() {
       </p>
       
       <p>
-        <strong>Ready to maximize your savings?</strong> We provide the <strong>lowest prices for both Weekly Passes and Direct Recharges</strong> through हमारा (our) secure, automated system. Head over to the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] underline font-black">bluebuff.in</a> and start your journey to a legendary skin collection today!
+        <strong>Ready to save more?</strong> Visit the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] underline font-black">bluebuff.in</a> for Weekly Pass and direct recharge options.
       </p>
 
       <div className="mt-20 pt-10 border-t border-[var(--border)]">

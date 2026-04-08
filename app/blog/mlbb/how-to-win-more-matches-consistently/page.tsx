@@ -29,15 +29,15 @@ export default function BlogPage() {
       game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-        Win-streaks in Mobile Legends: Bang Bang are not a matter of luck; they are a result of discipline, strategy, and the psychological ability to adapt. If you want to raise your win rate to 65% or higher in 2026, this <strong>Indian-focused</strong> mental and tactical guide is for you.
+        Win streaks in Mobile Legends are not just luck. They come from discipline, better choices, and adapting fast. If you want a higher win rate in 2026, this <strong>India-focused</strong> guide helps.
       </p>
 
       <p>
-        Everyone can have a "good game," but only the elite can win consistently across hundreds of matches. In the high-stakes <strong>Indian servers</strong>, matches are often decided by single, avoidable mistakes. To reach the top of the leaderboards, you must stop playing for "fun" and start playing for "results." This involves mastering not just your hero's mechanics, but the hidden "Macro" of the game.
+        Anyone can have one good match, but consistent wins need fewer mistakes. In <strong>Indian servers</strong>, one mistake can decide a game. To climb, focus on results and macro decisions, not only mechanics.
       </p>
 
       <p>
-        Consistency is built on reducing errors and maximizing opportunities. By focusing on your drafting phase, respecting objectives over kills, and utilizing the smoothest-feeling skins from <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a> to ensure your animation cancels are frame-perfect, you can dominate the Land of Dawn.
+        Consistency comes from fewer errors and better decisions. Focus on draft, prioritize objectives over kills, and play with stable habits.
       </p>
 
       <h2>1. The "Role Versatility" Rule: Escape the One-Trick Trap</h2>
@@ -51,10 +51,10 @@ export default function BlogPage() {
 
       <h2>2. Drafting: Winning the Match at the 0:00 Mark</h2>
       <p>
-        In Mobile Legends, roughly 50% of matches are decided during the 60-second draft phase. If you pick a hero with zero mobility into an enemy team with four hard-CC (Crowd Control) heroes, you have an 80% chance of losing before the loading screen even appears.
+        Many matches are decided in draft. If your pick is weak against enemy crowd control, the match becomes much harder before it even starts.
       </p>
       <p>
-        <strong>The Counter-Pick Strategy:</strong> Don't just pick your hero based on curiosity. If you see the enemy pick a <strong>Wanwan</strong>, counter her instantly with a <strong>Phoveus</strong> or <strong>Minsitthar</strong>. If the enemy picks <strong>Estes</strong> or <strong>Floryn</strong>, pick a hero with massive area-of-effect (AoE) burst like <strong>Vexana</strong> or <strong>Kadita</strong>. Denying the enemy their "win condition" is the fastest way to a victory.
+        <strong>Counter-pick strategy:</strong> Pick heroes that answer enemy picks. If they pick strong healers like <strong>Estes</strong> or <strong>Floryn</strong>, use strong AoE burst like <strong>Vexana</strong> or <strong>Kadita</strong>.
       </p>
 
       <div className="bg-[var(--card)] border border-[var(--border)] p-10 rounded-[40px] my-16 shadow-xl relative overflow-hidden group">
@@ -76,7 +76,7 @@ export default function BlogPage() {
 
       <h2>4. Solo Queue Leadership: Winning with Randoms</h2>
       <p>
-        Playing solo <strong>in India</strong> is different from playing with a 5-man squad. You cannot expect your random teammates to follow your lead perfectly, so you must "manage" them.
+        Solo queue <strong>in India</strong> is different from a 5-man team. Random teammates may not always follow calls, so guide with pings and simple decisions.
       </p>
       <ol>
         <li><strong>Be the "Map Eyes":</strong> Use the "Ping" system constantly. Don't just ping "Gather," ping the specific bush where you suspect the enemy Roamer is hiding.</li>
@@ -86,10 +86,10 @@ export default function BlogPage() {
 
       <h2>5. Reactive Building: The Pro Itemization Guide</h2>
       <p>
-        Top-tier players never use the "Standard Global Build" for every match. Every game requires a custom set of items to counter the enemy's pressure.
+        Top players do not use one fixed build every game. Build items based on the enemy team.
       </p>
       <p>
-        If you are a Mage and the enemy Saber is constantly killing you, buy <strong>Antique Cuirass</strong> or <strong>Steel Legplates</strong> as your 2nd or 3rd item. Yes, you lose some magic power, but being alive with 80% damage output is infinitely more useful than being a dead carry with 100% damage output.
+        Example: if enemy Saber keeps killing you, buy defense like <strong>Antique Cuirass</strong> or <strong>Steel Legplates</strong> early. Staying alive is better than max damage while dead.
       </p>
 
       <h2>Conclusion: Discipline Builds Win Rates</h2>

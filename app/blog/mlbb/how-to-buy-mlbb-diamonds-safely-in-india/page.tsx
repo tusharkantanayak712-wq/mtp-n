@@ -32,11 +32,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Intro Highlight */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-red-500 pl-6 py-2 bg-red-500/5 rounded-r-2xl">
-          Buying <strong>MLBB diamonds in India</strong> has never been faster—but the risks have also never been higher. With the explosion of unverified "agents" on Instagram and WhatsApp in 2026, protecting your Moonton account is priority number one. This is your definitive safety blueprint.
+          Buying <strong>MLBB diamonds in India</strong> is now very fast, but scams are common. With many unverified sellers on Instagram and WhatsApp, account safety should be your first priority.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          In Mobile Legends: Bang Bang (MLBB), your account represents years of rank climbing and hundreds of skin collections. A single mistake during a top-up can lead to a <strong>Permanent Ban</strong> or the dreaded <strong>Negative Diamond Balance</strong>. To ensure your gaming experience remains elite, you must distinguish between an authorized API-based platform like <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black">bluebuff.in</Link> and a predatory scam. This guide breaks down the essential safety protocols every Indian player must know in 2026.
+          Your MLBB account can represent years of progress. One wrong top-up can lead to a <strong>Permanent Ban</strong> or <strong>Negative Diamonds</strong>. This guide explains simple safety checks every Indian player should know in 2026.
         </p>
 
         {/* Safety Pillars Grid */}
@@ -44,7 +44,7 @@ export default function BlogPage() {
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiLock className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">No Password Rule</h4>
-             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">A legitimate 2026 recharge service will <strong>NEVER</strong> asking for your password or OTP. We only need your Player ID and Zone ID.</p>
+             <p className="text-[11px] opacity-60 leading-relaxed text-justify m-0">A real recharge service will <strong>NEVER</strong> ask for your password or OTP. Only Player ID and Zone ID are needed.</p>
           </div>
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiUserCheck className="text-3xl text-[var(--accent)]" />
@@ -78,7 +78,7 @@ export default function BlogPage() {
              <FiSmartphone className="text-[var(--accent)]" />
              2. Checklist for a 2026 Safe Top-Up
           </h2>
-          <p>Before you hit that pay button, ensure the platform passes these four critical benchmarks:</p>
+          <p>Before paying, check these safety points:</p>
           <div className="space-y-4">
              <div className="flex items-start gap-4 p-5 bg-[var(--card)] border border-[var(--border)] rounded-[32px]">
                 <FiCheckCircle className="text-green-500 shrink-0 mt-1" />
@@ -98,7 +98,7 @@ export default function BlogPage() {
                 <FiCheckCircle className="text-green-500 shrink-0 mt-1" />
                 <div>
                    <h5 className="text-sm font-black uppercase italic m-0 mb-1">Instant Auto-Delivery</h5>
-                   <p className="text-[11px] opacity-60 m-0">Legitimate sites process orders in under 60 seconds. If they tell you to "wait 2-4 hours for an agent," they are likely processing a fraudulent transaction manually.</p>
+                   <p className="text-[11px] opacity-60 m-0">Trusted sites usually process in under 60 seconds. If they ask you to wait hours for an "agent," be careful.</p>
                 </div>
              </div>
           </div>
@@ -110,7 +110,7 @@ export default function BlogPage() {
              3. Why Local Indian Platforms Beat Social Media Agents
           </h2>
           <p className="text-lg leading-relaxed text-justify">
-             Instagram and Telegram "agents" are the source of 90% of MLBB fraud reports <strong>in India</strong>. Unlike a registered platform like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a>, these agents have no accountability. They often use the "Screen Sharing" scam or ask for your Moonton OTP to "process a special discount"—which is actually a tactic to steal your entire account to sell it on the black market. 
+             Many fraud reports in India involve Instagram and Telegram "agents." Unlike registered platforms like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a>, these agents are hard to trace. Some ask for screen sharing or OTP and then steal accounts.
           </p>
           <div className="p-8 rounded-[40px] bg-[var(--card)] border border-[var(--border)] relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-2 h-full bg-[var(--accent)]" />
@@ -118,7 +118,7 @@ export default function BlogPage() {
                <FiInfo /> Pro Safety Tip: Secondary Password 🔐
             </h4>
             <p className="text-sm italic opacity-70 m-0 leading-relaxed text-justify">
-              Go to your MLBB Settings and enable <strong>'Secondary Password'</strong> immediately. This prevents anyone from spending your diamonds or gifting skins even if they manage to log into your account. It is the best 2-minute safety fix available for every <strong>Indian MLBB player</strong>.
+              Go to MLBB settings and enable <strong>'Secondary Password'</strong>. This helps stop others from spending your diamonds even if they log into your account.
             </p>
           </div>
         </section>
@@ -126,10 +126,10 @@ export default function BlogPage() {
         <section>
           <h2>Conclusion: Invest in Peace of Mind</h2>
           <p className="text-lg leading-relaxed text-justify">
-            Your years of rank climbing and skin collection are too valuable to risk on a "cheap" deal that sounds too good to be true. Safety is the ultimate meta-strategy for longevity in Mobile Legends. 
+            Do not risk your account for a "too cheap" deal. Safe top-ups protect your progress in Mobile Legends.
           </p>
           <p className="mt-12 text-lg leading-relaxed text-justify">
-            <strong>Ready for a 100% Safe Recharge?</strong> Stop worrying about your account security. Visit the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">MLBB Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> and join the thousands of Indian pros who trust our <strong>24/7 automated delivery</strong> for every skin and pass!
+            <strong>Ready for safe recharge?</strong> Visit the <Link href="/games/mobile-legends988" className="text-[var(--accent)] underline font-black italic">MLBB Diamond Store</Link> on <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> for secure delivery.
           </p>
         </section>
 

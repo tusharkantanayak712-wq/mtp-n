@@ -31,11 +31,11 @@ export default function BlogPage() {
       <div className="space-y-10">
         {/* Simplified Intro */}
         <p className="text-lg md:text-xl font-medium italic border-l-4 border-red-500 pl-6 py-2 bg-red-500/5 rounded-r-2xl">
-          Every year, thousands of <strong>Mobile Legends players in India</strong> lose their hard-earned money and their prized accounts to sophisticated top-up scams. In 2026, scammers have become more dangerous than ever, using deepfake ads and bot-filled groups. This guide is your definitive shield.
+          Every year, many <strong>Mobile Legends players in India</strong> lose money and accounts to top-up scams. In 2026, scams are even more common. This guide shows how to stay safe.
         </p>
 
         <p className="text-lg leading-relaxed text-justify">
-          Mobile Legends: Bang Bang (MLBB) diamonds are a premium currency that unlocks the most powerful visual effects and rarest heroes in the game. Because they are in such high demand within the <strong>Indian gaming community</strong>, scammers have built entire fake ecosystems—fake websites, fake WhatsApp "agents," and fake Facebook groups—to steal your money and your login credentials. If you want to protect your account and your finances, you must know how to distinguish a 100% legitimate platform like <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a> from a predatory scam. This guide breaks down the most common 2026 scams and how to avoid them.
+          MLBB diamonds are in high demand, so scammers create fake websites, fake WhatsApp agents, and fake groups to steal money and login info. To protect your account, you need to know how to spot trusted platforms like <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a>.
         </p>
 
         <div className="space-y-6">
@@ -47,7 +47,7 @@ export default function BlogPage() {
             This is the most common scam targeting <strong>Indian players</strong> on social media. You might see an ad on Instagram or a message in a WhatsApp group offering "10,000 Diamonds for ₹499."
           </p>
           <p>
-            <strong>The Reality:</strong> Moonton, the developer of MLBB, sets a strict baseline price for diamonds. While trusted third-party sellers like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> can offer significant discounts by buying in bulk, no one can offer 90% off the market price. If the price feels like a miracle, it is a scam.
+            <strong>The Reality:</strong> Trusted sellers like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a> can give discounts, but not impossible prices. If the offer looks unreal, it is likely a scam.
           </p>
           <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-3xl">
              <p className="m-0 text-sm italic opacity-80 leading-relaxed text-justify">
@@ -65,7 +65,7 @@ export default function BlogPage() {
             This is the most critical safety rule in MLBB: <strong>Never share your password.</strong> Scammers will often tell you they need to log into your account to "manually process" a special diamond package or bypass regional restrictions. 
           </p>
           <p>
-            <strong>The Truth:</strong> Professional automated platforms <strong>NEVER</strong> need your password. Sites like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a> only require your <strong>Player ID and Zone ID</strong> to send diamonds via the game's secure API. If a site or person asks for your Moonton Email, Facebook, or Google password, they are trying to steal your account to sell it or use it for botting.
+            <strong>The Truth:</strong> Trusted automated platforms <strong>NEVER</strong> need your password. Sites like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a> only need your <strong>Player ID and Zone ID</strong>. If anyone asks for your password, they are trying to steal your account.
           </p>
           <p className="border-l-2 border-[var(--accent)] pl-4 italic text-sm opacity-60 m-0">
              If you have already shared your password, change it immediately and enable 2-Factor Authentication (2FA) on your Moonton and linked social accounts.
@@ -130,11 +130,11 @@ export default function BlogPage() {
              <FiAlertTriangle className="text-red-500" />
              What to do if You Have Been Scammed?
           </h2>
-          <p>If you unfortunately fall victim to a scam, act fast to minimize the damage:</p>
+          <p>If you get scammed, act fast to reduce the damage:</p>
           <ul className="space-y-6 opacity-80 list-none p-0 m-0">
             <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>1. Immediate Password Reset:</strong> Change your Moonton password and all linked email/social passwords. Enable 2-Factor Authentication (2FA) immediately.</li>
-            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>2. Bank/UPI Dispute:</strong> Contact your bank or UPI app support (GPay/PhonePe) and report the transaction as <strong>Cyber Fraud</strong>. Provide them with the scammer's bank details and the fake website link.</li>
-            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>3. Contact Moonton Support:</strong> Send an in-game ticket explaining that you were tricked by a fraudulent 3rd party. Showing them you were a victim of fraud can sometimes help you avoid a permanent account suspension.</li>
+            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>2. Bank/UPI Dispute:</strong> Contact your bank or UPI app support (GPay/PhonePe) and report it as <strong>Cyber Fraud</strong>. Share the scammer details and fake website link.</li>
+            <li className="p-4 bg-[var(--background)] border border-[var(--border)] rounded-xl"><strong>3. Contact Moonton Support:</strong> Send an in-game ticket and explain what happened. This may help protect your account.</li>
           </ul>
         </section>
 

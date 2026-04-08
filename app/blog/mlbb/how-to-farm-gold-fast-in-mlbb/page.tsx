@@ -29,20 +29,20 @@ export default function BlogPage() {
       game="MLBB"
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
-        In the world of Mobile Legends, "Gold wins games." The team with the item advantage always holds a massive physiological and tactical edge. If you want to reach Mythic in the <strong>Indian servers</strong>, you must learn how to farm more efficiently than your opponent. This is your definitive 2026 blueprint.
+        In Mobile Legends, more gold means more items, and more items win fights. If you want to reach Mythic in <strong>Indian servers</strong>, you need better farming.
       </p>
 
       <p>
-        Farming is the single most critical skill in Mobile Legends: Bang Bang (MLBB). It doesn't matter how gifted your "fast hands" are if your enemy has a 2,000 gold lead. At that stage, they will simply deal more damage, survive more hits, and out-regain you in every teamfight. To master the game's economy, you need to understand exactly where gold comes from and how to maximize every second of the match.
+        Farming is one of the most important MLBB skills. Even good mechanics cannot beat a big gold gap. To improve, learn where gold comes from and use your time well.
       </p>
 
       <p>
-        For players <strong>in India</strong>, where the gameplay is fast-paced and aggressive, knowing how to stay ahead in gold—and ensuring you have the latest hero skins for smooth skill animations from <a href="https://bluebuff.in" className="text-[var(--accent)] underline decoration-2 underline-offset-4 font-black">bluebuff.in</a>—is what defines a "carry" player. 
+        For players <strong>in India</strong>, matches are fast and aggressive. Staying ahead in gold is what helps you carry games.
       </p>
 
       <h2>1. Mastering the "Last Hit" Protocol 🎯</h2>
       <p>
-        The biggest mistake low-to-mid rank players make is simply watching their minions kill enemy minions. If you don't secure the <strong>Last Hit</strong> (dealing the final blow), you lose a significant portion of potential gold.
+        A common mistake is letting minions get the final hit. If you miss the <strong>Last Hit</strong>, you lose gold.
       </p>
       <ul>
         <li><strong>The Math of Inefficiency:</strong> Every minion wave has a set "gold value." If you rely on your minions to do the work, you only receive about 75% of that value. Over a 10-minute laning phase, this adds up to nearly 1,200 gold—literally the cost of an entire core item component.</li>
@@ -51,10 +51,10 @@ export default function BlogPage() {
 
       <h2>2. Priority Architecture: The Gold Lane "Cart" Minion</h2>
       <p>
-        If you are playing the Marksman role, the <strong>Gold Lane</strong> is your oxygen. For the first 5 minutes of the 2026 season, the "Siege Minions" (the large ones on carts) in this lane are specifically buffed to give extra gold to the player who clears them.
+        If you play Marksman, <strong>Gold Lane</strong> is your priority. In early game, cart minions in this lane give extra gold.
       </p>
       <p>
-        <strong>Early Game Discipline:</strong> Missing just one cart minion is like losing half a hero kill's worth of gold. Never rotate to the Mid-lane or join a pointless jungle skirmish if a minion wave is approaching your tower. Clear your wave first, ensure you get the last hit on the cart, and <strong>only then</strong> look for map-wide opportunities. Your items are more important than an early-game brawl.
+        <strong>Early game rule:</strong> Do not miss cart minions. If a wave is near your tower, clear it first. Rotate only after that.
       </p>
 
       <div className="bg-[var(--card)] border border-[var(--border)] p-10 rounded-[40px] my-16 shadow-xl relative overflow-hidden group">
@@ -75,7 +75,7 @@ export default function BlogPage() {
 
       <h2>4. Opportunistic Jungle Farming (For All Roles)</h2>
       <p>
-        While the Jungler owns the forest, a professional team <strong>in India</strong> knows how to share resources during rotations. If your Jungler is clearing the opposite side of the map and a small jungle camp like the <strong>Fire Beetle</strong> or <strong>Crab</strong> is available in your lane, take it!
+        Junglers mainly control jungle camps, but teams can share resources smartly. If your jungler is far away and a small camp is free near you, take it.
       </p>
       <p>
         The <strong>Gold Buff (Crab)</strong> in the side lanes provides an active gold-per-second benefit for 30 seconds once defeated. Professional Marksman players in 2026 will always prioritize the Crab at the 0:45 and 2:00 marks to accelerate their build.
