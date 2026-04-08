@@ -75,14 +75,14 @@ export default function RedeemCodesTab() {
                 alert(data.message);
             }
         } catch (err) {
-            alert("Failed to generate codes");
+            alert("Could not generate codes.");
         } finally {
             setIsGenerating(false);
         }
     };
 
     const handleExpire = async (codeId) => {
-        if (!confirm("Are you sure you want to expire/delete this code?")) return;
+        if (!confirm("Do you want to expire/delete this code?")) return;
 
         try {
             const token = localStorage.getItem("token");
@@ -97,7 +97,7 @@ export default function RedeemCodesTab() {
                 alert(data.message);
             }
         } catch (err) {
-            alert("Failed to expire code");
+            alert("Could not expire code.");
         }
     };
 

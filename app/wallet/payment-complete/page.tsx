@@ -7,14 +7,14 @@ import { motion } from "framer-motion";
 
 export default function PaymentComplete() {
   const [status, setStatus] = useState("checking"); // checking | success | failed | delayed
-  const [message, setMessage] = useState("Verifying Payment...");
+  const [message, setMessage] = useState("Checking payment...");
 
   useEffect(() => {
     const orderId = localStorage.getItem("pending_order");
 
     if (!orderId) {
       setStatus("failed");
-      setMessage("Order Not Found");
+      setMessage("Order not found");
       return;
     }
 
@@ -24,7 +24,7 @@ export default function PaymentComplete() {
     async function checkPayment() {
       if (attempts >= maxAttempts) {
         setStatus("delayed");
-        setMessage("Verification Pending");
+        setMessage("Verification pending");
         return;
       }
 
@@ -44,7 +44,7 @@ export default function PaymentComplete() {
 
         if (data?.success) {
           setStatus("success");
-          setMessage("Payment Successful");
+          setMessage("Payment successful");
 
           const oldBal = Number(localStorage.getItem("walletBalance") || "0");
           const newBal = oldBal + Number(data.amount || 0);
@@ -137,25 +137,25 @@ export default function PaymentComplete() {
             {/* DESCRIPTION */}
             <div className="text-[var(--muted)] text-sm md:text-base leading-relaxed max-w-sm mx-auto mb-8">
               {status === "checking" && (
-                <p className="animate-pulse">Securely communicating with the payment gateway...</p>
+                <p className="animate-pulse">Checking payment gateway...</p>
               )}
 
               {status === "success" && (
-                <p>Funds have been added to your wallet instantly. You can now proceed with your purchases.</p>
+                <p>Money has been added to your wallet. You can continue now.</p>
               )}
 
               {status === "delayed" && (
                 <div className="space-y-2">
-                  <p className="font-medium text-amber-500/90">Transaction submitted for admin approval.</p>
+                  <p className="font-medium text-amber-500/90">Payment sent for admin approval.</p>
                   <p className="text-xs text-[var(--muted)]">
-                    Don't worry! Your payment is safe. Our system will auto-verify and credit your wallet shortly.
+                    Don't worry. Your payment is safe. We will check and add it to your wallet soon.
                     No further action is needed.
                   </p>
                 </div>
               )}
 
               {status === "failed" && (
-                <p>We couldn't verify the payment instantly. If money was deducted, it will be automatically refunded or credited within 24 hours.</p>
+                <p>We could not verify payment right now. If money was deducted, it will be refunded or added within 24 hours.</p>
               )}
             </div>
 
@@ -163,7 +163,7 @@ export default function PaymentComplete() {
             <div className="space-y-3">
               <Link href="/" className="block w-full">
                 <button className="group w-full py-4 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-bold text-sm uppercase tracking-wider hover:opacity-90 transition-all flex items-center justify-center gap-2">
-                  <span>Return to Command Center</span>
+                  <span>Return Home</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
@@ -183,7 +183,7 @@ export default function PaymentComplete() {
           {/* Footer Security Badge */}
           <div className="bg-[var(--foreground)]/[0.02] border-t border-[var(--border)] p-4 flex items-center justify-center gap-2 text-[10px] uppercase font-bold text-[var(--muted)]/60 tracking-widest">
             <ShieldCheck size={12} />
-            <span>Secure 256-bit Transaction</span>
+            <span>Secure 256-bit payment</span>
           </div>
 
         </div>

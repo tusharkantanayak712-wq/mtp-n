@@ -151,7 +151,7 @@ export default function StatsTab() {
         const finalAmount = overrideAmount || manageAmount;
 
         if (!finalEmail || !finalAmount || Number(finalAmount) <= 0) {
-            alert("Please enter a valid email and amount");
+            alert("Please enter a valid email and amount.");
             return;
         }
 
@@ -189,7 +189,7 @@ export default function StatsTab() {
             }
         } catch (err) {
             console.error("Wallet update error", err);
-            alert("Something went wrong");
+            alert("Something went wrong.");
         } finally {
             setUpdating(false);
         }
@@ -197,7 +197,7 @@ export default function StatsTab() {
 
     /* ================= UPDATE STATUS ================= */
     const handleStatusUpdate = async (id, newStatus) => {
-        if (!confirm(`Are you sure you want to mark this transaction as ${newStatus}?`)) return;
+        if (!confirm(`Do you want to mark this transaction as ${newStatus}?`)) return;
 
         try {
             const token = localStorage.getItem("token");
@@ -221,7 +221,7 @@ export default function StatsTab() {
             }
         } catch (err) {
             console.error("Status update error", err);
-            alert("Failed to update status");
+            alert("Could not update status.");
         }
     };
 
@@ -519,7 +519,7 @@ export default function StatsTab() {
                                                                             alert(json.message);
                                                                             if (json.success) fetchHistory();
                                                                         } catch (e) {
-                                                                            alert("Verification Failed");
+                                                                                alert("Verification failed.");
                                                                         }
                                                                     }}
                                                                     className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 transition-colors"
@@ -652,7 +652,7 @@ export default function StatsTab() {
                                                                                 if (json.success) fetchHistory();
                                                                             } catch (e) {
                                                                                 console.error(e);
-                                                                                alert("Verification API Failed");
+                                                                                alert("Verification API failed.");
                                                                             }
                                                                         }}
                                                                         className="p-1.5 rounded-lg hover:bg-blue-500/10 text-blue-500 transition-colors"

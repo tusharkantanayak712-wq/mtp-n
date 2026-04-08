@@ -210,9 +210,9 @@ function BuyFlowContent() {
                     <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20">
                       <FiCheck className="text-4xl text-white" />
                     </div>
-                    <h2 className="text-3xl font-[900] text-green-400 mb-2 uppercase tracking-tight">Payment Successful!</h2>
+                    <h2 className="text-3xl font-[900] text-green-400 mb-2 uppercase tracking-tight">Payment successful!</h2>
                     <p className="text-[var(--muted)] max-w-sm mx-auto mb-8 font-medium">
-                      Your verification was successful and your order has been placed.
+                      Verification complete. Your order has been placed.
                     </p>
                     <button
                       onClick={() => window.location.href = "/"}

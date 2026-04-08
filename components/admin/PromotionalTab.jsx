@@ -96,7 +96,7 @@ export default function PromotionalTab() {
     setPromoTitle(log.promoTitle || "");
     setContent(log.content || "");
     setImageUrl(log.imageUrl || "");
-    setStatus({ type: "success", message: "Template loaded successfully!" });
+    setStatus({ type: "success", message: "Template loaded." });
     // Scroll to composer
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -142,7 +142,7 @@ export default function PromotionalTab() {
         // Also update manualEmails if the user was originally from manualEmails
         setManualEmails(prev => prev.map(email => userToUpdate.email === email ? { ...userToUpdate, tags }.email : email));
         setEditingTagsUserId(null);
-        setStatus({ type: "success", message: "Tags updated locally for external contact!" });
+        setStatus({ type: "success", message: "Tags updated for external contact." });
         return;
       }
 
@@ -159,7 +159,7 @@ export default function PromotionalTab() {
       if (data.success) {
         setUsers(prev => prev.map(u => u._id === userId ? { ...u, tags: data.tags } : u));
         setEditingTagsUserId(null);
-        setStatus({ type: "success", message: "Tags updated!" });
+        setStatus({ type: "success", message: "Tags updated." });
       } else {
         setStatus({ type: "error", message: data.message || "Failed to update tags." });
       }
@@ -340,7 +340,7 @@ export default function PromotionalTab() {
 
     } catch (err) {
       console.error("Transmission Error:", err);
-      setStatus({ type: "error", message: "An error occurred during broadasting. Progress might be partial." });
+      setStatus({ type: "error", message: "An error happened while sending. Some emails may still be sent." });
     } finally {
       setSending(false);
     }

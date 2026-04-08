@@ -147,7 +147,7 @@ export default function ReferralTab({
                                         navigator.share({ title: 'Join now', text: shareText });
                                     } else {
                                         navigator.clipboard.writeText(shareText);
-                                        alert("Copied!");
+                                        alert("Copied.");
                                     }
                                 }}
                                 className="p-2 rounded-lg bg-white/[0.03] text-[var(--muted)] hover:text-[var(--accent)] transition-all"

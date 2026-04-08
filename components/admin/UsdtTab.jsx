@@ -35,7 +35,7 @@ export default function UsdtTab() {
   }, [status, page]);
 
   const handleAction = async (depositId, action) => {
-    if (!confirm(`Are you sure you want to ${action} this deposit?`)) return;
+    if (!confirm(`Do you want to ${action} this deposit?`)) return;
 
     try {
       setActionLoading(depositId);
@@ -57,7 +57,7 @@ export default function UsdtTab() {
       }
     } catch (err) {
       console.error(`USDT ${action} error:`, err);
-      alert("Server error");
+      alert("Server error.");
     } finally {
       setActionLoading(null);
     }

@@ -54,7 +54,7 @@ export default function RegionPage() {
           <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tighter italic text-[var(--foreground)] leading-none">
             Region <span className="text-[var(--accent)]">Check</span>
           </h1>
-          <p className="text-[9px] text-[var(--muted)] font-bold uppercase tracking-widest opacity-40 mt-1.5 italic">Check your game region instantly.</p>
+          <p className="text-[9px] text-[var(--muted)] font-bold uppercase tracking-widest opacity-40 mt-1.5 italic">Check your game region fast.</p>
         </motion.div>
 
         {/* SCANNER CARD */}

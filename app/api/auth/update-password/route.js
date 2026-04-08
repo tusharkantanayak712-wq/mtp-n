@@ -53,7 +53,7 @@ export async function POST(request) {
     await user.save();
 
     return Response.json(
-      { success: true, message: "Password updated successfully" },
+      { success: true, message: "Password updated" },
       { status: 200 }
     );
 

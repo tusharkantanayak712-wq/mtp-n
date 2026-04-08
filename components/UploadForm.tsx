@@ -16,7 +16,7 @@ export default function UploadForm() {
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) return alert("Please select a file first!");
+    if (!file) return alert("Please select a file.");
 
     setLoading(true);
     const formData = new FormData();
@@ -39,12 +39,12 @@ export default function UploadForm() {
         setPreviewUrl(null);
         setFile(null);
       } else {
-        alert("Upload failed ❌");
+        alert("Upload failed.");
       }
     } catch (err) {
       console.error("Upload error:", err);
       setLoading(false);
-      alert("Upload failed ❌");
+      alert("Upload failed.");
     }
   };
 
@@ -148,7 +148,7 @@ export default function UploadForm() {
         <div className="mt-10 text-center animate-fadeIn">
           <div className="flex flex-col items-center gap-2">
             <FaCheckCircle className="text-green-500 w-6 h-6 animate-pulse" />
-            <p className="text-gray-400 text-sm">Uploaded Successfully!</p>
+            <p className="text-gray-400 text-sm">Upload successful.</p>
             <a
               href={uploadedUrl}
               target="_blank"
