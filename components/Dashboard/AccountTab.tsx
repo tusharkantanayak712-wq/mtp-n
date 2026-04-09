@@ -96,7 +96,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
                 </div>
               </div>
               <h3 className="text-xl font-black uppercase italic tracking-tighter mb-1">{userDetails.name}</h3>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)] opacity-60">Verified User</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)] opacity-60">Member</span>
             </div>
 
             <div className="space-y-5">
@@ -119,7 +119,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
               </div>
               <div>
                 <h3 className="text-xl font-black uppercase italic tracking-tighter">Change Password</h3>
-                <p className="text-[10px] uppercase font-bold text-[var(--muted)]/40 tracking-widest mt-1">Set a new password for your account</p>
+                <p className="text-[10px] uppercase font-bold text-[var(--muted)]/40 tracking-widest mt-1">Pick a new password</p>
               </div>
             </div>
 
@@ -153,7 +153,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
                 onClick={handlePasswordUpdate}
                 className="w-full p-5 rounded-[2rem] bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic text-xs shadow-[0_20px_40px_-10px_rgba(var(--accent-rgb),0.3)] hover:scale-[1.01] active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
               >
-                {loadingPass ? <FiZap className="animate-spin" size={16} /> : "Update Password"}
+                {loadingPass ? <FiZap className="animate-spin" size={16} /> : "Save Password"}
               </button>
             </div>
 
@@ -163,7 +163,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
                 <p className="text-[10px] font-black italic">India</p>
               </div>
               <div className="p-5 rounded-[2rem] bg-white/5 border border-white/5">
-                <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40 mb-1">Account Status</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40 mb-1">Status</p>
                 <p className="text-[10px] font-black italic text-[var(--accent)]">Active</p>
               </div>
             </div>

@@ -17,7 +17,7 @@ const SUPPORT_CONFIG = {
     subtitle: "How can we help you today?",
   },
   contacts: {
-    title: "Quick Contact",
+    title: "Contact Us",
     items: [
       { id: "phone", title: "Phone", value: "+91 9178521537", href: "tel:+919178521537", icon: <FaPhoneAlt /> },
       { id: "instagram", title: "Instagram", value: "@mlbbtopup.in", href: "https://www.instagram.com/mlbbtopup.in", icon: <FaInstagram /> },
@@ -70,7 +70,7 @@ export default function QueryTab() {
       <div className="flex flex-col gap-2">
         <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 w-fit">
           <FiZap className="text-[var(--accent)] animate-pulse" size={10} />
-          <span className="text-[8px] font-black uppercase tracking-widest text-[var(--accent)]">Help Desk</span>
+          <span className="text-[8px] font-black uppercase tracking-widest text-[var(--accent)]">Support</span>
         </div>
         <h2 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter leading-none text-[var(--foreground)]">
           {SUPPORT_CONFIG.header.title} <span className="text-[var(--accent)]">{SUPPORT_CONFIG.header.highlight}</span>
@@ -114,7 +114,7 @@ export default function QueryTab() {
               <div className="w-1 h-1 rounded-full bg-green-500 animate-ping" />
               <span className="text-[8px] font-black tracking-widest text-[#22c55e] uppercase">We're Online</span>
             </div>
-            <span className="text-[8px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40">Replies in ~15 mins</span>
+            <span className="text-[8px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40">We reply in ~15 mins</span>
           </div>
         </div>
 

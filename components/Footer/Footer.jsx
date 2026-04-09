@@ -18,19 +18,19 @@ const TRUSTPILOT_URL = "https://www.trustpilot.com/evaluate/mlbbtopup.in";
 
 const FOOTER_LINKS = [
   {
-    title: "Market",
+    title: "Pages",
     links: [
       { label: "Home", href: "/" },
       { label: "Store", href: "/games" },
       { label: "Services", href: "/services" },
-      { label: "Scanner", href: "/region" },
-      { label: "Insights", href: "/blog" },
+      { label: "Region", href: "/region" },
+      { label: "Blog", href: "/blog" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Identity", href: "/about" },
+      { label: "About Us", href: "/about" },
       { label: "Privacy", href: "/privacy-policy" },
       { label: "Terms", href: "/terms-and-conditions" },
       { label: "Support", href: "/contact" },
@@ -64,7 +64,7 @@ export default function Footer() {
                 {BRAND}
               </h2>
               <p className="mt-3 text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic leading-relaxed max-w-[260px]">
-                THE GOLD STANDARD IN AUTOMATED GAME TOP-UPS & ELITE SOLUTIONS.
+                Fast & safe top-ups. Trusted by 10,000+ players.
               </p>
             </Link>
 
@@ -151,7 +151,7 @@ export default function Footer() {
               onClick={scrollToTop}
               className="mt-auto group flex items-center gap-3 text-[9px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-all italic"
             >
-              Elevate
+              Back to Top
               <div className="w-8 h-8 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] flex items-center justify-center shadow-md group-hover:border-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
                 <FiChevronUp size={16} />
               </div>

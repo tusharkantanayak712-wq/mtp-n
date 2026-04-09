@@ -41,7 +41,7 @@ export default function ReviewAndPaymentStep({
   // Handle proceed to payment
   const handleProceed = async () => {
     if (!paymentMethod) {
-      alert("Please select a payment method");
+      alert("Please choose a payment method first");
       return;
     }
 
@@ -118,16 +118,16 @@ export default function ReviewAndPaymentStep({
             <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-20 h-20 bg-[var(--accent)]/5 rounded-full blur-2xl -z-10 group-hover:bg-[var(--accent)]/10 transition-all" />
               <h3 className="text-xs font-[900] uppercase tracking-widest text-[var(--muted)] mb-4 flex items-center gap-2">
-                <FiUser className="text-lg" /> User Details
+                <FiUser className="text-lg" /> Your Info
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Email Address</p>
-                  <p className="font-medium truncate text-sm">{userEmail || "Not provided"}</p>
+                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Email</p>
+                  <p className="font-medium truncate text-sm">{userEmail || "Not added"}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Phone Number</p>
-                  <p className="font-medium truncate text-sm">{userPhone || "Not provided"}</p>
+                  <p className="text-[10px] uppercase font-bold text-[var(--muted)]">Phone</p>
+                  <p className="font-medium truncate text-sm">{userPhone || "Not added"}</p>
                 </div>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ReviewAndPaymentStep({
             <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full blur-2xl -z-10 group-hover:bg-blue-500/10 transition-all" />
               <h3 className="text-xs font-[900] uppercase tracking-widest text-[var(--muted)] mb-4 flex items-center gap-2">
-                <FiShield className="text-lg" /> Game Account
+                <FiShield className="text-lg" /> Game Info
               </h3>
               <div className="space-y-3">
                 <div>
@@ -161,7 +161,7 @@ export default function ReviewAndPaymentStep({
           {/* PAYMENT METHODS */}
           <div className="space-y-4">
             <h3 className="text-sm font-[900] uppercase tracking-widest text-[var(--foreground)] flex items-center gap-2">
-              <FiCreditCard /> Select Payment Method
+              <FiCreditCard /> How do you want to pay?
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -180,13 +180,13 @@ export default function ReviewAndPaymentStep({
                         `}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-sm">Wallet Balance</span>
+                  <span className="font-bold text-sm">My Wallet</span>
                   {paymentMethod === "wallet" && <FiCheck className="text-[var(--accent)]" />}
                 </div>
                 <div className="flex items-end gap-2">
                   <span className="text-lg font-[900]">₹{walletBalance}</span>
                   {walletBalance < totalPrice && (
-                    <span className="text-[10px] text-red-400 font-bold mb-1">Insufficient</span>
+                    <span className="text-[10px] text-red-400 font-bold mb-1">Not enough</span>
                   )}
                 </div>
               </button>
@@ -202,11 +202,11 @@ export default function ReviewAndPaymentStep({
                         `}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-sm">UPI / QR Payment</span>
+                  <span className="font-bold text-sm">Pay via UPI / QR</span>
                   {paymentMethod === "upi" && <FiCheck className="text-[var(--accent)]" />}
                 </div>
                 <div className="flex items-end gap-2">
-                  <span className="text-xs text-[var(--muted)] font-medium">Instant Processing</span>
+                  <span className="text-xs text-[var(--muted)] font-medium">Fast &amp; Easy</span>
                 </div>
               </button>
             </div>
@@ -216,7 +216,7 @@ export default function ReviewAndPaymentStep({
           <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 relative overflow-hidden">
             <div className="space-y-2 mb-6">
               <div className="flex justify-between text-sm">
-                <span className="text-[var(--muted)] font-medium">Subtotal</span>
+                <span className="text-[var(--muted)] font-medium">Price</span>
                 <span className="font-bold">₹{price}</span>
               </div>
               {discount > 0 && (
@@ -227,7 +227,7 @@ export default function ReviewAndPaymentStep({
               )}
               <div className="h-px bg-[var(--border)] my-2" />
               <div className="flex justify-between items-center">
-                <span className="font-[900] text-lg uppercase tracking-tight">Total Pay</span>
+                <span className="font-[900] text-lg uppercase tracking-tight">You Pay</span>
                 <span className="font-[900] text-2xl text-[var(--accent)]">₹{totalPrice}</span>
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function ReviewAndPaymentStep({
                   <span className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                   Processing...
                 </span>
-              ) : "Proceed to Pay"}
+              ) : "Pay Now"}
             </button>
           </div>
         </motion.div>
@@ -259,7 +259,7 @@ export default function ReviewAndPaymentStep({
             <FiSmartphone className="text-3xl text-[var(--accent)]" />
           </div>
           <h3 className="text-xl font-[900] uppercase tracking-wide mb-2">Scan to Pay</h3>
-          <p className="text-[var(--muted)] text-sm mb-6">Use any UPI app to scan and pay safely.</p>
+          <p className="text-[var(--muted)] text-sm mb-6">Open any UPI app and scan this to pay.</p>
 
           <div className="w-64 h-64 mx-auto bg-white p-4 rounded-2xl shadow-xl mb-8">
             {upiQR ? (
@@ -275,7 +275,7 @@ export default function ReviewAndPaymentStep({
             onClick={onPaymentComplete}
             className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-[900] uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] transition-all"
           >
-            I Have Completed Payment
+            I've Paid
           </button>
         </motion.div>
       )}

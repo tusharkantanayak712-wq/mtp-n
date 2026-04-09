@@ -68,7 +68,7 @@ export default function BuyPanel({
 
               <div className="flex flex-col min-w-0 text-left">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-[8px] font-black uppercase tracking-[0.1em] text-[var(--accent)] opacity-80">Your Selection</span>
+                  <span className="text-[8px] font-black uppercase tracking-[0.1em] text-[var(--accent)] opacity-80">Selected</span>
                 </div>
                 <h3 className="text-sm md:text-base font-black text-[var(--foreground)] tracking-tight leading-none uppercase italic truncate max-w-[150px] md:max-w-none">
                   {activeItem.itemName}

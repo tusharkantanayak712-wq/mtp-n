@@ -41,10 +41,10 @@ export default function FilterModal({
                   </div>
                   <div>
                     <h3 className="text-xl font-black uppercase tracking-tighter italic text-[var(--foreground)]">
-                      Elite Refinement
+                      Filter & Sort
                     </h3>
                     <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest">
-                      Customize your armory
+                      Pick how to sort
                     </p>
                   </div>
                 </div>
@@ -61,14 +61,14 @@ export default function FilterModal({
                 <div className="flex items-center gap-2 mb-2">
                   <div className="h-1 w-8 bg-[var(--accent)] rounded-full" />
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">
-                    Sequential Priority
+                    Sort By
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: "az", label: "Alpha A-Z" },
-                    { id: "za", label: "Alpha Z-A" },
+                    { id: "az", label: "Name: A to Z" },
+                    { id: "za", label: "Name: Z to A" },
                   ].map((option) => (
                     <button
                       key={option.id}
@@ -97,7 +97,7 @@ export default function FilterModal({
                 <div className="flex items-center gap-2 mb-2">
                   <div className="h-1 w-8 bg-[var(--accent)] rounded-full" />
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">
-                    Availability Mask
+                    Filter Items
                   </p>
                 </div>
 
@@ -111,10 +111,10 @@ export default function FilterModal({
                 >
                   <div className="flex flex-col">
                     <span className={`text-[11px] font-black uppercase tracking-widest italic transition-colors ${hideOOS ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
-                      Hide Reserves
+                       Hide sold out items
                     </span>
                     <span className="text-[9px] font-medium text-[var(--muted)]">
-                      Show only live items
+                      Only show items in stock
                     </span>
                   </div>
 
@@ -134,7 +134,7 @@ export default function FilterModal({
                 onClick={onClose}
                 className="group w-full py-5 rounded-[2rem] bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic text-xs shadow-xl hover:shadow-[var(--accent)]/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
               >
-                Engage Selection
+                Apply
                 <div className="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
                   <FiChevronRight size={16} />
                 </div>

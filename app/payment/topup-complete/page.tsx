@@ -205,12 +205,12 @@ export default function TopupComplete() {
                     {message}
                   </motion.h1>
                   <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs mb-6 px-4">
-                    Please keep this page open. We are checking your payment.
+                   Don't close this page. We are checking your payment.
                   </motion.p>
 
                   <div className="w-full max-w-[280px]">
                     <div className="flex justify-between items-end mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">Checking Payment</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">Checking...</span>
                       <span className="text-[10px] font-mono text-[var(--muted)]">{timeLeft}s left</span>
                     </div>
                     <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden">
@@ -259,8 +259,8 @@ export default function TopupComplete() {
                     className="w-full bg-[var(--muted)]/5 border border-[var(--border)] rounded-xl p-4 mb-6 space-y-3"
                   >
                     <div className="flex justify-between items-center text-[10px]">
-                       <span className="text-[var(--muted)] font-medium uppercase tracking-wider">Order Details</span>
-                       <span className="bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded font-mono">CONFIRMED</span>
+                       <span className="text-[var(--muted)] font-medium uppercase tracking-wider">Your Order</span>
+                       <span className="bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded font-mono">DONE</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -269,7 +269,7 @@ export default function TopupComplete() {
                         <p className="text-xs font-mono truncate">{orderId || "---"}</p>
                       </div>
                       <div className="space-y-0.5">
-                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Game / Item</p>
+                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Item</p>
                         <p className="text-xs font-bold truncate">{orderData?.itemName || "Digital Product"}</p>
                       </div>
                       <div className="space-y-0.5">
@@ -277,7 +277,7 @@ export default function TopupComplete() {
                         <p className="text-xs font-mono">{orderData?.playerId || "---"}</p>
                       </div>
                       <div className="space-y-0.5">
-                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Total Paid</p>
+                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">You Paid</p>
                         <p className="text-xs font-black text-[var(--accent)]">₹{orderData?.price || "---"}</p>
                       </div>
                     </div>
