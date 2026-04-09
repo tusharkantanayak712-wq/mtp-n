@@ -67,7 +67,7 @@ export default function HomeReferralStats() {
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
                                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]/80 italic">
-                                        Referral Center
+                                        Invite & Earn
                                     </h3>
                                 </div>
 
@@ -105,7 +105,7 @@ export default function HomeReferralStats() {
                                     ) : (
                                         (Date.now() - new Date(user.createdAt).getTime() < 24 * 60 * 60 * 1000) && (
                                             <Link href="/dashboard/referral" className="flex items-center gap-1 text-[var(--accent)] hover:text-[var(--foreground)] transition-colors text-[9px] font-black tracking-widest uppercase">
-                                                ADD REFERRER <FiArrowRight size={10} />
+                                                Use a friend's code <FiArrowRight size={10} />
                                             </Link>
                                         )
                                     )}

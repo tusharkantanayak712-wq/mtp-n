@@ -21,11 +21,11 @@ import {
 /* ===================== CONFIG ===================== */
 
 const topRow = [
-  { title: "Scanner", href: "/region", icon: Globe, color: "#3b82f6" },
+  { title: "Region", href: "/region", icon: Globe, color: "#3b82f6" },
   { title: "Games", href: "/games", icon: Gamepad2, color: "#22c55e" },
   { title: "Services", href: "/services", icon: Layers, color: "#a855f7" },
   { title: "Blogs", href: "/blog", icon: BookOpen, color: "#eab308" },
-  { title: "Leader", href: "/leaderboard", icon: Trophy, color: "#f97316" },
+  { title: "Top List", href: "/leaderboard", icon: Trophy, color: "#f97316" },
   { title: "Wallet", href: "/dashboard/wallet", icon: Wallet, color: "#10b981" },
 ];
 

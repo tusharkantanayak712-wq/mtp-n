@@ -70,7 +70,7 @@ export default function WalletTab({
         if (diff <= 0) {
           clearInterval(timer);
           setTimeLeft("EXPIRED");
-          setUsdtError("This deposit has expired. Please create a new one.");
+          setUsdtError("This deposit has expired. Please start a new one.");
           return;
         }
 
@@ -204,7 +204,7 @@ export default function WalletTab({
       });
       const data = await res.json();
       if (!data.success) {
-        setUsdtError(data.message || "Failed to initiate deposit");
+        setUsdtError(data.message || "Could not start deposit. Try again.");
         return;
       }
       setUsdtDeposit(data);
@@ -232,7 +232,7 @@ export default function WalletTab({
       });
       const data = await res.json();
       if (!data.success) {
-        setUsdtError(data.message || "Failed to submit hash");
+        setUsdtError(data.message || "Could not submit your hash. Try again.");
         return;
       }
       setUsdtStep("submitted");
@@ -447,7 +447,7 @@ export default function WalletTab({
                   disabled={usdtLoading}
                   className="w-full p-4 rounded-2xl bg-green-500 text-black font-black uppercase tracking-[0.2em] italic text-xs hover:scale-[1.02] active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
                 >
-                  {usdtLoading ? <FiLoader className="animate-spin" size={18} /> : "Get Deposit Address →"}
+                  {usdtLoading ? <FiLoader className="animate-spin" size={18} /> : "Show Me the Address →"}
                 </button>
               </motion.div>
             )}
@@ -545,7 +545,7 @@ export default function WalletTab({
                     <button onClick={() => setUsdtStep("amount")} className="p-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
                       <FiArrowLeft size={14} />
                     </button>
-                    <span className="text-[11px] font-black uppercase tracking-widest text-green-400">Send USDT</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-green-400">Send USDT to this address</span>
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 ml-2">
                        <FiClock size={12} className="animate-spin-slow" />
                        <span className="text-[10px] font-black tracking-widest tabular-nums">{timeLeft}</span>
@@ -593,7 +593,7 @@ export default function WalletTab({
 
                   {/* TX Hash Input */}
                   <div>
-                    <p className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest mb-2">Transaction Hash (After Sending)</p>
+                    <p className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest mb-2">Paste Your Transaction Hash (after sending)</p>
                     <input
                       type="text"
                       value={txHash}
@@ -614,7 +614,7 @@ export default function WalletTab({
                     disabled={usdtLoading || !txHash.trim()}
                     className="w-full p-4 rounded-2xl bg-green-500 text-black font-black uppercase tracking-[0.2em] italic text-xs hover:scale-[1.02] active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
                   >
-                    {usdtLoading ? <FiLoader className="animate-spin" size={18} /> : "Submit & Verify"}
+                    {usdtLoading ? <FiLoader className="animate-spin" size={18} /> : "I've Sent — Confirm"}
                   </button>
                 </div>
               )}
@@ -626,8 +626,8 @@ export default function WalletTab({
                     <FiClock size={24} className="text-amber-400" />
                   </div>
                   <div>
-                    <p className="font-black text-[var(--foreground)] text-sm">Verification Pending</p>
-                    <p className="text-[10px] text-[var(--muted)] mt-1">We got your TX hash. We are checking it now and will add <strong className="text-green-400">{usdtDeposit?.coinsToCredit} coins</strong> automatically.</p>
+                    <p className="font-black text-[var(--foreground)] text-sm">Checking Your Payment...</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-1">We got your TX hash. We're checking it now and will add <strong className="text-green-400">{usdtDeposit?.coinsToCredit} coins</strong> to your wallet automatically.</p>
                   </div>
                   <div className="flex items-center justify-center gap-2 text-[9px] text-[var(--muted)]">
                     <FiRefreshCw size={10} className="animate-spin" />

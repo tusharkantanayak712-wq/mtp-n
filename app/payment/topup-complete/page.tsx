@@ -74,7 +74,7 @@ export default function TopupComplete() {
     const urlParams = new URLSearchParams(window.location.search);
     const isWalletPayment = urlParams.get("wallet") === "true";
     if (isWalletPayment) {
-      setMessage("Finalizing top-up...");
+      setMessage("Almost done...");
     }
 
     const verify = async () => {
@@ -93,7 +93,7 @@ export default function TopupComplete() {
 
         // Update message based on internal state
         if (data.topupStatus === "processing") {
-          setMessage("Fulfilling your order...");
+          setMessage("Sending your top-up...");
         }
 
         return data;
@@ -111,7 +111,7 @@ export default function TopupComplete() {
       if (result.success) {
         if (isMounted) {
           setStatus("success");
-          setMessage("Payment successful!");
+          setMessage("Payment done!");
           localStorage.removeItem("pending_topup_order");
           fetchOrderDetails(orderId);
         }
@@ -126,7 +126,7 @@ export default function TopupComplete() {
       } else {
         if (isMounted) {
           setStatus("failed");
-          setMessage("Verification Timeout");
+          setMessage("Taking too long...");
         }
       }
     };
@@ -205,13 +205,13 @@ export default function TopupComplete() {
                     {message}
                   </motion.h1>
                   <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs mb-6 px-4">
-                    Secure channel established. Please do not close this window while we finalize your delivery.
+                    Please keep this page open. We are checking your payment.
                   </motion.p>
 
                   <div className="w-full max-w-[280px]">
                     <div className="flex justify-between items-end mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">Verification Engine</span>
-                      <span className="text-[10px] font-mono text-[var(--muted)]">{timeLeft}S REMAINING</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">Checking Payment</span>
+                      <span className="text-[10px] font-mono text-[var(--muted)]">{timeLeft}s left</span>
                     </div>
                     <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden">
                       <motion.div
@@ -246,10 +246,10 @@ export default function TopupComplete() {
                       <FaCheckCircle className="text-3xl text-white" />
                     </motion.div>
                     <motion.h1 variants={itemVariants} className="text-2xl font-black italic uppercase tracking-tighter text-emerald-500 mb-1">
-                      TOP-UP SUCCESSFUL
+                      TOP-UP DONE!
                     </motion.h1>
                     <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs">
-                      Your high-priority order has been fulfilled.
+                       Your order is complete. Diamonds have been sent!
                     </motion.p>
                   </div>
 
@@ -259,8 +259,8 @@ export default function TopupComplete() {
                     className="w-full bg-[var(--muted)]/5 border border-[var(--border)] rounded-xl p-4 mb-6 space-y-3"
                   >
                     <div className="flex justify-between items-center text-[10px]">
-                      <span className="text-[var(--muted)] font-medium uppercase tracking-wider">Transaction Details</span>
-                      <span className="bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded font-mono">VERIFIED</span>
+                       <span className="text-[var(--muted)] font-medium uppercase tracking-wider">Order Details</span>
+                       <span className="bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded font-mono">CONFIRMED</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -292,7 +292,7 @@ export default function TopupComplete() {
                       className="w-full group rounded-xl bg-[var(--accent)] py-3 font-black italic uppercase tracking-wide text-white hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20"
                     >
                       <FaHistory className="text-sm" />
-                      View History
+                       See My Orders
                       <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
                     </motion.button>
 
@@ -327,12 +327,12 @@ export default function TopupComplete() {
                       <FaExclamationTriangle className="text-3xl text-yellow-500" />
                     </motion.div>
                     <motion.h1 variants={itemVariants} className="text-xl font-black italic uppercase tracking-tighter text-yellow-500 mb-1">
-                      {message === "Order not found" ? "ERROR DETECTED" : "VERIFICATION TIMEOUT"}
+                      {message === "Order not found" ? "ORDER NOT FOUND" : "STILL CHECKING..."}
                     </motion.h1>
                     <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs max-w-[280px]">
                       {message === "Order not found"
-                        ? "Critical error: The specified order reference could not be located."
-                        : "Verification is taking longer than usual. Don't worry, your funds are safe."}
+                        ? "We could not find this order. Please contact support."
+                        : "This is taking longer than usual. Don't worry, your money is safe."}
                     </motion.p>
                   </div>
 
@@ -347,7 +347,7 @@ export default function TopupComplete() {
                       </div>
                       <div className="space-y-2">
                         <p className="text-[var(--foreground)] leading-relaxed">
-                          Your delivery is queued and will be processed within <strong className="text-yellow-500">10–15 mins</strong>, else a refund will be issued to your wallet.
+                           Your top-up will be done within <strong className="text-yellow-500">10–15 mins</strong>. If not, we will refund the money to your wallet.
                         </p>
                         <p className="text-[var(--muted)] font-mono text-[9px]">
                           REF: {orderId || "N/A"}
@@ -367,7 +367,7 @@ export default function TopupComplete() {
                       className="w-full rounded-xl bg-[#25D366] py-3 font-black italic uppercase tracking-wide text-white flex items-center justify-center gap-2 shadow-lg shadow-green-600/20"
                     >
                       <FaWhatsapp className="text-lg" />
-                      Contact Support
+                       Chat on WhatsApp
                     </motion.a>
 
                     <button
@@ -395,12 +395,12 @@ export default function TopupComplete() {
                 if (orderId) navigator.clipboard.writeText(orderId);
               }}>
               <FaRegClipboard className="text-xs" />
-              Copy Ref ID
+               Copy Order ID
             </div>
             <div className="w-1.5 h-1.5 rounded-full bg-[var(--border)]" />
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              Secure Link
+               Safe & Secure
             </div>
           </motion.div>
         </div>

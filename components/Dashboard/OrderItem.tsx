@@ -142,7 +142,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
               disabled={verifyLoading}
               className="px-1.5 py-0.5 rounded-sm bg-[var(--accent)]/5 border border-[var(--accent)]/20 text-[var(--accent)] text-[7px] font-black uppercase tracking-wider hover:bg-[var(--accent)] hover:text-black transition-all flex items-center gap-1"
             >
-              {verifyLoading ? <FiLoader className="animate-spin" size={6} /> : "Verify Now"}
+              {verifyLoading ? <FiLoader className="animate-spin" size={6} /> : "Check Status"}
             </button>
           )}
         </div>
@@ -209,7 +209,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
             {config.label === 'PENDING' && order.paymentMethod?.toLowerCase() === 'upi' && (
               <div className="mt-4 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
                 <p className="text-[9px] font-medium text-amber-500/80 uppercase tracking-widest leading-relaxed">
-                  If you already paid with **UPI** but this order still shows pending, click **Verify Now** above to check and update payment status.
+                  Paid via UPI but order still shows pending? Tap "Check Status" above to update it.
                 </p>
               </div>
             )}

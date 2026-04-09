@@ -39,7 +39,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                 setStatus({ type: 'error', message: data.message });
             }
         } catch (err) {
-            setStatus({ type: 'error', message: "Redeem failed. Please try again." });
+            setStatus({ type: 'error', message: "Something went wrong. Try again." });
         } finally {
             setLoading(false);
         }
@@ -59,7 +59,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                             <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">Rewards</span>
                         </div>
                         <h1 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Redeem <span className="text-blue-500">Code</span></h1>
-                        <p className="text-[10px] font-bold text-[var(--muted)] mt-2 uppercase tracking-wide opacity-50">Add money to your wallet fast.</p>
+                        <p className="text-[10px] font-bold text-[var(--muted)] mt-2 uppercase tracking-wide opacity-50">Enter a code to add money to your wallet.</p>
                     </motion.div>
 
                     <motion.div
@@ -70,7 +70,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                     >
                         <form onSubmit={handleRedeem} className="space-y-4">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] uppercase tracking-widest font-black text-blue-500/40 ml-1">Voucher Code</label>
+                                <label className="text-[9px] uppercase tracking-widest font-black text-blue-500/40 ml-1">Your Code</label>
                                 <input
                                     type="text"
                                     value={code}
@@ -94,7 +94,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                                     <FiLoader className="animate-spin" size={16} />
                                 ) : (
                                     <>
-                                        <span>Redeem Now</span>
+                                        <span>Add to Wallet</span>
                                         <FiArrowRight size={14} />
                                     </>
                                 )}
@@ -128,30 +128,30 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
                     className="space-y-4"
                 >
                     <div className="p-6 rounded-3xl bg-[var(--card)]/40 border border-white/5 space-y-6 relative overflow-hidden">
-                        <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--muted)] opacity-30">How it works</h3>
+                        <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--muted)] opacity-30">How to use</h3>
 
                         <div className="space-y-6">
                             <div className="flex gap-4">
                                 <div className="w-8 h-8 rounded-lg bg-blue-500/5 border border-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">1</div>
                                 <div>
-                                    <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Enter Code</p>
-                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Enter your voucher code exactly as shown.</p>
+                                    <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Type Your Code</p>
+                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Type the code exactly as given to you.</p>
                                 </div>
                             </div>
 
                             <div className="flex gap-4">
                                 <div className="w-8 h-8 rounded-lg bg-blue-500/5 border border-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">2</div>
                                 <div>
-                                    <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Get Balance</p>
-                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Click redeem to add balance to your account.</p>
+                                    <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Click the Button</p>
+                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Tap "Add to Wallet" to add money.</p>
                                 </div>
                             </div>
 
                             <div className="flex gap-4">
                                 <div className="w-8 h-8 rounded-lg bg-blue-500/5 border border-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">3</div>
                                 <div>
-                                    <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Use Instantly</p>
-                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Balance is added to your wallet right away.</p>
+                                    <p className="text-[11px] font-black uppercase tracking-tight text-[var(--foreground)]">Money Added!</p>
+                                    <p className="text-[9px] text-[var(--muted)] mt-1 tracking-wide leading-relaxed opacity-40 font-bold uppercase">Money goes into your wallet instantly.</p>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@ export default function RedeemTab({ setWalletBalance }: RedeemTabProps) {
 
                     <div className="px-5 py-3.5 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex items-center gap-3">
                         <FiShield className="text-blue-500/60" size={12} />
-                        <p className="text-[8px] font-black text-blue-400/60 uppercase tracking-[0.2em]">Secure Processing</p>
+                        <p className="text-[8px] font-black text-blue-400/60 uppercase tracking-[0.2em]">Safe & Secure</p>
                     </div>
                 </motion.div>
             </div>

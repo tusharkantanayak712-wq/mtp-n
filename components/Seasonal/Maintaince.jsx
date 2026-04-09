@@ -54,13 +54,13 @@ export default function Maintaince() {
                             />
 
                             <h2 className="text-xl font-bold text-white mb-2">
-                                We'll be back soon
+                                We'll be back very soon!
                             </h2>
                             
                             <p className="text-[var(--muted)] text-xs mb-5 leading-relaxed">
-                                We are performing a quick maintenance.
+                                We are doing a quick update right now.
                                 <br />
-                                <span className="text-[var(--accent)] font-medium italic">Back in 10-30 minutes!</span>
+                                <span className="text-[var(--accent)] font-medium italic">We'll be back in 10–30 minutes!</span>
                             </p>
 
                             {/* WhatsApp Support Block */}
@@ -75,8 +75,8 @@ export default function Maintaince() {
                                         <FaWhatsapp size={18} />
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-xs font-bold leading-tight">Quick Topups</p>
-                                        <p className="text-[10px] opacity-40">Join WhatsApp Channel</p>
+                                        <p className="text-xs font-bold leading-tight">Fast Topups</p>
+                                        <p className="text-[10px] opacity-40">Join our WhatsApp Channel</p>
                                     </div>
                                 </a>
                             </div>

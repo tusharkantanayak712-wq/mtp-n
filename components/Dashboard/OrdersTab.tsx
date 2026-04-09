@@ -77,7 +77,7 @@ export default function OrdersTab() {
           <div>
             <h3 className="text-xl font-[900] uppercase italic tracking-tighter text-[var(--foreground)]">Your Orders</h3>
             <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
-              {loading ? "Loading your orders..." : `Showing ${totalCount} Orders`}
+              {loading ? "Getting your orders..." : `You have ${totalCount} order${totalCount !== 1 ? 's' : ''}`}
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function OrdersTab() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search orders..."
+            placeholder="Search by order ID or item..."
             className="w-full pl-11 pr-4 py-3 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-[11px] uppercase font-bold tracking-widest outline-none transition-all placeholder:text-[var(--muted)] text-[var(--foreground)]"
           />
         </div>
@@ -121,7 +121,7 @@ export default function OrdersTab() {
             className="flex flex-col items-center justify-center py-20 border border-dashed border-[var(--border)] rounded-[2.5rem]"
           >
             <FiLayers size={32} className="text-[var(--muted)]/20 mb-4" />
-            <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted)]">No orders found</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted)]">No orders yet. Buy something!</p>
           </motion.div>
         ) : (
           <div className="space-y-4">

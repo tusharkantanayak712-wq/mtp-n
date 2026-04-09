@@ -178,7 +178,7 @@ function BuyFlowContent() {
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
                         <h3 className="text-[9px] font-[900] uppercase tracking-[0.2em] text-[var(--muted)]/80 italic">
-                          Pack Details
+                          What You're Buying
                         </h3>
                       </div>
                       <h4 className="font-[900] text-[13px] leading-tight uppercase tracking-tight truncate text-[var(--foreground)]/90 mb-1">{itemName}</h4>
@@ -210,15 +210,15 @@ function BuyFlowContent() {
                     <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20">
                       <FiCheck className="text-4xl text-white" />
                     </div>
-                    <h2 className="text-3xl font-[900] text-green-400 mb-2 uppercase tracking-tight">Payment successful!</h2>
+                    <h2 className="text-3xl font-[900] text-green-400 mb-2 uppercase tracking-tight">Payment Done!</h2>
                     <p className="text-[var(--muted)] max-w-sm mx-auto mb-8 font-medium">
-                      Verification complete. Your order has been placed.
+                      Your order is placed. We will top up your account soon!
                     </p>
                     <button
                       onClick={() => window.location.href = "/"}
                       className="px-8 py-3 bg-[var(--card)] hover:bg-[var(--accent)] hover:text-white border border-[var(--border)] hover:border-[var(--accent)] rounded-xl font-bold uppercase tracking-widest transition-all shadow-lg"
                     >
-                      Return Home
+                      Go to Home
                     </button>
                   </motion.div>
                 ) : (

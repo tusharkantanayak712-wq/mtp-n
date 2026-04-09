@@ -64,7 +64,7 @@ export default function ReferralTab({
                 setReferralMessage(data.message);
             }
         } catch (error) {
-            setReferralMessage("Redeem failed.");
+            setReferralMessage("Something went wrong. Try again.");
         } finally {
             setReferralLoading(false);
         }
@@ -104,14 +104,14 @@ export default function ReferralTab({
             <div className="relative p-4 sm:p-5 rounded-3xl bg-[var(--card)]/30 border border-white/5 flex items-center justify-between overflow-hidden shadow-sm">
                 <div className="relative z-10">
                     <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--accent)] mb-1 italic opacity-50">
-                        Total Referrals
+                        Total Friends Invited
                     </p>
                     <div className="flex items-baseline gap-1.5">
                         <span className="text-3xl font-black italic tracking-tighter uppercase text-[var(--foreground)]">
                             {userReferral?.referralCount || 0}
                         </span>
                         <span className="text-[8px] font-bold text-[var(--muted)]/40 uppercase tracking-widest leading-none">
-                            Users Joined
+                            friends joined
                         </span>
                     </div>
                 </div>
@@ -125,7 +125,7 @@ export default function ReferralTab({
                 {/* SHARE */}
                 <div className="space-y-3">
                     <label className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/50 flex items-center gap-1.5 px-1">
-                        <FiShare2 className="text-[var(--accent)]" size={10} /> Your Code
+                        <FiShare2 className="text-[var(--accent)]" size={10} /> Your Invite Code
                     </label>
 
                     <div className="w-full p-3 rounded-2xl border border-white/5 bg-[var(--card)]/30 flex items-center justify-between group-hover:border-[var(--accent)]/30 transition-all shadow-sm">
@@ -136,7 +136,7 @@ export default function ReferralTab({
                             <button
                                 onClick={handleCopyCode}
                                 className="p-2 rounded-lg bg-white/[0.03] text-[var(--muted)] hover:text-[var(--accent)] transition-all"
-                                title="Copy"
+                                title="Copy code"
                             >
                                 {copied ? <FiCheckCircle size={14} /> : <FiCopy size={14} />}
                             </button>
@@ -144,14 +144,14 @@ export default function ReferralTab({
                                 onClick={() => {
                                     const shareText = `Join mlbbtopup.in\nCode: ${userReferral?.userId}`;
                                     if (navigator.share) {
-                                        navigator.share({ title: 'Join now', text: shareText });
+                                        navigator.share({ title: 'Join me on mlbbtopup.in', text: shareText });
                                     } else {
                                         navigator.clipboard.writeText(shareText);
-                                        alert("Copied.");
+                                        alert("Link copied to clipboard!");
                                     }
                                 }}
                                 className="p-2 rounded-lg bg-white/[0.03] text-[var(--muted)] hover:text-[var(--accent)] transition-all"
-                                title="Share"
+                                title="Share your code"
                             >
                                 <FiShare2 size={14} />
                             </button>
@@ -163,8 +163,8 @@ export default function ReferralTab({
                             <FiGift size={12} />
                         </div>
                         <div>
-                            <span className="text-[10px] font-black uppercase tracking-tight italic text-[var(--foreground)] block">Rewards</span>
-                            <span className="text-[8px] font-bold text-[var(--muted)]/50 uppercase tracking-tighter">Invite friends to earn.</span>
+                            <span className="text-[10px] font-black uppercase tracking-tight italic text-[var(--foreground)] block">Get Rewards</span>
+                            <span className="text-[8px] font-bold text-[var(--muted)]/50 uppercase tracking-tighter">Share your code. Get a bonus for every friend who signs up.</span>
                         </div>
                     </div>
                 </div>
@@ -172,14 +172,14 @@ export default function ReferralTab({
                 {/* REDEEM */}
                 <div className="space-y-3">
                     <label className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/50 flex items-center gap-1.5 px-1">
-                        <FiDownload className="text-[var(--accent)]" size={10} /> Use Code
+                        <FiDownload className="text-[var(--accent)]" size={10} /> Got a Friend's Code?
                     </label>
 
                     {!userReferral?.referralUsed ? (
                         <div className="space-y-2.5">
                             <input
                                 type="text"
-                                placeholder="ENTER CODE"
+                                placeholder="Type or paste the code here"
                                 value={referralCodeInput}
                                 onChange={(e) => setReferralCodeInput(e.target.value)}
                                 className="w-full p-3 rounded-2xl border border-white/5 bg-[var(--card)]/30 text-sm font-black tracking-widest text-[var(--foreground)] placeholder:text-[var(--muted)]/20 outline-none transition-all uppercase"
@@ -194,17 +194,17 @@ export default function ReferralTab({
                                 disabled={referralLoading || !referralCodeInput}
                                 className="w-full p-3 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-widest italic text-[10px] shadow-lg hover:scale-[1.01] active:scale-95 disabled:opacity-30 transition-all flex items-center justify-center gap-2"
                             >
-                                {referralLoading ? <FiLoader className="animate-spin" size={12} /> : "Redeem"}
+                                {referralLoading ? <FiLoader className="animate-spin" size={12} /> : "Use Code"}
                             </button>
                         </div>
                     ) : (
                         <div className="w-full p-4 rounded-2xl border border-dashed border-white/5 bg-[var(--card)]/10 flex items-center justify-center gap-2">
                             <FiCheckCircle size={14} className="text-green-500" />
-                            <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]">Redeemed</p>
+                            <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]">You already used a code</p>
                         </div>
                     )}
                     <p className="text-[7.5px] font-bold text-[var(--muted)]/30 uppercase tracking-[0.15em] px-1">
-                        Use within 24 hours of joining.
+                        You can only use a code within 24 hours of joining.
                     </p>
                 </div>
             </div>
@@ -213,7 +213,7 @@ export default function ReferralTab({
             <div className="pt-4 border-t border-white/[0.03]">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-black italic tracking-tighter text-[var(--foreground)] uppercase">
-                        My Network
+                        Friends Who Joined
                     </h3>
                     <button onClick={fetchReferrals} className="p-1.5 text-[var(--muted)] hover:text-[var(--accent)] transition-all">
                         <FiLoader size={12} className={loadingList ? "animate-spin" : ""} />
@@ -223,14 +223,14 @@ export default function ReferralTab({
                 {loadingList && referrals.length === 0 ? (
                     <div className="flex justify-center py-6"><FiLoader className="animate-spin text-[var(--accent)]" size={16} /></div>
                 ) : referrals.length === 0 ? (
-                    <div className="text-center py-6 text-[10px] uppercase font-black tracking-widest text-[var(--muted)]/30 italic">No users joined yet.</div>
+                    <div className="text-center py-6 text-[10px] uppercase font-black tracking-widest text-[var(--muted)]/30 italic">No friends joined yet. Share your code to start!</div>
                 ) : (
                     <div className="space-y-2">
                         <div className="rounded-2xl border border-white/5 bg-[var(--card)]/20 overflow-hidden">
                             <table className="w-full text-left">
                                 <thead className="bg-white/[0.02] text-[8px] font-black uppercase tracking-[0.2em] text-[var(--muted)]/50">
                                     <tr>
-                                        <th className="px-4 py-2">User</th>
+                                        <th className="px-4 py-2">Name</th>
                                         <th className="px-4 py-2 text-right">Status</th>
                                     </tr>
                                 </thead>
@@ -243,7 +243,7 @@ export default function ReferralTab({
                                                         {ref.name?.[0]?.toUpperCase() || "U"}
                                                     </div>
                                                     <div>
-                                                        <p className="font-black italic uppercase leading-none">{ref.name || "Unknown"}</p>
+                                                        <p className="font-black italic uppercase leading-none">{ref.name || "Unknown user"}</p>
                                                         <p className="text-[7.5px] text-[var(--muted)]/40 font-mono mt-0.5">{ref.userId}</p>
                                                     </div>
                                                 </div>
@@ -259,7 +259,7 @@ export default function ReferralTab({
                         {totalPages > 1 && (
                             <div className="flex justify-center gap-4 pt-2">
                                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)] disabled:opacity-20">Prev</button>
-                                <span className="text-[9px] font-black text-[var(--muted)]/40 italic">{page} / {totalPages}</span>
+                                <span className="text-[9px] font-black text-[var(--muted)]/40 italic">Page {page} of {totalPages}</span>
                                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)] disabled:opacity-20">Next</button>
                             </div>
                         )}

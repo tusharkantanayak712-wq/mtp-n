@@ -8,7 +8,7 @@ const SERVICES = [
     title: "Reseller Program",
     desc: "Get our lowest prices for your business. Fast delivery and big profits.",
     icon: FiUsers,
-    badge: "ELITE PRICE",
+    badge: "BEST PRICE",
   },
   {
     title: "Whitelabel Site",
@@ -20,7 +20,7 @@ const SERVICES = [
     title: "Custom Portals",
     desc: "We build special top-up websites with the look and features you want.",
     icon: FiZap,
-    badge: "BESPOKE",
+    badge: "CUSTOM",
   },
 ];
 
