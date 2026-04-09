@@ -30,7 +30,7 @@ export default function ServicesPage() {
     },
     {
       title: "Business API",
-      desc: "Connect your system for automatic orders. Available for Elite Members.",
+      desc: "Connect your system for automatic orders. Available for reseller accounts.",
       icon: FiCode,
       badge: "API ACCESS",
       active: true,
@@ -49,7 +49,7 @@ export default function ServicesPage() {
         >
           <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 mb-2">
             <FiZap className="text-[var(--accent)]" size={10} />
-            <span className="text-[8px] font-black uppercase tracking-widest text-[var(--accent)]">Enterprise</span>
+            <span className="text-[8px] font-black uppercase tracking-widest text-[var(--accent)]">For Businesses</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black italic tracking-tighter uppercase leading-none">
             <span className="text-[var(--accent)]">OUR</span> SERVICES

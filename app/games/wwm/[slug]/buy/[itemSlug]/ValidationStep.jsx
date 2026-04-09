@@ -16,15 +16,15 @@ export default function ValidationStep({
         <div>
           <h2 className="text-lg font-[900] uppercase tracking-tight text-[var(--foreground)] flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow immortality ring-1 ring-[var(--accent)]/50" />
-            Verification
+            Step 1: Enter Your ID
           </h2>
-          <p className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider mt-0.5 opacity-70">Enter details to proceed</p>
+          <p className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider mt-0.5 opacity-70">Enter your game ID to continue</p>
         </div>
       </div>
 
       {/* Input Group */}
       <div className="space-y-1.5">
-        <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] ml-1 opacity-60">Account ID</label>
+        <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] ml-1 opacity-60">Your Game ID</label>
         <div className="relative group">
           <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors duration-300">
             <FiUser className="text-lg" />
@@ -58,7 +58,7 @@ export default function ValidationStep({
             </span>
           ) : (
             <>
-              Check Player
+              Find My Account
               <FiCheckCircle className="text-lg" />
             </>
           )}

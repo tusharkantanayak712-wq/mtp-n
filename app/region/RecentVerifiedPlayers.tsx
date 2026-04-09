@@ -40,7 +40,7 @@ export default function RecentVerifiedPlayers({
         <div className="flex items-center gap-2">
           <FiRotateCcw size={12} className="text-[var(--accent)]" />
           <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60">
-            RECENT SCANS
+            RECENT CHECKS
           </h3>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function RecentVerifiedPlayers({
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-black uppercase tracking-tight italic truncate text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-none mb-1">
-                    {p.username || "UNKNOWN PLAYER"}
+                    {p.username || "Unknown Player"}
                   </p>
                   <div className="flex items-center gap-1.5 text-[8px] font-bold text-[var(--muted)] opacity-40 uppercase tracking-tighter">
                     <span>{p.playerId}</span>

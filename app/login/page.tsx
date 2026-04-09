@@ -103,13 +103,13 @@ function AuthContent() {
       });
       const data = await res.json();
       if (!data.success) {
-        setError(data.message || "Authentication Protocol Failed");
+        setError(data.message || "Login failed. Please try again.");
         setLoading(false);
         return;
       }
       saveSession(data);
     } catch {
-      setError("Nexus Connection Interrupted");
+      setError("Something went wrong. Try again.");
       setLoading(false);
     }
   };
@@ -136,7 +136,7 @@ function AuthContent() {
         setError(data.message);
       }
     } catch {
-      setError("Nexus connection failed");
+      setError("Could not send code. Try again.");
     }
     setLoading(false);
   };
@@ -241,10 +241,10 @@ function AuthContent() {
 
               <motion.div variants={itemVariants} className="space-y-2">
                 <h1 className="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[var(--foreground)] to-[var(--foreground)]/60 drop-shadow-sm">
-                  {showOtpField ? "Verification" : "Login Portal"}
+                  {showOtpField ? "Enter Your Code" : "Login"}
                 </h1>
                 <p className="text-xs font-medium text-[var(--muted)]/80 tracking-wide uppercase">
-                  {showOtpField ? "Confirm your identity" : "Secure Access Control"}
+                  {showOtpField ? "Enter the code we sent to your email" : "Sign in to your account"}
                 </p>
               </motion.div>
             </div>
@@ -269,7 +269,7 @@ function AuthContent() {
                   className="mb-6 p-4 rounded-xl bg-emerald-500 text-white flex items-center justify-center gap-2 text-center shadow-[0_0_30px_rgba(16,185,129,0.3)]"
                 >
                   <FiCheckCircle size={20} />
-                  <span className="text-sm font-black uppercase tracking-widest">ACCESS GRANTED</span>
+                  <span className="text-sm font-black uppercase tracking-widest">You're In! Redirecting...</span>
                 </motion.div>
               )}
 
@@ -372,7 +372,7 @@ function AuthContent() {
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        <span className="relative z-10">{showOtpField ? "Verify & Login" : "Send Access Code"}</span>
+                        <span className="relative z-10">{showOtpField ? "Verify & Login" : "Send Code to Email"}</span>
                       </>
                     )}
                   </button>
@@ -381,7 +381,7 @@ function AuthContent() {
                 {/* DIVIDER */}
                 <div className="relative flex items-center gap-4 py-2">
                   <div className="h-[1px] flex-1 bg-[var(--border)]/30" />
-                  <span className="text-[9px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">Social Connect</span>
+                  <span className="text-[9px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">Or sign in with</span>
                   <div className="h-[1px] flex-1 bg-[var(--border)]/30" />
                 </div>
 
@@ -418,17 +418,15 @@ function AuthContent() {
                     <div className="flex flex-col items-center gap-2">
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
                         <FiLock size={10} className="text-emerald-500" />
-                        <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/70">SECURE SHELL v2.0</span>
+                        <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/70">Your data is safe with us</span>
                       </div>
                       <a
                         href="tel:+919178521537"
                         className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest hover:brightness-125 transition-all"
                       >
-                        Help-Desk: +91 9178521537
+                        Support: +91 9178521537
                       </a>
-                      <p className="text-[7px] text-[var(--muted)]/30 uppercase tracking-[0.2em] animate-pulse">
-                        System Monitoring Active • Session ID: RT-77
-                      </p>
+                      <p className="text-[7px] text-[var(--muted)]/30 uppercase tracking-[0.2em] animate-pulse">Need help? Call us anytime</p>
                     </div>
                   </div>
                 </motion.div>

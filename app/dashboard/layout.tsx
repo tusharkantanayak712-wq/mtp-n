@@ -98,15 +98,15 @@ export default function DashboardLayout({
     const activeTab = pathname.split("/").pop() || "orders";
 
     const tabCards = [
-        { key: "orders", label: "Operations", value: "Orders", icon: FiInbox, href: "/dashboard/orders" },
-        { key: "support", label: "Protocol", value: "Support", icon: FiHelpCircle, href: "/dashboard/support" },
-        { key: "wallet", label: "Credits", value: "Wallet", icon: FiCreditCard, href: "/dashboard/wallet" },
+        { key: "orders", label: "Your Orders", value: "Orders", icon: FiInbox, href: "/dashboard/orders" },
+        { key: "support", label: "Get Help", value: "Support", icon: FiHelpCircle, href: "/dashboard/support" },
+        { key: "wallet", label: "Add Money", value: "Wallet", icon: FiCreditCard, href: "/dashboard/wallet" },
         { key: "redeem", label: "Gift Card", value: "Redeem", icon: FiGift, href: "/dashboard/redeem" },
-        { key: "referral", label: "Network", value: "Referral", icon: FiUsers, href: "/dashboard/referral" },
+        { key: "referral", label: "Invite Friends", value: "Referral", icon: FiUsers, href: "/dashboard/referral" },
         // { key: "account", label: "Identity", value: "Profile", icon: FiUser, href: "/dashboard/account" },
     ];
 
-    tabCards.push({ key: "api-keys", label: "Access", value: "API Keys", icon: FiKey, href: "/dashboard/api-keys" });
+    tabCards.push({ key: "api-keys", label: "API Keys", value: "API Keys", icon: FiKey, href: "/dashboard/api-keys" });
 
     return (
         <AuthGuard>
@@ -126,14 +126,14 @@ export default function DashboardLayout({
                                 <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10">
                                     <FiZap className="text-[var(--accent)] animate-pulse" size={8} />
                                     <span className="text-[8px] font-black uppercase tracking-[0.2em] text-[var(--accent)] italic">
-                                        Systems Online
+                                        Active
                                     </span>
                                 </div>
                                 <h1 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter leading-none">
-                                    COMMAND <span className="text-[var(--accent)]">CENTER</span>
+                                    MY <span className="text-[var(--accent)]">DASHBOARD</span>
                                 </h1>
                                 <p className="text-[var(--muted)] text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em] opacity-30 italic">
-                                    Operative: {userDetails.name || "UNIDENTIFIED"} • Sync Active
+                                    Hi, {userDetails.name || "Guest"}
                                 </p>
                             </div>
 

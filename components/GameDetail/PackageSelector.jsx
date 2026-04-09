@@ -21,11 +21,11 @@ export default function PackageSelector({
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <h2 className="text-xl font-[950] tracking-tighter text-[var(--foreground)] lowercase">
-            select <span className="text-[var(--accent)] drop-shadow-[0_0_10px_rgba(var(--accent-rgb),0.3)]">package</span>
+            pick a <span className="text-[var(--accent)] drop-shadow-[0_0_10px_rgba(var(--accent-rgb),0.3)]">pack</span>
           </h2>
           <span className="hidden sm:block w-4 h-[1px] bg-[var(--border)]" />
           <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/50">
-            {items.length} options
+            {items.length} packs available
           </p>
         </div>
 
@@ -208,7 +208,7 @@ export default function PackageSelector({
                         </div>
                         {discount > 0 && item.itemAvailablity !== false && (
                           <p className="text-[8px] font-black text-[var(--accent)] uppercase tracking-[0.2em] mt-1">
-                            save {discount}% now
+                             {discount}% off
                           </p>
                         )}
                       </div>

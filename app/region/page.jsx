@@ -116,12 +116,12 @@ export default function RegionPage() {
                       <FiUser size={18} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/50 mb-0.5">Player Name</p>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/50 mb-0.5">Name</p>
                       <h2 className="text-base font-black italic uppercase text-[var(--foreground)] truncate leading-tight">
                         {result.data?.username}
                       </h2>
                       <span className="text-[9px] font-black uppercase text-emerald-500 tracking-tighter mt-1 block">
-                        Server: {formatRegion(result.data?.region)}
+                        Region: {formatRegion(result.data?.region)}
                       </span>
                     </div>
                   </div>

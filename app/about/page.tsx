@@ -41,7 +41,7 @@ export default function AboutPage() {
           className="mb-20 text-center md:text-left"
         >
           <div className="inline-block px-4 py-1.5 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 mb-6">
-            <span className="text-[var(--accent)] text-[10px] font-black uppercase tracking-widest italic">Our Identity</span>
+            <span className="text-[var(--accent)] text-[10px] font-black uppercase tracking-widest italic">Who We Are</span>
           </div>
           <h1 className="text-5xl md:text-8xl font-[1000] italic tracking-tighter uppercase leading-[0.85] mb-6">
             ABOUT <span className="text-[var(--accent)]">{BRAND.toUpperCase()}</span>
@@ -100,17 +100,17 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                title: "Velocity",
+                title: "Speed",
                 icon: FiZap,
                 desc: "Credits are added to your ID quickly after payment confirmation."
               },
               {
-                title: "Fortress",
+                title: "Safety",
                 icon: FiShield,
                 desc: "Strong security and verified gateways protect every payment."
               },
               {
-                title: "Elite Rates",
+                title: "Best Prices",
                 icon: FiTrendingUp,
                 desc: "We keep prices low so you get better value for each rupee."
               }

@@ -68,7 +68,7 @@ export default function BuyPanel({
 
               <div className="flex flex-col min-w-0 text-left">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-[8px] font-black uppercase tracking-[0.1em] text-[var(--accent)] opacity-80">Selected Package</span>
+                  <span className="text-[8px] font-black uppercase tracking-[0.1em] text-[var(--accent)] opacity-80">Your Selection</span>
                 </div>
                 <h3 className="text-sm md:text-base font-black text-[var(--foreground)] tracking-tight leading-none uppercase italic truncate max-w-[150px] md:max-w-none">
                   {activeItem.itemName}
@@ -109,7 +109,7 @@ export default function BuyPanel({
                 {redirecting ? (
                   <div className="w-4 h-4 border-2 border-[var(--background)] border-t-transparent rounded-full animate-spin" />
                 ) : isUnavailable ? (
-                  <span>{gameAvailablity === false ? "Service Unavailable" : "Out of Stock"}</span>
+                  <span>{gameAvailablity === false ? "Not Available" : "Out of Stock"}</span>
                 ) : (
                   <>
                     <span>Order Now</span>

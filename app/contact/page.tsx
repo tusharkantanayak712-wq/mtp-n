@@ -56,7 +56,7 @@ export default function ContactPage() {
               transition={{ delay: 0.1 }}
               className="p-8 rounded-3xl bg-[var(--card)]/40 border border-[var(--border)] group hover:border-[var(--accent)]/30 transition-all"
             >
-              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-6">Social Network</h2>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-6">Find Us On</h2>
               <div className="flex flex-wrap gap-3">
                 {[
                   { icon: FaInstagram, link: "https://www.instagram.com/mlbbtopup.in", label: "INSTAGRAM" },
@@ -103,7 +103,7 @@ export default function ContactPage() {
           className="mt-12 flex items-center justify-center gap-3 text-[var(--muted)] opacity-30"
         >
           <FiInfo size={14} />
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] italic">Response Window: 24H</span>
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] italic">We usually reply within 24 hours</span>
         </motion.div>
 
       </div>

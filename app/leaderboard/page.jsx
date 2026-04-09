@@ -48,13 +48,13 @@ export default function LeaderboardPage() {
           >
             <h1 className="text-4xl md:text-5xl font-[900] italic tracking-tighter uppercase leading-none mb-2 transition-colors text-center md:text-left flex flex-col md:block">
               {type === "purchase" ? (
-                <>ELITE <span className="text-[var(--accent)]">SPENDORS</span></>
+                <>TOP <span className="text-[var(--accent)]">SPENDERS</span></>
               ) : (
-                <>TOP <span className="text-[var(--accent)]">RECRUITERS</span></>
+                <>TOP <span className="text-[var(--accent)]">INVITERS</span></>
               )}
             </h1>
             <p className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic text-center md:text-left">
-              The Legend Board
+              Leaderboard
             </p>
           </motion.div>
 
@@ -111,7 +111,7 @@ export default function LeaderboardPage() {
                 className="flex flex-col items-center justify-center py-24"
               >
                 <div className="w-8 h-8 border-2 border-[var(--border)] border-t-[var(--accent)] rounded-full animate-spin mb-4" />
-                <span className="text-[9px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40 italic">Syncing Data...</span>
+                <span className="text-[9px] font-black tracking-widest text-[var(--muted)] uppercase opacity-40 italic">Loading...</span>
               </motion.div>
             ) : data.length === 0 ? (
               <motion.div
@@ -120,7 +120,7 @@ export default function LeaderboardPage() {
                 exit={{ opacity: 0 }}
                 className="text-center py-24 text-[var(--muted)] font-black uppercase tracking-[0.3em] text-[11px] italic opacity-20 transition-opacity"
               >
-                The Throne is Empty
+                No one here yet
               </motion.div>
             ) : (
               <motion.div
@@ -162,7 +162,7 @@ export default function LeaderboardPage() {
                       </p>
                       <div className="flex items-center gap-2 text-[9px] font-bold text-[var(--muted)] opacity-40 uppercase tracking-tighter">
                         <span>UID {item.user?.userId || "—"}</span>
-                        {index === 0 && <span className="text-[var(--accent)] opacity-100 font-black tracking-widest ml-1">#1 CHAMPION</span>}
+                        {index === 0 && <span className="text-[var(--accent)] opacity-100 font-black tracking-widest ml-1">#1 TOP</span>}
                       </div>
                     </div>
 
