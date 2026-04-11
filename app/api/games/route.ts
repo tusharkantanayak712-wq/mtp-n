@@ -187,7 +187,9 @@ export async function GET() {
       "wuthering-of-waves464",
       "where-winds-meet280",
       "mlbb-smallphp980",
-      "weeklymonthly-bundle931"
+      "weeklymonthly-bundle931",
+      "asphalt9877",
+      "8ballpool498"
     ];
 
     const filteredGames =

@@ -530,6 +530,20 @@ export async function GET(req, { params }) {
       ];
     }
 
+    if (slug.includes("asphalt")) {
+      data.data.inputFieldOne = "Player ID";
+      data.data.inputFieldTwo = "Platform";
+      data.data.inputFieldTwoOptions = [
+        { label: "iOS", value: "ios" },
+        { label: "Android", value: "android" },
+        { label: "Windows", value: "windows" },
+      ];
+    }
+
+    if (slug.includes("8ballpool")) {
+      data.data.inputFieldOne = "Player ID";
+    }
+
     // Final sort to keep UI clean
     data.data.itemId.sort((a, b) => a.sellingPrice - b.sellingPrice);
 
