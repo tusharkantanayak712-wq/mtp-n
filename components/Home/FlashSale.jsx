@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FiZap, FiClock, FiChevronRight } from "react-icons/fi";
@@ -93,7 +92,7 @@ export default function FlashSale() {
                     </div>
 
                     <div className="flex items-center gap-2 bg-[var(--foreground)]/[0.03] backdrop-blur-md border border-[var(--border)] px-3 py-1 rounded-xl">
-                        <FiClock className="text-amber-500 animate-pulse hidden sm:block" size={10} />
+                        <FiClock className="text-amber-500 hidden sm:block" size={10} />
                         <div className="flex items-center gap-2 font-bold text-[10px] tabular-nums text-amber-500">
                             <span className="opacity-60 text-[8px] uppercase tracking-widest text-[var(--foreground)] mr-1 hidden md:block">Ends In</span>
                             <span>{String(timeLeft.hours).padStart(2, '0')}</span>
@@ -109,17 +108,13 @@ export default function FlashSale() {
                 <div className="overflow-x-auto pb-2 custom-scrollbar-premium snap-x snap-mandatory">
                     <div className="flex gap-3 md:gap-4 px-1 md:justify-center min-w-max md:min-w-0">
                         {flashSaleData.map((item, index) => (
-                            <motion.div
+                            <div
                                 key={item.id}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.4, delay: index * 0.05 }}
-                                viewport={{ once: true }}
                                 className="snap-start"
                             >
                                 <Link
                                     href={`/games/${item.slug}`}
-                                    className="group relative block w-[125px] sm:w-[150px] md:w-[200px] bg-[var(--card)]/40 backdrop-blur-lg border border-[var(--border)] rounded-[1rem] p-1.5 transition-all duration-500 hover:border-amber-500/30 hover:bg-amber-500/[0.04] shadow-lg"
+                                    className="group relative block w-[125px] sm:w-[150px] md:w-[200px] bg-[var(--card)]/40 backdrop-blur-lg border border-[var(--border)] rounded-[1rem] p-1.5 shadow-lg"
                                 >
                                     {/* Badge */}
                                     <div className="absolute top-3 left-3 z-20">
@@ -134,15 +129,15 @@ export default function FlashSale() {
                                             src={item.image}
                                             alt={item.name}
                                             fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            className="object-cover"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 transition-opacity group-hover:opacity-60" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 group-hover:opacity-60" />
                                     </div>
 
                                     {/* Compact Info */}
                                     <div className="space-y-0.5">
                                         <p className="text-[7px] md:text-[9px] font-bold text-amber-500/80 uppercase tracking-widest truncate">{item.game}</p>
-                                        <h3 className="text-[11px] md:text-[14px] font-black uppercase tracking-tight text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
+                                        <h3 className="text-[11px] md:text-[14px] font-black uppercase tracking-tight text-[var(--foreground)] truncate group-hover:text-amber-500">
                                             {item.name}
                                         </h3>
 
@@ -156,7 +151,7 @@ export default function FlashSale() {
                                         </div>
                                     </div>
                                 </Link>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
                 </div>

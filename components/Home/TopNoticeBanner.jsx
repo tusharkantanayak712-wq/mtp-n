@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { FiX, FiArrowRight, FiZap, FiActivity } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
 
 const STORAGE_KEY = "hide_whatsapp_banner";
 const ROTATE_INTERVAL = 4500;
@@ -65,12 +64,7 @@ export default function TopNoticeBanner() {
   const banner = BANNERS[index];
 
   return (
-    <motion.div
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-      className="relative z-30 overflow-hidden"
-    >
+    <div className="relative z-30 overflow-hidden h-auto opacity-100">
       <div
         onClick={() => window.open(banner.link, "_blank")}
         className="
@@ -100,10 +94,8 @@ export default function TopNoticeBanner() {
           <div className="flex items-center gap-3 min-w-0">
             {/* WHATSAPP ICON ORB */}
             <div className="relative shrink-0 flex items-center justify-center">
-              <motion.div
-                animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 blur-lg rounded-full"
+              <div
+                className="absolute inset-0 blur-lg rounded-full opacity-20"
                 style={{ backgroundColor: banner.color }}
               />
 
@@ -118,58 +110,45 @@ export default function TopNoticeBanner() {
             </div>
 
             <div className="min-w-0">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={banner.id}
-                  initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <div className="flex items-center gap-1.5">
-                    {/* TITLE - NOW USING THEME COLOR (Visible in all themes) */}
-                    <p className="font-black text-[9px] sm:text-xs uppercase italic tracking-tight truncate text-[var(--foreground)]">
-                      {banner.title}
-                    </p>
-                    <FiArrowRight
-                      className="size-2.5 shrink-0 group-hover:translate-x-1 transition-transform"
-                      style={{ color: banner.color }}
-                    />
-                  </div>
-                  <p className="text-[8px] sm:text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider truncate">
-                    {banner.subtitle}
+              <div key={banner.id}>
+                <div className="flex items-center gap-1.5">
+                  {/* TITLE - NOW USING THEME COLOR (Visible in all themes) */}
+                  <p className="font-black text-[9px] sm:text-xs uppercase italic tracking-tight truncate text-[var(--foreground)]">
+                    {banner.title}
                   </p>
-                </motion.div>
-              </AnimatePresence>
+                  <FiArrowRight
+                    className="size-2.5 shrink-0 group-hover:translate-x-1"
+                    style={{ color: banner.color }}
+                  />
+                </div>
+                <p className="text-[8px] sm:text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider truncate">
+                  {banner.subtitle}
+                </p>
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             {/* GRADIENT BADGE */}
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={banner.id + "-badge"}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="
-                  flex items-center gap-1
-                  text-[8px] sm:text-[9px] font-black uppercase tracking-widest
-                  px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border
-                  shadow-[0_2px_10px_rgba(0,0,0,0.05)]
-                  transition-all duration-500
-                "
-                style={{
-                  background: `linear-gradient(135deg, ${banner.color}15, ${banner.color}05)`,
-                  color: banner.color,
-                  borderColor: `${banner.color}35`
-                }}
-              >
-                <span className="group-hover:rotate-12 transition-transform duration-300">{banner.icon}</span>
-                <span className="hidden xs:inline-block">{banner.badge}</span>
-                <span className="xs:hidden">{banner.badge.split(' ')[0]}</span>
-              </motion.span>
-            </AnimatePresence>
+            <span
+              key={banner.id + "-badge"}
+              className="
+                flex items-center gap-1
+                text-[8px] sm:text-[9px] font-black uppercase tracking-widest
+                px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border
+                shadow-[0_2px_10px_rgba(0,0,0,0.05)]
+                transition-all duration-500
+              "
+              style={{
+                background: `linear-gradient(135deg, ${banner.color}15, ${banner.color}05)`,
+                color: banner.color,
+                borderColor: `${banner.color}35`
+              }}
+            >
+              <span>{banner.icon}</span>
+              <span className="hidden xs:inline-block">{banner.badge}</span>
+              <span className="xs:hidden">{banner.badge.split(' ')[0]}</span>
+            </span>
 
             <button
               onClick={(e) => {
@@ -190,6 +169,6 @@ export default function TopNoticeBanner() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

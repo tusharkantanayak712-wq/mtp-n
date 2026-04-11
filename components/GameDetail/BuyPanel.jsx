@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { FiArrowRight, FiShield, FiLock, FiCheck } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
+import { FiArrowRight, FiShield } from "react-icons/fi";
 
 export default function BuyPanel({
   activeItem,
@@ -27,19 +26,13 @@ export default function BuyPanel({
   const isUnavailable = gameAvailablity === false || activeItem.itemAvailablity === false;
 
   return (
-    <motion.div
+    <div
       ref={buyPanelRef}
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
       className="relative w-full max-w-4xl mx-auto px-4 mt-8 mb-6 md:static md:p-0"
     >
       <div className="relative group p-[1px] rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/5 overflow-hidden">
-        {/* Animated Border/Glow Effect */}
-        <motion.div
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_150deg,var(--accent)_180deg,transparent_210deg,transparent_360deg)] opacity-10 group-hover:opacity-20 transition-opacity duration-1000"
-        />
+        {/* Static Background Border Subtle Effect */}
+        <div className="absolute inset-[-100%] bg-white/5 group-hover:opacity-10 pointer-events-none" />
 
         {/* Main Premium Card */}
         <div className="relative bg-[var(--card)]/80 backdrop-blur-3xl rounded-[15px] p-3 md:p-4 overflow-hidden border border-[var(--border)]">
@@ -99,7 +92,7 @@ export default function BuyPanel({
                 onClick={() => goBuy(activeItem)}
                 disabled={redirecting || isUnavailable}
                 className={`
-                  relative group/btn h-11 md:h-12 px-6 rounded-xl overflow-hidden flex items-center justify-center gap-2 transition-all duration-500 active:scale-95
+                  relative group/btn h-11 md:h-12 px-6 rounded-xl overflow-hidden flex items-center justify-center gap-2
                   ${redirecting || isUnavailable
                     ? 'bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed border border-white/5'
                     : 'bg-[var(--foreground)] text-[var(--background)] font-[1000] uppercase tracking-tighter text-xs'
@@ -116,20 +109,12 @@ export default function BuyPanel({
                     <FiArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                   </>
                 )}
-
-                {!redirecting && (
-                  <motion.div
-                    animate={{ x: ["-100%", "300%"] }}
-                    transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-                    className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-[var(--foreground)]/10 to-transparent skew-x-[-30deg]"
-                  />
-                )}
               </button>
             </div>
 
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

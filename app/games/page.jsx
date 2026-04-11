@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { FiFilter, FiX, FiSearch, FiGrid, FiList, FiTrendingUp, FiZap, FiPackage, FiTv } from "react-icons/fi";
 
 import GameGrid from "@/components/Games/GameGrid";
@@ -160,7 +159,7 @@ export default function GamesPage() {
   const TabButton = ({ id, label, icon: Icon }) => (
     <button
       onClick={() => setActiveTab(id)}
-      className={`flex-1 flex items-center justify-center gap-1.5 px-1.5 py-2 rounded-lg font-black uppercase tracking-tight text-[8px] sm:text-[9px] italic transition-all duration-300 border
+      className={`flex-1 flex items-center justify-center gap-1.5 px-1.5 py-2 rounded-lg font-black uppercase tracking-tight text-[8px] sm:text-[9px] italic border
         ${activeTab === id
           ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/40 shadow-[0_0_10px_rgba(var(--accent-rgb),0.1)]"
           : "bg-[var(--foreground)]/5 text-[var(--muted)] border-[var(--border)] hover:bg-[var(--foreground)]/10"
@@ -180,29 +179,24 @@ export default function GamesPage() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* ================= COMPACT SEARCH & CONTROLS ================= */}
         <div className="space-y-4 mb-16">
-          <div className="bg-[var(--card)]/90 backdrop-blur-3xl border border-[var(--border)] rounded-[1.8rem] p-1.5 sm:p-2 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center gap-2 transition-all">
+          <div className="bg-[var(--card)]/90 backdrop-blur-3xl border border-[var(--border)] rounded-[1.8rem] p-1.5 sm:p-2 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center gap-2">
             {/* SEARCH */}
             <div className="relative flex-1 group/search">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within/search:text-[var(--accent)] transition-colors" size={15} />
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within/search:text-[var(--accent)]" size={15} />
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full pl-11 pr-10 py-3 rounded-[1.2rem] bg-[var(--background)] border border-[var(--border)] focus:bg-[var(--card)] focus:border-[var(--accent)]/30 outline-none text-[10px] sm:text-xs font-black tracking-widest transition-all placeholder:text-[var(--muted)]/50 uppercase italic text-[var(--foreground)]"
+                className="w-full pl-11 pr-10 py-3 rounded-[1.2rem] bg-[var(--background)] border border-[var(--border)] focus:bg-[var(--card)] focus:border-[var(--accent)]/30 outline-none text-[10px] sm:text-xs font-black tracking-widest placeholder:text-[var(--muted)]/50 uppercase italic text-[var(--foreground)]"
               />
-              <AnimatePresence>
-                {searchQuery && (
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-red-500/10 text-red-500/60 hover:text-red-500 transition-colors"
-                  >
-                    <FiX size={14} />
-                  </motion.button>
-                )}
-              </AnimatePresence>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-red-500/10 text-red-500/60 hover:text-red-500"
+                >
+                  <FiX size={14} />
+                </button>
+              )}
             </div>
 
             {/* ACTION GRID - COMPACT */}
@@ -216,7 +210,7 @@ export default function GamesPage() {
                   <button
                     key={mode.id}
                     onClick={() => setViewMode(mode.id)}
-                    className={`p-2 rounded-lg transition-all duration-300 ${viewMode === mode.id
+                    className={`p-2 rounded-lg ${viewMode === mode.id
                       ? "bg-[var(--accent)] text-[var(--background)] shadow-lg"
                       : "text-[var(--muted)] hover:text-[var(--foreground)]"
                       }`}
@@ -229,12 +223,12 @@ export default function GamesPage() {
               {/* FILTER BUTTON */}
               <button
                 onClick={() => setShowFilter(true)}
-                className={`relative flex items-center gap-2 px-3 py-3 rounded-xl font-black uppercase tracking-tight text-[9px] italic border transition-all duration-300 ${activeFilterCount > 0
+                className={`relative flex items-center gap-2 px-3 py-3 rounded-xl font-black uppercase tracking-tight text-[9px] italic border ${activeFilterCount > 0
                   ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]"
                   : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:border-[var(--accent)]/30 hover:text-[var(--accent)]"
                   }`}
               >
-                <FiFilter size={13} className={activeFilterCount > 0 ? "animate-pulse" : ""} />
+                <FiFilter size={13} />
                 {activeFilterCount > 0 && (
                   <span className="flex h-4 w-4 items-center justify-center bg-[var(--accent)] text-black rounded-md text-[8px] font-black">
                     {activeFilterCount}
@@ -256,117 +250,93 @@ export default function GamesPage() {
 
         {/* ================= GAME CONTENT ================= */}
         <div className="space-y-20">
-          <AnimatePresence mode="wait">
-            {isEmpty ? (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="py-20 text-center"
-              >
-                <div className="w-24 h-24 bg-[var(--card)] border border-[var(--border)] rounded-full flex items-center justify-center mx-auto mb-6">
-                  <FiX size={40} className="text-[var(--muted)]/30" />
-                </div>
-                <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-2">No Games Found</h3>
-                <p className="text-[var(--muted)] text-sm mb-8">Try adjusting your search or filters to find what you're looking for.</p>
-                <button
-                  onClick={clearFilters}
-                  className="px-8 py-4 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs italic hover:scale-105 transition-transform"
-                >
-                  Reset All Filters
-                </button>
-              </motion.div>
-            ) : (
-              <div>
-                {/* 1. FEATURED */}
-                {/* {(activeTab === "all" || activeTab === "others") && (processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length > 0) && (
-                  <div className="mb-20">
-                    <SectionHeader
-                      title="Elite Picks"
-                      icon={FiTrendingUp}
-                      count={processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length}
-                      gradient="from-orange-500 to-amber-600"
-                    />
-                    {viewMode === "grid"
-                      ? <GameGrid games={processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
-                      : <GameList games={processedFeaturedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
-                    }
-                  </div>
-                )} */}
-
-                {/* 2. MLBB VARIANT */}
-                {(activeTab === "all" || activeTab === "mlbb") && processedMlbbGames.length > 0 && (
-                  <div className="mb-20">
-                    <SectionHeader
-                      title="MLBB Special"
-                      icon={FiZap}
-                      count={processedMlbbGames.length}
-                      gradient="from-blue-500 to-indigo-600"
-                    />
-                    {viewMode === "grid"
-                      ? <GameGrid games={processedMlbbGames} isOutOfStock={isOutOfStock} />
-                      : <GameList games={processedMlbbGames} isOutOfStock={isOutOfStock} />
-                    }
-                  </div>
-                )}
-
-                {/* 3. ALL GAMES */}
-                {(activeTab === "all" || activeTab === "others") && (processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length > 0) && (
-                  <div className="mb-20">
-                    <SectionHeader
-                      title="Full Armory"
-                      icon={FiPackage}
-                      count={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length}
-                      gradient="from-[var(--accent)] to-cyan-600"
-                    />
-                    {viewMode === "grid"
-                      ? <GameGrid games={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
-                      : <GameList games={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
-                    }
-                  </div>
-                )}
-
-                {/* 4. OTT SECTION */}
-                {(activeTab === "all" || activeTab === "streaming") && otts?.items?.length > 0 && !searchQuery && (
-                  <div className="mb-10 border-t border-[var(--border)] pt-10">
-                    <SectionHeader
-                      title="Streaming Assets"
-                      icon={FiTv}
-                      count={otts.items.length}
-                      gradient="from-purple-500 to-indigo-600"
-                    />
-                    <ServiceGridSection
-                      title={null}
-                      total={otts.total}
-                      items={otts.items}
-                      hrefPrefix="/games/ott"
-                    />
-                  </div>
-                )}
-
-                {/* 5. MEMBERSHIP SECTION */}
-                {(activeTab === "all" || activeTab === "memberships") && memberships?.items?.length > 0 && !searchQuery && (
-                  <div className="mb-10 border-t border-[var(--border)] pt-10">
-                    <SectionHeader
-                      title="Elite Memberships"
-                      icon={FiPackage}
-                      count={memberships.items.length}
-                      gradient="from-amber-500 to-yellow-600"
-                    />
-                    <ServiceGridSection
-                      title={null}
-                      total={memberships.total}
-                      items={memberships.items}
-                      hrefPrefix="/games/membership"
-                      showCategory={false}
-                      ctaText="Join the Elite →"
-                    />
-                  </div>
-                )}
+          {isEmpty ? (
+            <div key="empty" className="py-20 text-center">
+              <div className="w-24 h-24 bg-[var(--card)] border border-[var(--border)] rounded-full flex items-center justify-center mx-auto mb-6">
+                <FiX size={40} className="text-[var(--muted)]/30" />
               </div>
-            )}
-          </AnimatePresence>
+              <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-2">No Games Found</h3>
+              <p className="text-[var(--muted)] text-sm mb-8">Try adjusting your search or filters to find what you're looking for.</p>
+              <button
+                onClick={clearFilters}
+                className="px-8 py-4 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs italic"
+              >
+                Reset All Filters
+              </button>
+            </div>
+          ) : (
+            <div>
+              {/* 2. MLBB VARIANT */}
+              {(activeTab === "all" || activeTab === "mlbb") && processedMlbbGames.length > 0 && (
+                <div className="mb-20">
+                  <SectionHeader
+                    title="MLBB Special"
+                    icon={FiZap}
+                    count={processedMlbbGames.length}
+                    gradient="from-blue-500 to-indigo-600"
+                  />
+                  {viewMode === "grid"
+                    ? <GameGrid games={processedMlbbGames} isOutOfStock={isOutOfStock} />
+                    : <GameList games={processedMlbbGames} isOutOfStock={isOutOfStock} />
+                  }
+                </div>
+              )}
+
+              {/* 3. ALL GAMES */}
+              {(activeTab === "all" || activeTab === "others") && (processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length > 0) && (
+                <div className="mb-20">
+                  <SectionHeader
+                    title="Full Armory"
+                    icon={FiPackage}
+                    count={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length}
+                    gradient="from-[var(--accent)] to-cyan-600"
+                  />
+                  {viewMode === "grid"
+                    ? <GameGrid games={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
+                    : <GameList games={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
+                  }
+                </div>
+              )}
+
+              {/* 4. OTT SECTION */}
+              {(activeTab === "all" || activeTab === "streaming") && otts?.items?.length > 0 && !searchQuery && (
+                <div className="mb-10 border-t border-[var(--border)] pt-10">
+                  <SectionHeader
+                    title="Streaming Assets"
+                    icon={FiTv}
+                    count={otts.items.length}
+                    gradient="from-purple-500 to-indigo-600"
+                  />
+                  <ServiceGridSection
+                    title={null}
+                    total={otts.total}
+                    items={otts.items}
+                    hrefPrefix="/games/ott"
+                  />
+                </div>
+              )}
+
+              {/* 5. MEMBERSHIP SECTION */}
+              {(activeTab === "all" || activeTab === "memberships") && memberships?.items?.length > 0 && !searchQuery && (
+                <div className="mb-10 border-t border-[var(--border)] pt-10">
+                  <SectionHeader
+                    title="Elite Memberships"
+                    icon={FiPackage}
+                    count={memberships.items.length}
+                    gradient="from-amber-500 to-yellow-600"
+                  />
+                  <ServiceGridSection
+                    title={null}
+                    total={memberships.total}
+                    items={memberships.items}
+                    hrefPrefix="/games/membership"
+                    showCategory={false}
+                    ctaText="Join the Elite →"
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

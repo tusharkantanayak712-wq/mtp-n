@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
 
 import Loader from "@/components/Loader/Loader";
 import MLBBPurchaseGuide from "@/components/HelpImage/MLBBPurchaseGuide";
@@ -113,20 +112,11 @@ function GameDetailContent() {
   if (error || !game || !activeItem) {
     return (
       <section className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4 py-20">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-          className="max-w-md w-full text-center"
-        >
+        <div className="max-w-md w-full text-center">
           {/* Icon */}
           <div className="mb-8 flex justify-center">
             <div className="relative">
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 bg-[var(--accent)]/20 blur-3xl rounded-full"
-              />
+              <div className="absolute inset-0 bg-[var(--accent)]/20 blur-3xl rounded-full" />
               <svg
                 className="w-28 h-28 text-[var(--accent)]/60 relative"
                 fill="none"
@@ -154,15 +144,13 @@ function GameDetailContent() {
           </p>
 
           {/* Action Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={() => router.push("/")}
-            className="px-8 py-4 bg-gradient-to-r from-[var(--accent)] to-purple-600 hover:from-[var(--accent)] hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-[var(--accent)]/25 hover:shadow-[var(--accent)]/40"
+            className="px-8 py-4 bg-gradient-to-r from-[var(--accent)] to-purple-600 hover:from-[var(--accent)] hover:to-purple-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-[var(--accent)]/25 hover:shadow-[var(--accent)]/40"
           >
             Back to Home
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
       </section>
     );
   }
@@ -217,8 +205,6 @@ function GameDetailContent() {
               ? `/games/wwm/${slug}/buy`
               : `/games/${slug}/buy`;
 
-
-
     router.push(
       `${basePath}/${item.itemSlug}?${query.toString()}`
     );
@@ -229,20 +215,12 @@ function GameDetailContent() {
     <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 pb-10 pt-2">
       <GameSwitcher />
       {/* ================= HEADER ================= */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
+      <div>
         <GameHeader game={game} />
-      </motion.div>
+      </div>
 
       {/* ================= PACKAGE SELECTOR ================= */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
+      <div>
         {(isBGMI || isGenshin || isHOK) ? (
           <PackageSelectorBgmi
             items={visibleItems}
@@ -268,14 +246,10 @@ function GameDetailContent() {
             scrollToItem={scrollToItem}
           />
         )}
-      </motion.div>
+      </div>
 
       {/* ================= BUY PANEL ================= */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-      >
+      <div>
         {(isBGMI || isGenshin || isHOK) ? (
           <BuyPanelBgmi
             activeItem={activeItem}
@@ -295,17 +269,12 @@ function GameDetailContent() {
             buyPanelRef={buyPanelRef}
           />
         )}
-      </motion.div>
+      </div>
 
       {/* ================= PURCHASE GUIDE ================= */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.3 }}
-        className="max-w-6xl mx-auto mt-6"
-      >
+      <div className="max-w-6xl mx-auto mt-6">
         {!isBGMI && <MLBBPurchaseGuide />}
-      </motion.div>
+      </div>
     </section>
   );
 }

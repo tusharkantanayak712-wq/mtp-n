@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
 import { FiCreditCard, FiSmartphone, FiUser, FiInfo, FiCheck, FiShield } from "react-icons/fi";
-import { motion } from "framer-motion";
 
 export default function ReviewAndPaymentStep({
   game,
@@ -113,11 +112,7 @@ export default function ReviewAndPaymentStep({
     <div className="space-y-6">
       {/* STEP 2: REVIEW & PAY */}
       {step === 2 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
-        >
+        <div className="space-y-6">
           {/* USER & ACCOUNT DETAILS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group">
@@ -250,16 +245,12 @@ export default function ReviewAndPaymentStep({
               ) : "Pay Now"}
             </button>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* STEP 3: QR CODE DISPLAY */}
       {step === 3 && paymentMethod === "upi" && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-8 text-center"
-        >
+        <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-8 text-center">
           <div className="w-16 h-16 bg-[var(--accent)]/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <FiSmartphone className="text-3xl text-[var(--accent)]" />
           </div>
@@ -270,7 +261,7 @@ export default function ReviewAndPaymentStep({
             {upiQR ? (
               <Image src={upiQR} alt="UPI QR" width={250} height={250} className="w-full h-full object-contain" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-black/50 text-sm font-bold animate-pulse">
+              <div className="w-full h-full flex items-center justify-center text-black/50 text-sm font-bold">
                 Loading QR code...
               </div>
             )}
@@ -278,11 +269,11 @@ export default function ReviewAndPaymentStep({
 
           <button
             onClick={onPaymentComplete}
-            className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-[900] uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] transition-all"
+            className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-[900] uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
           >
             I've Paid
           </button>
-        </motion.div>
+        </div>
       )}
     </div>
   );

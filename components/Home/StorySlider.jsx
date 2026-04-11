@@ -1,18 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
 const storyData = [
-  {
-    id: 5,
-    title: "BGMI",
-    badge: "Sale",
-    color: "#f59e0b", // Orange
-    image: "/game-assets/bgmi-logo.webp",
-    link: "/games/bgmi-manual",
-  },
+  // {
+  //   id: 5,
+  //   title: "BGMI",
+  //   badge: "Sale",
+  //   color: "#f59e0b", // Orange
+  //   image: "/game-assets/bgmi-logo.webp",
+  //   link: "/games/bgmi-manual",
+  // },
   {
     id: 0,
     title: "Weekly Pass",
@@ -76,11 +75,9 @@ export default function StorySlider() {
     <section className="relative py-4 px-4">
       <div className="flex md:justify-center gap-3 md:gap-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory relative z-10">
         {storyData.map((item, index) => (
-          <motion.div
+          <div
             key={item.id}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
+            className="opacity-100 translate-y-0"
           >
             <Link
               href={item.link}
@@ -129,7 +126,7 @@ export default function StorySlider() {
                 {item.title}
               </span>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>
