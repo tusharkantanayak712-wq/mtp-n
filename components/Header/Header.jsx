@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiBell, FiUsers, FiKey, FiGift, FiSearch } from "react-icons/fi";
+import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiUsers, FiKey, FiGift, FiSearch } from "react-icons/fi";
 
 /* ================= CONFIG ================= */
 const HEADER_CONFIG = {
@@ -53,45 +53,7 @@ export default function Header() {
 
   const dropdownRef = useRef(null);
 
-  /* ================= PUSH NOTIFICATIONS ================= */
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [showSubscribeToast, setShowSubscribeToast] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // @ts-ignore
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      // @ts-ignore
-      window.OneSignalDeferred.push(async (OneSignal) => {
-        setIsSubscribed(OneSignal.Notifications.permission === "granted");
-        OneSignal.Notifications.addEventListener("permissionChange", (permission) => {
-          const granted = permission === "granted";
-          setIsSubscribed(granted);
-          if (granted) {
-            setShowSubscribeToast(true);
-            setTimeout(() => setShowSubscribeToast(false), 3000);
-          }
-        });
-      });
-    }
-  }, []);
-
-  const handlePushToggle = () => {
-    if (typeof window !== "undefined") {
-      // @ts-ignore
-      const OneSignal = window.OneSignal;
-      if (OneSignal) {
-        OneSignal.Notifications.requestPermission();
-      } else {
-        // @ts-ignore
-        const OneSignalDeferred = window.OneSignalDeferred || [];
-        // @ts-ignore
-        OneSignalDeferred.push(async (OneSignal) => {
-          await OneSignal.Notifications.requestPermission();
-        });
-      }
-    }
-  };
 
   /* ================= AUTH ================= */
   useEffect(() => {
@@ -380,19 +342,7 @@ export default function Header() {
           <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
             <ThemeToggle />
 
-            <button
-              onClick={handlePushToggle}
-              className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 group hover:scale-105 active:scale-95 ${isSubscribed ? "text-[var(--accent)]" : "text-[var(--foreground)]/60"}`}
-            >
-              <div className="w-full h-full rounded-full flex items-center justify-center bg-[var(--foreground)]/5 group-hover:bg-[var(--foreground)]/10 transition-colors">
-                <div className="animate-pulse">
-                  <FiBell className="text-lg" />
-                </div>
-              </div>
-              {isSubscribed && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-[var(--accent)] rounded-full border-2 border-[var(--background)] shadow-[0_0_10px_rgba(var(--accent-rgb),0.5)]" />
-              )}
-            </button>
+
 
             <button
               onClick={() => user ? setUserMenuOpen((p) => !p) : window.location.href = "/login"}
