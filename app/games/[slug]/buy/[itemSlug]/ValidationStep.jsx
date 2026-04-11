@@ -1,4 +1,4 @@
-import { FiUser, FiGlobe, FiInfo, FiCheckCircle } from "react-icons/fi";
+import { FiUser, FiGlobe, FiInfo, FiCheckCircle, FiChevronDown } from "react-icons/fi";
 import HelpImagePopup from "../../../../../components/HelpImage/HelpImagePopup";
 import RecentVerifiedPlayers from "../../../../region/RecentVerifiedPlayers";
 
@@ -43,7 +43,7 @@ export default function ValidationStep({
       </div>
 
       {/* Input Group */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className={`grid gap-3 ${game?.inputFieldTwo ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
         <div className="space-y-1.5">
           <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] ml-1 opacity-60">{fieldOneLabel}</label>
           <div className="relative group">
@@ -65,26 +65,53 @@ export default function ValidationStep({
           </div>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] ml-1 opacity-60">{fieldTwoLabel}</label>
-          <div className="relative group">
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)]">
-              <FiGlobe className="text-lg" />
+        {game?.inputFieldTwo && (
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] ml-1 opacity-60">{fieldTwoLabel}</label>
+            <div className="relative group">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] z-10 pointer-events-none">
+                <FiGlobe className="text-lg" />
+              </div>
+              
+              {game?.inputFieldTwoOptions?.length > 0 ? (
+                <>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none z-10">
+                    <FiChevronDown className="text-lg group-hover:translate-y-0.5 transition-transform" />
+                  </div>
+                  <select
+                    value={zoneId}
+                    onChange={(e) => {
+                      setZoneId(e.target.value);
+                      if (error && setError) setError("");
+                    }}
+                    disabled={loading}
+                    className="w-full pl-11 pr-10 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 text-sm text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 outline-none transition-all duration-300 font-bold appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled className="bg-[var(--card)]">Select {fieldTwoLabel}</option>
+                    {game.inputFieldTwoOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value} className="bg-[var(--card)] text-white font-medium">
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              ) : (
+                <input
+                  value={zoneId}
+                  onChange={(e) => {
+                    setZoneId(e.target.value);
+                    if (error && setError) setError("");
+                  }}
+                  placeholder={`Enter ${fieldTwoLabel}`}
+                  className={`w-full pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border text-sm text-[var(--foreground)] placeholder-[var(--muted)]/40 focus:ring-2 focus:ring-[var(--accent)]/10 outline-none font-bold
+                    ${error ? "border-red-500/30 focus:border-red-500" : "border-white/5 focus:border-[var(--accent)]"}
+                  `}
+                  disabled={loading}
+                />
+              )}
             </div>
-            <input
-              value={zoneId}
-              onChange={(e) => {
-                setZoneId(e.target.value);
-                if (error && setError) setError("");
-              }}
-              placeholder={`Enter ${fieldTwoLabel}`}
-              className={`w-full pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border text-sm text-[var(--foreground)] placeholder-[var(--muted)]/40 focus:ring-2 focus:ring-[var(--accent)]/10 outline-none font-bold
-                ${error ? "border-red-500/30 focus:border-red-500" : "border-white/5 focus:border-[var(--accent)]"}
-              `}
-              disabled={loading}
-            />
           </div>
-        </div>
+        )}
       </div>
 
       {/* Action Button */}

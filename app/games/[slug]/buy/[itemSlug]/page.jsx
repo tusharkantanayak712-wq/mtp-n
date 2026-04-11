@@ -90,11 +90,37 @@ function BuyFlowContent() {
       });
   }, [slug, itemSlug]);
 
+  /* ================= LABELS ================= */
+  const fieldOneLabel = game?.inputFieldOne || "Player ID";
+  const fieldTwoLabel = game?.inputFieldTwo || "Zone ID";
+
+  // Provide fallback options for known games (if missing from API)
+  const gameWithOptions = {
+    ...game,
+    inputFieldTwoOptions: game?.inputFieldTwoOptions?.length > 0
+      ? game.inputFieldTwoOptions
+      : (slug?.includes("genshin-impact")
+        ? [
+          { label: "America", value: "america" },
+          { label: "Asia", value: "asia" },
+          { label: "Europe", value: "europe" },
+          { label: "TW_HK_MO", value: "tw_hk_mo" },
+        ]
+        : slug?.includes("wuthering-of-waves")
+          ? [
+            { label: "America", value: "america" },
+            { label: "Asia", value: "asia" },
+            { label: "Europe", value: "europe" },
+            { label: "SEA", value: "sea" },
+          ]
+          : [])
+  };
+
   /* ================= VALIDATION ================= */
   const handleValidate = async () => {
     setError(""); // reset error
-    if (!playerId || !zoneId) {
-      setError("Please enter your Player ID and Zone ID");
+    if (!playerId || (gameWithOptions?.inputFieldTwo && !zoneId)) {
+      setError(`Please enter your ${fieldOneLabel}${gameWithOptions?.inputFieldTwo ? ` and ${fieldTwoLabel}` : ""}`);
       return;
     }
 
@@ -102,8 +128,8 @@ function BuyFlowContent() {
 
     if (game?.isValidationRequired === false) {
       setReviewData({
-        userName: slug === 'bgmi-manual' ? "BGMI Player" : "Manual Order",
-        region: slug === 'bgmi-manual' ? "India" : "Manual",
+        userName: game?.gameName || "Player",
+        region: "Global",
         playerId,
         zoneId,
       });
@@ -193,12 +219,12 @@ function BuyFlowContent() {
 
   return (
     <AuthGuard>
-      <section className="min-h-screen px-4 pt-2 pb-12 md:pt-4 md:pb-16 bg-gradient-to-b from-[var(--background)] to-[var(--card)]/20">
-        <div className="max-w-4xl mx-auto">
+      <section className="min-h-screen px-2 sm:px-4 pt-2 pb-12 md:pt-4 md:pb-16 bg-gradient-to-b from-[var(--background)] to-[var(--card)]/20">
+        <div className="max-w-5xl mx-auto">
 
           {/* ================= HEADER & PROGRESS ================= */}
-          <div className="mb-4 relative">
-            <div className="max-w-md mx-auto px-6">
+          <div className="mb-6 relative">
+            <div className="max-w-md mx-auto px-6 sm:px-12">
               <div className="flex items-center justify-between relative text-center">
                 {/* Progress Line Background */}
                 <div className="absolute top-[20px] left-0 w-full h-[1.5px] bg-[var(--border)]/10 -z-10" />
@@ -232,11 +258,11 @@ function BuyFlowContent() {
                         <div className={`
                             w-10 h-10 rounded-full border flex items-center justify-center relative z-10 backdrop-blur-md
                             ${isCompleted
-                              ? "bg-[var(--accent)] text-[var(--background)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)] border-[var(--accent)]"
-                              : isActive
-                                ? "bg-[var(--foreground)] text-[var(--background)] shadow-xl border-[var(--foreground)]/20"
-                                : "bg-[var(--foreground)]/[0.03] text-[var(--muted)] border-[var(--foreground)]/5"
-                            }
+                            ? "bg-[var(--accent)] text-[var(--background)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)] border-[var(--accent)]"
+                            : isActive
+                              ? "bg-[var(--foreground)] text-[var(--background)] shadow-xl border-[var(--foreground)]/20"
+                              : "bg-[var(--foreground)]/[0.03] text-[var(--muted)] border-[var(--foreground)]/5"
+                          }
                           `}
                         >
                           {isCompleted ? (
@@ -247,8 +273,8 @@ function BuyFlowContent() {
                         </div>
                       </div>
 
-                      <span className={`text-[8px] font-black uppercase tracking-[0.2em] ${isActive || isCompleted ? "text-[var(--foreground)] opacity-100" : "text-[var(--muted)] opacity-20"}`}>
-                        {s.label}
+                      <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${isActive || isCompleted ? "text-[var(--foreground)] opacity-100" : "text-[var(--muted)] opacity-20"}`}>
+                        {s.id}. {s.label}
                       </span>
                     </div>
                   );
@@ -285,7 +311,7 @@ function BuyFlowContent() {
                           What You're Buying
                         </h3>
                       </div>
-                      <h4 className="font-[900] text-[13px] leading-tight uppercase tracking-tight truncate text-[var(--foreground)]/90 mb-1">{item?.itemName || fallbackName}</h4>
+                      <h4 className="font-[900] text-[13px] leading-tight uppercase tracking-tight text-[var(--foreground)]/90 mb-1">{item?.itemName || fallbackName}</h4>
 
                       <div className="flex items-end gap-2">
                         <span className="text-lg font-[900] text-[var(--accent)] leading-none">₹{totalPrice}</span>
@@ -321,10 +347,10 @@ function BuyFlowContent() {
                 </div>
               ) : (
                 step === 1 ? (
-                  <div className="bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)] rounded-[2rem] p-5 md:p-6 shadow-xl relative overflow-hidden">
+                  <div className="bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)] rounded-[2rem] p-4 md:p-6 shadow-xl relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 rounded-full blur-3xl -z-10" />
                     <ValidationStep
-                      game={game}
+                      game={gameWithOptions}
                       playerId={playerId}
                       setPlayerId={setPlayerId}
                       zoneId={zoneId}
@@ -336,11 +362,11 @@ function BuyFlowContent() {
                     />
                   </div>
                 ) : (
-                  <div className="bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)] rounded-[2rem] p-6 md:p-8 shadow-xl relative overflow-hidden">
+                  <div className="bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)] rounded-[2rem] p-4 md:p-8 shadow-xl relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 rounded-full blur-3xl -z-10" />
                     {(step === 2 || step === 3) && reviewData && (
                       <ReviewAndPaymentStep
-                        game={game}
+                        game={gameWithOptions}
                         step={step}
                         setStep={setStep}
                         itemName={item?.itemName || fallbackName}

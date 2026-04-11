@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { FiCreditCard, FiSmartphone, FiUser, FiInfo, FiCheck, FiShield } from "react-icons/fi";
+import { FiCreditCard, FiSmartphone, FiUser, FiInfo, FiCheck, FiShield, FiArrowRight } from "react-icons/fi";
 
 export default function ReviewAndPaymentStep({
   game,
@@ -171,7 +171,7 @@ export default function ReviewAndPaymentStep({
                   if (walletBalance >= totalPrice) setPaymentMethod("wallet");
                 }}
                 disabled={walletBalance < totalPrice}
-                className={`relative p-4 rounded-xl border2 transition-all text-left group overflow-hidden
+                className={`relative p-4 rounded-xl border-2 transition-all text-left group overflow-hidden
                              ${paymentMethod === "wallet"
                     ? "bg-[var(--accent)]/10 border-[var(--accent)] ring-1 ring-[var(--accent)]"
                     : "bg-[var(--background)] border-[var(--border)] hover:border-[var(--muted)]"
@@ -180,13 +180,16 @@ export default function ReviewAndPaymentStep({
                         `}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-sm">My Wallet</span>
+                  <div className="flex items-center gap-2">
+                    <FiCreditCard className={paymentMethod === "wallet" ? "text-[var(--accent)]" : "text-[var(--muted)]"} />
+                    <span className="font-bold text-sm">My Wallet</span>
+                  </div>
                   {paymentMethod === "wallet" && <FiCheck className="text-[var(--accent)]" />}
                 </div>
-                <div className="flex items-end gap-2">
+                <div className="flex items-end gap-2 px-1">
                   <span className="text-lg font-[900]">₹{walletBalance}</span>
                   {walletBalance < totalPrice && (
-                    <span className="text-[10px] text-red-400 font-bold mb-1">Not enough balance</span>
+                    <span className="text-[10px] text-red-400 font-bold mb-1 italic">Low balance</span>
                   )}
                 </div>
               </button>
@@ -194,7 +197,7 @@ export default function ReviewAndPaymentStep({
               {/* UPI Option */}
               <button
                 onClick={handleUPI}
-                className={`relative p-4 rounded-xl border transition-all text-left group overflow-hidden
+                className={`relative p-4 rounded-xl border-2 transition-all text-left group overflow-hidden
                              ${paymentMethod === "upi"
                     ? "bg-[var(--accent)]/10 border-[var(--accent)] ring-1 ring-[var(--accent)]"
                     : "bg-[var(--background)] border-[var(--border)] hover:border-[var(--muted)]"
@@ -202,11 +205,14 @@ export default function ReviewAndPaymentStep({
                         `}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-sm">Pay with UPI</span>
+                  <div className="flex items-center gap-2">
+                    <FiSmartphone className={paymentMethod === "upi" ? "text-[var(--accent)]" : "text-[var(--muted)]"} />
+                    <span className="font-bold text-sm">Pay with UPI</span>
+                  </div>
                   {paymentMethod === "upi" && <FiCheck className="text-[var(--accent)]" />}
                 </div>
-                <div className="flex items-end gap-2">
-                  <span className="text-xs text-[var(--muted)] font-medium">Fast &amp; Easy</span>
+                <div className="flex items-end gap-2 px-1">
+                  <span className="text-xs text-[var(--muted)] font-bold uppercase tracking-widest opacity-60">Fast & Safe</span>
                 </div>
               </button>
             </div>
@@ -242,7 +248,12 @@ export default function ReviewAndPaymentStep({
                   <span className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                   Processing...
                 </span>
-              ) : "Pay Now"}
+              ) : (
+                <span className="flex items-center justify-center gap-2 group">
+                  Pay Now
+                  <FiArrowRight className="text-lg group-hover:translate-x-1 transition-transform" />
+                </span>
+              )}
             </button>
           </div>
         </div>

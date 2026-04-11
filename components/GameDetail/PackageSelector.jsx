@@ -19,12 +19,12 @@ export default function PackageSelector({
       {/* ================= HEADER & VIEW TOGGLE ================= */}
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-[950] tracking-tighter text-[var(--foreground)] lowercase">
-            pick a <span className="text-[var(--accent)] drop-shadow-[0_0_10px_rgba(var(--accent-rgb),0.3)]">pack</span>
+          <h2 className="text-xl font-[1000] tracking-tighter text-[var(--foreground)] uppercase italic">
+            Pick <span className="text-[var(--accent)] drop-shadow-[0_0_10px_rgba(var(--accent-rgb),0.3)]">Your Pack</span>
           </h2>
-          <span className="hidden sm:block w-4 h-[1px] bg-[var(--border)]" />
-          <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/50">
-            {items.length} packs available
+          <span className="hidden sm:block w-4 h-[1px] bg-[var(--border)] opacity-20" />
+          <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40">
+            {items.length} items available
           </p>
         </div>
 

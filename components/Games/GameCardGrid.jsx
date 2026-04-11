@@ -76,13 +76,13 @@ export default function GameCardGrid({ game, isOutOfStock, index = 0 }) {
         <div className="p-2 sm:p-2.5 relative">
           <div className="flex items-center justify-between gap-1.5">
             <h3
-              className={`text-[10px] sm:text-xs font-black uppercase tracking-tight leading-tight line-clamp-2
+              className={`text-[10px] sm:text-xs font-black uppercase tracking-tight leading-tight
               ${disabled ? "text-[var(--muted)]" : "text-[var(--foreground)] group-hover:text-[var(--accent)]"}`}
             >
               {game.gameName}
             </h3>
             {!disabled && (
-              <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)]" size={12} />
+              <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] shrink-0 transition-transform group-hover:translate-x-0.5" size={12} />
             )}
           </div>
         </div>

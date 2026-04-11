@@ -11,8 +11,6 @@ import GameSwitcher from "@/components/GameDetail/GameSwitcher";
 import GameHeader from "@/components/GameDetail/GameHeader";
 import PackageSelector from "@/components/GameDetail/PackageSelector";
 import BuyPanel from "@/components/GameDetail/BuyPanel";
-import PackageSelectorBgmi from "@/components/GameDetail/PackageSelectorBgmi";
-import BuyPanelBgmi from "@/components/GameDetail/BuyPanelBgmi";
 
 import { Suspense } from "react";
 
@@ -193,17 +191,7 @@ function GameDetailContent() {
       dummy: item.dummyPrice?.toString() || "",
       image: item.itemImageId?.image || "",
     });
-    const basePath = isBGMI
-      ? `/games/pubg/${slug}/buy`
-      : isGenshin
-        ? `/games/gensin/${slug}/buy`
-        : isHOK
-          ? `/games/hok/${slug}/buy`
-          : isWuwa
-            ? `/games/wwow/${slug}/buy`
-            : isWWM
-              ? `/games/wwm/${slug}/buy`
-              : `/games/${slug}/buy`;
+    const basePath = `/games/${slug}/buy`;
 
     router.push(
       `${basePath}/${item.itemSlug}?${query.toString()}`
@@ -221,54 +209,29 @@ function GameDetailContent() {
 
       {/* ================= PACKAGE SELECTOR ================= */}
       <div>
-        {(isBGMI || isGenshin || isHOK) ? (
-          <PackageSelectorBgmi
-            items={visibleItems}
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            sliderRef={sliderRef}
-            buyPanelRef={buyPanelRef}
-            calculateDiscount={calculateDiscount}
-            scrollToItem={scrollToItem}
-          />
-        ) : (
-          <PackageSelector
-            items={visibleItems}
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            sliderRef={sliderRef}
-            buyPanelRef={buyPanelRef}
-            calculateDiscount={calculateDiscount}
-            scrollToItem={scrollToItem}
-          />
-        )}
+        <PackageSelector
+          items={visibleItems}
+          activeItem={activeItem}
+          setActiveItem={setActiveItem}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          sliderRef={sliderRef}
+          buyPanelRef={buyPanelRef}
+          calculateDiscount={calculateDiscount}
+          scrollToItem={scrollToItem}
+        />
       </div>
 
       {/* ================= BUY PANEL ================= */}
       <div>
-        {(isBGMI || isGenshin || isHOK) ? (
-          <BuyPanelBgmi
-            activeItem={activeItem}
-            gameAvailablity={game.gameAvailablity}
-            redirecting={redirecting}
-            goBuy={goBuy}
-            calculateDiscount={calculateDiscount}
-            buyPanelRef={buyPanelRef}
-          />
-        ) : (
-          <BuyPanel
-            activeItem={activeItem}
-            gameAvailablity={game.gameAvailablity}
-            redirecting={redirecting}
-            goBuy={goBuy}
-            calculateDiscount={calculateDiscount}
-            buyPanelRef={buyPanelRef}
-          />
-        )}
+        <BuyPanel
+          activeItem={activeItem}
+          gameAvailablity={game.gameAvailablity}
+          redirecting={redirecting}
+          goBuy={goBuy}
+          calculateDiscount={calculateDiscount}
+          buyPanelRef={buyPanelRef}
+        />
       </div>
 
       {/* ================= PURCHASE GUIDE ================= */}
