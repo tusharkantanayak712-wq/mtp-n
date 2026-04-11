@@ -219,7 +219,7 @@ function AuthContent() {
             className="px-6 pb-4 sm:px-8 sm:pb-4"
           >
             {/* HEADER */}
-            <div className="flex flex-col items-center text-center mb-8">
+            <div className="flex flex-col items-center text-center mb-4">
               <motion.div
                 variants={itemVariants}
                 className="relative mb-6"
@@ -308,7 +308,7 @@ function AuthContent() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         disabled={showOtpField}
-                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-5 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
+                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-3.5 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
                       />
                       {showOtpField && (
                         <button
@@ -362,17 +362,23 @@ function AuthContent() {
                     </AnimatePresence>
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
-                  >
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest py-3.5 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
+                    >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite]" />
                     {loading ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        <span className="relative z-10">{showOtpField ? "Verify & Login" : "Send Code to Email"}</span>
+                        <span className="relative z-10 flex items-center gap-2">
+                          {showOtpField ? (
+                            <>Verify & Login <FiCheckCircle className="text-lg" /></>
+                          ) : (
+                            <>Send Code to Email <FiZap className="text-lg" /></>
+                          )}
+                        </span>
                       </>
                     )}
                   </button>
