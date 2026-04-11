@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones } from "react-icons/fi";
 
 
@@ -80,7 +79,7 @@ const BottomNav = () => {
                         >
                             {/* Animated indicator pill */}
                             {isActive && (
-                                <motion.div layoutId="nav-pill" className="absolute inset-0 bg-[var(--foreground)]/5 border border-[var(--border)]/40 rounded-xl pointer-events-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]" />
+                                <div className="absolute inset-0 bg-[var(--foreground)]/5 border border-[var(--border)]/40 rounded-xl pointer-events-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]" />
                             )}
 
                             <div className="flex flex-col items-center gap-[2px] z-10 w-full mt-0.5">

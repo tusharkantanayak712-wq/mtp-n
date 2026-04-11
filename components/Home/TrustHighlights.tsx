@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   FiZap,
   FiShield,
@@ -65,14 +64,9 @@ export default function TrustHighlights() {
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
           {HIGHLIGHTS.map((item, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              whileHover={{ y: -2 }}
-              className="group relative p-2 sm:p-2.5 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all duration-300"
+              className="group relative p-2 sm:p-2.5 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all duration-300 hover:-translate-y-0.5"
             >
               <div className="flex flex-col items-center text-center space-y-1">
                 {/* ICON TAG */}
@@ -98,7 +92,7 @@ export default function TrustHighlights() {
 
               {/* SIDE GLOW ON HOVER */}
               <div className="absolute inset-x-4 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

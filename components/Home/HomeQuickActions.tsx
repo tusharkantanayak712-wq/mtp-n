@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Globe,
@@ -10,10 +9,8 @@ import {
   BookOpen,
   Trophy,
   Crown,
-  Flower2,
   Inbox,
   LifeBuoy,
-  Heart,
   Wallet,
   Users
 } from "lucide-react";
@@ -35,14 +32,6 @@ const bottomRow = [
   { title: "Silver", href: "/games/membership/silver-membership", icon: Crown, color: "#94a3b8" },
   { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },
   { title: "Referral", href: "/dashboard/referral", icon: Users, color: "#ec4899" },
-  // {
-  //   title: "Valentine",
-  //   icon: Heart,
-  //   href: "/special-leaderboard",
-  //   isColorful: true,
-  //   color: "#ff2e63",
-  //   accent: "from-rose-500 to-pink-500"
-  // },
 ];
 
 /* ===================== COMPONENT ===================== */
@@ -63,21 +52,12 @@ export default function HomeQuickActions() {
     return item.href;
   };
 
-  const ActionCard = ({ item, index, delayBase }: any) => {
+  const ActionCard = ({ item }: any) => {
     const Icon = item.icon;
     const isColorful = item.isColorful;
 
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.5,
-          delay: delayBase + index * 0.04,
-          ease: [0.16, 1, 0.3, 1]
-        }}
-        className="flex-1"
-      >
+      <div className="flex-1 opacity-100 translate-y-0">
         <Link
           href={getTargetHref(item)}
           className="group relative flex flex-col items-center justify-center py-1.5 px-0.5"
@@ -85,19 +65,11 @@ export default function HomeQuickActions() {
           {/* Enhanced Icon Section */}
           <div className="relative flex items-center justify-center p-1.5 rounded-xl transition-all duration-500">
 
-            {/* VALENTINE SPECIAL HIGHLIGHT */}
+            {/* VALENTINE SPECIAL HIGHLIGHT (Static version) */}
             {isColorful && (
               <>
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.2, 0.4] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 bg-rose-500/20 blur-xl rounded-full"
-                />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  className="absolute -inset-1 border border-dashed border-rose-500/30 rounded-xl"
-                />
+                <div className="absolute inset-0 bg-rose-500/20 blur-xl rounded-full" />
+                <div className="absolute -inset-1 border border-dashed border-rose-500/30 rounded-xl" />
               </>
             )}
 
@@ -147,7 +119,7 @@ export default function HomeQuickActions() {
             style={{ backgroundColor: isColorful ? undefined : item.color }}
           />
         </Link>
-      </motion.div>
+      </div>
     );
   };
 
@@ -157,15 +129,15 @@ export default function HomeQuickActions() {
         <div className="flex flex-col gap-0.5">
           {/* ================= TOP ROW ================= */}
           <div className="flex justify-between gap-1">
-            {topRow.map((item, index) => (
-              <ActionCard key={item.title} item={item} index={index} delayBase={0} />
+            {topRow.map((item) => (
+              <ActionCard key={item.title} item={item} />
             ))}
           </div>
 
           {/* ================= BOTTOM ROW ================= */}
           <div className="flex justify-between gap-1">
-            {bottomRow.map((item, index) => (
-              <ActionCard key={item.title} item={item} index={index} delayBase={0.1} />
+            {bottomRow.map((item) => (
+              <ActionCard key={item.title} item={item} />
             ))}
           </div>
         </div>

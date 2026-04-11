@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { FiInfo, FiCheckCircle, FiShield, FiTrendingUp } from "react-icons/fi";
 
 export default function SEOContent() {
@@ -15,11 +14,8 @@ export default function SEOContent() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Main Title Section */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-5 space-y-6"
+          <div 
+            className="lg:col-span-5 space-y-6 opacity-100 translate-x-0"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-[1px] bg-[var(--accent)]" />
@@ -44,15 +40,11 @@ export default function SEOContent() {
                 <span className="text-[9px] font-black uppercase tracking-widest italic">Fast</span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Details Grid */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6"
+          <div 
+            className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 opacity-100 translate-y-0"
           >
             {/* Box 1 */}
             <div className="p-8 rounded-[32px] glass-card premium-gradient hover:border-[var(--accent)]/30 transition-all duration-500 group">
@@ -86,20 +78,17 @@ export default function SEOContent() {
                 Our <strong className="text-[var(--foreground)]">mobile legends recharge india fast</strong> protocols ensure that <strong className="text-[var(--foreground)]">mlbb diamonds instant delivery india</strong> is not just a promise, but a consistent reality for our elite community.
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Bottom Banner */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-16 p-6 rounded-3xl bg-[var(--card)]/30 border border-dashed border-[var(--border)] text-center"
+        <div 
+          className="mt-16 p-6 rounded-3xl bg-[var(--card)]/30 border border-dashed border-[var(--border)] text-center opacity-100"
         >
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--muted)] italic">
             Elite Gaming Infrastructure • <span className="text-[var(--accent)]">Blue Buff India</span> • High Fidelity Automation
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

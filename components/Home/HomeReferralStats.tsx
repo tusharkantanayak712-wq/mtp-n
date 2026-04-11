@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { FiUsers, FiCopy, FiCheck, FiArrowRight, FiUserPlus } from "react-icons/fi";
 
@@ -50,11 +49,8 @@ export default function HomeReferralStats() {
     return (
         <section className="relative max-w-7xl mx-auto px-4 mt-2 mb-2">
             <div className="max-w-xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="group relative"
+                <div
+                    className="group relative opacity-100 translate-y-0"
                 >
                     {/* Subtle Glow */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/10 via-transparent to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -125,7 +121,7 @@ export default function HomeReferralStats() {
                             </Link>
                         </div>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );
