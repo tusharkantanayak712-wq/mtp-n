@@ -43,6 +43,15 @@ export async function POST(req) {
                 });
 
                 const regionData = await regionCheckResp.json();
+
+                if (regionData.success === 200 && regionData.data?.valid === false) {
+                    return NextResponse.json({
+                        success: false,
+                        status: "failed",
+                        message: "Invalid Player ID or Server ID."
+                    }, { status: 400 });
+                }
+
                 const playerRegion = regionData?.data?.region?.toUpperCase();
                 const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
 

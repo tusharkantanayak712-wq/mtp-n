@@ -25,7 +25,7 @@ export default function RegionPage() {
       });
       const data = await res.json();
       setResult(data);
-      if (data?.success === 200) {
+      if (data?.success === 200 && data?.data?.valid !== false) {
         saveVerifiedPlayer({
           playerId: id,
           zoneId: zone,
@@ -108,9 +108,9 @@ export default function RegionPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className={`mt-4 rounded-2xl p-4 border ${result.success === 200 ? "bg-emerald-500/5 border-emerald-500/10" : "bg-rose-500/5 border-rose-500/10"}`}
+                className={`mt-4 rounded-2xl p-4 border ${result.success === 200 && result.data?.valid !== false ? "bg-emerald-500/5 border-emerald-500/10" : "bg-rose-500/5 border-rose-500/10"}`}
               >
-                {result.success === 200 ? (
+                {result.success === 200 && result.data?.valid !== false ? (
                   <div className="flex items-center gap-3 text-left">
                     <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20 shrink-0">
                       <FiUser size={18} />

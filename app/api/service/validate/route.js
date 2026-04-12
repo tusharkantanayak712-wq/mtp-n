@@ -23,6 +23,13 @@ export async function POST(req) {
         const data = await response.json();
         const { gameSlug } = body;
 
+        if (data.success === 200 && data.data?.valid === false) {
+            return NextResponse.json({
+                success: false,
+                message: "Validation failed: Invalid Player ID or Server ID."
+            }, { status: 400 });
+        }
+
         // ⚡ REGION RESTRICTION CHECK for mobile-legends988 via Service API
         if ((gameSlug === "mobile-legends988" || gameSlug === "mlbb-double332" || gameSlug === "weeklymonthly-bundle931") && data.success === 200) {
             const playerRegion = data.data?.region?.toUpperCase();

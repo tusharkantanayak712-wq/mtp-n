@@ -149,8 +149,9 @@ function BuyFlowContent() {
 
       if (
         data?.success === 200 &&
-        data?.data &&
-        (data?.data?.username || data?.data?.region)
+
+        (data?.data?.username || data?.data?.region) &&
+        data?.data?.valid !== false
       ) {
         // Filter restricted regions for mobile-legends988
         const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
