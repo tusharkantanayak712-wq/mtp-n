@@ -10,10 +10,6 @@ import GameHeader from "@/components/GameDetail/GameHeader";
 import PackageSelector from "@/components/GameDetail/PackageSelector";
 import BuyPanel from "@/components/GameDetail/BuyPanel";
 
-import PackageSelectorBgmi from "@/components/GameDetail/PackageSelectorBgmi";
-import BuyPanelBgmi from "@/components/GameDetail/BuyPanelBgmi";
-// import BGMIPurchaseGuide from "@/components/HelpImage/BGMIPurchaseGuide";
-
 
 export default function GameDetailPage() {
   const { slug } = useParams();
@@ -114,53 +110,28 @@ export default function GameDetailPage() {
       <GameHeader game={game} />
 
       {/* ================= PACKAGE SELECTOR ================= */}
-      {isBGMI ? (
-        <PackageSelectorBgmi
-          items={items}
-          activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          sliderRef={sliderRef}
-          buyPanelRef={buyPanelRef}
-          calculateDiscount={calculateDiscount}
-          scrollToItem={scrollToItem}
-        />
-      ) : (
-        <PackageSelectorBgmi
-          items={items}
-          activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          sliderRef={sliderRef}
-          buyPanelRef={buyPanelRef}
-          calculateDiscount={calculateDiscount}
-          scrollToItem={scrollToItem}
-        />
-      )}
+      <PackageSelector
+        items={items}
+        activeItem={activeItem}
+        setActiveItem={setActiveItem}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        sliderRef={sliderRef}
+        buyPanelRef={buyPanelRef}
+        calculateDiscount={calculateDiscount}
+        scrollToItem={scrollToItem}
+      />
 
 
       {/* ================= BUY PANEL ================= */}
-      {isBGMI ? (
-        <BuyPanelBgmi
-          activeItem={activeItem}
-          gameAvailablity={game.gameAvailablity}
-          redirecting={redirecting}
-          goBuy={goBuy}
-          calculateDiscount={calculateDiscount}
-          buyPanelRef={buyPanelRef}
-        />
-      ) : (
-        <BuyPanelBgmi
-          activeItem={activeItem}
-          gameAvailablity={game.gameAvailablity}
-          redirecting={redirecting}
-          goBuy={goBuy}
-          calculateDiscount={calculateDiscount}
-          buyPanelRef={buyPanelRef}
-        />
-      )}
+      <BuyPanel
+        activeItem={activeItem}
+        gameAvailablity={game.gameAvailablity}
+        redirecting={redirecting}
+        goBuy={goBuy}
+        calculateDiscount={calculateDiscount}
+        buyPanelRef={buyPanelRef}
+      />
 
       {/* ================= MEMBERSHIP BENEFITS ================= */}
       <div className="max-w-6xl mx-auto mt-12 mb-12">
