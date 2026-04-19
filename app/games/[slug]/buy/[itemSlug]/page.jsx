@@ -193,14 +193,17 @@ function BuyFlowContent() {
       }
 
       if (isValid) {
-        // Filter restricted regions for MLBB
-        const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
-        const playerRegion = region.toUpperCase();
+        // Filter restricted regions for SPECIFIC slugs
+        const restrictedSlugs = ["mobile-legends988", "mlbb-double332", "weeklymonthly-bundle931"];
+        if (restrictedSlugs.includes(slug)) {
+          const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
+          const playerRegion = region.toUpperCase();
 
-        if (isMLBB && restrictedRegions.includes(playerRegion)) {
-          setError(`Sorry, we don't support orders from ${playerRegion} region for this item.`);
-          setLoading(false);
-          return;
+          if (restrictedRegions.includes(playerRegion)) {
+            setError(`Sorry, we don't support orders from ${playerRegion} region for this item.`);
+            setLoading(false);
+            return;
+          }
         }
 
         saveVerifiedPlayer({
