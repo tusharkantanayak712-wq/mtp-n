@@ -25,6 +25,7 @@ const FOOTER_LINKS = [
       { label: "Services", href: "/services" },
       { label: "Region", href: "/region" },
       { label: "Blog", href: "/blog" },
+      { label: "Partner With Us", href: "/partner" },
     ],
   },
   {

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones } from "react-icons/fi";
+import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones, FiZap, FiLayers } from "react-icons/fi";
 
 
 const BottomNav = () => {
@@ -25,9 +25,11 @@ const BottomNav = () => {
     // Retained 7 items, preserving symmetry around the Home button
     const navItems = [
         { label: "Wallet", icon: FiCreditCard, path: "/dashboard/wallet", action: () => router.push("/dashboard/wallet") },
+        { label: "Earn", icon: FiZap, path: "/dashboard/coins", action: () => router.push("/dashboard/coins") },
         { label: "Games", icon: FiGrid, path: "/games", action: () => router.push("/games") },
         { label: "Region", icon: FiTarget, path: "/region", action: () => router.push("/region") },
         { label: "Home", icon: FiHome, path: "/", isHome: true, action: () => router.push("/") },
+        { label: "Blog", icon: FiLayers, path: "/blog", action: () => router.push("/blog") },
         { label: "Orders", icon: FiShoppingBag, path: "/dashboard/orders", action: () => router.push("/dashboard/orders") },
         { label: "Redeem", icon: FiGift, path: "/dashboard/redeem", action: () => router.push("/dashboard/redeem") },
         { label: "Support", icon: FiHeadphones, path: "/dashboard/support", action: () => router.push("/dashboard/support") },
@@ -54,16 +56,16 @@ const BottomNav = () => {
                             <button
                                 key={idx}
                                 onClick={item.action}
-                                className="relative flex flex-col items-center justify-end w-[46px] h-[40px] sm:w-[48px] sm:h-[42px] rounded-xl transition-all duration-300 group"
+                                className="relative flex flex-col items-center justify-end w-[36px] h-[38px] sm:w-[40px] sm:h-[40px] rounded-xl transition-all duration-300 group"
                                 aria-label={item.label}
                             >
                                 {/* Distinctive Prominent Floating Circle */}
-                                <div className="absolute -top-3 z-20">
-                                    <div className={`flex items-center justify-center w-[36px] h-[36px] sm:w-[38px] sm:h-[38px] rounded-full shadow-[0_4px_16px_rgba(var(--accent-rgb),0.5)] border-[3px] border-[var(--card)] transition-transform duration-300 ${isActive ? 'bg-gradient-to-br from-[var(--accent)] to-indigo-600 scale-105' : 'bg-[var(--accent)] hover:scale-105'}`}>
-                                        <Icon className="text-[1.05rem] sm:text-[1.1rem] text-white" />
+                                <div className="absolute -top-2 z-20">
+                                    <div className={`flex items-center justify-center w-[32px] h-[32px] sm:w-[34px] sm:h-[34px] rounded-full shadow-[0_4px_12px_rgba(var(--accent-rgb),0.4)] border-[2px] border-[var(--card)] transition-transform duration-300 ${isActive ? 'bg-gradient-to-br from-[var(--accent)] to-indigo-600 scale-105' : 'bg-[var(--accent)] hover:scale-105'}`}>
+                                        <Icon className="text-[0.95rem] sm:text-[1rem] text-white" />
                                     </div>
                                 </div>
-                                <span className={`absolute bottom-0.5 text-[5.5px] sm:text-[6px] font-[900] uppercase tracking-wider transition-all duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)]/80 group-hover:text-[var(--foreground)]/90"}`}>
+                                <span className={`absolute bottom-0.5 text-[4.5px] sm:text-[5px] font-[900] uppercase tracking-tighter transition-all duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)]/80 group-hover:text-[var(--foreground)]/90"}`}>
                                     {item.label}
                                 </span>
                             </button>
@@ -74,7 +76,7 @@ const BottomNav = () => {
                         <button
                             key={idx}
                             onClick={item.action}
-                            className="relative flex flex-col items-center justify-center w-[46px] h-[40px] sm:w-[48px] sm:h-[42px] rounded-xl transition-all duration-300 group overflow-hidden"
+                            className="relative flex flex-col items-center justify-center w-[36px] h-[38px] sm:w-[40px] sm:h-[40px] rounded-xl transition-all duration-300 group overflow-hidden"
                             aria-label={item.label}
                         >
                             {/* Animated indicator pill */}
@@ -82,9 +84,9 @@ const BottomNav = () => {
                                 <div className="absolute inset-0 bg-[var(--foreground)]/5 border border-[var(--border)]/40 rounded-xl pointer-events-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]" />
                             )}
 
-                            <div className="flex flex-col items-center gap-[2px] z-10 w-full mt-0.5">
-                                <Icon className={`text-[1.1rem] transition-all duration-300 ${isActive ? "text-[var(--accent)] drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)] -translate-y-0.5 scale-110" : "text-[var(--muted)] group-hover:text-[var(--foreground)]/80 group-hover:-translate-y-0.5"}`} />
-                                <span className={`text-[5.5px] sm:text-[6px] font-[900] uppercase tracking-wider transition-all duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)]/80 group-hover:text-[var(--foreground)]/90"}`}>
+                            <div className="flex flex-col items-center gap-[1px] z-10 w-full mt-0.5">
+                                <Icon className={`text-[0.95rem] transition-all duration-300 ${isActive ? "text-[var(--accent)] drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)] -translate-y-0.5 scale-110" : "text-[var(--muted)] group-hover:text-[var(--foreground)]/80 group-hover:-translate-y-0.5"}`} />
+                                <span className={`text-[4.5px] sm:text-[5px] font-[900] uppercase tracking-tighter transition-all duration-300 ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)]/80 group-hover:text-[var(--foreground)]/90"}`}>
                                     {item.label}
                                 </span>
                             </div>

@@ -39,7 +39,8 @@ export async function GET(req) {
             name: { name: order },
             joinDate: { createdAt: order },
             lastLogin: { lastLogin: order },
-            totalOrders: { totalOrders: order }
+            totalOrders: { totalOrders: order },
+            coins: { coins: order }
         };
 
         const currentSort = sortMap[sortBy] || { lastLogin: -1 };

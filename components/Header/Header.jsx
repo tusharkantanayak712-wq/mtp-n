@@ -25,10 +25,10 @@ const HEADER_CONFIG = {
     common: [
       { label: "My Orders", href: "/dashboard/orders", icon: <FiShoppingBag size={14} />, desc: "Track your top-ups" },
       { label: "My Wallet", href: "/dashboard/wallet", icon: <FiLayers size={14} />, desc: "Balance & Recharge" },
+      { label: "Earn BBC", href: "/dashboard/coins", icon: <FiZap size={14} />, desc: "FREE Tasks & Check-in" },
       { label: "Redeem Code", href: "/dashboard/redeem", icon: <FiGift size={14} />, desc: "Claim gift credits" },
       { label: "Refer & Earn", href: "/dashboard/referral", icon: <FiUsers size={14} />, desc: "Earn rewards" },
       { label: "API Setup", href: "/dashboard/api-keys", icon: <FiKey size={14} />, desc: "Developer API Access" },
-
       { label: "Support", href: "/dashboard/support", icon: <FiMessageSquare size={14} />, desc: "Get help 24/7" },
     ],
     roles: {
@@ -421,11 +421,11 @@ export default function Header() {
                       </div>
                     ) : (
                       <>
-                        <div className="grid grid-cols-3 gap-2.5 mb-6">
+                        <div className="grid grid-cols-3 gap-2 mb-6">
                           {HEADER_CONFIG.nav.map((item) => (
-                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex flex-col items-center justify-center p-2.5 rounded-[1.2rem] bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all group">
-                              <span className="text-[var(--accent)] group-hover:text-white mb-1">{item.icon}</span>
-                              <span className="text-[10px] font-bold">{item.label}</span>
+                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all group">
+                              <span className="text-[var(--accent)] group-hover:text-white mb-0.5">{item.icon}</span>
+                              <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
                             </Link>
                           ))}
                         </div>

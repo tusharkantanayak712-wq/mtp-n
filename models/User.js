@@ -62,6 +62,22 @@ const UserSchema = new mongoose.Schema(
       default: 0,
     },
 
+    /* ================= BBC COIN SYSTEM ================= */
+    coins: {
+      type: Number,
+      default: 0,
+    },
+
+    lastCheckin: {
+      type: Date,
+      default: null,
+    },
+
+    checkinStreak: {
+      type: Number,
+      default: 0, // 0 = never checked in, 1–7 = current streak day
+    },
+
     /* ================= REFERRAL SYSTEM ================= */
     referralUsed: {
       type: Boolean,

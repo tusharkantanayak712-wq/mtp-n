@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
+import CoinTransaction from "@/models/CoinTransaction";
 import { getAppSettings } from "@/lib/settings";
 import { placeSmileOrder } from "@/lib/smileOne";
 
@@ -397,6 +398,42 @@ export async function POST(req: Request) {
     }
 
     await finalOrder.save();
+
+    /* ===================================================
+       BBC COIN REWARD: Award 1 coin per ₹150 on success
+    =================================================== */
+    if (finalOrder.status === "success" && finalOrder.userId) {
+      try {
+        const coinsToAward = Math.floor(Number(finalOrder.price) / 150);
+        if (coinsToAward > 0) {
+          const purchaseUser = await User.findOneAndUpdate(
+            { userId: finalOrder.userId },
+            { $inc: { coins: coinsToAward } },
+            { new: true }
+          );
+          if (purchaseUser) {
+            const coinTxId = `PURCHASE${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+            await CoinTransaction.create({
+              transactionId: coinTxId,
+              userId: finalOrder.userId,
+              userObjectId: purchaseUser._id,
+              type: "earn",
+              coins: coinsToAward,
+              balanceBefore: (purchaseUser.coins || 0) - coinsToAward,
+              balanceAfter: purchaseUser.coins || 0,
+              source: "purchase",
+              description: `Purchase Reward: ${finalOrder.itemName}`,
+              referenceId: finalOrder.orderId,
+              performedBy: "system",
+            });
+            console.log(`[coins] Awarded ${coinsToAward} coins to ${finalOrder.userId} for order ${finalOrder.orderId}`);
+          }
+        }
+      } catch (coinErr) {
+        // Non-critical: don't fail the order if coin award fails
+        console.error("[coins] Failed to award purchase coins:", coinErr);
+      }
+    }
 
     return NextResponse.json({
       success: finalOrder.status === "success",

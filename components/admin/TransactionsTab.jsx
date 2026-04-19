@@ -29,7 +29,7 @@ export default function TransactionsTab() {
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(30);
   const [search, setSearch] = useState("");
 
   const [pagination, setPagination] = useState({

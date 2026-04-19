@@ -44,7 +44,7 @@ export default function OrdersTab() {
   });
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(20);
+  const [limit] = useState(30);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     status: "",

@@ -138,26 +138,66 @@ function BuyFlowContent() {
       return;
     }
 
+    // Determine if MLBB based on slug and name
+    const name = game?.gameName?.toLowerCase() || "";
+    const isMLBB = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988") || slug.includes("weeklymonthly-bundle");
+
     try {
-      const res = await fetch("/api/check-region", {
+      let username = "Unknown";
+      let region = "Global";
+      let isValid = false;
+
+      // 1. Always check name for ALL games (including MLBB)
+      const productId = `${game?.gameId || slug}_${item?.itemId || itemSlug}`;
+      const nameRes = await fetch("/api/check-region/namecheck", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: playerId, zone: zoneId }),
+        body: JSON.stringify({
+          productId,
+          playerId,
+          zoneId: zoneId || "NA",
+        }),
       });
-
-      const data = await res.json();
+      const nameData = await nameRes.json();
 
       if (
-        data?.success === 200 &&
-
-        (data?.data?.username || data?.data?.region) &&
-        data?.data?.valid !== false
+        (nameData?.success === 200 || nameData?.success === true) &&
+        (nameData?.data?.username || nameData?.data?.name) &&
+        nameData?.data?.valid !== false
       ) {
-        // Filter restricted regions for mobile-legends988
-        const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
-        const playerRegion = data.data.region?.toUpperCase();
+        username = nameData?.data?.username || nameData?.data?.name || "Unknown";
+        region = nameData?.data?.region || "Global";
+        isValid = true;
+      }
 
-        if ((slug === "mobile-legends988" || slug === "mlbb-double332" || slug === "weeklymonthly-bundle931") && restrictedRegions.includes(playerRegion)) {
+      // 2. Extra check for MLBB to verify region
+      if (isMLBB) {
+        const regionRes = await fetch("/api/check-region", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: playerId, zone: zoneId }),
+        });
+        const regionData = await regionRes.json();
+
+        if (regionData?.success === 200 && (regionData?.data?.username || regionData?.data?.region)) {
+          region = regionData.data.region || region;
+          username = regionData.data.username || username;
+          isValid = true; // Even if namecheck fails, if region check succeeds it counts
+        } else if (!isValid) {
+          // If namecheck failed AND region check failed, it's truly invalid
+          const serverMsg = regionData?.message || nameData?.message || "Player not found";
+          setError(serverMsg.toLowerCase().includes("success") ? "Player not found. Check your ID." : serverMsg);
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (isValid) {
+        // Filter restricted regions for MLBB
+        const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
+        const playerRegion = region.toUpperCase();
+
+        if (isMLBB && restrictedRegions.includes(playerRegion)) {
           setError(`Sorry, we don't support orders from ${playerRegion} region for this item.`);
           setLoading(false);
           return;
@@ -166,14 +206,14 @@ function BuyFlowContent() {
         saveVerifiedPlayer({
           playerId,
           zoneId,
-          username: data.data.username || "Unknown",
-          region: data.data.region || "Unknown",
+          username,
+          region,
           savedAt: Date.now(),
         });
 
         setReviewData({
-          userName: data.data.username || "Unknown",
-          region: data.data.region || "Unknown",
+          userName: username,
+          region,
           playerId,
           zoneId,
         });
@@ -181,16 +221,14 @@ function BuyFlowContent() {
         setLoading(false);
         setStep(2);
       } else {
-        const serverMsg = data?.message || "Player ID or Zone ID is wrong";
-        const finalError = serverMsg.toLowerCase().includes("success")
-          ? "Player not found. Please check your ID and Zone."
-          : serverMsg;
-
-        setError(finalError);
+        // If we got here and it's not valid, use the error from nameData
+        const serverMsg = nameData?.message || "Player not found";
+        setError(serverMsg.toLowerCase().includes("success") ? "Player ID not found." : serverMsg);
         setLoading(false);
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      console.error("Complete Validation Error:", err);
+      setError("Validation failed. Please try again.");
       setLoading(false);
     }
   };

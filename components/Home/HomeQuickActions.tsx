@@ -12,7 +12,9 @@ import {
   Inbox,
   LifeBuoy,
   Wallet,
-  Users
+  Users,
+  Zap,
+  Gift
 } from "lucide-react";
 
 /* ===================== CONFIG ===================== */
@@ -29,9 +31,9 @@ const topRow = [
 const bottomRow = [
   { title: "Orders", href: "/dashboard/orders", icon: Inbox, color: "#64748b" },
   { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
-  { title: "Silver", href: "/games/membership/silver-membership", icon: Crown, color: "#94a3b8" },
+  { title: "Earn", href: "/dashboard/coins", icon: Zap, color: "#a855f7" },
   { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },
-  { title: "Referral", href: "/dashboard/referral", icon: Users, color: "#ec4899" },
+  { title: "Redeem", href: "/dashboard/redeem", icon: Gift, color: "#ec4899" },
 ];
 
 /* ===================== COMPONENT ===================== */

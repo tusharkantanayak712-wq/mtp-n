@@ -21,6 +21,7 @@ import RedeemCodesTab from "@/components/admin/RedeemCodesTab";
 import ApiKeysTab from "@/components/admin/ApiKeysTab";
 import UsdtTab from "@/components/admin/UsdtTab";
 import PromotionalTab from "@/components/admin/PromotionalTab";
+import CoinsAdminTab from "@/components/admin/CoinsAdminTab";
 
 
 
@@ -241,7 +242,7 @@ export default function AdminPanalPage() {
 
 
           <div className="mb-5 flex flex-wrap gap-2">
-            {["wallet", "usdt", "redeem", "users", "api-keys", "promotional", "orders", "transactions", "queries", "pricing", "banners", "settings"].map(
+            {["wallet", "usdt", "redeem", "coins", "users", "api-keys", "promotional", "orders", "transactions", "queries", "pricing", "banners", "settings"].map(
               (tab) => {
                 const isActive = activeTab === tab;
 
@@ -301,6 +302,7 @@ export default function AdminPanalPage() {
             {activeTab === "wallet" && <StatsTab />}
             {activeTab === "usdt" && <UsdtTab />}
             {activeTab === "redeem" && <RedeemCodesTab />}
+            {activeTab === "coins" && <CoinsAdminTab />}
             {activeTab === "users" && (
               <UsersTab />
             )}
