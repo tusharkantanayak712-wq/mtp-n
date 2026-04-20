@@ -913,14 +913,14 @@ function StatCard({ label, value, icon, color, pulse }) {
     blue: "text-blue-400 bg-blue-500/10 border-blue-500/20",
   };
   return (
-    <div className={`p-3 rounded-2xl border ${colors[color]} relative overflow-hidden`}>
-      {pulse && <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-current animate-pulse" />}
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-xs">{icon}</span>
-        <span className="text-[8px] font-black uppercase tracking-wider opacity-60">{label}</span>
+    <div className={`p-2 rounded-xl border ${colors[color]} relative overflow-hidden`}>
+      {pulse && <div className="absolute top-1.5 right-1.5 w-1 h-1 rounded-full bg-current animate-pulse" />}
+      <div className="flex items-center gap-1.5 mb-0.5">
+        <span className="text-[10px]">{icon}</span>
+        <span className="text-[7px] font-black uppercase tracking-wider opacity-60">{label}</span>
       </div>
-      <div className="text-lg font-black tracking-tighter tabular-nums">
-        {value.toLocaleString()} <span className="text-[8px] opacity-40 ml-0.5">BBC</span>
+      <div className="text-sm font-black tracking-tighter tabular-nums">
+        {value.toLocaleString()} <span className="text-[7px] opacity-40 ml-0.5 font-bold">BBC</span>
       </div>
     </div>
   );

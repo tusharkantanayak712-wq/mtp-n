@@ -501,51 +501,50 @@ export default function CoinsTab() {
   const completedTasks = tasks.filter(t => t.status === "completed");
 
   return (
-    <div className="max-w-xl mx-auto space-y-3 pb-20 px-2 pt-1">
+    <div className="max-w-xl mx-auto space-y-2 pb-16 px-2 pt-0.5">
       
       {/* ── NEW PREMIUM BALANCE CARD ──────────────────────────────────── */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-        className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[#0A0A0A] p-5 shadow-2xl shadow-blue-500/5 mb-2"
+        className="relative overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[#0A0A0A] p-4 shadow-2xl shadow-blue-500/5 mb-1"
       >
         <div className="relative flex items-center justify-between gap-4">
           
           {/* Left Side: Balance & Info */}
-          <div className="flex flex-col items-start gap-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/5 border border-amber-500/20 mb-1">
-              <FiStar className="text-amber-500 text-[9px]" />
-              <span className="text-[8px] font-black uppercase tracking-widest text-amber-500">Bluebuff Coins</span>
+          <div className="flex flex-col items-start gap-0.5">
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/5 border border-amber-500/20 mb-0.5">
+              <FiStar className="text-amber-500 text-[8px]" />
+              <span className="text-[7px] font-black uppercase tracking-widest text-amber-500">BBC Coins</span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <span className="text-5xl font-black text-amber-500 tabular-nums leading-tight">{coins}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-4xl font-black text-amber-500 tabular-nums leading-none">{coins}</span>
+              <p className="text-[9px] font-black uppercase tracking-wide text-[var(--muted)]/60 mt-1">
+                ≈ ₹{(coins / 100).toFixed(2)}
+              </p>
             </div>
-            
-            <p className="text-[10px] font-black uppercase tracking-wide text-[var(--muted)]/60">
-              = <span className="text-white">₹{(coins / 100).toFixed(2)} Wallet Value</span>
-            </p>
           </div>
 
           {/* Right Side: Quick Stats */}
-          <div className="flex items-center gap-2">
-            <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/5 p-2 transition-colors hover:bg-white/[0.05]">
+          <div className="flex items-center gap-1.5">
+            <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-white/[0.03] border border-white/5 p-1.5 transition-colors hover:bg-white/[0.05]">
                <div className="flex items-center gap-1">
-                 <span className="text-sm">🔥</span>
-                 <span className="text-sm font-black text-blue-400">{streak}</span>
+                 <span className="text-xs">🔥</span>
+                 <span className="text-xs font-black text-blue-400">{streak}</span>
                </div>
-               <span className="text-[7px] font-black uppercase text-[var(--muted)]/40 mt-1">Streak</span>
+               <span className="text-[6px] font-black uppercase text-[var(--muted)]/40 mt-0.5">Streak</span>
             </div>
 
-            <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/5 p-2 transition-colors hover:bg-white/[0.05]">
-               <span className="text-sm font-black text-amber-500">+{nextReward}</span>
-               <span className="text-[7px] font-black uppercase text-[var(--muted)]/40 mt-1 uppercase text-center leading-tight">Tomorrow</span>
+            <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-white/[0.03] border border-white/5 p-1.5 transition-colors hover:bg-white/[0.05]">
+               <span className="text-xs font-black text-amber-500">+{nextReward}</span>
+               <span className="text-[6px] font-black uppercase text-[var(--muted)]/40 mt-0.5 uppercase text-center leading-tight">Next</span>
             </div>
           </div>
 
         </div>
 
         {/* Experimental Notice */}
-        <div className="mt-4 pt-3 border-t border-white/5 flex items-center gap-2">
+        <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center gap-2">
            <FiAlertCircle className="text-blue-400 text-[10px] animate-pulse shrink-0" />
            <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
               Rewards will be increased in 3-4 days. Now its experimental.
@@ -555,7 +554,7 @@ export default function CoinsTab() {
 
       {/* ── CONTENT AREA ──────────────────────────────────────────────── */}
       {!loading && (
-        <div className="space-y-6">
+        <div className="space-y-4">
 
           <AnimatePresence mode="wait">
             {/* ══ CONVERT ══ */}
