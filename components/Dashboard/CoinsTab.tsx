@@ -543,6 +543,14 @@ export default function CoinsTab() {
           </div>
 
         </div>
+
+        {/* Experimental Notice */}
+        <div className="mt-4 pt-3 border-t border-white/5 flex items-center gap-2">
+           <FiAlertCircle className="text-blue-400 text-[10px] animate-pulse shrink-0" />
+           <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
+              Rewards will be increased in 3-4 days. Now its experimental.
+           </p>
+        </div>
       </motion.div>
 
       {/* ── CONTENT AREA ──────────────────────────────────────────────── */}
