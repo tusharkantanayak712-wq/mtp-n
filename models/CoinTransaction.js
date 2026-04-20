@@ -33,6 +33,7 @@ const CoinTransactionSchema = new mongoose.Schema(
         "purchase",       // Earned from buying a game top-up
         "checkin",        // Daily check-in
         "task",           // Completed a sponsored task
+        "ad_reward",      // Earned from watching Adsterra ads
         "referral",       // Referral bonus
         "convert_to_wallet", // Spent coins → wallet
         "admin",          // Manual admin adjustment

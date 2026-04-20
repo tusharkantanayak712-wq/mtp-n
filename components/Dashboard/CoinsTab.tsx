@@ -9,6 +9,8 @@ import {
   FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight
 } from "react-icons/fi";
 import Link from "next/link";
+import { ADS_CONFIG } from "@/lib/adsConfig";
+
 
 // ──────────────────────────────────────────── TYPES ──────────────────────────
 interface Task {
@@ -65,10 +67,14 @@ const taskIconBg: Record<string, string> = {
 };
 
 // ──────────────────────────────── TASK CARD ──────────────────────────────────
-function TaskCard({ task, onClaim, pendingClaims }: {
+function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTimer, onStartAd }: {
   task: Task;
   onClaim: (task: Task, code?: string) => Promise<{ pending?: boolean }>;
   pendingClaims: Set<string>;
+  isUnlocked: boolean;
+  isWatchingAd: boolean;
+  adTimer: number | null;
+  onStartAd: () => void;
 }) {
   const [timer, setTimer] = useState<number | null>(null);
   const [opened, setOpened] = useState(false);
@@ -82,7 +88,7 @@ function TaskCard({ task, onClaim, pendingClaims }: {
   const iconBg = taskIconBg[task.type] || taskIconBg.custom;
   const isPending = pendingClaims.has(task.taskId);
 
-  const handleOpen = () => {
+  const handleOpenMainTask = () => {
     window.open(task.url, "_blank", "noopener,noreferrer");
     setOpened(true);
     setTimer(task.waitSeconds);
@@ -164,10 +170,21 @@ function TaskCard({ task, onClaim, pendingClaims }: {
         ) : !opened ? (
           <motion.button
             whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-            onClick={handleOpen}
-            className="flex items-center gap-1.5 bg-[var(--accent)] text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide"
+            onClick={() => {
+              if (isUnlocked) handleOpenMainTask();
+              else onStartAd();
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide ${
+              isWatchingAd ? "bg-purple-500/20 text-purple-400" : isUnlocked ? "bg-[var(--accent)] text-white" : "bg-purple-600 text-white"
+            }`}
           >
-            Go <FiExternalLink className="text-xs" />
+            {isWatchingAd ? (
+              <><FiClock className="animate-pulse" /> {adTimer}s</>
+            ) : isUnlocked ? (
+              <>Go <FiExternalLink className="text-xs" /></>
+            ) : (
+              <>Unlock <FiLock className="text-xs" /></>
+            )}
           </motion.button>
         ) : timer !== null && timer > 0 ? (
           <div className="flex items-center gap-1.5 text-[var(--muted)]">
@@ -261,6 +278,31 @@ export default function CoinsTab() {
   const [tasksPages, setTasksPages] = useState(1);
   const [historyPage, setHistoryPage] = useState(1);
   const [historyPages, setHistoryPages] = useState(1);
+  const [checkinRewarded, setCheckinRewarded] = useState(false);
+  const [adTimer, setAdTimer] = useState<number | null>(null);
+  const [activeAdTarget, setActiveAdTarget] = useState<string | null>(null);
+  const [unlockedTaskIds, setUnlockedTaskIds] = useState<Set<string>>(new Set());
+  const adTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleStartAd = (target: string) => {
+    window.open(ADS_CONFIG.ADSTERRA_LINK, "_blank", "noopener,noreferrer");
+    setActiveAdTarget(target);
+    setAdTimer(15);
+  };
+
+  useEffect(() => {
+    if (adTimer === null || adTimer <= 0) {
+      if (adTimer === 0 && activeAdTarget) {
+        if (activeAdTarget === "checkin") setCheckinRewarded(true);
+        else setUnlockedTaskIds(prev => new Set([...prev, activeAdTarget]));
+        setAdTimer(null);
+        setActiveAdTarget(null);
+      }
+      return;
+    }
+    adTimerRef.current = setTimeout(() => setAdTimer(t => (t !== null ? t - 1 : null)), 1000);
+    return () => { if (adTimerRef.current) clearTimeout(adTimerRef.current); };
+  }, [adTimer, activeAdTarget]);
 
   const showToast = (message: string, type: "success" | "error") => {
     setToast({ message, type });
@@ -533,20 +575,32 @@ export default function CoinsTab() {
                 <motion.button
                   whileHover={{ scale: checkedInToday ? 1 : 1.02 }}
                   whileTap={{ scale: checkedInToday ? 1 : 0.98 }}
-                  onClick={handleCheckin}
+                  onClick={() => {
+                    if (checkedInToday) return;
+                    if (!checkinRewarded) handleStartAd("checkin");
+                    else handleCheckin();
+                  }}
                   disabled={checkedInToday || checkinLoading}
                   className={`w-full py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                     checkedInToday
                       ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 cursor-default"
-                      : "bg-amber-500 text-white hover:bg-amber-400 shadow-lg shadow-amber-500/20"
+                      : adTimer !== null && activeAdTarget === "checkin"
+                      ? "bg-purple-500/20 border border-purple-500/40 text-purple-400"
+                      : checkinRewarded
+                      ? "bg-amber-500 text-white hover:bg-amber-400 shadow-lg shadow-amber-500/20"
+                      : "bg-purple-600 text-white hover:bg-purple-500 shadow-lg shadow-purple-600/20"
                   }`}
                 >
                   {checkinLoading ? (
                     <FiRefreshCw className="animate-spin text-sm" />
                   ) : checkedInToday ? (
                     <><FiCheckCircle /> Checked In — Day {streak}</>
+                  ) : adTimer !== null && activeAdTarget === "checkin" ? (
+                    <><FiClock className="animate-pulse" /> Opening Reward Link... {adTimer}s</>
+                  ) : !checkinRewarded ? (
+                    <><FiExternalLink /> Watch Ad to Check-in</>
                   ) : (
-                    <><FiCalendar /> Check In (+{nextReward} BBC)</>
+                    <><FiCalendar /> Finalize Check-in (+{nextReward} BBC)</>
                   )}
                 </motion.button>
               </motion.div>
@@ -581,6 +635,7 @@ export default function CoinsTab() {
                   </div>
                 )}
 
+
                 {tasks.length === 0 ? (
                   <div className="text-center py-12 text-[var(--muted)]/40">
                     <FiList className="text-3xl mx-auto mb-2" />
@@ -590,14 +645,31 @@ export default function CoinsTab() {
                 ) : (
                   <div className="space-y-3">
                     {incompleteTasks.map((task) => (
-                      <TaskCard key={task.taskId} task={task} onClaim={handleClaimTask} pendingClaims={pendingClaims} />
+                      <TaskCard 
+                        key={task.taskId} 
+                        task={task} 
+                        onClaim={handleClaimTask} 
+                        pendingClaims={pendingClaims} 
+                        isUnlocked={unlockedTaskIds.has(task.taskId)}
+                        isWatchingAd={activeAdTarget === task.taskId}
+                        adTimer={activeAdTarget === task.taskId ? adTimer : null}
+                        onStartAd={() => handleStartAd(task.taskId)}
+                      />
                     ))}
                     {completedTasks.length > 0 && (
                       <>
                         <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/30 pt-2">Completed</p>
                         {completedTasks.map((task) => (
                           <div key={task.taskId} className="opacity-40">
-                            <TaskCard task={task} onClaim={async () => ({})} pendingClaims={pendingClaims} />
+                            <TaskCard 
+                              task={task} 
+                              onClaim={async () => ({})} 
+                              pendingClaims={pendingClaims} 
+                              isUnlocked={true}
+                              isWatchingAd={false}
+                              adTimer={null}
+                              onStartAd={() => {}}
+                            />
                           </div>
                         ))}
                       </>
