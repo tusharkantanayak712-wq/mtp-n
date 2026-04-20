@@ -16,16 +16,11 @@ import { ADS_CONFIG } from "@/lib/adsConfig";
 interface Task {
   taskId: string;
   title: string;
-  description: string;
-  type: "url_visit" | "yt_watch" | "app_install" | "wp_join" | "custom";
-  url: string;
+  icon: string;
   reward: number;
-  waitSeconds: number;
-  sponsorName: string | null;
-  completed: boolean;
-  maxReached: boolean;
-  expiresAt: string | null;
-  hasCode: boolean;
+  type: string;
+  url: string;
+  status: "available" | "pending" | "completed";
 }
 
 interface CoinHistory {
@@ -36,44 +31,32 @@ interface CoinHistory {
   createdAt: string;
 }
 
-const COINS_PER_RUPEE = 100;
-const DAY_LABELS = ["D1", "D2", "D3", "D4", "D5", "D6", "D7"];
-
-// ──────────────────────────────── TASK ICON ──────────────────────────────────
-const TaskIcon = ({ type }: { type: Task["type"] }) => {
-  switch (type) {
-    case "yt_watch": return <FiYoutube className="text-xl" />;
-    case "app_install": return <FiSmartphone className="text-xl" />;
-    case "wp_join": return <FiMessageCircle className="text-xl" />;
-    case "url_visit": return <FiGlobe className="text-xl" />;
-    default: return <FiStar className="text-xl" />;
-  }
+const TASK_ICONS: Record<string, any> = {
+  youtube: <FiYoutube className="text-rose-500" />,
+  site: <FiGlobe className="text-blue-500" />,
+  app: <FiSmartphone className="text-emerald-500" />,
+  social: <FiMessageCircle className="text-sky-500" />,
+  custom: <FiStar className="text-amber-500" />,
 };
 
-const taskGradients: Record<string, string> = {
-  yt_watch: "from-red-500/20 to-red-600/5 border-red-500/20",
-  app_install: "from-blue-500/20 to-blue-600/5 border-blue-500/20",
-  wp_join: "from-green-500/20 to-green-600/5 border-green-500/20",
-  url_visit: "from-purple-500/20 to-purple-600/5 border-purple-500/20",
-  custom: "from-amber-500/20 to-amber-600/5 border-amber-500/20",
-};
-
-const taskIconBg: Record<string, string> = {
-  yt_watch: "bg-red-500/10 text-red-400",
-  app_install: "bg-blue-500/10 text-blue-400",
-  wp_join: "bg-green-500/10 text-green-400",
-  url_visit: "bg-purple-500/10 text-purple-400",
+const ICON_STYLES: Record<string, string> = {
+  youtube: "bg-rose-500/10 text-rose-400",
+  site: "bg-blue-500/10 text-blue-400",
+  app: "bg-emerald-500/10 text-emerald-400",
+  social: "bg-sky-500/10 text-sky-400",
   custom: "bg-amber-500/10 text-amber-400",
 };
 
 // ──────────────────────────────── ADSTERRA CARD ──────────────────────────────
-function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast }: { 
+function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, reward, cooldownMs }: { 
   lastAdReward: string | null;
   adId: string;
   adLink: string;
   title?: string;
-  onReward: (newBal: number, lastTime: string) => void;
+  onReward: (newBal: number, adId: string, lastTime: string) => void;
   showToast: (m: string, t: "success" | "error") => void;
+  reward?: number;
+  cooldownMs?: number;
 }) {
   const [opened, setOpened] = useState(false);
   const [timer, setTimer] = useState<number | null>(null);
@@ -91,11 +74,12 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast }
     const updateCooldown = () => {
       const last = new Date(lastAdReward).getTime();
       const diff = Date.now() - last;
-      const remaining = ADS_CONFIG.COOLDOWN_MS - diff;
+      const currentCooldownMs = cooldownMs || ADS_CONFIG.COOLDOWN_MS;
+      const remains = currentCooldownMs - diff;
 
-      if (remaining > 0) {
-        const mins = Math.floor(remaining / 60000);
-        const secs = Math.floor((remaining % 60000) / 1000);
+      if (remains > 0) {
+        const mins = Math.floor(remains / 60000);
+        const secs = Math.floor((remains % 60000) / 1000);
         setCooldownText(`${mins}m ${secs}s`);
       } else {
         setCooldownText(null);
@@ -136,13 +120,14 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast }
       const data = await res.json();
       if (data.success) {
         showToast(data.message, "success");
-        onReward(data.newBalance, data.transaction.createdAt);
+        onReward(data.newBalance, adId, data.transaction?.createdAt || new Date().toISOString());
         setOpened(false);
         setTimer(null);
       } else {
         showToast(data.message, "error");
       }
-    } catch {
+    } catch (e) {
+      console.error(e);
       showToast("Reward claim failed", "error");
     } finally {
       setClaiming(false);
@@ -153,69 +138,62 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast }
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative rounded-2xl border p-4 flex flex-col gap-3 overflow-hidden group transition-all ${
+      className={`relative rounded-xl border p-3 flex flex-col gap-2 overflow-hidden group transition-all ${
         cooldownText ? "border-[var(--border)] bg-[var(--card)]/20 opacity-80" : "border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 shadow-lg shadow-blue-500/5"
       }`}
     >
-      <div className="absolute top-0 right-0 p-2">
-         <span className={`text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${
+      <div className="absolute top-0 right-0 p-1.5">
+         <span className={`text-[6px] font-black uppercase tracking-widest px-1 py-0.5 rounded ${
            cooldownText ? "text-[var(--muted)]/40 bg-[var(--card)]/40" : "text-blue-400/50 bg-blue-500/10"
          }`}>
-           {cooldownText ? "Cooldown Active" : "Bonus Reward"}
+           {cooldownText ? "Cooldown" : "Bonus"}
          </span>
       </div>
-      <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform ${
+      <div className="flex items-center gap-2.5">
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform ${
           cooldownText ? "bg-[var(--card)]/40 grayscale" : "bg-blue-500/10 group-hover:scale-110"
         }`}>
-          <FiPlay className={cooldownText ? "text-[var(--muted)]/40 text-xl" : "text-blue-400 text-xl"} />
+          <FiPlay size={14} className={cooldownText ? "text-[var(--muted)]/40 text-xl" : "text-blue-400 text-xl"} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`text-[11px] font-black uppercase tracking-tight ${cooldownText ? "text-[var(--muted)]/60" : ""}`}>
-            {cooldownText ? "Next Ad Soon" : (title || "Watch Ad & Earn")}
+          <p className={`text-[10px] font-black uppercase tracking-tight shrink-0 truncate ${cooldownText ? "text-[var(--muted)]/60" : ""}`}>
+            {cooldownText ? "Locked" : (title || "Watch Ad")}
           </p>
-          <p className="text-[9px] text-[var(--muted)]/60 mt-0.5 leading-relaxed italic line-clamp-1">
-            {cooldownText ? "Cooldown in progress..." : "View for 15s to claim free coins! (45m cooldown)"}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className={`flex items-center gap-1.5 border rounded-lg px-2.5 py-1 ${
-          cooldownText ? "bg-[var(--card)]/20 border-[var(--border)]" : "bg-blue-500/10 border-blue-500/20"
-        }`}>
-          <FiStar className={cooldownText ? "text-[var(--muted)]/30 text-xs" : "text-blue-400 text-xs"} />
-          <span className={`font-black text-[11px] ${cooldownText ? "text-[var(--muted)]/40" : "text-blue-400"}`}>
-            +{ADS_CONFIG.REWARD_COINS} BBC
-          </span>
+          <div className="flex items-center gap-1.5 mt-0.5">
+             <FiStar className={cooldownText ? "text-[var(--muted)]/30 text-[8px]" : "text-blue-400 text-[8px]"} />
+             <span className={`font-black text-[9px] ${cooldownText ? "text-[var(--muted)]/40" : "text-blue-400"}`}>
+               +{reward || ADS_CONFIG.REWARD_COINS} BBC
+             </span>
+          </div>
         </div>
         {!opened ? (
           <motion.button
             whileHover={{ scale: cooldownText ? 1 : 1.05 }} whileTap={{ scale: cooldownText ? 1 : 0.95 }}
             onClick={handleOpen}
             disabled={!!cooldownText}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all min-w-[90px] justify-center ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all min-w-[75px] justify-center ${
               cooldownText 
                 ? "bg-[var(--card)]/40 text-amber-400/80 border border-amber-500/20 cursor-not-allowed" 
                 : "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
             }`}
           >
-            {cooldownText ? <><FiClock className="animate-pulse" /> {cooldownText}</> : <><FiPlay /> Watch</>}
+            {cooldownText ? <><FiClock size={10} /> {cooldownText}</> : <><FiPlay size={10} /> Watch</>}
           </motion.button>
         ) : timer !== null && timer > 0 ? (
           <button
             disabled
-            className="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400/50 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase cursor-not-allowed shadow-none"
+            className="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400/50 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase cursor-not-allowed shadow-none min-w-[75px] justify-center"
           >
-             <FiClock className="animate-pulse" /> Verify Again ({timer}s)
+             <FiClock size={10} className="animate-pulse" /> {timer}s
           </button>
         ) : (
           <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={handleClaim}
             disabled={claiming}
-            className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase shadow-lg shadow-emerald-500/20"
+            className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase shadow-lg shadow-emerald-500/20 min-w-[75px] justify-center"
           >
-            {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : "Verify Again"}
+            {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : "Claim"}
           </motion.button>
         )}
       </div>
@@ -226,179 +204,91 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast }
 // ──────────────────────────────── TASK CARD ──────────────────────────────────
 function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTimer, onStartAd }: {
   task: Task;
-  onClaim: (task: Task, code?: string) => Promise<{ pending?: boolean }>;
+  onClaim: (id: string) => Promise<any>;
   pendingClaims: Set<string>;
-  isUnlocked: boolean;
-  isWatchingAd: boolean;
-  adTimer: number | null;
-  onStartAd: () => void;
+  isUnlocked?: boolean;
+  isWatchingAd?: boolean;
+  adTimer?: number | null;
+  onStartAd?: () => void;
 }) {
-  const [timer, setTimer] = useState<number | null>(null);
-  const [opened, setOpened] = useState(false);
-  const [claiming, setClaiming] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [enteredCode, setEnteredCode] = useState("");
-  const [codeError, setCodeError] = useState("");
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const gradient = taskGradients[task.type] || taskGradients.custom;
-  const iconBg = taskIconBg[task.type] || taskIconBg.custom;
+  const [loading, setLoading] = useState(false);
   const isPending = pendingClaims.has(task.taskId);
 
-  const handleOpenMainTask = () => {
-    window.open(task.url, "_blank", "noopener,noreferrer");
-    setOpened(true);
-    setTimer(task.waitSeconds);
-  };
-
-  useEffect(() => {
-    if (timer === null || timer <= 0) return;
-    timerRef.current = setTimeout(() => setTimer((t) => (t !== null ? t - 1 : null)), 1000);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [timer]);
-
-  const handleClaim = async () => {
-    if (claiming) return;
-    if (task.hasCode && !enteredCode.trim()) {
-      setCodeError("Please enter the secret code from the task content");
-      return;
+  const handleAction = async () => {
+    if (task.status === "completed" || isPending) return;
+    
+    setLoading(true);
+    if (task.url && task.url !== "#") {
+      window.open(task.url, "_blank", "noopener,noreferrer");
     }
-    setCodeError("");
-    setClaiming(true);
-    const result = await onClaim(task, enteredCode.trim() || undefined);
-    if (result?.pending) setSubmitted(true);
-    setClaiming(false);
+    
+    // Slight delay to simulate user clicking before we show claim
+    setTimeout(async () => {
+      await onClaim(task.taskId);
+      setLoading(false);
+    }, 1500);
   };
 
-  const canClaim = opened && (timer === 0 || timer === null);
-  const isDone = task.completed;
-  const isLimitReached = task.maxReached;
+  const getButtonContent = () => {
+    if (isPending) return <><FiClock /> Pending</>;
+    if (task.status === "completed") return <><FiCheck /> Completed</>;
+    if (loading) return <FiRefreshCw className="animate-spin" />;
+    return <><FiArrowRight /> Go</>;
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`relative rounded-2xl border bg-gradient-to-br ${gradient} p-4 flex flex-col gap-3 overflow-hidden`}
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={`relative rounded-2xl border p-4 flex items-center gap-4 transition-all ${
+        task.status === "completed" 
+          ? "bg-emerald-500/5 border-emerald-500/20 opacity-60" 
+          : "bg-[var(--card)]/40 border-[var(--border)]"
+      }`}
     >
-      {task.sponsorName && (
-        <span className="absolute top-2.5 right-2.5 text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/50 bg-[var(--card)]/40 px-1.5 py-0.5 rounded">
-          Sponsored
-        </span>
-      )}
-
-      <div className="flex items-start gap-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
-          <TaskIcon type={task.type} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-[11px] font-black uppercase tracking-tight truncate">{task.title}</p>
-          {task.description && (
-            <p className="text-[9px] text-[var(--muted)]/60 mt-0.5 leading-relaxed line-clamp-2">{task.description}</p>
-          )}
-          {task.hasCode && !isDone && !isPending && (
-            <span className="inline-flex items-center gap-1 mt-1 text-[8px] font-bold text-purple-400">
-              <FiLock size={8} /> Secret code required
-            </span>
-          )}
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl ${ICON_STYLES[task.type] || ICON_STYLES.custom}`}>
+        {TASK_ICONS[task.type] || TASK_ICONS.custom}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-[11px] font-black uppercase tracking-tight truncate">{task.title}</p>
+        <div className="flex items-center gap-1.5 mt-1">
+          <FiStar className="text-amber-400 text-[10px]" />
+          <span className="text-amber-400 font-black text-[10px]">+{task.reward} BBC</span>
         </div>
       </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-2.5 py-1">
-          <FiStar className="text-amber-400 text-xs" />
-          <span className="text-amber-400 font-black text-[11px]">+{task.reward} BBC</span>
-        </div>
-
-        {isDone ? (
-          <div className="flex items-center gap-1.5 text-emerald-400">
-            <FiCheckCircle className="text-sm" />
-            <span className="text-[10px] font-black uppercase">Done</span>
-          </div>
-        ) : isLimitReached ? (
-          <div className="flex items-center gap-1.5 text-[var(--muted)]/40">
-            <FiLock className="text-sm" />
-            <span className="text-[10px] font-black uppercase">Full</span>
-          </div>
-        ) : isPending || submitted ? (
-          <div className="flex items-center gap-1.5 text-amber-400">
-            <FiClock className="text-sm animate-pulse" />
-            <span className="text-[10px] font-black uppercase">Under Review</span>
-          </div>
-        ) : !opened ? (
-          <motion.button
-            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-            onClick={() => {
-              if (isUnlocked) handleOpenMainTask();
-              else onStartAd();
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide ${
-              isWatchingAd ? "bg-purple-500/20 text-purple-400" : isUnlocked ? "bg-[var(--accent)] text-white" : "bg-purple-600 text-white"
-            }`}
-          >
-            {isWatchingAd ? (
-              <><FiClock className="animate-pulse" /> {adTimer}s</>
-            ) : isUnlocked ? (
-              <>Go <FiExternalLink className="text-xs" /></>
-            ) : (
-              <>Unlock <FiLock className="text-xs" /></>
-            )}
-          </motion.button>
-        ) : timer !== null && timer > 0 ? (
-          <div className="flex items-center gap-1.5 text-[var(--muted)]">
-            <FiClock className="text-xs animate-pulse" />
-            <span className="text-[10px] font-black font-mono">{timer}s</span>
-          </div>
-        ) : !task.hasCode ? (
-          <motion.button
-            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-            onClick={handleClaim}
-            disabled={claiming}
-            className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide disabled:opacity-50"
-          >
-            {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : "Submit"}
-            {!claiming && <FiArrowRight className="text-xs" />}
-          </motion.button>
-        ) : null}
-      </div>
-
-      {(isPending || submitted) && (
-        <div className="flex items-center gap-1.5 px-2 py-1 bg-amber-500/5 border border-amber-500/15 rounded-lg">
-          <FiAlertCircle className="text-amber-400 text-xs shrink-0" />
-          <p className="text-[8px] text-amber-400 font-bold">Waiting for admin approval. Coins will be added once approved.</p>
-        </div>
-      )}
-
-      {/* Code input — shown after timer, if code required */}
-      {opened && canClaim && task.hasCode && !isPending && !submitted && !isDone && (
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-500/5 border border-purple-500/20 rounded-lg">
-            <FiLock className="text-purple-400 text-xs shrink-0" />
-            <p className="text-[8px] text-purple-400 font-bold">Find the secret code in the task content, then enter it below.</p>
-          </div>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={enteredCode}
-              onChange={(e) => { setEnteredCode(e.target.value.toUpperCase()); setCodeError(""); }}
-              placeholder="ENTER CODE HERE"
-              className="flex-1 bg-[var(--background)]/60 border border-purple-500/30 rounded-xl px-3 py-2 text-xs font-black tracking-widest text-purple-300 placeholder:text-[var(--muted)]/20 outline-none focus:border-purple-500/60 transition-colors"
-              autoComplete="off"
-            />
+      
+      {!isUnlocked && task.status !== "completed" && !isPending ? (
+        <div className="shrink-0">
+          {isWatchingAd ? (
+            <div className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase bg-purple-500/10 text-purple-400 border border-purple-500/20`}>
+               <FiClock className="animate-pulse" /> {adTimer}s
+            </div>
+          ) : (
             <motion.button
-              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              onClick={handleClaim}
-              disabled={claiming || !enteredCode.trim()}
-              className="flex items-center gap-1 bg-purple-600 text-white px-3 py-2 rounded-xl text-[10px] font-black uppercase disabled:opacity-40"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onClick={onStartAd}
+              className="bg-purple-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg shadow-purple-600/20"
             >
-              {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : <><FiCheck className="text-xs" /> Verify</>}
+              Unlock
             </motion.button>
-          </div>
-          {codeError && (
-            <p className="text-[9px] text-rose-400 font-bold flex items-center gap-1">
-              <FiAlertCircle className="text-xs" /> {codeError}
-            </p>
           )}
         </div>
+      ) : (
+        <motion.button
+          whileHover={{ scale: task.status === "completed" ? 1 : 1.05 }}
+          whileTap={{ scale: task.status === "completed" ? 1 : 0.95 }}
+          onClick={handleAction}
+          disabled={task.status === "completed" || isPending || loading}
+          className={`shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${
+            task.status === "completed"
+              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 cursor-default"
+              : isPending
+              ? "bg-amber-500/10 text-amber-400 border border-amber-500/20 cursor-default"
+              : "bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500"
+          }`}
+        >
+          {getButtonContent()}
+        </motion.button>
       )}
     </motion.div>
   );
@@ -413,244 +303,377 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "watch",    label: "Ads",      icon: <FiPlay size={13} /> },
 ];
 
+const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
 export default function CoinsTab() {
   const [activeTab, setActiveTab] = useState<TabKey>("checkin");
   const [coins, setCoins] = useState(0);
+  const [checkinLoading, setCheckinLoading] = useState(false);
   const [checkedInToday, setCheckedInToday] = useState(false);
   const [streak, setStreak] = useState(0);
   const [rewards, setRewards] = useState([2, 3, 5, 7, 10, 15, 25]);
   const [nextReward, setNextReward] = useState(2);
-  const [lastAdReward1, setLastAdReward1] = useState<string | null>(null);
-  const [lastAdReward2, setLastAdReward2] = useState<string | null>(null);
-  const [lastAdReward3, setLastAdReward3] = useState<string | null>(null);
+  
+  // Dynamic ad channel rewards tracking
+  const [adRewardTimes, setAdRewardTimes] = useState<Record<string, string | null>>({});
+
   const [history, setHistory] = useState<CoinHistory[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [pendingClaims, setPendingClaims] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(true);
-  const [checkinLoading, setCheckinLoading] = useState(false);
-  const [convertCoins, setConvertCoins] = useState("");
-  const [converting, setConverting] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-
-  // Pagination states
   const [tasksPage, setTasksPage] = useState(1);
   const [tasksPages, setTasksPages] = useState(1);
   const [historyPage, setHistoryPage] = useState(1);
   const [historyPages, setHistoryPages] = useState(1);
-  const [checkinRewarded, setCheckinRewarded] = useState(false);
-  const [adTimer, setAdTimer] = useState<number | null>(null);
-  const [activeAdTarget, setActiveAdTarget] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Conversion state
+  const [convertCoins, setConvertCoins] = useState("");
+  const [converting, setConverting] = useState(false);
+  const convertPreview = convertCoins ? (parseInt(convertCoins) / 100).toFixed(2) : null;
+
+  // Ad Gateway State (for Tasks)
   const [unlockedTaskIds, setUnlockedTaskIds] = useState<Set<string>>(new Set());
+  const [activeAdTarget, setActiveAdTarget] = useState<string | null>(null);
+  const [adTimer, setAdTimer] = useState<number | null>(null);
   const adTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleStartAd = (target: string) => {
-    window.open(ADS_CONFIG.ADSTERRA_LINK, "_blank", "noopener,noreferrer");
-    setActiveAdTarget(target);
-    setAdTimer(15);
+  const showToast = (message: string, type: "success" | "error" = "success") => {
+    // We'll use the browser's alert for now since we don't have a toast component in this file
+    // Ideally use a custom toast UI
+    const event = new CustomEvent("show-toast", { detail: { message, type } });
+    window.dispatchEvent(event);
   };
-
-  useEffect(() => {
-    if (adTimer === null || adTimer <= 0) {
-      if (adTimer === 0 && activeAdTarget) {
-        if (activeAdTarget === "checkin") setCheckinRewarded(true);
-        else setUnlockedTaskIds(prev => new Set([...prev, activeAdTarget]));
-        setAdTimer(null);
-        setActiveAdTarget(null);
-      }
-      return;
-    }
-    adTimerRef.current = setTimeout(() => setAdTimer(t => (t !== null ? t - 1 : null)), 1000);
-    return () => { if (adTimerRef.current) clearTimeout(adTimerRef.current); };
-  }, [adTimer, activeAdTarget]);
-
-  const showToast = (message: string, type: "success" | "error") => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 4000);
-  };
-
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const fetchData = useCallback(async () => {
+    const token = localStorage.getItem("token");
     if (!token) return;
-    setLoading(true);
-    try {
-      const [balRes, taskRes] = await Promise.all([
-        fetch(`/api/coins/balance?historyPage=${historyPage}`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`/api/coins/tasks?page=${tasksPage}`,   { headers: { Authorization: `Bearer ${token}` } }),
-      ]);
-      const [bal, taskData] = await Promise.all([balRes.json(), taskRes.json()]);
 
+    try {
+      // Balance & History
+      const balRes = await fetch(`/api/coins/balance?historyPage=${historyPage}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const bal = await balRes.json();
       if (bal.success) {
         setCoins(bal.coins);
         setCheckedInToday(bal.checkedInToday);
         setStreak(bal.streak || 0);
         setNextReward(bal.nextReward || 5);
         setRewards(bal.rewards || [5, 7, 10, 15, 20, 25, 50]);
-        setLastAdReward1(bal.lastAdReward1);
-        setLastAdReward2(bal.lastAdReward2);
-        setLastAdReward3(bal.lastAdReward3);
+        
+        // Map ad rewards array to record
+        const rewardMap: Record<string, string | null> = {};
+        bal.adRewards?.forEach((r: any) => { rewardMap[r.id] = r.lastTime; });
+        setAdRewardTimes(rewardMap);
+
         setHistory(bal.history || []);
         setHistoryPages(bal.historyPages || 1);
       }
-      if (taskData.success) {
-        setTasks(taskData.tasks || []);
-        setTasksPages(taskData.pages || 1);
+
+      // Tasks
+      const taskRes = await fetch(`/api/coins/tasks?page=${tasksPage}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const tData = await taskRes.json();
+      if (tData.success) {
+        setTasks(tData.tasks);
+        setTasksPages(tData.pages);
+        setPendingClaims(new Set(tData.pendingClaimIds || []));
       }
-    } catch (e) {
-      console.error("Failed to fetch coin data:", e);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
-  }, [token, tasksPage, historyPage]);
+  }, [historyPage, tasksPage]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleCheckin = async () => {
-    if (checkinLoading || checkedInToday) return;
     setCheckinLoading(true);
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("/api/coins/checkin", {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (data.success) {
+        showToast(data.message, "success");
         setCoins(data.newBalance);
         setCheckedInToday(true);
         setStreak(data.streak);
-        setNextReward(data.nextReward);
-        if (data.rewards) setRewards(data.rewards);
-        showToast(data.message, "success");
+        fetchData(); // Refresh history
       } else {
         showToast(data.message, "error");
       }
     } catch {
-      showToast("Check-in failed. Try again.", "error");
+      showToast("Check-in failed", "error");
     } finally {
       setCheckinLoading(false);
     }
   };
 
-  const handleClaimTask = async (task: Task, code?: string): Promise<{ pending?: boolean }> => {
+  const handleClaimTask = async (taskId: string) => {
     try {
-      const res = await fetch("/api/coins/complete-task", {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/coins/claim", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ taskId: task.taskId, code }),
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ taskId })
       });
       const data = await res.json();
       if (data.success) {
-        setPendingClaims((prev) => new Set([...prev, task.taskId]));
         showToast(data.message, "success");
-        return { pending: true };
+        setPendingClaims(prev => new Set([...prev, taskId]));
+        return data;
       } else {
         showToast(data.message, "error");
-        return {};
+        return data;
       }
     } catch {
-      showToast("Failed to submit claim. Try again.", "error");
-      return {};
+      showToast("Claim failed", "error");
     }
   };
 
   const handleConvert = async () => {
-    const c = parseInt(convertCoins);
-    if (!c || c < 100) return showToast("Minimum 100 coins to convert", "error");
-    if (c > coins) return showToast("Insufficient coin balance", "error");
+    if (!convertCoins || isNaN(parseInt(convertCoins))) return;
     setConverting(true);
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("/api/coins/convert", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ coins: c }),
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ amount: parseInt(convertCoins) })
       });
       const data = await res.json();
       if (data.success) {
-        setCoins(data.newCoinBalance);
-        setConvertCoins("");
         showToast(data.message, "success");
-        window.dispatchEvent(new Event("walletUpdated"));
+        setCoins(data.newCoins);
+        setConvertCoins("");
         fetchData();
       } else {
         showToast(data.message, "error");
       }
     } catch {
-      showToast("Conversion failed. Try again.", "error");
+      showToast("Conversion failed", "error");
     } finally {
       setConverting(false);
     }
   };
 
-  const convertPreview = parseInt(convertCoins) >= 100 ? (parseInt(convertCoins) / COINS_PER_RUPEE).toFixed(2) : null;
-  const incompleteTasks = tasks.filter((t) => !t.completed && !t.maxReached);
-  const completedTasks  = tasks.filter((t) => t.completed || t.maxReached);
+  // ── AD GATEWAY LOGIC ──
+  const handleStartAd = (targetId: string) => {
+    window.open(ADS_CONFIG.ADSTERRA_LINK, "_blank", "noopener,noreferrer");
+    setActiveAdTarget(targetId);
+    setAdTimer(15);
+  };
+
+  useEffect(() => {
+    if (adTimer === null || adTimer <= 0) {
+      if (adTimer === 0 && activeAdTarget) {
+        setUnlockedTaskIds(prev => new Set([...prev, activeAdTarget]));
+        setActiveAdTarget(null);
+        setAdTimer(null);
+      }
+      return;
+    }
+    adTimerRef.current = setTimeout(() => setAdTimer(t => (t ? t - 1 : 0)), 1000);
+    return () => { if (adTimerRef.current) clearTimeout(adTimerRef.current); };
+  }, [adTimer, activeAdTarget]);
+
+  if (loading) return (
+    <div className="p-8 flex flex-col items-center justify-center gap-4 animate-pulse">
+      <div className="w-16 h-16 rounded-full bg-[var(--card)] border-2 border-[var(--border)]" />
+      <div className="h-4 w-32 bg-[var(--card)] rounded" />
+    </div>
+  );
+
+  const incompleteTasks = tasks.filter(t => t.status !== "completed");
+  const completedTasks = tasks.filter(t => t.status === "completed");
 
   return (
-    <div className="max-w-2xl mx-auto relative">
-
-      {/* ── TOAST ────────────────────────────────────────────────────────── */}
-      <AnimatePresence>
-        {toast && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`fixed top-6 left-1/2 -translate-x-1/2 z-[1600] px-5 py-3 rounded-2xl shadow-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 max-w-xs w-full justify-center ${
-              toast.type === "success" ? "bg-emerald-500 text-white" : "bg-rose-500 text-white"
-            }`}
-          >
-            {toast.type === "success" ? <FiStar /> : <FiZap />}
-            {toast.message}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {loading ? (
-        <div className="flex items-center justify-center h-60">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
-            <FiRefreshCw className="text-3xl text-[var(--accent)]" />
-          </motion.div>
-        </div>
-      ) : (
-        <div className="space-y-4">
-
-          {/* ── BALANCE HEADER ───────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative rounded-2xl overflow-hidden border border-[var(--border)] bg-gradient-to-br from-amber-500/10 via-[var(--card)]/60 to-[var(--card)]/40 p-4 sm:p-5"
-          >
-            <div className="absolute top-[-30%] right-[-5%] w-[160px] h-[160px] bg-amber-500/10 rounded-full blur-[50px] pointer-events-none" />
-            <div className="relative flex items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-2">
-                  <FiStar className="text-amber-400" size={9} />
-                  <span className="text-[8px] font-black uppercase tracking-widest text-amber-400">BlueBuff Coins</span>
-                </div>
-                <motion.p
-                  key={coins}
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-4xl sm:text-5xl font-black italic tracking-tighter text-amber-400"
-                >
-                  {coins.toLocaleString()}
-                </motion.p>
-                <p className="text-[var(--muted)] text-[10px] mt-0.5 font-bold uppercase tracking-wide">
-                  = ₹{(coins / COINS_PER_RUPEE).toFixed(2)} wallet value
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-2 shrink-0">
-                <div className="bg-[var(--card)]/40 border border-[var(--border)] rounded-xl p-2.5 text-center">
-                  <p className="text-blue-400 font-black text-base">🔥 {streak}</p>
-                  <p className="text-[7px] font-bold uppercase tracking-wide text-[var(--muted)]">Streak</p>
-                </div>
-                <div className="bg-[var(--card)]/40 border border-[var(--border)] rounded-xl p-2.5 text-center">
-                  <p className="text-amber-400 font-black text-base">+{nextReward}</p>
-                  <p className="text-[7px] font-bold uppercase tracking-wide text-[var(--muted)]">Tomorrow</p>
-                </div>
-              </div>
+    <div className="max-w-xl mx-auto space-y-3 pb-20 px-2 pt-1">
+      
+      {/* ── NEW PREMIUM BALANCE CARD ──────────────────────────────────── */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+        className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[#0A0A0A] p-5 shadow-2xl shadow-blue-500/5 mb-2"
+      >
+        <div className="relative flex items-center justify-between gap-4">
+          
+          {/* Left Side: Balance & Info */}
+          <div className="flex flex-col items-start gap-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/5 border border-amber-500/20 mb-1">
+              <FiStar className="text-amber-500 text-[9px]" />
+              <span className="text-[8px] font-black uppercase tracking-widest text-amber-500">Bluebuff Coins</span>
             </div>
-          </motion.div>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-5xl font-black text-amber-500 tabular-nums leading-tight">{coins}</span>
+            </div>
+            
+            <p className="text-[10px] font-black uppercase tracking-wide text-[var(--muted)]/60">
+              = <span className="text-white">₹{(coins / 100).toFixed(2)} Wallet Value</span>
+            </p>
+          </div>
+
+          {/* Right Side: Quick Stats */}
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/5 p-2 transition-colors hover:bg-white/[0.05]">
+               <div className="flex items-center gap-1">
+                 <span className="text-sm">🔥</span>
+                 <span className="text-sm font-black text-blue-400">{streak}</span>
+               </div>
+               <span className="text-[7px] font-black uppercase text-[var(--muted)]/40 mt-1">Streak</span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/5 p-2 transition-colors hover:bg-white/[0.05]">
+               <span className="text-sm font-black text-amber-500">+{nextReward}</span>
+               <span className="text-[7px] font-black uppercase text-[var(--muted)]/40 mt-1 uppercase text-center leading-tight">Tomorrow</span>
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
+
+      {/* ── CONTENT AREA ──────────────────────────────────────────────── */}
+      {!loading && (
+        <div className="space-y-6">
+
+          <AnimatePresence mode="wait">
+            {/* ══ CONVERT ══ */}
+            {activeTab === "convert" && (
+              <motion.div key="convert" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <FiTrendingUp className="text-emerald-400 text-sm" />
+                  <p className="text-[11px] font-black uppercase tracking-wide">Convert to Diamonds</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                      <FiStar className="text-amber-500 text-xs" />
+                    </div>
+                    <input
+                      type="number"
+                      value={convertCoins}
+                      onChange={(e) => setConvertCoins(e.target.value)}
+                      placeholder="Enter coins (min 100)"
+                      className="w-full pl-9 pr-4 py-3 bg-[var(--background)]/60 border border-[var(--border)] rounded-xl text-sm font-bold outline-none focus:border-amber-500/40 transition-colors"
+                    />
+                  </div>
+
+                  <AnimatePresence>
+                    {convertPreview && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="flex items-center justify-between px-3 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-xl"
+                      >
+                        <span className="text-[10px] font-bold text-[var(--muted)] uppercase">You'll receive</span>
+                        <span className="text-emerald-400 font-black text-sm">₹{convertPreview}</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                    onClick={handleConvert}
+                    disabled={converting || !convertCoins || parseInt(convertCoins) < 100 || parseInt(convertCoins) > coins}
+                    className="w-full py-3.5 rounded-xl bg-emerald-500 text-white text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {converting ? <FiRefreshCw className="animate-spin" /> : <><FiArrowRight /> Add to Wallet</>}
+                  </motion.button>
+
+                  <div className="flex items-center gap-2 px-3 py-2 bg-[var(--card)]/40 border border-[var(--border)] rounded-xl">
+                    <FiLock className="text-[var(--muted)]/40 text-xs" />
+                    <p className="text-[8px] font-bold uppercase tracking-wide text-[var(--muted)]/40">Min 100 BBC · Instant transfer</p>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 px-3 py-2.5 bg-blue-500/5 border border-blue-500/15 rounded-xl border-dashed">
+                    <FiZap className="text-blue-400 text-[10px] animate-pulse shrink-0" />
+                    <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
+                      🚀 Crypto withdrawal & Listing on Decentralized Exchanges (DEX) coming soon! Hold your coins to maximize value.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* ══ HISTORY ══ */}
+            {activeTab === "history" && (
+              <motion.div key="history" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <FiList className="text-[var(--muted)] text-sm" />
+                  <p className="text-[11px] font-black uppercase tracking-wide">Coin History</p>
+                  <button onClick={fetchData} className="ml-auto text-[var(--muted)]/40 hover:text-[var(--muted)] transition-colors">
+                    <FiRefreshCw className="text-xs" />
+                  </button>
+                </div>
+
+                {history.length === 0 ? (
+                  <div className="text-center py-12 text-[var(--muted)]/40">
+                    <FiList className="text-3xl mx-auto mb-2" />
+                    <p className="text-[10px] font-black uppercase tracking-wide">No transactions yet</p>
+                    <p className="text-[9px] mt-1">Complete tasks or check in to earn coins!</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {history.map((item, idx) => (
+                      <div key={idx} className="flex items-center justify-between py-2.5 border-b border-[var(--border)]/30 last:border-0">
+                        <div className="flex items-center gap-2.5">
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                            item.type === "earn" ? "bg-amber-500/10" : "bg-rose-500/10"
+                          }`}>
+                            <FiStar className={`text-[10px] ${item.type === "earn" ? "text-amber-400" : "text-rose-400"}`} />
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-black truncate max-w-[200px]">{item.description}</p>
+                            <p className="text-[8px] text-[var(--muted)]/40 font-mono">
+                              {new Date(item.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "2-digit" })}
+                            </p>
+                          </div>
+                        </div>
+                        <span className={`font-black text-[11px] ${item.type === "earn" ? "text-amber-400" : "text-rose-400"}`}>
+                          {item.type === "earn" ? "+" : "-"}{item.coins}
+                        </span>
+                      </div>
+                    ))}
+
+                    {historyPages > 1 && (
+                      <div className="flex items-center justify-center gap-3 pt-4">
+                        <button onClick={() => setHistoryPage(p => Math.max(1, p - 1))} disabled={historyPage === 1}
+                          className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
+                          <FiChevronLeft className="text-xs" />
+                        </button>
+                        <span className="text-[10px] font-black uppercase tracking-wide text-[var(--muted)]">
+                          {historyPage} / {historyPages}
+                        </span>
+                        <button onClick={() => setHistoryPage(p => Math.min(historyPages, p + 1))} disabled={historyPage === historyPages}
+                          className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
+                          <FiChevronRight className="text-xs" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* ── SEPARATE TOP TOOLS ────────────────────────────────────────── */}
           <div className="grid grid-cols-2 gap-3">
@@ -677,6 +700,7 @@ export default function CoinsTab() {
                History
              </button>
           </div>
+
 
           {/* ── TOP TAB BAR ──────────────────────────────────────────────── */}
           <div className="grid grid-cols-3 gap-1.5 bg-[var(--card)]/40 p-1 rounded-2xl border border-[var(--border)]">
@@ -733,7 +757,7 @@ export default function CoinsTab() {
                 <div className="grid grid-cols-7 gap-1.5">
                   {rewards.map((reward, i) => {
                     const day = i + 1;
-                    const isCompleted = checkedInToday ? day < streak : day < streak;
+                    const isCompleted = day <= (checkedInToday ? streak : streak);
                     const isToday = day === streak && checkedInToday;
                     const isCurrent = day === (checkedInToday ? streak : streak + 1);
                     return (
@@ -842,9 +866,6 @@ export default function CoinsTab() {
                               onClaim={async () => ({})} 
                               pendingClaims={pendingClaims} 
                               isUnlocked={true}
-                              isWatchingAd={false}
-                              adTimer={null}
-                              onStartAd={() => {}}
                             />
                           </div>
                         ))}
@@ -852,7 +873,7 @@ export default function CoinsTab() {
                     )}
 
                     {tasksPages > 1 && (
-                      <div className="flex items-center justify-center gap-3 pt-4 pb-2">
+                      <div className="flex items-center justify-center gap-3 pt-4">
                         <button onClick={() => setTasksPage(p => Math.max(1, p - 1))} disabled={tasksPage === 1}
                           className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
                           <FiChevronLeft className="text-xs" />
@@ -866,103 +887,8 @@ export default function CoinsTab() {
                         </button>
                       </div>
                     )}
-
-                    {/* ══ PROMO CARD ══ */}
-                    <Link href="/partner">
-                      <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
-                        className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/5 border border-indigo-500/20 relative overflow-hidden group"
-                      >
-                        <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-indigo-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform" />
-                        <div className="relative z-10">
-                          <div className="flex items-center gap-2 mb-2">
-                             <div className="w-6 h-6 rounded-lg bg-indigo-500/20 flex items-center justify-center">
-                                <FiUsers className="text-indigo-400 text-xs" />
-                             </div>
-                             <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400">Promote With Us</span>
-                          </div>
-                          <h4 className="text-[12px] font-black uppercase italic italic-tighter text-white/90">Want to promote your YouTube, App, or Website?</h4>
-                          <p className="text-[9px] text-[var(--muted)]/60 mt-1 leading-relaxed">Join 50+ partners and grow your audience instantly. Reach thousands of gamers every day.</p>
-                          <div className="flex items-center gap-1.5 mt-3 text-indigo-400 text-[9px] font-black uppercase tracking-widest group-hover:gap-2 transition-all">
-                             Learn More <FiArrowRight />
-                          </div>
-                        </div>
-                      </motion.div>
-                    </Link>
                   </div>
                 )}
-              </motion.div>
-            )}
-
-            {/* ══ CONVERT ══ */}
-            {activeTab === "convert" && (
-              <motion.div key="convert" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5 space-y-4"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                    <FiTrendingUp className="text-emerald-400 text-sm" />
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-black uppercase tracking-wide">Convert to Wallet</p>
-                    <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">100 BBC = ₹1.00</p>
-                  </div>
-                </div>
-
-                {/* Current balance pill */}
-                <div className="flex items-center justify-between px-3 py-2.5 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-                  <span className="text-[9px] font-bold uppercase text-[var(--muted)]">Your balance</span>
-                  <span className="text-amber-400 font-black text-sm">{coins.toLocaleString()} BBC</span>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="relative">
-                    <FiStar className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400 text-sm" />
-                    <input
-                      type="number"
-                      value={convertCoins}
-                      onChange={(e) => setConvertCoins(e.target.value)}
-                      placeholder="Enter coins (min 100)"
-                      className="w-full pl-9 pr-4 py-3 bg-[var(--background)]/60 border border-[var(--border)] rounded-xl text-sm font-bold outline-none focus:border-amber-500/40 transition-colors"
-                    />
-                  </div>
-
-                  <AnimatePresence>
-                    {convertPreview && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="flex items-center justify-between px-3 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-xl"
-                      >
-                        <span className="text-[10px] font-bold text-[var(--muted)] uppercase">You'll receive</span>
-                        <span className="text-emerald-400 font-black text-sm">₹{convertPreview}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    onClick={handleConvert}
-                    disabled={converting || !convertCoins || parseInt(convertCoins) < 100 || parseInt(convertCoins) > coins}
-                    className="w-full py-3.5 rounded-xl bg-emerald-500 text-white text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    {converting ? <FiRefreshCw className="animate-spin" /> : <><FiArrowRight /> Add to Wallet</>}
-                  </motion.button>
-
-                  <div className="flex items-center gap-2 px-3 py-2 bg-[var(--card)]/40 border border-[var(--border)] rounded-xl">
-                    <FiLock className="text-[var(--muted)]/40 text-xs" />
-                    <p className="text-[8px] font-bold uppercase tracking-wide text-[var(--muted)]/40">Min 100 BBC · Instant transfer</p>
-                  </div>
-
-                  <div className="flex items-center gap-2.5 px-3 py-2.5 bg-blue-500/5 border border-blue-500/15 rounded-xl border-dashed">
-                    <FiZap className="text-blue-400 text-[10px] animate-pulse shrink-0" />
-                    <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
-                      🚀 Crypto withdrawal & Listing on Decentralized Exchanges (DEX) coming soon! Hold your coins to maximize value.
-                    </p>
-                  </div>
-                </div>
               </motion.div>
             )}
 
@@ -982,30 +908,22 @@ export default function CoinsTab() {
                 </div>
 
                 <div className="space-y-4">
-                  <AdsterraCard 
-                    adId="watch_1"
-                    title="Watch Ad Channel 1"
-                    adLink={ADS_CONFIG.WATCH_EARN_LINK}
-                    lastAdReward={lastAdReward1}
-                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward1(lastTime); }} 
-                    showToast={showToast} 
-                  />
-                  <AdsterraCard 
-                    adId="watch_2"
-                    title="Watch Ad Channel 2"
-                    adLink={ADS_CONFIG.WATCH_EARN_LINK_2}
-                    lastAdReward={lastAdReward2}
-                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward2(lastTime); }} 
-                    showToast={showToast} 
-                  />
-                  <AdsterraCard 
-                    adId="watch_3"
-                    title="Watch Ad Channel 3"
-                    adLink={ADS_CONFIG.WATCH_EARN_LINK_3}
-                    lastAdReward={lastAdReward3}
-                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward3(lastTime); }} 
-                    showToast={showToast} 
-                  />
+                  {ADS_CONFIG.WATCH_EARN_CHANNELS.map((channel) => (
+                    <AdsterraCard 
+                      key={channel.id}
+                      adId={channel.id}
+                      title={channel.title}
+                      adLink={channel.link}
+                      reward={(channel as any).reward}
+                      cooldownMs={(channel as any).cooldownMs}
+                      lastAdReward={adRewardTimes[channel.id] || null}
+                      onReward={(bal, id, lastTime) => { 
+                        setCoins(bal); 
+                        setAdRewardTimes(prev => ({ ...prev, [id]: lastTime }));
+                      }} 
+                      showToast={showToast} 
+                    />
+                  ))}
                 </div>
 
                 <div className="relative rounded-2xl border border-[var(--border)] bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-4 overflow-hidden">
@@ -1024,69 +942,8 @@ export default function CoinsTab() {
               </motion.div>
             )}
 
-            {/* ══ HISTORY ══ */}
-            {activeTab === "history" && (
-              <motion.div key="history" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5"
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <FiList className="text-[var(--muted)] text-sm" />
-                  <p className="text-[11px] font-black uppercase tracking-wide">Coin History</p>
-                  <button onClick={fetchData} className="ml-auto text-[var(--muted)]/40 hover:text-[var(--muted)] transition-colors">
-                    <FiRefreshCw className="text-xs" />
-                  </button>
-                </div>
-
-                {history.length === 0 ? (
-                  <div className="text-center py-12 text-[var(--muted)]/40">
-                    <FiList className="text-3xl mx-auto mb-2" />
-                    <p className="text-[10px] font-black uppercase tracking-wide">No transactions yet</p>
-                    <p className="text-[9px] mt-1">Complete tasks or check in to earn coins!</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {history.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between py-2.5 border-b border-[var(--border)]/30 last:border-0">
-                        <div className="flex items-center gap-2.5">
-                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                            item.type === "earn" ? "bg-amber-500/10" : "bg-rose-500/10"
-                          }`}>
-                            <FiStar className={`text-[10px] ${item.type === "earn" ? "text-amber-400" : "text-rose-400"}`} />
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-black truncate max-w-[200px]">{item.description}</p>
-                            <p className="text-[8px] text-[var(--muted)]/40 font-mono">
-                              {new Date(item.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "2-digit" })}
-                            </p>
-                          </div>
-                        </div>
-                        <span className={`font-black text-[11px] ${item.type === "earn" ? "text-amber-400" : "text-rose-400"}`}>
-                          {item.type === "earn" ? "+" : "-"}{item.coins}
-                        </span>
-                      </div>
-                    ))}
-
-                    {historyPages > 1 && (
-                      <div className="flex items-center justify-center gap-3 pt-4">
-                        <button onClick={() => setHistoryPage(p => Math.max(1, p - 1))} disabled={historyPage === 1}
-                          className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
-                          <FiChevronLeft className="text-xs" />
-                        </button>
-                        <span className="text-[10px] font-black uppercase tracking-wide text-[var(--muted)]">
-                          {historyPage} / {historyPages}
-                        </span>
-                        <button onClick={() => setHistoryPage(p => Math.min(historyPages, p + 1))} disabled={historyPage === historyPages}
-                          className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
-                          <FiChevronRight className="text-xs" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </motion.div>
-            )}
-
           </AnimatePresence>
+
         </div>
       )}
     </div>

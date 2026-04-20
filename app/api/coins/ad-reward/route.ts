@@ -28,6 +28,12 @@ export async function POST(req: Request) {
     const user = await User.findOne({ _id: userId });
     if (!user) return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
 
+    // Find specific channel config
+    const channel = ADS_CONFIG.WATCH_EARN_CHANNELS.find(c => c.id === adId);
+    const rewardCoins = (channel as any)?.reward || ADS_CONFIG.REWARD_COINS;
+    const cooldownMs = (channel as any)?.cooldownMs || ADS_CONFIG.COOLDOWN_MS;
+    const channelName = channel ? channel.title : adId;
+
     // Check cooldown specifically for this adId
     const lastAdReward = await CoinTransaction.findOne({
       userObjectId: user._id,
@@ -37,8 +43,8 @@ export async function POST(req: Request) {
 
     if (lastAdReward) {
       const timeSinceLast = Date.now() - new Date(lastAdReward.createdAt).getTime();
-      if (timeSinceLast < ADS_CONFIG.COOLDOWN_MS) {
-        const remainingMinutes = Math.ceil((ADS_CONFIG.COOLDOWN_MS - timeSinceLast) / 60000);
+      if (timeSinceLast < cooldownMs) {
+        const remainingMinutes = Math.ceil((cooldownMs - timeSinceLast) / 60000);
         return NextResponse.json({ 
           success: false, 
           message: `Please wait ${remainingMinutes}m before claiming again.` 
@@ -47,12 +53,12 @@ export async function POST(req: Request) {
     }
 
     const balanceBefore = user.coins || 0;
-    const balanceAfter = balanceBefore + ADS_CONFIG.REWARD_COINS;
+    const balanceAfter = balanceBefore + rewardCoins;
 
     // Award coins
     await User.updateOne(
       { _id: userId },
-      { $inc: { coins: ADS_CONFIG.REWARD_COINS } }
+      { $inc: { coins: rewardCoins } }
     );
 
     // Log transaction
@@ -62,18 +68,18 @@ export async function POST(req: Request) {
       userId: user.userId,
       userObjectId: user._id,
       type: "earn",
-      coins: ADS_CONFIG.REWARD_COINS,
+      coins: rewardCoins,
       balanceBefore,
       balanceAfter,
       source: "ad_reward",
       referenceId: adId,
-      description: `Adsterra Reward (${adId === "watch_1" ? "Channel 1" : adId === "watch_2" ? "Channel 2" : "Channel 3"})`,
+      description: `Adsterra Reward (${channelName})`,
       performedBy: "system",
     });
 
     return NextResponse.json({
       success: true,
-      message: `Success! +${ADS_CONFIG.REWARD_COINS} BBC added.`,
+      message: `Success! +${rewardCoins} BBC added.`,
       newBalance: balanceAfter
     });
 
