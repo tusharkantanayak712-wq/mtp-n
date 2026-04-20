@@ -24,15 +24,15 @@ function getDateFilter(
 ) {
   const now = new Date();
 
-  if (range === "weekly") {
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - 7);
-    return { $gte: weekStart };
-  }
-
   if (range === "monthly") {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     return { $gte: monthStart };
+  }
+
+  if (range === "prev-month") {
+    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+    return { $gte: prevMonthStart, $lte: prevMonthEnd };
   }
 
   if (range === "custom") {

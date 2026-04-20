@@ -8,10 +8,15 @@ import { FiUsers, FiDollarSign } from "react-icons/fi";
 export default function LeaderboardPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState("weekly");
+  const [range, setRange] = useState("monthly");
   const [type, setType] = useState("purchase"); // "purchase" | "referral"
 
-  const limit = 10;
+  const limit = 15;
+
+  const currentMonthName = new Date().toLocaleString("en-US", { month: "short" });
+  const prevMonthDate = new Date();
+  prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
+  const prevMonthName = prevMonthDate.toLocaleString("en-US", { month: "short" });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -87,16 +92,19 @@ export default function LeaderboardPage() {
 
             {/* RANGE TOGGLE */}
             <div className="bg-[var(--card)] p-1 rounded-2xl flex w-full sm:w-auto border border-[var(--border)] transition-colors">
-              {["weekly", "monthly"].map((r) => (
+              {[
+                { id: "monthly", label: currentMonthName },
+                { id: "prev-month", label: prevMonthName }
+              ].map((r) => (
                 <button
-                  key={r}
-                  onClick={() => setRange(r)}
-                  className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${range === r
-                    ? "bg-[var(--foreground)] text-[var(--background)]"
+                  key={r.id}
+                  onClick={() => setRange(r.id)}
+                  className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${range === r.id
+                    ? "bg-[var(--foreground)] text-[var(--background)] shadow-lg"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
-                  {r === "weekly" ? "Week" : "Month"}
+                  {r.label}
                 </button>
               ))}
             </div>

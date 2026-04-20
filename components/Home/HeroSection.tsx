@@ -30,7 +30,7 @@ export default function HeroSection() {
 
       <div className="space-y-1">
         <HomeQuickActions />
-        <HomeReferralStats />
+        {/* <HomeReferralStats /> */}
       </div>
 
       <GamesPage />
