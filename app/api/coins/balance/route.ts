@@ -32,13 +32,16 @@ export async function GET(req: Request) {
     const historySkip = (historyPage - 1) * historyLimit;
 
     // Get coin transactions — CoinTransaction stores the custom userId string
-    const [history, historyTotal] = await Promise.all([
+    const [history, historyTotal, lastAdTx] = await Promise.all([
       CoinTransaction.find({ userId: user.userId })
         .sort({ createdAt: -1 })
         .skip(historySkip)
         .limit(historyLimit)
         .select("type coins source description referenceId createdAt"),
       CoinTransaction.countDocuments({ userId: user.userId }),
+      CoinTransaction.findOne({ userId: user.userId, source: "ad_reward" })
+        .sort({ createdAt: -1 })
+        .select("createdAt"),
     ]);
 
     // IST-aware check-in status
@@ -84,6 +87,7 @@ export async function GET(req: Request) {
       streak: effectiveStreak,
       nextReward,
       rewards: STREAK_REWARDS,
+      lastAdReward: lastAdTx ? lastAdTx.createdAt : null,
       history,
       historyTotal,
       historyPage,

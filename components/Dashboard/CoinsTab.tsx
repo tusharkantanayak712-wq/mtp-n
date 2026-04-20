@@ -6,7 +6,7 @@ import {
   FiStar, FiCalendar, FiCheckCircle, FiArrowRight, FiCheck,
   FiYoutube, FiSmartphone, FiGlobe, FiMessageCircle,
   FiZap, FiRefreshCw, FiClock, FiList, FiLock, FiTrendingUp,
-  FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight
+  FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, FiPlay
 } from "react-icons/fi";
 import Link from "next/link";
 import { ADS_CONFIG } from "@/lib/adsConfig";
@@ -65,6 +65,154 @@ const taskIconBg: Record<string, string> = {
   url_visit: "bg-purple-500/10 text-purple-400",
   custom: "bg-amber-500/10 text-amber-400",
 };
+
+// ──────────────────────────────── ADSTERRA CARD ──────────────────────────────
+function AdsterraCard({ lastAdReward, onReward, showToast }: { 
+  lastAdReward: string | null;
+  onReward: (newBal: number, lastTime: string) => void;
+  showToast: (m: string, t: "success" | "error") => void;
+}) {
+  const [opened, setOpened] = useState(false);
+  const [timer, setTimer] = useState<number | null>(null);
+  const [claiming, setClaiming] = useState(false);
+  const [cooldownText, setCooldownText] = useState<string | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cooldown effect
+  useEffect(() => {
+    if (!lastAdReward) {
+      setCooldownText(null);
+      return;
+    }
+
+    const updateCooldown = () => {
+      const last = new Date(lastAdReward).getTime();
+      const diff = Date.now() - last;
+      const remaining = ADS_CONFIG.COOLDOWN_MS - diff;
+
+      if (remaining > 0) {
+        const mins = Math.floor(remaining / 60000);
+        const secs = Math.floor((remaining % 60000) / 1000);
+        setCooldownText(`${mins}m ${secs}s`);
+      } else {
+        setCooldownText(null);
+      }
+    };
+
+    updateCooldown();
+    const inv = setInterval(updateCooldown, 1000);
+    return () => clearInterval(inv);
+  }, [lastAdReward]);
+
+  const handleOpen = () => {
+    if (cooldownText) return showToast(`Please wait ${cooldownText} for next ad`, "error");
+    window.open(ADS_CONFIG.WATCH_EARN_LINK, "_blank", "noopener,noreferrer");
+    setOpened(true);
+    setTimer(15);
+  };
+
+  useEffect(() => {
+    if (timer === null || timer <= 0) return;
+    timerRef.current = setTimeout(() => setTimer((t) => (t !== null ? t - 1 : null)), 1000);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [timer]);
+
+  const handleClaim = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    setClaiming(true);
+    try {
+      const res = await fetch("/api/coins/ad-reward", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, "success");
+        onReward(data.newBalance, data.transaction.createdAt);
+        setOpened(false);
+        setTimer(null);
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch {
+      showToast("Reward claim failed", "error");
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`relative rounded-2xl border p-4 flex flex-col gap-3 overflow-hidden group transition-all ${
+        cooldownText ? "border-[var(--border)] bg-[var(--card)]/20 opacity-80" : "border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 shadow-lg shadow-blue-500/5"
+      }`}
+    >
+      <div className="absolute top-0 right-0 p-2">
+         <span className={`text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${
+           cooldownText ? "text-[var(--muted)]/40 bg-[var(--card)]/40" : "text-blue-400/50 bg-blue-500/10"
+         }`}>
+           {cooldownText ? "Cooldown Active" : "Bonus Reward"}
+         </span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform ${
+          cooldownText ? "bg-[var(--card)]/40 grayscale" : "bg-blue-500/10 group-hover:scale-110"
+        }`}>
+          <FiPlay className={cooldownText ? "text-[var(--muted)]/40 text-xl" : "text-blue-400 text-xl"} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className={`text-[11px] font-black uppercase tracking-tight ${cooldownText ? "text-[var(--muted)]/60" : ""}`}>
+            {cooldownText ? "Next Ad Soon" : "Watch Ad & Earn"}
+          </p>
+          <p className="text-[9px] text-[var(--muted)]/60 mt-0.5 leading-relaxed italic line-clamp-1">
+            {cooldownText ? "Cooldown in progress..." : "View for 15s to claim free coins! (45m cooldown)"}
+          </p>
+        </div>
+      </div>
+      <div className="flex items-center justify-between">
+        <div className={`flex items-center gap-1.5 border rounded-lg px-2.5 py-1 ${
+          cooldownText ? "bg-[var(--card)]/20 border-[var(--border)]" : "bg-blue-500/10 border-blue-500/20"
+        }`}>
+          <FiStar className={cooldownText ? "text-[var(--muted)]/30 text-xs" : "text-blue-400 text-xs"} />
+          <span className={`font-black text-[11px] ${cooldownText ? "text-[var(--muted)]/40" : "text-blue-400"}`}>
+            +{ADS_CONFIG.REWARD_COINS} BBC
+          </span>
+        </div>
+        {!opened ? (
+          <motion.button
+            whileHover={{ scale: cooldownText ? 1 : 1.05 }} whileTap={{ scale: cooldownText ? 1 : 0.95 }}
+            onClick={handleOpen}
+            disabled={!!cooldownText}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all min-w-[90px] justify-center ${
+              cooldownText 
+                ? "bg-[var(--card)]/40 text-amber-400/80 border border-amber-500/20 cursor-not-allowed" 
+                : "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+            }`}
+          >
+            {cooldownText ? <><FiClock className="animate-pulse" /> {cooldownText}</> : <><FiPlay /> Watch</>}
+          </motion.button>
+        ) : timer !== null && timer > 0 ? (
+          <div className="flex items-center gap-1.5 text-blue-400">
+            <FiClock className="text-xs animate-pulse" />
+            <span className="text-[10px] font-black font-mono">{timer}s</span>
+          </div>
+        ) : (
+          <motion.button
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            onClick={handleClaim}
+            disabled={claiming}
+            className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase disabled:opacity-50"
+          >
+            {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : "Verify & Claim"}
+          </motion.button>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
 // ──────────────────────────────── TASK CARD ──────────────────────────────────
 function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTimer, onStartAd }: {
@@ -248,13 +396,12 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
 }
 
 // ══════════════════════════════════ MAIN COMPONENT ════════════════════════════
-type TabKey = "checkin" | "tasks" | "convert" | "history";
+type TabKey = "checkin" | "tasks" | "watch" | "convert" | "history";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "checkin",  label: "Check-in", icon: <FiCalendar size={13} /> },
   { key: "tasks",    label: "Tasks",    icon: <FiZap size={13} /> },
-  { key: "convert",  label: "Convert",  icon: <FiTrendingUp size={13} /> },
-  { key: "history",  label: "History",  icon: <FiList size={13} /> },
+  { key: "watch",    label: "Ads",      icon: <FiPlay size={13} /> },
 ];
 
 export default function CoinsTab() {
@@ -264,6 +411,7 @@ export default function CoinsTab() {
   const [streak, setStreak] = useState(0);
   const [rewards, setRewards] = useState([2, 3, 5, 7, 10, 15, 25]);
   const [nextReward, setNextReward] = useState(2);
+  const [lastAdReward, setLastAdReward] = useState<string | null>(null);
   const [history, setHistory] = useState<CoinHistory[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [pendingClaims, setPendingClaims] = useState<Set<string>>(new Set());
@@ -327,6 +475,7 @@ export default function CoinsTab() {
         setStreak(bal.streak || 0);
         setNextReward(bal.nextReward || 5);
         setRewards(bal.rewards || [5, 7, 10, 15, 20, 25, 50]);
+        setLastAdReward(bal.lastAdReward);
         setHistory(bal.history || []);
         setHistoryPages(bal.historyPages || 1);
       }
@@ -490,8 +639,34 @@ export default function CoinsTab() {
             </div>
           </motion.div>
 
+          {/* ── SEPARATE TOP TOOLS ────────────────────────────────────────── */}
+          <div className="grid grid-cols-2 gap-3">
+             <button
+               onClick={() => setActiveTab("convert")}
+               className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${
+                 activeTab === "convert"
+                   ? "bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                   : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
+               }`}
+             >
+               <FiTrendingUp size={14} />
+               Convert
+             </button>
+             <button
+               onClick={() => setActiveTab("history")}
+               className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${
+                 activeTab === "history"
+                   ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
+                   : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
+               }`}
+             >
+               <FiList size={14} />
+               History
+             </button>
+          </div>
+
           {/* ── TOP TAB BAR ──────────────────────────────────────────────── */}
-          <div className="grid grid-cols-4 gap-1.5 bg-[var(--card)]/40 p-1 rounded-2xl border border-[var(--border)]">
+          <div className="grid grid-cols-3 gap-1.5 bg-[var(--card)]/40 p-1 rounded-2xl border border-[var(--border)]">
             {TABS.map((tab) => (
               <button
                 key={tab.key}
@@ -575,32 +750,20 @@ export default function CoinsTab() {
                 <motion.button
                   whileHover={{ scale: checkedInToday ? 1 : 1.02 }}
                   whileTap={{ scale: checkedInToday ? 1 : 0.98 }}
-                  onClick={() => {
-                    if (checkedInToday) return;
-                    if (!checkinRewarded) handleStartAd("checkin");
-                    else handleCheckin();
-                  }}
+                  onClick={handleCheckin}
                   disabled={checkedInToday || checkinLoading}
                   className={`w-full py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                     checkedInToday
                       ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 cursor-default"
-                      : adTimer !== null && activeAdTarget === "checkin"
-                      ? "bg-purple-500/20 border border-purple-500/40 text-purple-400"
-                      : checkinRewarded
-                      ? "bg-amber-500 text-white hover:bg-amber-400 shadow-lg shadow-amber-500/20"
-                      : "bg-purple-600 text-white hover:bg-purple-500 shadow-lg shadow-purple-600/20"
+                      : "bg-amber-500 text-white hover:bg-amber-400 shadow-lg shadow-amber-500/20"
                   }`}
                 >
                   {checkinLoading ? (
                     <FiRefreshCw className="animate-spin text-sm" />
                   ) : checkedInToday ? (
                     <><FiCheckCircle /> Checked In — Day {streak}</>
-                  ) : adTimer !== null && activeAdTarget === "checkin" ? (
-                    <><FiClock className="animate-pulse" /> Opening Reward Link... {adTimer}s</>
-                  ) : !checkinRewarded ? (
-                    <><FiExternalLink /> Watch Ad to Check-in</>
                   ) : (
-                    <><FiCalendar /> Finalize Check-in (+{nextReward} BBC)</>
+                    <><FiCalendar /> Check In (+{nextReward} BBC)</>
                   )}
                 </motion.button>
               </motion.div>
@@ -786,6 +949,45 @@ export default function CoinsTab() {
                       🚀 Crypto withdrawal & Listing on Decentralized Exchanges (DEX) coming soon! Hold your coins to maximize value.
                     </p>
                   </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* ══ WATCH ADS ══ */}
+            {activeTab === "watch" && (
+              <motion.div key="watch" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="space-y-5"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                    <FiPlay className="text-blue-400 text-sm" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-wide">Watch Ads & Earn</p>
+                    <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Earn daily rewards instantly</p>
+                  </div>
+                </div>
+
+                <div className="p-1">
+                  <AdsterraCard 
+                    lastAdReward={lastAdReward}
+                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward(lastTime); }} 
+                    showToast={showToast} 
+                  />
+                </div>
+
+                <div className="relative rounded-2xl border border-[var(--border)] bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-4 overflow-hidden">
+                   <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                         <FiAlertCircle className="text-blue-400 text-sm" />
+                      </div>
+                      <div>
+                         <h5 className="text-[10px] font-black uppercase tracking-wide text-white/80">Ad Information</h5>
+                         <p className="text-[9px] text-[var(--muted)] mt-1 leading-relaxed">
+                            Watch the full 15 seconds to be eligible for rewards. You can claim this bonus once every 45 minutes. Make sure your internet connection is stable.
+                         </p>
+                      </div>
+                   </div>
                 </div>
               </motion.div>
             )}
