@@ -72,6 +72,7 @@ export async function POST(req) {
 
     /* ================= FETCH ORDERS ================= */
     const orders = await Order.find(finalFilter)
+      .select("-gatewayResponse -externalResponse")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)

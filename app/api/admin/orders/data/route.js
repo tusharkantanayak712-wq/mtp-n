@@ -57,6 +57,7 @@ export async function GET(req) {
 
         const [orders, total] = await Promise.all([
             Order.find(filter)
+                .select("-gatewayResponse -externalResponse")
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit)

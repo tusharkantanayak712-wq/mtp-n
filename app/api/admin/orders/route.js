@@ -161,7 +161,7 @@ export async function PATCH(req) {
       { orderId },
       update,
       { new: true }
-    );
+    ).select("-gatewayResponse -externalResponse");
 
     if (!order) {
       return Response.json(
