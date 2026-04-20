@@ -19,7 +19,7 @@ const BottomNav = () => {
     }, []);
 
     // Hide BottomNav on certain pages if needed
-    const hideOnRoutes = ["/admin", "/owner", "/blog"];
+    const hideOnRoutes = ["/admin", "/owner", "/blog", "/login", "/register"];
     if (hideOnRoutes.some(route => pathname?.startsWith(route))) return null;
 
     // Retained 7 items, preserving symmetry around the Home button

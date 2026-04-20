@@ -22,7 +22,7 @@ export default function GamesPage() {
   const [showFilter, setShowFilter] = useState(false);
   const [sort, setSort] = useState("az");
   const [hideOOS, setHideOOS] = useState(false);
-  const [viewMode, setViewMode] = useState("list");
+  const [viewMode, setViewMode] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 

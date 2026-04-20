@@ -16,7 +16,7 @@ const BANNERS = [
     badge: "VIP SAVE",
     icon: <FiZap />,
     color: "#eab308",
-    link: "https://wa.me/919178521537?text=Hi%20I%20want%205%25%20OFF",
+    link: "https://wa.me/919178521537?text=hii%20i%20want%20to%20prchase%20dias",
   },
   {
     id: "bgmi",
@@ -25,7 +25,7 @@ const BANNERS = [
     badge: "HOT DEAL",
     icon: <FiActivity />,
     color: "#f97316",
-    link: "https://wa.me/919178521537?text=BGMI%2060%20UC%20Offer%20@%2070rs",
+    link: "https://wa.me/919178521537?text=hii%20i%20want%20to%20prchase%20dias",
   },
   {
     id: "support",
@@ -34,7 +34,7 @@ const BANNERS = [
     badge: "24/7 LIVE",
     icon: <FiZap />,
     color: "#3b82f6",
-    link: "https://wa.me/919178521537?text=Hi%20I%20need%20help",
+    link: "https://wa.me/919178521537?text=hii%20i%20want%20to%20prchase%20dias",
   },
 ];
 
