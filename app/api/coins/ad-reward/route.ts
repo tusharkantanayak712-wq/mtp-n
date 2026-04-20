@@ -67,7 +67,7 @@ export async function POST(req: Request) {
       balanceAfter,
       source: "ad_reward",
       referenceId: adId,
-      description: `Adsterra Reward (${adId === "watch_1" ? "Channel 1" : "Channel 2"})`,
+      description: `Adsterra Reward (${adId === "watch_1" ? "Channel 1" : adId === "watch_2" ? "Channel 2" : "Channel 3"})`,
       performedBy: "system",
     });
 

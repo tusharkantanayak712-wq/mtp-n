@@ -32,7 +32,7 @@ export async function GET(req: Request) {
     const historySkip = (historyPage - 1) * historyLimit;
 
     // Get coin transactions — CoinTransaction stores the custom userId string
-    const [history, historyTotal, lastAd1, lastAd2] = await Promise.all([
+    const [history, historyTotal, lastAd1, lastAd2, lastAd3] = await Promise.all([
       CoinTransaction.find({ userId: user.userId })
         .sort({ createdAt: -1 })
         .skip(historySkip)
@@ -42,6 +42,8 @@ export async function GET(req: Request) {
       CoinTransaction.findOne({ userId: user.userId, source: "ad_reward", referenceId: "watch_1" })
         .sort({ createdAt: -1 }).select("createdAt"),
       CoinTransaction.findOne({ userId: user.userId, source: "ad_reward", referenceId: "watch_2" })
+        .sort({ createdAt: -1 }).select("createdAt"),
+      CoinTransaction.findOne({ userId: user.userId, source: "ad_reward", referenceId: "watch_3" })
         .sort({ createdAt: -1 }).select("createdAt"),
     ]);
 
@@ -90,6 +92,7 @@ export async function GET(req: Request) {
       rewards: STREAK_REWARDS,
       lastAdReward1: lastAd1 ? lastAd1.createdAt : null,
       lastAdReward2: lastAd2 ? lastAd2.createdAt : null,
+      lastAdReward3: lastAd3 ? lastAd3.createdAt : null,
       history,
       historyTotal,
       historyPage,

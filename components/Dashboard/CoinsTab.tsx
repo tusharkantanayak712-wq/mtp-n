@@ -422,6 +422,7 @@ export default function CoinsTab() {
   const [nextReward, setNextReward] = useState(2);
   const [lastAdReward1, setLastAdReward1] = useState<string | null>(null);
   const [lastAdReward2, setLastAdReward2] = useState<string | null>(null);
+  const [lastAdReward3, setLastAdReward3] = useState<string | null>(null);
   const [history, setHistory] = useState<CoinHistory[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [pendingClaims, setPendingClaims] = useState<Set<string>>(new Set());
@@ -487,6 +488,7 @@ export default function CoinsTab() {
         setRewards(bal.rewards || [5, 7, 10, 15, 20, 25, 50]);
         setLastAdReward1(bal.lastAdReward1);
         setLastAdReward2(bal.lastAdReward2);
+        setLastAdReward3(bal.lastAdReward3);
         setHistory(bal.history || []);
         setHistoryPages(bal.historyPages || 1);
       }
@@ -994,6 +996,14 @@ export default function CoinsTab() {
                     adLink={ADS_CONFIG.WATCH_EARN_LINK_2}
                     lastAdReward={lastAdReward2}
                     onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward2(lastTime); }} 
+                    showToast={showToast} 
+                  />
+                  <AdsterraCard 
+                    adId="watch_3"
+                    title="Watch Ad Channel 3"
+                    adLink={ADS_CONFIG.WATCH_EARN_LINK_3}
+                    lastAdReward={lastAdReward3}
+                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward3(lastTime); }} 
                     showToast={showToast} 
                   />
                 </div>
