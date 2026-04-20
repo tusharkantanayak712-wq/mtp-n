@@ -6,6 +6,8 @@ export const ADS_CONFIG = {
     { id: "watch_3", title: "Channel 3", link: "https://www.profitablecpmratenetwork.com/hufhc5xjdq?key=061e505a28e2947339287dabe62e6175", reward: 1, cooldownMs: 40 * 60 * 1000 },
     { id: "watch_4", title: "Channel 4", link: "https://omg10.com/4/9869073", reward: 1, cooldownMs: 35 * 60 * 1000 },
     { id: "watch_5", title: "Channel 5", link: "https://www.profitablecpmratenetwork.com/na3uf7p2jk?key=88e14dd1c1b8f2d96d5474d1a62b0bec", reward: 1, cooldownMs: 45 * 60 * 1000 },
+    { id: "watch_6", title: "Channel 6", link: "https://omg10.com/4/10902850", reward: 1, cooldownMs: 45 * 60 * 1000 },
+    { id: "watch_7", title: "Channel 7", link: "https://omg10.com/4/10902851", reward: 1, cooldownMs: 45 * 60 * 1000 },
   ],
   REWARD_COINS: 1, // Default fallback
   COOLDOWN_MS: 30 * 60 * 1000, // Default fallback (30 mins)
