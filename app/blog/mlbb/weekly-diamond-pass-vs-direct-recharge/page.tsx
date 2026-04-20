@@ -26,6 +26,7 @@ export default function BlogPage() {
       date="March 31, 2026"
       image="/blog/mlbb-wdp-vs-diamonds.png"
       game="MLBB"
+      description="Should you buy the Weekly Diamond Pass or direct diamonds in Mobile Legends? Our 2026 guide breaks down the value, ROI, and best ways to spend in India."
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         Every Mobile Legends player in India wants more diamonds for less money. Should you buy direct recharge now, or use Weekly Pass over time? This 2026 guide compares both clearly.

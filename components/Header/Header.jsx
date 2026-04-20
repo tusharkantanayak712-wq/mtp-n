@@ -68,6 +68,7 @@ export default function Header() {
       email: localStorage.getItem("email"),
       userId: localStorage.getItem("userId"),
       avatar: localStorage.getItem("avatar"),
+      userType: localStorage.getItem("userType") || "user",
     };
     if (savedUser.name) setUser(savedUser);
 
@@ -389,8 +390,13 @@ export default function Header() {
                             )}
                           </div>
                           <div className="flex flex-col min-w-0">
-                            <span className="text-sm font-bold text-[var(--foreground)] truncate max-w-[140px] leading-tight">{user.name}</span>
-                            <span className="text-[10px] text-[var(--muted)] truncate max-w-[140px] italic">{user.email}</span>
+                            <span className="text-sm font-bold text-[var(--foreground)] truncate max-w-[180px] leading-tight mb-0.5">{user.name}</span>
+                            <span className="text-[10px] text-[var(--muted)] truncate max-w-[180px] italic leading-tight">{user.email}</span>
+                            <div className="mt-1.5 flex">
+                              <span className="text-[7px] font-black uppercase px-2 py-0.5 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/10 italic tracking-widest">
+                                {user.userType === "owner" ? "owner" : user.userType === "admin" ? "reseller" : user.userType === "member" ? "member" : "user"}
+                              </span>
+                            </div>
                           </div>
                         </>
                       ) : (
@@ -421,7 +427,7 @@ export default function Header() {
                       </div>
                     ) : (
                       <>
-                        <div className="grid grid-cols-3 gap-2 mb-6">
+                        <div className="grid grid-cols-3 gap-2 mb-4">
                           {HEADER_CONFIG.nav.map((item) => (
                             <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all group">
                               <span className="text-[var(--accent)] group-hover:text-white mb-0.5">{item.icon}</span>
@@ -430,23 +436,23 @@ export default function Header() {
                           ))}
                         </div>
 
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           {HEADER_CONFIG.userMenu.common.map((item) => (
-                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex items-center justify-between p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-transparent hover:border-[var(--accent)]/10 hover:bg-[var(--accent)]/5 transition-all group">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-all">{item.icon}</div>
+                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex items-center justify-between p-2 rounded-xl bg-[var(--foreground)]/[0.02] border border-transparent hover:border-[var(--accent)]/10 hover:bg-[var(--accent)]/5 transition-all group">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-all">{item.icon}</div>
                                 <div className="flex flex-col">
-                                  <p className="text-xs font-bold text-[var(--foreground)] leading-tight">{item.label}</p>
-                                  <p className="text-[9px] text-[var(--muted)]">{item.desc}</p>
+                                  <p className="text-[11px] font-bold text-[var(--foreground)] leading-tight">{item.label}</p>
+                                  <p className="text-[8px] text-[var(--muted)]">{item.desc}</p>
                                 </div>
                               </div>
-                              <FiChevronRight className="text-[var(--muted)] opacity-20 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
+                              <FiChevronRight size={12} className="text-[var(--muted)] opacity-20 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
                             </Link>
                           ))}
                         </div>
 
                         {user?.userType === "owner" && (
-                          <div className="relative mt-8 group">
+                          <div className="relative mt-4 group">
                             <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-purple-600 rounded-[1.5rem] blur opacity-30 group-hover:opacity-60 transition duration-500 group-hover:duration-200"></div>
                             <Link
                               href="/owner-panal"

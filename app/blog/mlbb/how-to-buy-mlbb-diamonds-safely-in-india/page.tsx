@@ -28,10 +28,10 @@ export default function BlogPage() {
       date="March 31, 2026"
       image="/blog/buy-safely.png"
       game="MLBB"
+      description="Learn the safest way to recharge MLBB diamonds in India. Protect your account from scams, avoid 'Negative Diamond' bans, and identify trusted websites like bluebuff.in for 2026."
     >
-      <div className="space-y-10">
         {/* Intro Highlight */}
-        <p className="text-lg md:text-xl font-medium italic border-l-4 border-red-500 pl-6 py-2 bg-red-500/5 rounded-r-2xl">
+        <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-red-500 pl-6 py-2 bg-red-500/5 rounded-r-2xl">
           Buying <strong>MLBB diamonds in India</strong> is now very fast, but scams are common. With many unverified sellers on Instagram and WhatsApp, account safety should be your first priority.
         </p>
 
@@ -40,7 +40,7 @@ export default function BlogPage() {
         </p>
 
         {/* Safety Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10 border-y border-[var(--border)] py-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10 border-y border-[var(--border)] py-10 not-prose">
           <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--border)] space-y-4">
              <FiLock className="text-3xl text-[var(--accent)]" />
              <h4 className="text-sm font-black uppercase italic tracking-tighter m-0">No Password Rule</h4>
@@ -66,7 +66,7 @@ export default function BlogPage() {
           <p>
             This is the most common way <strong>Indian players</strong> lose their accounts in 2026. Scammers buy diamonds using stolen credit cards and sell them to you at 70-80% discounts.
           </p>
-          <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl">
+          <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl not-prose">
              <p className="text-sm italic opacity-80 leading-relaxed text-justify m-0">
                 <strong>How it happens:</strong> Once the real card owner reports the fraud, Moonton reverses the transaction. Your account is then hit with a <strong>negative balance</strong>. You will be locked out of playing rank matches and using skins until you pay back every single stolen diamond using a legitimate source like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold">bluebuff.in</a>.
              </p>
@@ -79,7 +79,7 @@ export default function BlogPage() {
              2. Checklist for a 2026 Safe Top-Up
           </h2>
           <p>Before paying, check these safety points:</p>
-          <div className="space-y-4">
+          <div className="space-y-4 not-prose">
              <div className="flex items-start gap-4 p-5 bg-[var(--card)] border border-[var(--border)] rounded-[32px]">
                 <FiCheckCircle className="text-green-500 shrink-0 mt-1" />
                 <div>
@@ -112,7 +112,7 @@ export default function BlogPage() {
           <p className="text-lg leading-relaxed text-justify">
              Many fraud reports in India involve Instagram and Telegram "agents." Unlike registered platforms like <a href="https://bluebuff.in" className="text-[var(--accent)] font-bold italic underline">bluebuff.in</a>, these agents are hard to trace. Some ask for screen sharing or OTP and then steal accounts.
           </p>
-          <div className="p-8 rounded-[40px] bg-[var(--card)] border border-[var(--border)] relative overflow-hidden group">
+          <div className="p-8 rounded-[40px] bg-[var(--card)] border border-[var(--border)] relative overflow-hidden group not-prose">
             <div className="absolute top-0 left-0 w-2 h-full bg-[var(--accent)]" />
             <h4 className="italic font-black uppercase text-[var(--accent)] mb-3 tracking-tighter flex items-center gap-2">
                <FiInfo /> Pro Safety Tip: Secondary Password 🔐
@@ -134,8 +134,8 @@ export default function BlogPage() {
         </section>
 
         {/* Simplified FAQ */}
-        <div className="mt-20 pt-10 border-t border-[var(--border)] space-y-8">
-          <h4 className="text-xl font-black italic uppercase tracking-widest opacity-40">Safety FAQ</h4>
+        <div className="mt-20 pt-10 border-t border-[var(--border)] not-prose">
+          <h4 className="text-xl font-black italic uppercase tracking-widest opacity-40 mb-8">Safety FAQ</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="group space-y-3">
               <h5 className="text-[var(--accent)] font-black uppercase tracking-tight text-base italic m-0">Can a "Diamond Generator" work?</h5>
@@ -155,7 +155,6 @@ export default function BlogPage() {
             </div>
           </div>
         </div>
-      </div>
     </BlogPostLayout>
   );
 }

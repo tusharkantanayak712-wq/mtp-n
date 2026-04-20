@@ -27,6 +27,7 @@ export default function BlogPage() {
       date="March 31, 2026"
       image="/blog/mlbb-epic-to-mythic.png"
       game="MLBB"
+      description="Stuck in 'Epic Hell'? Learn the professional strategies to escape Epic and reach Mythic in Mobile Legends fast. Our 2026 guide covers drafting, map awareness, and the mental game for Indian players."
     >
       <p className="text-lg md:text-xl font-medium !opacity-100 italic border-l-4 border-[var(--accent)] pl-6 py-2 bg-[var(--accent)]/5 rounded-r-2xl">
         Every Mobile Legends player in <strong>India</strong> knows the pain of "Epic Hell." It is the rank where team coordination is low, but the enemy’s individual micro-skills are high enough to punish every mistake. If you want to reach Mythic in 2026, you need a system to dominate.
