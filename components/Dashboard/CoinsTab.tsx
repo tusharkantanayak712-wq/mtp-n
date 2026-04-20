@@ -67,8 +67,10 @@ const taskIconBg: Record<string, string> = {
 };
 
 // ──────────────────────────────── ADSTERRA CARD ──────────────────────────────
-function AdsterraCard({ lastAdReward, onReward, showToast }: { 
+function AdsterraCard({ lastAdReward, adLink, title, onReward, showToast }: { 
   lastAdReward: string | null;
+  adLink: string;
+  title?: string;
   onReward: (newBal: number, lastTime: string) => void;
   showToast: (m: string, t: "success" | "error") => void;
 }) {
@@ -106,7 +108,7 @@ function AdsterraCard({ lastAdReward, onReward, showToast }: {
 
   const handleOpen = () => {
     if (cooldownText) return showToast(`Please wait ${cooldownText} for next ad`, "error");
-    window.open(ADS_CONFIG.WATCH_EARN_LINK, "_blank", "noopener,noreferrer");
+    window.open(adLink, "_blank", "noopener,noreferrer");
     setOpened(true);
     setTimer(15);
   };
@@ -165,7 +167,7 @@ function AdsterraCard({ lastAdReward, onReward, showToast }: {
         </div>
         <div className="flex-1 min-w-0">
           <p className={`text-[11px] font-black uppercase tracking-tight ${cooldownText ? "text-[var(--muted)]/60" : ""}`}>
-            {cooldownText ? "Next Ad Soon" : "Watch Ad & Earn"}
+            {cooldownText ? "Next Ad Soon" : (title || "Watch Ad & Earn")}
           </p>
           <p className="text-[9px] text-[var(--muted)]/60 mt-0.5 leading-relaxed italic line-clamp-1">
             {cooldownText ? "Cooldown in progress..." : "View for 15s to claim free coins! (45m cooldown)"}
@@ -968,8 +970,17 @@ export default function CoinsTab() {
                   </div>
                 </div>
 
-                <div className="p-1">
+                <div className="space-y-4">
                   <AdsterraCard 
+                    title="Watch Ad Channel 1"
+                    adLink={ADS_CONFIG.WATCH_EARN_LINK}
+                    lastAdReward={lastAdReward}
+                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward(lastTime); }} 
+                    showToast={showToast} 
+                  />
+                  <AdsterraCard 
+                    title="Watch Ad Channel 2"
+                    adLink={ADS_CONFIG.WATCH_EARN_LINK_2}
                     lastAdReward={lastAdReward}
                     onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward(lastTime); }} 
                     showToast={showToast} 
