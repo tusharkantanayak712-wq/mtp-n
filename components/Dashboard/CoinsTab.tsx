@@ -67,8 +67,9 @@ const taskIconBg: Record<string, string> = {
 };
 
 // ──────────────────────────────── ADSTERRA CARD ──────────────────────────────
-function AdsterraCard({ lastAdReward, adLink, title, onReward, showToast }: { 
+function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast }: { 
   lastAdReward: string | null;
+  adId: string;
   adLink: string;
   title?: string;
   onReward: (newBal: number, lastTime: string) => void;
@@ -126,7 +127,11 @@ function AdsterraCard({ lastAdReward, adLink, title, onReward, showToast }: {
     try {
       const res = await fetch("/api/coins/ad-reward", {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ adId })
       });
       const data = await res.json();
       if (data.success) {
@@ -197,18 +202,20 @@ function AdsterraCard({ lastAdReward, adLink, title, onReward, showToast }: {
             {cooldownText ? <><FiClock className="animate-pulse" /> {cooldownText}</> : <><FiPlay /> Watch</>}
           </motion.button>
         ) : timer !== null && timer > 0 ? (
-          <div className="flex items-center gap-1.5 text-blue-400">
-            <FiClock className="text-xs animate-pulse" />
-            <span className="text-[10px] font-black font-mono">{timer}s</span>
-          </div>
+          <button
+            disabled
+            className="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400/50 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase cursor-not-allowed shadow-none"
+          >
+             <FiClock className="animate-pulse" /> Verify Again ({timer}s)
+          </button>
         ) : (
           <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={handleClaim}
             disabled={claiming}
-            className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase disabled:opacity-50"
+            className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase shadow-lg shadow-emerald-500/20"
           >
-            {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : "Verify & Claim"}
+            {claiming ? <FiRefreshCw className="animate-spin text-xs" /> : "Verify Again"}
           </motion.button>
         )}
       </div>
@@ -413,7 +420,8 @@ export default function CoinsTab() {
   const [streak, setStreak] = useState(0);
   const [rewards, setRewards] = useState([2, 3, 5, 7, 10, 15, 25]);
   const [nextReward, setNextReward] = useState(2);
-  const [lastAdReward, setLastAdReward] = useState<string | null>(null);
+  const [lastAdReward1, setLastAdReward1] = useState<string | null>(null);
+  const [lastAdReward2, setLastAdReward2] = useState<string | null>(null);
   const [history, setHistory] = useState<CoinHistory[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [pendingClaims, setPendingClaims] = useState<Set<string>>(new Set());
@@ -477,7 +485,8 @@ export default function CoinsTab() {
         setStreak(bal.streak || 0);
         setNextReward(bal.nextReward || 5);
         setRewards(bal.rewards || [5, 7, 10, 15, 20, 25, 50]);
-        setLastAdReward(bal.lastAdReward);
+        setLastAdReward1(bal.lastAdReward1);
+        setLastAdReward2(bal.lastAdReward2);
         setHistory(bal.history || []);
         setHistoryPages(bal.historyPages || 1);
       }
@@ -972,17 +981,19 @@ export default function CoinsTab() {
 
                 <div className="space-y-4">
                   <AdsterraCard 
+                    adId="watch_1"
                     title="Watch Ad Channel 1"
                     adLink={ADS_CONFIG.WATCH_EARN_LINK}
-                    lastAdReward={lastAdReward}
-                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward(lastTime); }} 
+                    lastAdReward={lastAdReward1}
+                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward1(lastTime); }} 
                     showToast={showToast} 
                   />
                   <AdsterraCard 
+                    adId="watch_2"
                     title="Watch Ad Channel 2"
                     adLink={ADS_CONFIG.WATCH_EARN_LINK_2}
-                    lastAdReward={lastAdReward}
-                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward(lastTime); }} 
+                    lastAdReward={lastAdReward2}
+                    onReward={(bal, lastTime) => { setCoins(bal); setLastAdReward2(lastTime); }} 
                     showToast={showToast} 
                   />
                 </div>

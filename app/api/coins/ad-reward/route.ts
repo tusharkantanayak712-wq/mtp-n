@@ -21,14 +21,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
     }
 
+    const { adId } = await req.json().catch(() => ({ adId: "watch_1" }));
+    if (!adId) return NextResponse.json({ success: false, message: "Ad ID required" }, { status: 400 });
+
     const userId = decoded.userId;
     const user = await User.findOne({ _id: userId });
     if (!user) return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
 
-    // Check cooldown from last ad_reward transaction
+    // Check cooldown specifically for this adId
     const lastAdReward = await CoinTransaction.findOne({
       userObjectId: user._id,
-      source: "ad_reward"
+      source: "ad_reward",
+      referenceId: adId
     }).sort({ createdAt: -1 });
 
     if (lastAdReward) {
@@ -62,7 +66,8 @@ export async function POST(req: Request) {
       balanceBefore,
       balanceAfter,
       source: "ad_reward",
-      description: "Adsterra Smart Link Reward",
+      referenceId: adId,
+      description: `Adsterra Reward (${adId === "watch_1" ? "Channel 1" : "Channel 2"})`,
       performedBy: "system",
     });
 
