@@ -25,13 +25,11 @@ const BottomNav = () => {
     // Retained 7 items, preserving symmetry around the Home button
     const navItems = [
         { label: "Wallet", icon: FiCreditCard, path: "/dashboard/wallet", action: () => router.push("/dashboard/wallet") },
-        { label: "Earn", icon: FiZap, path: "/dashboard/coins", action: () => router.push("/dashboard/coins") },
         { label: "Games", icon: FiGrid, path: "/games", action: () => router.push("/games") },
-        { label: "Region", icon: FiTarget, path: "/region", action: () => router.push("/region") },
-        { label: "Home", icon: FiHome, path: "/", isHome: true, action: () => router.push("/") },
+        { label: "Home", icon: FiHome, path: "/", action: () => router.push("/") },
+        { label: "Earn", icon: FiZap, path: "/dashboard/coins", isHome: true, action: () => router.push("/dashboard/coins") },
         { label: "Blog", icon: FiLayers, path: "/blog", action: () => router.push("/blog") },
         { label: "Orders", icon: FiShoppingBag, path: "/dashboard/orders", action: () => router.push("/dashboard/orders") },
-        { label: "Redeem", icon: FiGift, path: "/dashboard/redeem", action: () => router.push("/dashboard/redeem") },
         { label: "Support", icon: FiHeadphones, path: "/dashboard/support", action: () => router.push("/dashboard/support") },
     ];
 
