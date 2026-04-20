@@ -56,10 +56,14 @@ export default function CoinsAdminTab() {
   const [view, setView] = useState("claims");
   const [tasks, setTasks] = useState([]);
   const [claims, setClaims] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [historySearch, setHistorySearch] = useState("");
+  const [historyFilter, setHistoryFilter] = useState({ source: "", type: "" });
   const [users, setUsers] = useState([]);
   const [userSearch, setUserSearch] = useState("");
   const [claimStatus, setClaimStatus] = useState("pending");
   const [pendingCount, setPendingCount] = useState(0);
+  const [coinStats, setCoinStats] = useState({ totalEarned: 0, totalSpent: 0, todayEarned: 0, todaySpent: 0, totalAvailable: 0 });
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -116,6 +120,31 @@ export default function CoinsAdminTab() {
     }
   }, [token, claimStatus, page]);
 
+  const fetchHistory = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: "20",
+        search: historySearch,
+        source: historyFilter.source,
+        type: historyFilter.type
+      });
+      const res = await fetch(`/api/admin/coins/history?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setHistory(data.transactions || []);
+        setPages(data.pages || 1);
+        if (data.stats) setCoinStats(data.stats);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [token, page, historySearch, historyFilter]);
+
   const fetchUsers = useCallback(async () => {
     if (!token) return;
     setLoading(true);
@@ -143,6 +172,8 @@ export default function CoinsAdminTab() {
   useEffect(() => { if (view === "tasks") fetchTasks(); }, [view, fetchTasks]);
   useEffect(() => { if (view === "claims") fetchClaims(); }, [view, fetchClaims]);
   useEffect(() => { if (view === "users") fetchUsers(); }, [view, fetchUsers]);
+  useEffect(() => { if (view === "history") fetchHistory(); }, [view, fetchHistory]);
+  useEffect(() => { fetchHistory(); }, [fetchHistory]); // Initial stats fetch
 
   const toggleTask = async (task) => {
     const res = await fetch("/api/admin/coins/tasks", {
@@ -227,6 +258,15 @@ export default function CoinsAdminTab() {
   return (
     <div className="space-y-5">
       <AnimatePresence>{toast && <Toast {...toast} />}</AnimatePresence>
+      
+      {/* Stats Overview */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <StatCard label="Total Available" value={coinStats.totalAvailable} icon={<FiList />} color="blue" />
+        <StatCard label="Total Earned" value={coinStats.totalEarned} icon={<FiStar />} color="amber" />
+        <StatCard label="Total Spent" value={coinStats.totalSpent} icon={<FiX />} color="rose" />
+        <StatCard label="Today Earned" value={coinStats.todayEarned} icon={<FiCheck />} color="emerald" pulse />
+        <StatCard label="Today Spent" value={coinStats.todaySpent} icon={<FiRefreshCw />} color="blue" />
+      </div>
 
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -267,10 +307,19 @@ export default function CoinsAdminTab() {
             Claims {pendingCount > 0 && `(${pendingCount})`}
           </button>
           <button
+            onClick={() => { setView("history"); setPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide border transition-all ${
+              view === "history" ? "bg-[var(--accent)]/15 border-[var(--accent)]/40 text-[var(--accent)]"
+              : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30"
+            }`}
+          >
+            History
+          </button>
+          <button
             onClick={() => { setView("tasks"); setPage(1); }}
             className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide border transition-all ${
               view === "tasks" ? "bg-[var(--accent)]/15 border-[var(--accent)]/40 text-[var(--accent)]"
-              : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30"
+              : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:border(--accent)/30"
             }`}
           >
             Tasks
@@ -360,6 +409,122 @@ export default function CoinsAdminTab() {
                             <FiPlus className="text-[10px]" />
                           </button>
                         </div>
+                      </td>
+                    </motion.tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {pages > 1 && (
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
+                <FiChevronLeft className="text-xs" />
+              </button>
+              <span className="text-[10px] font-black uppercase tracking-wide text-[var(--muted)]">
+                {page} / {pages}
+              </span>
+              <button onClick={() => setPage(p => Math.min(pages, p + 1))} disabled={page === pages}
+                className="p-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/30 disabled:opacity-30">
+                <FiChevronRight className="text-xs" />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+      {/* ── HISTORY VIEW ───────────────────────────────────────────────── */}
+      {view === "history" && (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]/40 text-xs" />
+              <input
+                type="text"
+                placeholder="Search by User ID, Description, ID..."
+                value={historySearch}
+                onChange={(e) => { setHistorySearch(e.target.value); setPage(1); }}
+                className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl pl-9 pr-3 py-2 text-[10px] font-bold outline-none focus:border-[var(--accent)]/40"
+              />
+            </div>
+            <div className="flex gap-2">
+              <select
+                value={historyFilter.source}
+                onChange={(e) => { setHistoryFilter(f => ({ ...f, source: e.target.value })); setPage(1); }}
+                className="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3 py-2 text-[10px] font-bold outline-none focus:border-[var(--accent)]/40"
+              >
+                <option value="">All Sources</option>
+                <option value="checkin">Daily Check-in</option>
+                <option value="task">Tasks</option>
+                <option value="ad_reward">Ads</option>
+                <option value="purchase">Purchase</option>
+                <option value="convert_to_wallet">Spend</option>
+                <option value="admin">Admin</option>
+              </select>
+              <button onClick={fetchHistory} className="text-[var(--muted)]/40 hover:text-[var(--muted)] transition-colors">
+                <FiRefreshCw className={`text-xs ${loading ? "animate-spin" : ""}`} />
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--card)]/40">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[var(--border)] bg-[var(--foreground)]/[0.02]">
+                  <th className="px-4 py-3 text-[9px] font-black uppercase tracking-wider text-[var(--muted)]">Time / ID</th>
+                  <th className="px-4 py-3 text-[9px] font-black uppercase tracking-wider text-[var(--muted)]">User</th>
+                  <th className="px-4 py-3 text-[9px] font-black uppercase tracking-wider text-[var(--muted)]">Type / Source</th>
+                  <th className="px-4 py-3 text-[9px] font-black uppercase tracking-wider text-[var(--muted)] text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--border)]/40">
+                {loading ? (
+                  <tr>
+                    <td colSpan={4} className="py-10 text-center">
+                      <FiRefreshCw className="animate-spin text-xl mx-auto text-[var(--muted)]/30" />
+                    </td>
+                  </tr>
+                ) : history.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-10 text-center">
+                      <Empty label="No transactions matched" />
+                    </td>
+                  </tr>
+                ) : (
+                  history.map((h) => (
+                    <motion.tr
+                      key={h.transactionId}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="hover:bg-[var(--foreground)]/[0.02] transition-colors text-[10px]"
+                    >
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col">
+                          <span className="font-mono text-[var(--muted)]/50">{h.transactionId}</span>
+                          <span className="text-[9px] text-[var(--muted)] font-bold">
+                            {new Date(h.createdAt).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col">
+                          <span className="font-black truncate max-w-[150px]">{h.userId}</span>
+                          <span className="text-[8px] text-[var(--muted)]/40 truncate max-w-[150px]">{h.description}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-1.5 items-center">
+                          <span className={`px-1.5 py-0.5 rounded uppercase font-black text-[8px] ${h.type === "earn" ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"}`}>
+                            {h.type}
+                          </span>
+                          <span className="text-[9px] text-[var(--muted)] font-bold uppercase">{h.source}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <span className={`font-black text-xs ${h.type === "earn" ? "text-amber-400" : "text-rose-400"}`}>
+                          {h.type === "earn" ? "+" : "-"}{h.coins}
+                        </span>
                       </td>
                     </motion.tr>
                   ))
@@ -736,6 +901,27 @@ export default function CoinsAdminTab() {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function StatCard({ label, value, icon, color, pulse }) {
+  const colors = {
+    amber: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    rose: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+    emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    blue: "text-blue-400 bg-blue-500/10 border-blue-500/20",
+  };
+  return (
+    <div className={`p-3 rounded-2xl border ${colors[color]} relative overflow-hidden`}>
+      {pulse && <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-current animate-pulse" />}
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-xs">{icon}</span>
+        <span className="text-[8px] font-black uppercase tracking-wider opacity-60">{label}</span>
+      </div>
+      <div className="text-lg font-black tracking-tighter tabular-nums">
+        {value.toLocaleString()} <span className="text-[8px] opacity-40 ml-0.5">BBC</span>
+      </div>
     </div>
   );
 }
