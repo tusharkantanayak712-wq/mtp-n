@@ -11,6 +11,7 @@ import StorySlider from "./StorySlider";
 import HomeQuickActions from "./HomeQuickActions";
 import HomeReferralStats from "./HomeReferralStats";
 import PromoBanner from "./PromoBanner";
+import HomeEarnPromotion from "./HomeEarnPromotion";
 import SEOContent from "./SEOContent";
 
 export default function HeroSection() {
@@ -18,17 +19,21 @@ export default function HeroSection() {
 
   return (
     <>
-      <TopNoticeBanner />
+      {/* <TopNoticeBanner /> */}
+      <HomeEarnPromotion />
+
       <GameBannerCarousel />
 
       <div className="space-y-1 mt-2">
         <StorySlider />
+
         <FlashSale />
       </div>
 
       {/* <PromoBanner /> */}
 
       <div className="space-y-1">
+
         <HomeQuickActions />
         {/* <HomeReferralStats /> */}
       </div>
