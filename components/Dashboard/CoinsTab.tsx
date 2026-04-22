@@ -9,7 +9,7 @@ import {
   FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, FiPlay
 } from "react-icons/fi";
 import Link from "next/link";
-import Script from "next/script";
+import AdsterraBanner from "@/components/Ads/AdsterraBanner";
 import { ADS_CONFIG } from "@/lib/adsConfig";
 
 
@@ -957,19 +957,8 @@ export default function CoinsTab() {
 
         </div>
       )}
-
-      {/* Adsterra Banner Container */}
-      <div className="mt-6 flex justify-center overflow-hidden rounded-xl border border-[var(--border)] bg-black/20 min-h-[50px]">
-        <div id="container-c755433b5487dae7313fbaa97a482b40"></div>
-      </div>
-
-      {/* Adsterra Banner Script */}
-      <Script 
-        async 
-        data-cfasync="false" 
-        src="https://pl29207483.profitablecpmratenetwork.com/c755433b5487dae7313fbaa97a482b40/invoke.js" 
-        strategy="afterInteractive"
-      />
+      {/* Adsterra Banner */}
+      <AdsterraBanner className="mt-6" />
 
     </div>
   );
