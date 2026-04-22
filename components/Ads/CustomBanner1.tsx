@@ -14,26 +14,38 @@ export default function CustomBanner1({ className = "" }: CustomBannerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Set the options on window so the invoke.js can find them
-    (window as any).atOptions = {
-      'key' : '12769ff4f11c1254fd7310aea93f838d',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
+    if (!containerRef.current) return;
+
+    // Remove any existing content to prevent duplicates on remount
+    containerRef.current.innerHTML = "";
+
+    const script = document.createElement("script");
+    const options = document.createElement("script");
+
+    options.innerHTML = `
+      atOptions = {
+        'key' : '12769ff4f11c1254fd7310aea93f838d',
+        'format' : 'iframe',
+        'height' : 250,
+        'width' : 300,
+        'params' : {}
+      };
+    `;
+
+    script.src = "https://www.highperformanceformat.com/12769ff4f11c1254fd7310aea93f838d/invoke.js";
+    script.async = true;
+
+    containerRef.current.appendChild(options);
+    containerRef.current.appendChild(script);
   }, []);
 
   return (
     <div className={`flex justify-center overflow-hidden py-2 ${className}`}>
-      <div className="relative border border-[var(--border)] rounded-xl bg-[var(--foreground)]/[0.03] overflow-hidden shadow-lg" style={{ width: '300px', height: '250px' }}>
-         {/* The script usually appends the iframe inside it or writes directly to the DOM */}
-         <Script 
-           async 
-           src="https://www.highperformanceformat.com/12769ff4f11c1254fd7310aea93f838d/invoke.js" 
-           strategy="afterInteractive"
-         />
-      </div>
+      <div 
+        ref={containerRef}
+        className="relative border border-[var(--border)] rounded-xl bg-[var(--foreground)]/[0.03] overflow-hidden shadow-lg" 
+        style={{ width: '300px', height: '250px' }}
+      ></div>
     </div>
   );
 }
