@@ -952,11 +952,8 @@ export default function CoinsTab() {
       )}
       {/* Adsterra Banner */}
       {/* Adsterra Banners */}
-      <div className="space-y-1 mb-2">
-        <NativeBanner />
-        <CustomBanner1 />
-        <CustomBanner2 />
-      </div>
+      <NativeBanner />
+
     </div>
   );
 }

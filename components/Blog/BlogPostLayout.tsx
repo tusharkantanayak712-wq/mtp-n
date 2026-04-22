@@ -8,6 +8,7 @@ import { ReactNode, useMemo, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { BLOGS_DATA } from "@/lib/blogData";
 import Script from "next/script";
+import NativeBanner from "@/components/Ads/NativeBanner";
 
 interface BlogPostLayoutProps {
     title: string;
@@ -186,6 +187,11 @@ export default function BlogPostLayout({
                     )}
                 </header>
 
+                {/* Top Ad Banner */}
+                <div className="max-w-2xl mx-auto mb-16">
+                    <NativeBanner />
+                </div>
+
                 {/* CONTENT SECTION */}
                 <section className="max-w-2xl mx-auto">
                     <div className="prose prose-invert prose-p:text-lg prose-p:leading-relaxed prose-p:text-[var(--muted)]/90 prose-p:font-medium prose-headings:text-[var(--foreground)] prose-headings:italic prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-20 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-[var(--border)] prose-h2:flex prose-h2:items-center prose-h2:gap-4 prose-strong:text-[var(--accent)] prose-strong:font-black prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:underline prose-ul:list-none prose-ul:pl-0 prose-li:relative prose-li:pl-8 prose-li:before:absolute prose-li:before:left-0 prose-li:before:top-[0.7em] prose-li:before:w-3 prose-li:before:h-[2px] prose-li:before:bg-[var(--accent)] prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-[var(--accent)]/5 prose-blockquote:rounded-r-2xl prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:italic-none prose-table:border prose-table:border-[var(--border)] prose-th:bg-[var(--accent)]/10 prose-th:p-4 prose-td:p-4 prose-img:rounded-[2rem] space-y-12">
@@ -210,10 +216,10 @@ export default function BlogPostLayout({
                                 className="group relative flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-[2.5rem] overflow-hidden hover:border-[var(--accent)]/50 transition-all duration-500 shadow-xl hover:-translate-y-2"
                             >
                                 <div className="aspect-video relative overflow-hidden">
-                                    <img 
-                                        src={blog.image} 
-                                        alt={blog.title} 
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                    <img
+                                        src={blog.image}
+                                        alt={blog.title}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
                                     <div className="absolute top-4 left-4">
                                         <span className="px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-wider text-[var(--accent)] border border-[var(--accent)]/30">
@@ -226,7 +232,7 @@ export default function BlogPostLayout({
                                     <h4 className="text-lg font-black uppercase italic tracking-tighter leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-3 mb-4">
                                         {blog.title}
                                     </h4>
-                                    
+
                                     <div className="mt-auto pt-4 border-t border-[var(--border)]/50 flex items-center justify-between">
                                         <div className="flex items-center gap-2 text-[var(--muted)] opacity-50">
                                             <FiClock size={10} />
@@ -242,6 +248,8 @@ export default function BlogPostLayout({
                     </div>
                 </section>
 
+
+
                 {/* SHARE SECTION */}
                 <footer className="max-w-2xl mx-auto mt-32 p-12 rounded-[3rem] bg-[var(--card)] border border-[var(--border)] flex flex-col items-center gap-8 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30" />
@@ -252,8 +260,8 @@ export default function BlogPostLayout({
                     </div>
                     <div className="flex gap-6">
                         {['Twitter', 'Facebook', 'Copy Link'].map((label, i) => (
-                            <button 
-                                key={i} 
+                            <button
+                                key={i}
                                 className="group relative flex flex-col items-center gap-2"
                                 onClick={() => {
                                     if (label === 'Copy Link') {
