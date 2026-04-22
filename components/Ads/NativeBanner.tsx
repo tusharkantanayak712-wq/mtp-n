@@ -13,7 +13,7 @@ interface AdsterraBannerProps {
  * Reusable Adsterra Banner component.
  * Defaults to the tasks page banner if no props are provided.
  */
-export default function AdsterraBanner({
+export default function NativeBanner({
   id = "c755433b5487dae7313fbaa97a482b40",
   src = "https://pl29207483.profitablecpmratenetwork.com/c755433b5487dae7313fbaa97a482b40/invoke.js",
   className = ""

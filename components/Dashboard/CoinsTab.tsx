@@ -9,7 +9,9 @@ import {
   FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, FiPlay
 } from "react-icons/fi";
 import Link from "next/link";
-import AdsterraBanner from "@/components/Ads/AdsterraBanner";
+import NativeBanner from "@/components/Ads/NativeBanner";
+import CustomBanner1 from "@/components/Ads/CustomBanner1";
+import CustomBanner2 from "@/components/Ads/CustomBanner2";
 import { ADS_CONFIG } from "@/lib/adsConfig";
 
 
@@ -49,7 +51,7 @@ const ICON_STYLES: Record<string, string> = {
 };
 
 // ──────────────────────────────── ADSTERRA CARD ──────────────────────────────
-function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, reward, cooldownMs }: { 
+function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, reward, cooldownMs }: {
   lastAdReward: string | null;
   adId: string;
   adLink: string;
@@ -112,7 +114,7 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, 
     try {
       const res = await fetch("/api/coins/ad-reward", {
         method: "POST",
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
@@ -139,21 +141,18 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, 
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative rounded-xl border p-3 flex flex-col gap-2 overflow-hidden group transition-all ${
-        cooldownText ? "border-[var(--border)] bg-[var(--card)]/20 opacity-80" : "border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 shadow-lg shadow-blue-500/5"
-      }`}
+      className={`relative rounded-xl border p-3 flex flex-col gap-2 overflow-hidden group transition-all ${cooldownText ? "border-[var(--border)] bg-[var(--card)]/20 opacity-80" : "border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 shadow-lg shadow-blue-500/5"
+        }`}
     >
       <div className="absolute top-0 right-0 p-1.5">
-         <span className={`text-[6px] font-black uppercase tracking-widest px-1 py-0.5 rounded ${
-           cooldownText ? "text-[var(--muted)]/40 bg-[var(--card)]/40" : "text-blue-400/50 bg-blue-500/10"
-         }`}>
-           {cooldownText ? "Cooldown" : "Bonus"}
-         </span>
+        <span className={`text-[6px] font-black uppercase tracking-widest px-1 py-0.5 rounded ${cooldownText ? "text-[var(--muted)]/40 bg-[var(--card)]/40" : "text-blue-400/50 bg-blue-500/10"
+          }`}>
+          {cooldownText ? "Cooldown" : "Bonus"}
+        </span>
       </div>
       <div className="flex items-center gap-2.5">
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform ${
-          cooldownText ? "bg-[var(--card)]/40 grayscale" : "bg-blue-500/10 group-hover:scale-110"
-        }`}>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform ${cooldownText ? "bg-[var(--card)]/40 grayscale" : "bg-blue-500/10 group-hover:scale-110"
+          }`}>
           <FiPlay size={14} className={cooldownText ? "text-[var(--muted)]/40 text-xl" : "text-blue-400 text-xl"} />
         </div>
         <div className="flex-1 min-w-0">
@@ -161,10 +160,10 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, 
             {cooldownText ? "Locked" : (title || "Watch Ad")}
           </p>
           <div className="flex items-center gap-1.5 mt-0.5">
-             <FiStar className={cooldownText ? "text-[var(--muted)]/30 text-[8px]" : "text-blue-400 text-[8px]"} />
-             <span className={`font-black text-[9px] ${cooldownText ? "text-[var(--muted)]/40" : "text-blue-400"}`}>
-               +{reward || ADS_CONFIG.REWARD_COINS} BBC
-             </span>
+            <FiStar className={cooldownText ? "text-[var(--muted)]/30 text-[8px]" : "text-blue-400 text-[8px]"} />
+            <span className={`font-black text-[9px] ${cooldownText ? "text-[var(--muted)]/40" : "text-blue-400"}`}>
+              +{reward || ADS_CONFIG.REWARD_COINS} BBC
+            </span>
           </div>
         </div>
         {!opened ? (
@@ -172,11 +171,10 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, 
             whileHover={{ scale: cooldownText ? 1 : 1.05 }} whileTap={{ scale: cooldownText ? 1 : 0.95 }}
             onClick={handleOpen}
             disabled={!!cooldownText}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all min-w-[75px] justify-center ${
-              cooldownText 
-                ? "bg-[var(--card)]/40 text-amber-400/80 border border-amber-500/20 cursor-not-allowed" 
-                : "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all min-w-[75px] justify-center ${cooldownText
+              ? "bg-[var(--card)]/40 text-amber-400/80 border border-amber-500/20 cursor-not-allowed"
+              : "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+              }`}
           >
             {cooldownText ? <><FiClock size={10} /> {cooldownText}</> : <><FiPlay size={10} /> Watch</>}
           </motion.button>
@@ -185,7 +183,7 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, 
             disabled
             className="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400/50 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase cursor-not-allowed shadow-none min-w-[75px] justify-center"
           >
-             <FiClock size={10} className="animate-pulse" /> {timer}s
+            <FiClock size={10} className="animate-pulse" /> {timer}s
           </button>
         ) : (
           <motion.button
@@ -217,12 +215,12 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
 
   const handleAction = async () => {
     if (task.status === "completed" || isPending) return;
-    
+
     setLoading(true);
     if (task.url && task.url !== "#") {
       window.open(task.url, "_blank", "noopener,noreferrer");
     }
-    
+
     // Slight delay to simulate user clicking before we show claim
     setTimeout(async () => {
       await onClaim(task.taskId);
@@ -241,11 +239,10 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`relative rounded-2xl border p-4 flex items-center gap-4 transition-all ${
-        task.status === "completed" 
-          ? "bg-emerald-500/5 border-emerald-500/20 opacity-60" 
-          : "bg-[var(--card)]/40 border-[var(--border)]"
-      }`}
+      className={`relative rounded-2xl border p-4 flex items-center gap-4 transition-all ${task.status === "completed"
+        ? "bg-emerald-500/5 border-emerald-500/20 opacity-60"
+        : "bg-[var(--card)]/40 border-[var(--border)]"
+        }`}
     >
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl ${ICON_STYLES[task.type] || ICON_STYLES.custom}`}>
         {TASK_ICONS[task.type] || TASK_ICONS.custom}
@@ -257,12 +254,12 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
           <span className="text-amber-400 font-black text-[10px]">+{task.reward} BBC</span>
         </div>
       </div>
-      
+
       {!isUnlocked && task.status !== "completed" && !isPending ? (
         <div className="shrink-0">
           {isWatchingAd ? (
             <div className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase bg-purple-500/10 text-purple-400 border border-purple-500/20`}>
-               <FiClock className="animate-pulse" /> {adTimer}s
+              <FiClock className="animate-pulse" /> {adTimer}s
             </div>
           ) : (
             <motion.button
@@ -280,13 +277,12 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
           whileTap={{ scale: task.status === "completed" ? 1 : 0.95 }}
           onClick={handleAction}
           disabled={task.status === "completed" || isPending || loading}
-          className={`shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${
-            task.status === "completed"
-              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 cursor-default"
-              : isPending
+          className={`shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${task.status === "completed"
+            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 cursor-default"
+            : isPending
               ? "bg-amber-500/10 text-amber-400 border border-amber-500/20 cursor-default"
               : "bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500"
-          }`}
+            }`}
         >
           {getButtonContent()}
         </motion.button>
@@ -299,9 +295,9 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
 type TabKey = "checkin" | "tasks" | "watch" | "convert" | "history";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
-  { key: "checkin",  label: "Check-in", icon: <FiCalendar size={13} /> },
-  { key: "tasks",    label: "Tasks",    icon: <FiZap size={13} /> },
-  { key: "watch",    label: "Ads",      icon: <FiPlay size={13} /> },
+  { key: "checkin", label: "Check-in", icon: <FiCalendar size={13} /> },
+  { key: "tasks", label: "Tasks", icon: <FiZap size={13} /> },
+  { key: "watch", label: "Ads", icon: <FiPlay size={13} /> },
 ];
 
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -314,7 +310,7 @@ export default function CoinsTab() {
   const [streak, setStreak] = useState(0);
   const [rewards, setRewards] = useState([2, 3, 5, 7, 10, 15, 25]);
   const [nextReward, setNextReward] = useState(2);
-  
+
   // Dynamic ad channel rewards tracking
   const [adRewardTimes, setAdRewardTimes] = useState<Record<string, string | null>>({});
 
@@ -361,7 +357,7 @@ export default function CoinsTab() {
         setStreak(bal.streak || 0);
         setNextReward(bal.nextReward || 5);
         setRewards(bal.rewards || [5, 7, 10, 15, 20, 25, 50]);
-        
+
         // Map ad rewards array to record
         const rewardMap: Record<string, string | null> = {};
         bal.adRewards?.forEach((r: any) => { rewardMap[r.id] = r.lastTime; });
@@ -395,7 +391,7 @@ export default function CoinsTab() {
   const handleCheckin = async () => {
     // Open Ad first
     window.open(ADS_CONFIG.ADSTERRA_LINK, "_blank", "noopener,noreferrer");
-    
+
     setCheckinLoading(true);
     try {
       const token = localStorage.getItem("token");
@@ -425,7 +421,7 @@ export default function CoinsTab() {
       const token = localStorage.getItem("token");
       const res = await fetch("/api/coins/claim", {
         method: "POST",
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
@@ -452,7 +448,7 @@ export default function CoinsTab() {
       const token = localStorage.getItem("token");
       const res = await fetch("/api/coins/convert", {
         method: "POST",
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
@@ -495,9 +491,11 @@ export default function CoinsTab() {
   }, [adTimer, activeAdTarget]);
 
   if (loading) return (
-    <div className="p-8 flex flex-col items-center justify-center gap-4 animate-pulse">
-      <div className="w-16 h-16 rounded-full bg-[var(--card)] border-2 border-[var(--border)]" />
-      <div className="h-4 w-32 bg-[var(--card)] rounded" />
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="relative">
+        <div className="w-12 h-12 rounded-full border-2 border-[var(--border)] border-t-[var(--accent)] animate-spin" />
+        <FiZap className="absolute inset-0 m-auto text-[var(--accent)] text-lg animate-pulse" />
+      </div>
     </div>
   );
 
@@ -506,21 +504,21 @@ export default function CoinsTab() {
 
   return (
     <div className="max-w-xl mx-auto space-y-2 pb-16 px-2 pt-0.5">
-      
+
       {/* ── NEW PREMIUM BALANCE CARD ──────────────────────────────────── */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
         className="relative overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] p-4 shadow-2xl shadow-blue-500/5 mb-1"
       >
         <div className="relative flex items-center justify-between gap-4">
-          
+
           {/* Left Side: Balance & Info */}
           <div className="flex flex-col items-start gap-0.5">
             <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/5 border border-amber-500/20 mb-0.5">
               <FiStar className="text-amber-500 text-[8px]" />
               <span className="text-[7px] font-black uppercase tracking-widest text-amber-500">BBC Coins</span>
             </div>
-            
+
             <div className="flex items-center gap-1.5">
               <span className="text-4xl font-black text-amber-500 tabular-nums leading-none">{coins}</span>
               <p className="text-[9px] font-black uppercase tracking-wide text-[var(--muted)]/60 mt-1">
@@ -532,16 +530,16 @@ export default function CoinsTab() {
           {/* Right Side: Quick Stats */}
           <div className="flex items-center gap-1.5">
             <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] p-1.5 transition-colors hover:bg-[var(--foreground)]/[0.05]">
-               <div className="flex items-center gap-1">
-                 <span className="text-xs">🔥</span>
-                 <span className="text-xs font-black text-blue-400">{streak}</span>
-               </div>
-               <span className="text-[6px] font-black uppercase text-[var(--muted)]/40 mt-0.5">Streak</span>
+              <div className="flex items-center gap-1">
+                <span className="text-xs">🔥</span>
+                <span className="text-xs font-black text-blue-400">{streak}</span>
+              </div>
+              <span className="text-[6px] font-black uppercase text-[var(--muted)]/40 mt-0.5">Streak</span>
             </div>
 
             <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] p-1.5 transition-colors hover:bg-[var(--foreground)]/[0.05]">
-               <span className="text-xs font-black text-amber-500">+{nextReward}</span>
-               <span className="text-[6px] font-black uppercase text-[var(--muted)]/40 mt-0.5 uppercase text-center leading-tight">Next</span>
+              <span className="text-xs font-black text-amber-500">+{nextReward}</span>
+              <span className="text-[6px] font-black uppercase text-[var(--muted)]/40 mt-0.5 uppercase text-center leading-tight">Next</span>
             </div>
           </div>
 
@@ -549,12 +547,14 @@ export default function CoinsTab() {
 
         {/* Experimental Notice */}
         <div className="mt-3 pt-2.5 border-t border-[var(--border)]/40 flex items-center gap-2">
-           <FiAlertCircle className="text-blue-400 text-[10px] animate-pulse shrink-0" />
-           <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
-              Rewards will be increased in 3-4 days. Now its experimental.
-           </p>
+          <FiAlertCircle className="text-blue-400 text-[10px] animate-pulse shrink-0" />
+          <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
+            Rewards will be increased in 3-4 days. Now its experimental.
+          </p>
         </div>
       </motion.div>
+
+
 
       {/* ── CONTENT AREA ──────────────────────────────────────────────── */}
       {!loading && (
@@ -647,9 +647,8 @@ export default function CoinsTab() {
                     {history.map((item, idx) => (
                       <div key={idx} className="flex items-center justify-between py-2.5 border-b border-[var(--border)]/30 last:border-0">
                         <div className="flex items-center gap-2.5">
-                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                            item.type === "earn" ? "bg-amber-500/10" : "bg-rose-500/10"
-                          }`}>
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${item.type === "earn" ? "bg-amber-500/10" : "bg-rose-500/10"
+                            }`}>
                             <FiStar className={`text-[10px] ${item.type === "earn" ? "text-amber-400" : "text-rose-400"}`} />
                           </div>
                           <div>
@@ -688,28 +687,26 @@ export default function CoinsTab() {
 
           {/* ── SEPARATE TOP TOOLS ────────────────────────────────────────── */}
           <div className="grid grid-cols-2 gap-3">
-             <button
-               onClick={() => setActiveTab("convert")}
-               className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${
-                 activeTab === "convert"
-                   ? "bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20"
-                   : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
-               }`}
-             >
-               <FiTrendingUp size={14} />
-               Convert
-             </button>
-             <button
-               onClick={() => setActiveTab("history")}
-               className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${
-                 activeTab === "history"
-                   ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
-                   : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
-               }`}
-             >
-               <FiList size={14} />
-               History
-             </button>
+            <button
+              onClick={() => setActiveTab("convert")}
+              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === "convert"
+                ? "bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
+                }`}
+            >
+              <FiTrendingUp size={14} />
+              Convert
+            </button>
+            <button
+              onClick={() => setActiveTab("history")}
+              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === "history"
+                ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
+                : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
+                }`}
+            >
+              <FiList size={14} />
+              History
+            </button>
           </div>
 
 
@@ -719,11 +716,10 @@ export default function CoinsTab() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`relative flex flex-col items-center gap-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wide transition-all ${
-                  activeTab === tab.key
-                    ? "bg-[var(--accent)] text-white shadow-lg"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                }`}
+                className={`relative flex flex-col items-center gap-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wide transition-all ${activeTab === tab.key
+                  ? "bg-[var(--accent)] text-white shadow-lg"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                  }`}
               >
                 {tab.icon}
                 <span>{tab.label}</span>
@@ -772,16 +768,14 @@ export default function CoinsTab() {
                     const isToday = day === streak && checkedInToday;
                     const isCurrent = day === (checkedInToday ? streak : streak + 1);
                     return (
-                      <div key={day} className={`flex flex-col items-center gap-1 p-1.5 rounded-xl border transition-all ${
-                        isToday        ? "bg-amber-500/20 border-amber-500/40"
-                        : isCompleted  ? "bg-emerald-500/10 border-emerald-500/20"
-                        : isCurrent && !checkedInToday ? "bg-blue-500/10 border-blue-500/30 ring-1 ring-blue-500/20"
-                        : "bg-[var(--card)]/20 border-[var(--border)]/30"
-                      }`}>
-                        <span className="text-[7px] font-black uppercase text-[var(--muted)]/40">{DAY_LABELS[i]}</span>
-                        <span className={`text-[8px] font-black ${
-                          isToday || isCompleted ? "text-amber-400" : isCurrent ? "text-blue-400" : "text-[var(--muted)]/30"
+                      <div key={day} className={`flex flex-col items-center gap-1 p-1.5 rounded-xl border transition-all ${isToday ? "bg-amber-500/20 border-amber-500/40"
+                        : isCompleted ? "bg-emerald-500/10 border-emerald-500/20"
+                          : isCurrent && !checkedInToday ? "bg-blue-500/10 border-blue-500/30 ring-1 ring-blue-500/20"
+                            : "bg-[var(--card)]/20 border-[var(--border)]/30"
                         }`}>
+                        <span className="text-[7px] font-black uppercase text-[var(--muted)]/40">{DAY_LABELS[i]}</span>
+                        <span className={`text-[8px] font-black ${isToday || isCompleted ? "text-amber-400" : isCurrent ? "text-blue-400" : "text-[var(--muted)]/30"
+                          }`}>
                           {isToday || isCompleted ? "✓" : reward}
                         </span>
                         {day === 7 && <span className="text-[6px] text-amber-400 font-black">🎉</span>}
@@ -800,11 +794,10 @@ export default function CoinsTab() {
                   whileTap={{ scale: checkedInToday ? 1 : 0.98 }}
                   onClick={handleCheckin}
                   disabled={checkedInToday || checkinLoading}
-                  className={`w-full py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-                    checkedInToday
-                      ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 cursor-default"
-                      : "bg-amber-500 text-white hover:bg-amber-400 shadow-lg shadow-amber-500/20"
-                  }`}
+                  className={`w-full py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${checkedInToday
+                    ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 cursor-default"
+                    : "bg-amber-500 text-white hover:bg-amber-400 shadow-lg shadow-amber-500/20"
+                    }`}
                 >
                   {checkinLoading ? (
                     <FiRefreshCw className="animate-spin text-sm" />
@@ -856,11 +849,11 @@ export default function CoinsTab() {
                 ) : (
                   <div className="space-y-3">
                     {incompleteTasks.map((task) => (
-                      <TaskCard 
-                        key={task.taskId} 
-                        task={task} 
-                        onClaim={handleClaimTask} 
-                        pendingClaims={pendingClaims} 
+                      <TaskCard
+                        key={task.taskId}
+                        task={task}
+                        onClaim={handleClaimTask}
+                        pendingClaims={pendingClaims}
                         isUnlocked={unlockedTaskIds.has(task.taskId)}
                         isWatchingAd={activeAdTarget === task.taskId}
                         adTimer={activeAdTarget === task.taskId ? adTimer : null}
@@ -872,10 +865,10 @@ export default function CoinsTab() {
                         <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]/30 pt-2">Completed</p>
                         {completedTasks.map((task) => (
                           <div key={task.taskId} className="opacity-40">
-                            <TaskCard 
-                              task={task} 
-                              onClaim={async () => ({})} 
-                              pendingClaims={pendingClaims} 
+                            <TaskCard
+                              task={task}
+                              onClaim={async () => ({})}
+                              pendingClaims={pendingClaims}
                               isUnlocked={true}
                             />
                           </div>
@@ -920,7 +913,7 @@ export default function CoinsTab() {
 
                 <div className="space-y-4">
                   {ADS_CONFIG.WATCH_EARN_CHANNELS.map((channel) => (
-                    <AdsterraCard 
+                    <AdsterraCard
                       key={channel.id}
                       adId={channel.id}
                       title={channel.title}
@@ -928,27 +921,27 @@ export default function CoinsTab() {
                       reward={(channel as any).reward}
                       cooldownMs={(channel as any).cooldownMs}
                       lastAdReward={adRewardTimes[channel.id] || null}
-                      onReward={(bal, id, lastTime) => { 
-                        setCoins(bal); 
+                      onReward={(bal, id, lastTime) => {
+                        setCoins(bal);
                         setAdRewardTimes(prev => ({ ...prev, [id]: lastTime }));
-                      }} 
-                      showToast={showToast} 
+                      }}
+                      showToast={showToast}
                     />
                   ))}
                 </div>
 
                 <div className="relative rounded-2xl border border-[var(--border)] bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-4 overflow-hidden">
-                   <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
-                         <FiAlertCircle className="text-blue-400 text-sm" />
-                      </div>
-                      <div>
-                         <h5 className="text-[10px] font-black uppercase tracking-wide text-white/80">Ad Information</h5>
-                         <p className="text-[9px] text-[var(--muted)] mt-1 leading-relaxed">
-                            Watch the full 15 seconds to be eligible for rewards. You can claim this bonus once every 45 minutes. Make sure your internet connection is stable.
-                         </p>
-                      </div>
-                   </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                      <FiAlertCircle className="text-blue-400 text-sm" />
+                    </div>
+                    <div>
+                      <h5 className="text-[10px] font-black uppercase tracking-wide text-white/80">Ad Information</h5>
+                      <p className="text-[9px] text-[var(--muted)] mt-1 leading-relaxed">
+                        Watch the full 15 seconds to be eligible for rewards. You can claim this bonus once every 45 minutes. Make sure your internet connection is stable.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -958,8 +951,12 @@ export default function CoinsTab() {
         </div>
       )}
       {/* Adsterra Banner */}
-      <AdsterraBanner className="mt-6" />
-
+      {/* Adsterra Banners */}
+      <div className="space-y-1 mb-2">
+        <NativeBanner />
+        <CustomBanner1 />
+        <CustomBanner2 />
+      </div>
     </div>
   );
 }
