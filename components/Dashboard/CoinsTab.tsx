@@ -306,9 +306,9 @@ type TabKey = "checkin" | "tasks" | "watch" | "convert" | "history" | "games";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "checkin", label: "Check-in", icon: <FiCalendar size={13} /> },
-  { key: "tasks", label: "Tasks", icon: <FiZap size={13} /> },
-  { key: "games", label: "Games", icon: <FiTarget size={13} /> },
   { key: "watch", label: "Ads", icon: <FiPlay size={13} /> },
+  { key: "games", label: "Games", icon: <FiTarget size={13} /> },
+  { key: "tasks", label: "Tasks", icon: <FiZap size={13} /> },
 ];
 
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
