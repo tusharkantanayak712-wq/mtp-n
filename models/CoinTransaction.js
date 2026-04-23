@@ -37,6 +37,7 @@ const CoinTransactionSchema = new mongoose.Schema(
         "referral",       // Referral bonus
         "convert_to_wallet", // Spent coins → wallet
         "admin",          // Manual admin adjustment
+        "game",           // Lucky Spin, Coin Flip, etc.
       ],
       required: true,
     },

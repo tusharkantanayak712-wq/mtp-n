@@ -129,7 +129,7 @@ export default function BlogPostLayout({
                 </motion.div>
 
 
-                <header className="mb-12 md:mb-16">
+                <header className="mb-8 md:mb-12">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -152,7 +152,7 @@ export default function BlogPostLayout({
                             ))}
                         </h1>
 
-                        <div className="flex items-center gap-3 py-4 border-y border-[var(--border)]/50 mr-auto">
+                        <div className="flex items-center gap-3 py-3 border-y border-[var(--border)]/50 mr-auto">
                             <div className="w-10 h-10 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-inner">
                                 <FiUser size={20} />
                             </div>
@@ -188,19 +188,19 @@ export default function BlogPostLayout({
                 </header>
 
                 {/* Top Ad Banner */}
-                <div className="max-w-2xl mx-auto mb-16">
+                <div className="max-w-3xl mx-auto mb-8">
                     <NativeBanner />
                 </div>
 
                 {/* CONTENT SECTION */}
-                <section className="max-w-2xl mx-auto">
-                    <div className="prose prose-invert prose-p:text-lg prose-p:leading-relaxed prose-p:text-[var(--muted)]/90 prose-p:font-medium prose-headings:text-[var(--foreground)] prose-headings:italic prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-20 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-[var(--border)] prose-h2:flex prose-h2:items-center prose-h2:gap-4 prose-strong:text-[var(--accent)] prose-strong:font-black prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:underline prose-ul:list-none prose-ul:pl-0 prose-li:relative prose-li:pl-8 prose-li:before:absolute prose-li:before:left-0 prose-li:before:top-[0.7em] prose-li:before:w-3 prose-li:before:h-[2px] prose-li:before:bg-[var(--accent)] prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-[var(--accent)]/5 prose-blockquote:rounded-r-2xl prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:italic-none prose-table:border prose-table:border-[var(--border)] prose-th:bg-[var(--accent)]/10 prose-th:p-4 prose-td:p-4 prose-img:rounded-[2rem] space-y-12">
+                <section className="max-w-3xl mx-auto">
+                    <div className="prose prose-invert prose-p:text-lg prose-p:leading-relaxed prose-p:text-[var(--muted)]/90 prose-p:font-medium prose-headings:text-[var(--foreground)] prose-headings:italic prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-4 prose-h2:border-b prose-h2:border-[var(--border)] prose-h2:flex prose-h2:items-center prose-h2:gap-4 prose-strong:text-[var(--accent)] prose-strong:font-black prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:underline prose-ul:list-none prose-ul:pl-0 prose-li:relative prose-li:pl-8 prose-li:before:absolute prose-li:before:left-0 prose-li:before:top-[0.7em] prose-li:before:w-3 prose-li:before:h-[2px] prose-li:before:bg-[var(--accent)] prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-[var(--accent)]/5 prose-blockquote:rounded-r-2xl prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:italic-none prose-table:border prose-table:border-[var(--border)] prose-th:bg-[var(--accent)]/10 prose-th:p-4 prose-td:p-4 prose-img:rounded-[2rem] space-y-8">
                         {children}
                     </div>
                 </section>
 
                 {/* RELATED ARTICLES */}
-                <section className="mt-32 max-w-5xl mx-auto">
+                <section className="mt-20 max-w-5xl mx-auto">
                     <div className="text-center mb-16">
                         <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[var(--accent)] opacity-60 mb-4 block">Keep Reading</span>
                         <h3 className="text-3xl md:text-5xl font-black italic tracking-tighter uppercase leading-none">
@@ -251,7 +251,7 @@ export default function BlogPostLayout({
 
 
                 {/* SHARE SECTION */}
-                <footer className="max-w-2xl mx-auto mt-32 p-12 rounded-[3rem] bg-[var(--card)] border border-[var(--border)] flex flex-col items-center gap-8 relative overflow-hidden">
+                <footer className="max-w-3xl mx-auto mt-20 p-8 rounded-[3rem] bg-[var(--card)] border border-[var(--border)] flex flex-col items-center gap-6 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30" />
                     <div className="text-center space-y-2">
                         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--muted)] opacity-60 italic">Community support</span>

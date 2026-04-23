@@ -6,13 +6,17 @@ import {
   FiStar, FiCalendar, FiCheckCircle, FiArrowRight, FiCheck,
   FiYoutube, FiSmartphone, FiGlobe, FiMessageCircle,
   FiZap, FiRefreshCw, FiClock, FiList, FiLock, FiTrendingUp,
-  FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, FiPlay
+  FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, FiPlay, FiTarget, FiBox
 } from "react-icons/fi";
 import Link from "next/link";
+import RouletteGame from "./RouletteGame";
+import TreasureGame from "./TreasureGame";
+import CoinFlipGame from "./CoinFlipGame";
 import NativeBanner from "@/components/Ads/NativeBanner";
 import CustomBanner1 from "@/components/Ads/CustomBanner1";
 import CustomBanner2 from "@/components/Ads/CustomBanner2";
 import { ADS_CONFIG } from "@/lib/adsConfig";
+import confetti from "canvas-confetti";
 
 
 // ──────────────────────────────────────────── TYPES ──────────────────────────
@@ -122,6 +126,12 @@ function AdsterraCard({ lastAdReward, adId, adLink, title, onReward, showToast, 
       });
       const data = await res.json();
       if (data.success) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.8 },
+          colors: ['#3b82f6', '#60a5fa', '#ffffff']
+        });
         showToast(data.message, "success");
         onReward(data.newBalance, adId, data.transaction?.createdAt || new Date().toISOString());
         setOpened(false);
@@ -292,11 +302,12 @@ function TaskCard({ task, onClaim, pendingClaims, isUnlocked, isWatchingAd, adTi
 }
 
 // ══════════════════════════════════ MAIN COMPONENT ════════════════════════════
-type TabKey = "checkin" | "tasks" | "watch" | "convert" | "history";
+type TabKey = "checkin" | "tasks" | "watch" | "convert" | "history" | "games";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "checkin", label: "Check-in", icon: <FiCalendar size={13} /> },
   { key: "tasks", label: "Tasks", icon: <FiZap size={13} /> },
+  { key: "games", label: "Games", icon: <FiTarget size={13} /> },
   { key: "watch", label: "Ads", icon: <FiPlay size={13} /> },
 ];
 
@@ -304,11 +315,14 @@ const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function CoinsTab() {
   const [activeTab, setActiveTab] = useState<TabKey>("checkin");
+  const [activeGame, setActiveGame] = useState<string | null>(null);
+  const [lastResult, setLastResult] = useState<{ amount: number; id: number } | null>(null);
   const [coins, setCoins] = useState(0);
+  const [historyLimit] = useState(10);
   const [checkinLoading, setCheckinLoading] = useState(false);
   const [checkedInToday, setCheckedInToday] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [rewards, setRewards] = useState([2, 3, 5, 7, 10, 15, 25]);
+  const [rewards, setRewards] = useState([2, 3, 5, 7, 10, 12, 15]);
   const [nextReward, setNextReward] = useState(2);
 
   // Dynamic ad channel rewards tracking
@@ -334,6 +348,25 @@ export default function CoinsTab() {
   const [adTimer, setAdTimer] = useState<number | null>(null);
   const adTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const updateCoins = (newVal: any, resultAmount?: number) => {
+    if (typeof newVal === "number" && !isNaN(newVal)) {
+      setCoins(newVal);
+      if (resultAmount !== undefined && resultAmount !== 0) {
+        setLastResult({ amount: resultAmount, id: Date.now() });
+        setTimeout(() => setLastResult(null), 3000);
+        setTimeout(() => fetchData(), 1000);
+      }
+    } else if (typeof newVal === "string" && !isNaN(parseInt(newVal))) {
+      const val = parseInt(newVal);
+      setCoins(val);
+      if (resultAmount !== undefined && resultAmount !== 0) {
+        setLastResult({ amount: resultAmount, id: Date.now() });
+        setTimeout(() => setLastResult(null), 3000);
+        setTimeout(() => fetchData(), 1000);
+      }
+    }
+  };
+
   const showToast = (message: string, type: "success" | "error" = "success") => {
     // We'll use the browser's alert for now since we don't have a toast component in this file
     // Ideally use a custom toast UI
@@ -352,7 +385,7 @@ export default function CoinsTab() {
       });
       const bal = await balRes.json();
       if (bal.success) {
-        setCoins(bal.coins);
+        updateCoins(bal.coins);
         setCheckedInToday(bal.checkedInToday);
         setStreak(bal.streak || 0);
         setNextReward(bal.nextReward || 5);
@@ -401,6 +434,12 @@ export default function CoinsTab() {
       });
       const data = await res.json();
       if (data.success) {
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#f59e0b', '#fbbf24', '#ffffff']
+        });
         showToast(data.message, "success");
         setCoins(data.newBalance);
         setCheckedInToday(true);
@@ -457,9 +496,10 @@ export default function CoinsTab() {
       const data = await res.json();
       if (data.success) {
         showToast(data.message, "success");
-        setCoins(data.newCoins);
+        updateCoins(data.newCoins);
         setConvertCoins("");
         fetchData();
+        setActiveTab("checkin");
       } else {
         showToast(data.message, "error");
       }
@@ -503,12 +543,11 @@ export default function CoinsTab() {
   const completedTasks = tasks.filter(t => t.status === "completed");
 
   return (
-    <div className="max-w-xl mx-auto space-y-2 pb-16 px-2 pt-0.5">
+    <div className="max-w-3xl mx-auto space-y-1.5 pb-16 px-2 pt-0.5">
 
       {/* ── NEW PREMIUM BALANCE CARD ──────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-        className="relative overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] p-4 shadow-2xl shadow-blue-500/5 mb-1"
+      <div
+        className="relative overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] p-4 shadow-2xl shadow-blue-500/5 mb-0.5"
       >
         <div className="relative flex items-center justify-between gap-4">
 
@@ -519,10 +558,27 @@ export default function CoinsTab() {
               <span className="text-[7px] font-black uppercase tracking-widest text-amber-500">BBC Coins</span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <span className="text-4xl font-black text-amber-500 tabular-nums leading-none">{coins}</span>
+            <div className="flex items-center gap-1.5 relative">
+              <span className="text-4xl font-black text-amber-500 tabular-nums leading-none">{coins || 0}</span>
+              
+              <AnimatePresence>
+                {lastResult && (
+                  <motion.div
+                    key={lastResult.id}
+                    initial={{ opacity: 0, y: 10, scale: 0.5 }}
+                    animate={{ opacity: 1, y: -25, scale: 1.2 }}
+                    exit={{ opacity: 0, y: -40, scale: 0.8 }}
+                    className={`absolute -right-2 top-0 font-black text-lg drop-shadow-lg pointer-events-none ${
+                      lastResult.amount > 0 ? "text-emerald-400" : "text-rose-500"
+                    }`}
+                  >
+                    {lastResult.amount > 0 ? `+${lastResult.amount}` : lastResult.amount}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <p className="text-[9px] font-black uppercase tracking-wide text-[var(--muted)]/60 mt-1">
-                ≈ ₹{(coins / 100).toFixed(2)}
+                ≈ ₹{((coins || 0) / 100).toFixed(2)}
               </p>
             </div>
           </div>
@@ -544,34 +600,79 @@ export default function CoinsTab() {
           </div>
 
         </div>
-
-        {/* Experimental Notice */}
-        <div className="mt-3 pt-2.5 border-t border-[var(--border)]/40 flex items-center gap-2">
-          <FiAlertCircle className="text-blue-400 text-[10px] animate-pulse shrink-0" />
-          <p className="text-[8px] font-bold uppercase tracking-wide text-blue-400/80 leading-relaxed">
-            Rewards will be increased in 3-4 days. Now its experimental.
-          </p>
-        </div>
-      </motion.div>
-
-
+      </div>
 
       {/* ── CONTENT AREA ──────────────────────────────────────────────── */}
       {!loading && (
-        <div className="space-y-4">
+        <div className="space-y-2">
 
+          {/* Navigation moved up */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => {
+                setActiveTab(activeTab === "convert" ? "checkin" : "convert");
+                setActiveGame(null);
+              }}
+              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === "convert"
+                ? "bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
+                }`}
+            >
+              <FiTrendingUp size={14} />
+              Convert
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab(activeTab === "history" ? "checkin" : "history");
+                setActiveGame(null);
+              }}
+              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === "history"
+                ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
+                : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
+                }`}
+            >
+              <FiList size={14} />
+              History
+            </button>
+          </div>
+
+          <div className="grid grid-cols-4 gap-1.5 bg-[var(--card)]/40 p-1 rounded-2xl border border-[var(--border)]">
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => {
+                  setActiveTab(tab.key);
+                  setActiveGame(null);
+                }}
+                className={`relative flex flex-col items-center gap-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wide transition-all ${activeTab === tab.key
+                  ? "bg-[var(--accent)] text-white shadow-lg"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                  }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+                {tab.key === "tasks" && incompleteTasks.length > 0 && (
+                  <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-[7px] font-black flex items-center justify-center ${activeTab === "tasks" ? "bg-white text-[var(--accent)]" : "bg-[var(--accent)] text-white"}`}>
+                    {incompleteTasks.length}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* ── ALL TAB CONTENT ──────────────────────────────────────────────── */}
           <AnimatePresence mode="wait">
             {/* ══ CONVERT ══ */}
             {activeTab === "convert" && (
               <motion.div key="convert" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-3 sm:p-4"
               >
                 <div className="flex items-center gap-2 mb-4">
                   <FiTrendingUp className="text-emerald-400 text-sm" />
                   <p className="text-[11px] font-black uppercase tracking-wide">Convert to Diamonds</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="relative">
                     <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                       <FiStar className="text-amber-500 text-xs" />
@@ -626,7 +727,7 @@ export default function CoinsTab() {
             {/* ══ HISTORY ══ */}
             {activeTab === "history" && (
               <motion.div key="history" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-3 sm:p-4"
               >
                 <div className="flex items-center gap-2 mb-4">
                   <FiList className="text-[var(--muted)] text-sm" />
@@ -683,62 +784,120 @@ export default function CoinsTab() {
                 )}
               </motion.div>
             )}
-          </AnimatePresence>
 
-          {/* ── SEPARATE TOP TOOLS ────────────────────────────────────────── */}
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => setActiveTab("convert")}
-              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === "convert"
-                ? "bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20"
-                : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
-                }`}
-            >
-              <FiTrendingUp size={14} />
-              Convert
-            </button>
-            <button
-              onClick={() => setActiveTab("history")}
-              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === "history"
-                ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
-                : "bg-[var(--card)]/40 border-[var(--border)] text-[var(--muted)] hover:text-white"
-                }`}
-            >
-              <FiList size={14} />
-              History
-            </button>
-          </div>
+            {/* ══ GAMES ══ */}
+            {activeTab === "games" && (
+              <motion.div key="games" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                {activeGame === null ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Lucky Spin */}
+                    <button 
+                      onClick={() => setActiveGame("roulette")}
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5 text-left"
+                    >
+                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <FiTarget size={40} className="text-amber-500" />
+                      </div>
+                      <div className="relative z-10 space-y-2">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                          <FiTarget className="text-amber-500" />
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-black uppercase tracking-wide">Lucky Spin</h4>
+                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Win up to 1 BBC instantly</p>
+                        </div>
+                      </div>
+                    </button>
 
+                    {/* Treasure Pick */}
+                    <button 
+                      onClick={() => setActiveGame("treasure")}
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 text-left"
+                    >
+                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <FiBox size={40} className="text-blue-500" />
+                      </div>
+                      <div className="relative z-10 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                            <FiBox className="text-blue-500" />
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-black uppercase tracking-wide">Treasure Pick</h4>
+                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Pick a chest to find 1 BBC</p>
+                        </div>
+                      </div>
+                    </button>
 
-          {/* ── TOP TAB BAR ──────────────────────────────────────────────── */}
-          <div className="grid grid-cols-3 gap-1.5 bg-[var(--card)]/40 p-1 rounded-2xl border border-[var(--border)]">
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`relative flex flex-col items-center gap-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wide transition-all ${activeTab === tab.key
-                  ? "bg-[var(--accent)] text-white shadow-lg"
-                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                  }`}
-              >
-                {tab.icon}
-                <span>{tab.label}</span>
-                {tab.key === "tasks" && incompleteTasks.length > 0 && (
-                  <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-[7px] font-black flex items-center justify-center ${activeTab === "tasks" ? "bg-white text-[var(--accent)]" : "bg-[var(--accent)] text-white"}`}>
-                    {incompleteTasks.length}
-                  </span>
+                    {/* Coin Flip - High Stakes */}
+                    <button 
+                      onClick={() => setActiveGame("coinflip")}
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/5 text-left"
+                    >
+                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <FiZap size={40} className="text-indigo-500" />
+                      </div>
+                      <div className="relative z-10 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                            <FiZap className="text-indigo-500" />
+                          </div>
+                          <span className="px-2 py-0.5 rounded text-[7px] font-black uppercase bg-rose-500/10 text-rose-500 border border-rose-500/20">High Stakes</span>
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-black uppercase tracking-wide">Coin Flip</h4>
+                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Heads or Tails? +/- 2 BBC</p>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Placeholder for future games */}
+                    <div className="rounded-2xl border border-[var(--border)] border-dashed bg-[var(--card)]/20 p-4 flex flex-col items-center justify-center gap-2 opacity-40">
+                      <FiLock className="text-[var(--muted)]" />
+                      <p className="text-[9px] font-black uppercase tracking-widest">More Games Coming Soon</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <button 
+                        onClick={() => setActiveGame(null)}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[9px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                      >
+                        <FiChevronLeft /> Back to Games
+                      </button>
+                    </div>
+                    {activeGame === "roulette" && (
+                      <RouletteGame 
+                        coins={coins} 
+                        onWin={(win, balance) => updateCoins(balance, win)} 
+                        showToast={showToast} 
+                      />
+                    )}
+                    {activeGame === "treasure" && (
+                      <TreasureGame 
+                        coins={coins} 
+                        onWin={(win, balance) => updateCoins(balance, win)} 
+                        showToast={showToast} 
+                      />
+                    )}
+                    {activeGame === "coinflip" && (
+                      <CoinFlipGame 
+                        coins={coins} 
+                        onWin={(win, balance) => updateCoins(balance, win)} 
+                        showToast={showToast} 
+                      />
+                    )}
+                  </div>
                 )}
-              </button>
-            ))}
-          </div>
-
-          {/* ── TAB CONTENT ──────────────────────────────────────────────── */}
-          <AnimatePresence mode="wait">
+              </motion.div>
+            )}
 
             {/* ══ CHECK-IN ══ */}
             {activeTab === "checkin" && (
               <motion.div key="checkin" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-5 space-y-4"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-3 sm:p-4 space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -746,7 +905,7 @@ export default function CoinsTab() {
                       <FiCalendar className="text-blue-400 text-sm" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-black uppercase tracking-wide">Daily Check-in</p>
+                      <p className="text-[11px] font-black uppercase tracking-wide">Daily Check-in Games</p>
                       <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">
                         {checkedInToday ? `Day ${streak} complete ✓` : `Next: +${nextReward} BBC`}
                       </p>
@@ -899,7 +1058,7 @@ export default function CoinsTab() {
             {/* ══ WATCH ADS ══ */}
             {activeTab === "watch" && (
               <motion.div key="watch" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="space-y-5"
+                className="space-y-3"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
@@ -911,7 +1070,7 @@ export default function CoinsTab() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {ADS_CONFIG.WATCH_EARN_CHANNELS.map((channel) => (
                     <AdsterraCard
                       key={channel.id}
@@ -930,7 +1089,7 @@ export default function CoinsTab() {
                   ))}
                 </div>
 
-                <div className="relative rounded-2xl border border-[var(--border)] bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-4 overflow-hidden">
+                <div className="relative rounded-2xl border border-[var(--border)] bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-3 overflow-hidden">
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
                       <FiAlertCircle className="text-blue-400 text-sm" />

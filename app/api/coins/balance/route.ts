@@ -5,7 +5,7 @@ import User from "@/models/User";
 import CoinTransaction from "@/models/CoinTransaction";
 import { ADS_CONFIG } from "@/lib/adsConfig";
 
-const STREAK_REWARDS = [2, 3, 5, 7, 10, 15, 25];
+const STREAK_REWARDS = [2, 3, 5, 7, 10, 12, 15];
 
 export async function GET(req: Request) {
   try {

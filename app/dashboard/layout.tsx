@@ -112,7 +112,7 @@ export default function DashboardLayout({
     return (
         <AuthGuard>
             <UserContext.Provider value={{ userDetails, walletBalance, setWalletBalance }}>
-                <section className="min-h-screen px-4 sm:px-6 py-6 sm:py-8 bg-[var(--background)]">
+                <section className="min-h-screen px-4 sm:px-6 pt-0 pb-4 sm:pb-6 bg-[var(--background)]">
                     {/* Ambient Glow */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-[200px] bg-[var(--accent)]/5 blur-[100px] rounded-full pointer-events-none" />
 
@@ -163,14 +163,9 @@ export default function DashboardLayout({
                         )}
 
                         {/* PAGE CONTENT AREA */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="bg-[var(--card)]/40 backdrop-blur-2xl border border-[var(--border)] rounded-[2rem] p-5 sm:p-8 shadow-2xl min-h-[500px]"
-                        >
+                        <div className="relative z-10">
                             {children}
-                        </motion.div>
+                        </div>
                     </div>
                 </section>
             </UserContext.Provider>

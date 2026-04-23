@@ -347,7 +347,7 @@ export default async function RootLayout({
           {/* <ValentineEffect /> */}
           {/* <ValentinePopup /> */}
           <MaintenanceWrapper maintenanceMode={settings.maintenanceMode} />
-          <main className="pt-16 pb-24 md:pb-0">{children}</main>
+          <main className="pt-14 pb-24 md:pb-0">{children}</main>
 
 
 

@@ -11,7 +11,7 @@ import CoinTransaction from "@/models/CoinTransaction";
  * Day 6      → large
  * Day 7      → big celebration reward → then streak resets to 0
  */
-const STREAK_REWARDS = [2, 3, 5, 7, 10, 15, 25]; // index 0 = Day 1, index 6 = Day 7
+const STREAK_REWARDS = [2, 3, 5, 7, 10, 12, 15]; // index 0 = Day 1, index 6 = Day 7
 
 export async function POST(req: Request) {
   try {

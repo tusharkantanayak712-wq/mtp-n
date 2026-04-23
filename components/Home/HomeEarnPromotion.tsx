@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function HomeEarnPromotion() {
   return (
-    <section className="max-w-xl mx-auto px-4 py-2">
+    <section className="max-w-2xl mx-auto px-4 py-1">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -30,12 +30,15 @@ export default function HomeEarnPromotion() {
 
             {/* Features Row */}
             <div className="flex gap-2">
-               <span className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-tight text-[var(--muted)]">
-                 <FiPlay className="text-purple-500 text-[9px]" /> Watch Ads
-               </span>
-               <span className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-tight text-[var(--muted)]">
-                 <FiCheckCircle className="text-purple-500 text-[9px]" /> Tasks
-               </span>
+              <span className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-tight text-[var(--muted)]">
+                <FiPlay className="text-purple-500 text-[9px]" /> Watch Ads
+              </span>
+              <span className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-tight text-[var(--muted)]">
+                <FiCheckCircle className="text-purple-500 text-[9px]" /> Tasks
+              </span>
+              <span className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-tight text-[var(--muted)]">
+                <FiStar className="text-purple-500 text-[9px]" /> Checkin Games
+              </span>
             </div>
           </div>
 

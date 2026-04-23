@@ -78,6 +78,11 @@ const UserSchema = new mongoose.Schema(
       default: 0, // 0 = never checked in, 1–7 = current streak day
     },
 
+    lastGameSpin: {
+      type: Date,
+      default: null,
+    },
+
     /* ================= REFERRAL SYSTEM ================= */
     referralUsed: {
       type: Boolean,
