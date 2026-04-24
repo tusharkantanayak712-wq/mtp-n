@@ -273,6 +273,27 @@ export default function RouletteGame({ coins, onWin, showToast }: RouletteGamePr
         )}
       </AnimatePresence>
 
+      {/* Rules Section */}
+      <div className="w-full border-t border-[var(--border)] pt-4 mt-2">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-3 bg-amber-500 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">How to Play</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { t: "Step 1", d: "Watch the Ad" },
+            { t: "Step 2", d: "Spin the Wheel" },
+            { t: "Reward", d: "0 to +1 BBC" },
+            { t: "Cooldown", d: "25 Seconds" }
+          ].map((rule, idx) => (
+            <div key={idx} className="p-2 rounded-lg bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+              <p className="text-[7px] font-black uppercase text-amber-500/60 leading-none mb-1">{rule.t}</p>
+              <p className="text-[9px] font-bold text-[var(--muted)] leading-tight">{rule.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   );
 }

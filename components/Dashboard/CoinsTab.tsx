@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
+import { 
   FiStar, FiCalendar, FiCheckCircle, FiArrowRight, FiCheck,
   FiYoutube, FiSmartphone, FiGlobe, FiMessageCircle,
   FiZap, FiRefreshCw, FiClock, FiList, FiLock, FiTrendingUp,
-  FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, FiPlay, FiTarget, FiBox
+  FiExternalLink, FiAlertCircle, FiUsers, FiChevronLeft, FiChevronRight, 
+  FiPlay, FiTarget, FiBox, FiArrowLeft, FiGift, FiInfo, FiAlertTriangle, FiPlus
 } from "react-icons/fi";
 import Link from "next/link";
 import RouletteGame from "./RouletteGame";
@@ -794,18 +795,23 @@ export default function CoinsTab() {
                     {/* Lucky Spin */}
                     <button 
                       onClick={() => setActiveGame("roulette")}
-                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5 text-left"
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-5 transition-all hover:border-amber-500/40 hover:shadow-2xl hover:shadow-amber-500/10 text-left hover:-translate-y-1"
                     >
-                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <FiTarget size={40} className="text-amber-500" />
+                      <div className="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 blur-[40px] rounded-full group-hover:bg-amber-500/20 transition-all" />
+                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                        <FiTarget size={56} className="text-amber-500" />
                       </div>
-                      <div className="relative z-10 space-y-2">
-                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                          <FiTarget className="text-amber-500" />
+                      <div className="relative z-10 flex flex-col h-full justify-between gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                          <FiTarget className="text-amber-500 text-xl" />
                         </div>
-                        <div>
-                          <h4 className="text-[12px] font-black uppercase tracking-wide">Lucky Spin</h4>
-                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Win up to 1 BBC instantly</p>
+                        <div className="space-y-1">
+                          <h4 className="text-[13px] font-black uppercase tracking-wider text-amber-500/90 italic">Lucky Spin</h4>
+                          <p className="text-[10px] text-[var(--muted)]/70 font-bold uppercase tracking-tight">Spin & Win up to 1 BBC</p>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-amber-500">Play Now</span>
+                          <FiArrowRight className="text-[10px] text-amber-500" />
                         </div>
                       </div>
                     </button>
@@ -813,20 +819,23 @@ export default function CoinsTab() {
                     {/* Treasure Pick */}
                     <button 
                       onClick={() => setActiveGame("treasure")}
-                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 text-left"
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-5 transition-all hover:border-blue-500/40 hover:shadow-2xl hover:shadow-blue-500/10 text-left hover:-translate-y-1"
                     >
-                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <FiBox size={40} className="text-blue-500" />
+                      <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 blur-[40px] rounded-full group-hover:bg-blue-500/20 transition-all" />
+                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                        <FiBox size={56} className="text-blue-500" />
                       </div>
-                      <div className="relative z-10 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                            <FiBox className="text-blue-500" />
-                          </div>
+                      <div className="relative z-10 flex flex-col h-full justify-between gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                          <FiBox className="text-blue-500 text-xl" />
                         </div>
-                        <div>
-                          <h4 className="text-[12px] font-black uppercase tracking-wide">Treasure Pick</h4>
-                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Pick a chest to find 1 BBC</p>
+                        <div className="space-y-1">
+                          <h4 className="text-[13px] font-black uppercase tracking-wider text-blue-500/90 italic">Treasure Pick</h4>
+                          <p className="text-[10px] text-[var(--muted)]/70 font-bold uppercase tracking-tight">Pick a chest to find 1 BBC</p>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">Open Now</span>
+                          <FiArrowRight className="text-[10px] text-blue-500" />
                         </div>
                       </div>
                     </button>
@@ -834,21 +843,26 @@ export default function CoinsTab() {
                     {/* Coin Flip - High Stakes */}
                     <button 
                       onClick={() => setActiveGame("coinflip")}
-                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/5 text-left"
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-5 transition-all hover:border-rose-500/40 hover:shadow-2xl hover:shadow-rose-500/10 text-left hover:-translate-y-1"
                     >
-                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <FiZap size={40} className="text-indigo-500" />
+                      <div className="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 blur-[40px] rounded-full group-hover:bg-rose-500/20 transition-all" />
+                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                        <FiZap size={56} className="text-rose-500" />
                       </div>
-                      <div className="relative z-10 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                            <FiZap className="text-indigo-500" />
+                      <div className="relative z-10 flex flex-col h-full justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                            <FiZap className="text-rose-500 text-xl" />
                           </div>
-                          <span className="px-2 py-0.5 rounded text-[7px] font-black uppercase bg-rose-500/10 text-rose-500 border border-rose-500/20">High Stakes</span>
+                          <span className="px-2 py-0.5 rounded text-[7px] font-black uppercase bg-rose-500/10 text-rose-500 border border-rose-500/20 animate-pulse">High Stakes</span>
                         </div>
-                        <div>
-                          <h4 className="text-[12px] font-black uppercase tracking-wide">Coin Flip</h4>
-                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Heads or Tails? +/- 2 BBC</p>
+                        <div className="space-y-1">
+                          <h4 className="text-[13px] font-black uppercase tracking-wider text-rose-500/90 italic">Coin Flip</h4>
+                          <p className="text-[10px] text-[var(--muted)]/70 font-bold uppercase tracking-tight">Heads or Tails? +/- 2 BBC</p>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-rose-500">Flip Now</span>
+                          <FiArrowRight className="text-[10px] text-rose-500" />
                         </div>
                       </div>
                     </button>
@@ -857,20 +871,26 @@ export default function CoinsTab() {
                     {/* Mega Slots */}
                     <button 
                       onClick={() => setActiveGame("slot")}
-                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-purple-500/40 hover:shadow-xl hover:shadow-purple-500/5 text-left"
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-5 transition-all hover:border-purple-500/40 hover:shadow-2xl hover:shadow-purple-500/10 text-left hover:-translate-y-1"
                     >
-                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <FiStar size={40} className="text-purple-500" />
+                      <div className="absolute -right-4 -top-4 w-24 h-24 bg-purple-500/10 blur-[40px] rounded-full group-hover:bg-purple-500/20 transition-all" />
+                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                        <FiStar size={56} className="text-purple-500" />
                       </div>
-                      <div className="relative z-10 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                            <FiStar className="text-purple-500" />
+                      <div className="relative z-10 flex flex-col h-full justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                            <FiStar className="text-purple-500 text-xl" />
                           </div>
+                          <span className="px-2 py-0.5 rounded text-[7px] font-black uppercase bg-purple-500/10 text-purple-500 border border-purple-500/20">Hot</span>
                         </div>
-                        <div>
-                          <h4 className="text-[12px] font-black uppercase tracking-wide">Mega Slots</h4>
-                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Match 3 to win 10 BBC!</p>
+                        <div className="space-y-1">
+                          <h4 className="text-[13px] font-black uppercase tracking-wider text-purple-500/90 italic">Mega Slots</h4>
+                          <p className="text-[10px] text-[var(--muted)]/70 font-bold uppercase tracking-tight">Match 3 to win up to 5 BBC</p>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-purple-500">Spin Now</span>
+                          <FiArrowRight className="text-[10px] text-purple-500" />
                         </div>
                       </div>
                     </button>

@@ -237,6 +237,27 @@ export default function CoinFlipGame({ coins, onWin, showToast }: CoinFlipGamePr
         )}
       </div>
 
+      {/* Rules Section */}
+      <div className="w-full border-t border-[var(--border)] pt-4 mt-2">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-3 bg-indigo-500 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">Rules & Rewards</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { t: "Pick Side", d: "Heads or Tails" },
+            { t: "Condition", d: "Watch 7s Ad" },
+            { t: "Win", d: "Gain +2 BBC" },
+            { t: "Loss", d: "Lose -2 BBC" }
+          ].map((rule, idx) => (
+            <div key={idx} className="p-2 rounded-lg bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+              <p className="text-[7px] font-black uppercase text-indigo-500/60 leading-none mb-1">{rule.t}</p>
+              <p className="text-[9px] font-bold text-[var(--muted)] leading-tight">{rule.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <style jsx>{`
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }

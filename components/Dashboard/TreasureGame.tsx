@@ -213,6 +213,26 @@ export default function TreasureGame({ coins, onWin, showToast }: TreasureGamePr
         )}
       </div>
 
+      {/* Rules Section */}
+      <div className="w-full border-t border-[var(--border)] pt-4 mt-2">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-3 bg-blue-400 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">Game Info</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { t: "Step 1", d: "Unlock with Ad" },
+            { t: "Step 2", d: "Pick 1 of 6 Chests" },
+            { t: "Win", d: "+1 BBC Coin" },
+            { t: "Loss", d: "-1 BBC (High Stake)" }
+          ].map((rule, idx) => (
+            <div key={idx} className="p-2 rounded-lg bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+              <p className="text-[7px] font-black uppercase text-blue-400/60 leading-none mb-1">{rule.t}</p>
+              <p className="text-[9px] font-bold text-[var(--muted)] leading-tight">{rule.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
