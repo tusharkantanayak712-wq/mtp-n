@@ -248,7 +248,7 @@ export default function RouletteGame({ coins, onWin, showToast }: RouletteGamePr
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-center z-30 flex items-center justify-center p-6"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md z-30 flex items-center justify-center p-6"
           >
             <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 text-center space-y-4 shadow-2xl">
               <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto border-2 border-amber-500/20">

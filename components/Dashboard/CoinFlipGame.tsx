@@ -262,6 +262,40 @@ export default function CoinFlipGame({ coins, onWin, showToast }: CoinFlipGamePr
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
       `}</style>
+
+      {/* Result Modal Overlay */}
+      <AnimatePresence>
+        {lastOutcome !== null && !flipping && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute inset-0 bg-black/80 backdrop-blur-md z-30 flex items-center justify-center p-6"
+          >
+            <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 text-center space-y-4 shadow-2xl min-w-[200px]">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto border-2 ${
+                lastOutcome > 0 ? "bg-emerald-500/10 border-emerald-500/20" : "bg-rose-500/10 border-rose-500/20"
+              }`}>
+                <FiZap className={`text-2xl animate-bounce ${lastOutcome > 0 ? "text-emerald-500" : "text-rose-500"}`} />
+              </div>
+              <div>
+                <h4 className="text-lg font-black uppercase italic">
+                  {lastOutcome > 0 ? "Winner!" : "Unlucky!"}
+                </h4>
+                <p className="text-xs text-[var(--muted)] font-bold uppercase mt-1">
+                  {lastOutcome > 0 ? `You won +${lastOutcome} BBC` : `You lost ${Math.abs(lastOutcome)} BBC`}
+                </p>
+              </div>
+              <button 
+                onClick={() => setLastOutcome(null)}
+                className="w-full py-2 bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
