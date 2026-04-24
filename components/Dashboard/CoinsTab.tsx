@@ -12,6 +12,7 @@ import Link from "next/link";
 import RouletteGame from "./RouletteGame";
 import TreasureGame from "./TreasureGame";
 import CoinFlipGame from "./CoinFlipGame";
+import SlotMachineGame from "./SlotMachineGame";
 import NativeBanner from "@/components/Ads/NativeBanner";
 import CustomBanner1 from "@/components/Ads/CustomBanner1";
 import CustomBanner2 from "@/components/Ads/CustomBanner2";
@@ -852,6 +853,28 @@ export default function CoinsTab() {
                       </div>
                     </button>
 
+
+                    {/* Mega Slots */}
+                    <button 
+                      onClick={() => setActiveGame("slot")}
+                      className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-4 transition-all hover:border-purple-500/40 hover:shadow-xl hover:shadow-purple-500/5 text-left"
+                    >
+                      <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <FiStar size={40} className="text-purple-500" />
+                      </div>
+                      <div className="relative z-10 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                            <FiStar className="text-purple-500" />
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-black uppercase tracking-wide">Mega Slots</h4>
+                          <p className="text-[9px] text-[var(--muted)]/60 font-bold uppercase">Match 3 to win 10 BBC!</p>
+                        </div>
+                      </div>
+                    </button>
+
                     {/* Placeholder for future games */}
                     <div className="rounded-2xl border border-[var(--border)] border-dashed bg-[var(--card)]/20 p-4 flex flex-col items-center justify-center gap-2 opacity-40">
                       <FiLock className="text-[var(--muted)]" />
@@ -884,6 +907,13 @@ export default function CoinsTab() {
                     )}
                     {activeGame === "coinflip" && (
                       <CoinFlipGame 
+                        coins={coins} 
+                        onWin={(win, balance) => updateCoins(balance, win)} 
+                        showToast={showToast} 
+                      />
+                    )}
+                    {activeGame === "slot" && (
+                      <SlotMachineGame 
                         coins={coins} 
                         onWin={(win, balance) => updateCoins(balance, win)} 
                         showToast={showToast} 

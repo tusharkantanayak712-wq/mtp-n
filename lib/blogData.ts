@@ -14,6 +14,19 @@ export interface BlogPost {
 
 export const BLOGS_DATA: BlogPost[] = [
   {
+    id: "22",
+    title: "Best MLBB Heroes for Rank Push in 2026: The Ultimate Meta Guide",
+    slug: "best-mlbb-heroes-for-rank-push-2026",
+    type: "Meta Guide",
+    excerpt: "Master the 2026 meta with our comprehensive guide to the best heroes for rank push in Mobile Legends. Discover top picks for all roles.",
+    publishedAt: "2026-04-24",
+    readingTime: "15 min read",
+    image: "/blog/best-heroes-2026.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["meta", "rank-push", "tier-list", "2026"]
+  },
+  {
     id: "21",
     title: "Step-by-Step Guide: How to Buy MLBB Diamonds Safely",
     slug: "step-by-step-guide-to-buy-diamonds-safely",

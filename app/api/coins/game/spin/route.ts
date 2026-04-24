@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
     const userId = decoded.userId; // MongoDB _id
     const user = await User.findOne({ _id: userId });
-    
+
     if (!user) {
       return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
     }
@@ -45,20 +45,38 @@ export async function POST(req: Request) {
       const randomIndex = Math.floor(Math.random() * rouletteOutcomes.length);
       serverOutcome = rouletteOutcomes[randomIndex];
       extraData.index = randomIndex; // Send back for animation
-    } 
+    }
     else if (game === "coinflip") {
       if (!side) return NextResponse.json({ success: false, message: "No side selected" });
       const sides = ["heads", "tails"];
       const winningSide = sides[Math.floor(Math.random() * 2)];
       serverOutcome = (side === winningSide) ? 2 : -2;
       extraData.winningSide = winningSide;
-    } 
+    }
     else if (game === "treasure") {
       // 1 winner (+1), 1 loser (-1), 4 empty (0)
       const rand = Math.random();
       if (rand < 0.166) serverOutcome = 1;
       else if (rand < 0.333) serverOutcome = -1;
       else serverOutcome = 0;
+    }
+    else if (game === "slot") {
+      // symbols: 0:🍒, 1:🍋, 2:🔔, 3:⭐, 4:💎
+      const r1 = Math.floor(Math.random() * 5);
+      const r2 = Math.floor(Math.random() * 5);
+      const r3 = Math.floor(Math.random() * 5);
+
+      extraData.reels = [r1, r2, r3];
+
+      if (r1 === r2 && r2 === r3) {
+        // 3 of a kind
+        if (r1 === 4) serverOutcome = 5; // All Dias
+        else if (r1 === 3) serverOutcome = 4; // All Stra
+        else serverOutcome = 1; // All Same (Others)
+      } else {
+        // Not same
+        serverOutcome = -1;
+      }
     }
 
     // Prevent negative balance
