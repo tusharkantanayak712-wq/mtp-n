@@ -391,7 +391,6 @@ export default async function RootLayout({
 
       </body>
       <GoogleAnalytics gaId="G-CKCKWLGJ9N" />
-      {/* <script src="https://quge5.com/88/tag.min.js" data-zone="191906" async data-cfasync="false"></script> */}
     </html>
   );
 }
