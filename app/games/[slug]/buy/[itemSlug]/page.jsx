@@ -172,6 +172,13 @@ function BuyFlowContent() {
 
       // 2. Extra check for MLBB to verify region
       if (isMLBB) {
+        // If namecheck returned data: null, the player ID is invalid — stop here
+        if (nameData?.data === null) {
+          setError(nameData?.message || "Invalid player ID or server ID. Please check and try again.");
+          setLoading(false);
+          return;
+        }
+
         const regionRes = await fetch("/api/check-region", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
