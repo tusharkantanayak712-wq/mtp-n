@@ -16,7 +16,8 @@ import {
   ChevronRight,
   ChevronDown,
   Filter,
-  Inbox
+  Inbox,
+  Send
 } from "lucide-react";
 
 export default function SupportQueriesTab() {
@@ -24,6 +25,9 @@ export default function SupportQueriesTab() {
   const [activeQuery, setActiveQuery] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [sendingReply, setSendingReply] = useState(false);
+  const [replySuccess, setReplySuccess] = useState("");
 
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
@@ -87,6 +91,37 @@ export default function SupportQueriesTab() {
       setQueries([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  /* ================= SEND ADMIN REPLY ================= */
+  const sendAdminReply = async (id, status) => {
+    if (!replyText.trim()) return;
+    try {
+      setSendingReply(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/admin/support-queries/reply", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id, adminReply: replyText.trim(), status }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setReplySuccess("Reply sent!");
+        setReplyText("");
+        setActiveQuery((prev) => prev ? { ...prev, adminReply: replyText.trim(), status: status || prev.status } : null);
+        fetchQueriesList();
+        setTimeout(() => setReplySuccess(""), 3000);
+      } else {
+        alert(data.message || "Failed to send reply");
+      }
+    } catch {
+      alert("Connection error");
+    } finally {
+      setSendingReply(false);
     }
   };
 
@@ -234,7 +269,7 @@ export default function SupportQueriesTab() {
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.03 }}
-                    onClick={() => setActiveQuery(q)}
+                    onClick={() => { setActiveQuery(q); setReplyText(q.adminReply || ""); setReplySuccess(""); }}
                     className="group relative rounded-2xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-all cursor-pointer p-4 flex items-center gap-4"
                   >
                     <div
@@ -355,7 +390,7 @@ export default function SupportQueriesTab() {
                     value={getStatus(activeQuery.status)}
                     onChange={(newStatus) => {
                       updateQueryStatus(activeQuery._id, newStatus);
-                      setActiveQuery(null);
+                      setActiveQuery((prev) => prev ? { ...prev, status: newStatus } : null);
                     }}
                     disabled={updating}
                     options={[
@@ -365,6 +400,42 @@ export default function SupportQueriesTab() {
                       { value: "closed", label: "Closed" },
                     ]}
                   />
+                </div>
+
+                {/* ===== ADMIN REPLY ===== */}
+                <div className="space-y-2 pt-4 border-t border-[var(--border)]">
+                  <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase ml-1 flex items-center gap-1.5">
+                    <Send size={10} className="text-[var(--accent)]" /> Admin Reply
+                  </p>
+
+                  {activeQuery.adminReply && (
+                    <div className="p-3 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/20">
+                      <p className="text-[10px] font-bold text-[var(--accent)] uppercase mb-1">Previous reply</p>
+                      <p className="text-sm text-[var(--foreground)] leading-relaxed">{activeQuery.adminReply}</p>
+                    </div>
+                  )}
+
+                  <textarea
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    placeholder="Type your reply to the user..."
+                    rows={3}
+                    className="w-full p-3 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder:text-[var(--muted)]/30 outline-none focus:border-[var(--accent)]/50 resize-none transition-all"
+                  />
+
+                  {replySuccess && (
+                    <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest flex items-center gap-1">
+                      <CheckCircle2 size={10} /> {replySuccess}
+                    </p>
+                  )}
+
+                  <button
+                    disabled={!replyText.trim() || sendingReply}
+                    onClick={() => sendAdminReply(activeQuery._id, getStatus(activeQuery.status))}
+                    className="w-full h-10 rounded-xl bg-[var(--accent)] text-black text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] disabled:opacity-30 transition-all"
+                  >
+                    {sendingReply ? <Loader2 size={14} className="animate-spin" /> : <><Send size={12} /> Send Reply</>}
+                  </button>
                 </div>
               </div>
             </motion.div>

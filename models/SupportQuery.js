@@ -8,8 +8,8 @@ const SupportQuerySchema = new mongoose.Schema(
     orderId: { type: String, default: null },
     type: { type: String, required: true },
     message: { type: String, required: true },
+    adminReply: { type: String, default: null },
 
-    // 👇 new field
     status: {
       type: String,
       enum: ["open", "in_progress", "resolved", "closed"],
@@ -19,5 +19,7 @@ const SupportQuerySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.SupportQuery ||
-  mongoose.model("SupportQuery", SupportQuerySchema);
+// Always use the latest schema (avoids stale cache in dev hot-reload)
+delete mongoose.models.SupportQuery;
+export default mongoose.model("SupportQuery", SupportQuerySchema);
+
