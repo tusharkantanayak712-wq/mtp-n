@@ -46,6 +46,7 @@ export default function Header() {
   const [user, setUser] = useState(null);
   const [activeNav, setActiveNav] = useState("/");
   const [walletBalance, setWalletBalance] = useState(0);
+  const [balanceLoading, setBalanceLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [allGames, setAllGames] = useState([]);
@@ -101,7 +102,10 @@ export default function Header() {
           setWalletBalance(0);
         }
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setBalanceLoading(false);
+      });
 
     const handleWalletSync = () => {
       const balance = localStorage.getItem("walletBalance");
@@ -117,20 +121,24 @@ export default function Header() {
   }, []);
 
   /* ================= GAME SEARCH LOGIC ================= */
-  useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const res = await fetch("/api/games");
-        const data = await res.json();
-        if (data.success && data.data?.games) {
-          setAllGames(data.data.games);
-        }
-      } catch (err) {
-        console.error("Failed to fetch games for search", err);
+  const fetchSearchData = async () => {
+    if (allGames.length > 0) return; // Already fetched
+    
+    try {
+      const res = await fetch("/api/games");
+      const data = await res.json();
+      if (data.success && data.data?.games) {
+        setAllGames(data.data.games);
       }
-    };
-    fetchGames();
-  }, []);
+    } catch (err) {
+      console.error("Failed to fetch games for search", err);
+    }
+  };
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+    fetchSearchData();
+  };
 
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
@@ -258,7 +266,11 @@ export default function Header() {
                 <button
                   className="relative w-auto h-9 px-3 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 group bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 hover:scale-105 active:scale-95"
                 >
-                  <span className="text-xs font-black text-[var(--accent)]">₹{walletBalance}</span>
+                  {balanceLoading ? (
+                    <div className="w-12 h-3 bg-[var(--accent)]/10 rounded-full overflow-hidden shimmer-overlay" />
+                  ) : (
+                    <span className="text-xs font-black text-[var(--accent)]">₹{walletBalance}</span>
+                  )}
                   <span className="text-lg text-[var(--accent)] group-hover:scale-110 transition-transform">+</span>
                 </button>
               </Link>
@@ -280,7 +292,7 @@ export default function Header() {
                   placeholder="Search games..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
+                  onFocus={handleSearchFocus}
                   className={`w-full h-10 pl-10 pr-4 rounded-full bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-xs font-medium focus:bg-[var(--foreground)]/[0.08] focus:border-[var(--accent)]/30 focus:ring-4 focus:ring-[var(--accent)]/5 outline-none transition-all placeholder:text-[var(--muted)]/40`}
                 />
                 <FiSearch className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${isSearchFocused ? 'text-[var(--accent)]' : 'text-[var(--muted)]/40'}`} size={14} />
@@ -558,6 +570,7 @@ export default function Header() {
               placeholder="Search premium games..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={fetchSearchData}
               className="w-full h-12 pl-12 pr-4 rounded-2xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-sm font-bold focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
             />
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--accent)]" size={18} />

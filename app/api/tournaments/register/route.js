@@ -87,33 +87,62 @@ export async function POST(req) {
       return NextResponse.json({ success: false, message: "Insufficient BBC coins" }, { status: 400 });
     }
 
-    // 4. Transaction-like update (deduct coins & increment slots)
-    // In a real prod env, use Mongoose sessions for atomicity
-    user.coins -= tournament.entryCoins;
-    tournament.slotsFilled += 1;
+    // 4. Atomic Transaction for Registration
+    const session = await (await connectDB()).startSession();
+    session.startTransaction();
 
-    await Promise.all([
-      user.save(),
-      tournament.save()
-    ]);
+    try {
+      // Re-verify slot availability and increment atomically within session
+      const updatedTournament = await Tournament.findOneAndUpdate(
+        { _id: tournamentId, slotsFilled: { $lt: tournament.slots }, status: { $in: ["open", "upcoming"] } },
+        { $inc: { slotsFilled: 1 } },
+        { session, new: true }
+      );
 
-    // 5. Create Entry
-    const entry = await TournamentEntry.create({
-      tournamentId,
-      userId,
-      contactEmail,
-      contactPhone,
-      gameIds,
-      coinsPaid: tournament.entryCoins,
-      status: "confirmed"
-    });
+      if (!updatedTournament) {
+        throw new Error("Tournament just filled up or registration closed.");
+      }
 
-    return NextResponse.json({
-      success: true,
-      message: "Successfully joined tournament!",
-      data: entry,
-      newCoinBalance: user.coins
-    });
+      // Deduct coins atomically
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId, coins: { $gte: tournament.entryCoins } },
+        { $inc: { coins: -tournament.entryCoins } },
+        { session, new: true }
+      );
+
+      if (!updatedUser) {
+        throw new Error("Insufficient coins for registration.");
+      }
+
+      // 5. Create Entry within transaction
+      const entry = await TournamentEntry.create([{
+        tournamentId,
+        userId,
+        contactEmail,
+        contactPhone,
+        gameIds,
+        coinsPaid: tournament.entryCoins,
+        status: "confirmed"
+      }], { session });
+
+      await session.commitTransaction();
+
+      return NextResponse.json({
+        success: true,
+        message: "Successfully joined tournament!",
+        data: entry[0],
+        newCoinBalance: updatedUser.coins
+      });
+
+    } catch (error) {
+      await session.abortTransaction();
+      return NextResponse.json({ 
+        success: false, 
+        message: error.message || "Registration failed due to a server error." 
+      }, { status: 400 });
+    } finally {
+      session.endSession();
+    }
 
   } catch (err) {
     console.error("Tournament registration error:", err);
