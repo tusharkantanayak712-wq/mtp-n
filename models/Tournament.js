@@ -16,13 +16,14 @@ const TournamentSchema = new mongoose.Schema(
     entryCoins: { type: Number, default: 0 },       // 0 = Free, >0 = via BBC coins
     status: {
       type: String,
-      enum: ["open", "upcoming", "closed", "ended"],
+      enum: ["open", "upcoming", "ongoing", "closed", "ended"],
       default: "upcoming",
     },
     startsAt: { type: Date, default: null },        // Event start date/time
     endsAt: { type: Date, default: null },          // optional end date/time
     roomId: { type: String, default: "" },          // Game Room ID
     roomPassword: { type: String, default: "" },    // Room Password
+    currentRound: { type: Number, default: 1 },     // Current active round
   },
   { timestamps: true }
 );

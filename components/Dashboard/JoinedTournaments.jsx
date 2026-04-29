@@ -140,8 +140,12 @@ export default function JoinedTournaments() {
                         <FiAward size={10} />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[9px] font-black text-[var(--foreground)] uppercase truncate">{entry.tournamentId?.title || "Scrim"}</p>
-                        <p className="text-[6px] text-[var(--muted)] uppercase tracking-tighter truncate">{entry.tournamentId?.game || "MLBB"}</p>
+                        <p className="text-[9px] font-black text-[var(--foreground)] uppercase truncate">
+                          {entry.teamName ? entry.teamName : (entry.tournamentId?.title || "Scrim")}
+                        </p>
+                        <p className="text-[6px] text-[var(--muted)] uppercase tracking-tighter truncate">
+                          {entry.teamName ? entry.tournamentId?.title : (entry.tournamentId?.game || "MLBB")}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -160,11 +164,11 @@ export default function JoinedTournaments() {
                   </td>
                   <td className="px-2 py-3 text-right">
                     <span className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-tighter border ${
-                      entry.status === "confirmed" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
-                      entry.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" :
-                      "bg-red-500/10 text-red-400 border-red-500/20"
+                      entry.isWinner ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
+                      entry.isEliminated ? "bg-red-500/10 text-red-400 border-red-500/20" : 
+                      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                     }`}>
-                      {entry.status}
+                      {entry.isWinner ? "🏆 Winner" : entry.isEliminated ? "Eliminated" : `Round ${entry.currentRound}`}
                     </span>
                   </td>
                 </motion.tr>
@@ -222,8 +226,13 @@ export default function JoinedTournaments() {
                     <span className="text-[7px] font-black uppercase tracking-[0.3em] text-[var(--accent)] italic">Details</span>
                   </div>
                   <h3 className="text-base font-[900] italic tracking-tighter uppercase leading-none text-[var(--foreground)]">
-                    {selectedEntry.tournamentId?.title}
+                    {selectedEntry.teamName || selectedEntry.tournamentId?.title}
                   </h3>
+                  {selectedEntry.teamName && (
+                    <p className="text-[7px] text-[var(--muted)] uppercase tracking-widest mt-1">
+                      {selectedEntry.tournamentId?.title}
+                    </p>
+                  )}
                 </div>
                 <button onClick={() => setSelectedEntry(null)} className="p-1.5 rounded-lg bg-[var(--foreground)]/5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
                   <FiX size={14} />
@@ -234,9 +243,13 @@ export default function JoinedTournaments() {
                 {/* Status & Info Row */}
                 <div className="flex items-center justify-between p-2 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
                    <div className="flex flex-col">
-                     <span className="text-[6px] font-black uppercase tracking-widest text-[var(--muted)]">Status</span>
-                     <span className={`text-[8px] font-black uppercase ${selectedEntry.status === "confirmed" ? "text-emerald-400" : "text-yellow-400"}`}>
-                       {selectedEntry.status}
+                     <span className="text-[6px] font-black uppercase tracking-widest text-[var(--muted)]">Progress</span>
+                     <span className={`text-[8px] font-black uppercase ${
+                       selectedEntry.isWinner ? "text-amber-400" :
+                       selectedEntry.isEliminated ? "text-red-400" : 
+                       "text-emerald-400"
+                     }`}>
+                       {selectedEntry.isWinner ? "🏆 Tournament Winner" : selectedEntry.isEliminated ? "Eliminated" : `Active (Round ${selectedEntry.currentRound})`}
                      </span>
                    </div>
                    <div className="flex flex-col text-right">
@@ -274,14 +287,16 @@ export default function JoinedTournaments() {
                     <span className="text-[8px] font-black uppercase tracking-widest text-[var(--foreground)]">Room Details</span>
                   </div>
 
-                  {selectedEntry.tournamentId?.roomId ? (
+                  {selectedEntry.assignedRoomId || selectedEntry.tournamentId?.roomId ? (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between bg-white/5 p-1.5 rounded-lg">
                         <span className="text-[7px] font-black uppercase text-[var(--muted)]">ID:</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono font-bold text-[var(--accent)]">{selectedEntry.tournamentId.roomId}</span>
+                          <span className="text-xs font-mono font-bold text-[var(--accent)]">
+                            {selectedEntry.assignedRoomId || selectedEntry.tournamentId.roomId}
+                          </span>
                           <button
-                            onClick={() => copyToClipboard(selectedEntry.tournamentId.roomId, "roomId")}
+                            onClick={() => copyToClipboard(selectedEntry.assignedRoomId || selectedEntry.tournamentId.roomId, "roomId")}
                             className="flex items-center gap-1 text-[7px] font-black uppercase transition-colors"
                           >
                             {copiedKey === "roomId"
@@ -293,10 +308,12 @@ export default function JoinedTournaments() {
                       <div className="flex items-center justify-between bg-white/5 p-1.5 rounded-lg">
                         <span className="text-[7px] font-black uppercase text-[var(--muted)]">Pass:</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono font-bold text-[var(--foreground)]">{selectedEntry.tournamentId.roomPassword || "None"}</span>
-                          {selectedEntry.tournamentId.roomPassword && (
+                          <span className="text-xs font-mono font-bold text-[var(--foreground)]">
+                            {selectedEntry.assignedRoomPassword || selectedEntry.tournamentId.roomPassword || "None"}
+                          </span>
+                          {(selectedEntry.assignedRoomPassword || selectedEntry.tournamentId.roomPassword) && (
                             <button
-                              onClick={() => copyToClipboard(selectedEntry.tournamentId.roomPassword, "roomPass")}
+                              onClick={() => copyToClipboard(selectedEntry.assignedRoomPassword || selectedEntry.tournamentId.roomPassword, "roomPass")}
                               className="flex items-center gap-1 text-[7px] font-black uppercase transition-colors"
                             >
                               {copiedKey === "roomPass"

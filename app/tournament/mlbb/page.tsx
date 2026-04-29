@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiChevronRight, FiChevronLeft, FiZap, FiLock, FiClock, FiSearch,
-  FiStar, FiMessageCircle, FiAward, FiInfo, FiLoader, FiX, FiCheck, FiUser, FiPhone, FiMail
+  FiStar, FiMessageCircle, FiAward, FiInfo, FiLoader, FiX, FiCheck, FiUser, FiUsers, FiPhone, FiMail
 } from "react-icons/fi";
 import { GiTrophy } from "react-icons/gi";
 import Image from "next/image";
@@ -22,13 +23,14 @@ interface Tournament {
   slots: number;
   slotsFilled: number;
   entryCoins: number;
-  status: "open" | "upcoming" | "closed" | "ended";
+  status: "open" | "upcoming" | "ongoing" | "closed" | "ended";
   startsAt?: string;
   endsAt?: string;
 }
 
 const STATUS_STYLE: Record<string, string> = {
   open: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  ongoing: "bg-blue-500/10 text-blue-400 border-blue-500/20",
   upcoming: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
   closed: "bg-red-500/10 text-red-400 border-red-500/20",
   ended: "bg-[var(--border)]/20 text-[var(--muted)] border-[var(--border)]",
@@ -42,12 +44,26 @@ export default function MLBBTournamentPage() {
   const [formLoading, setFormLoading] = useState(false);
   const [msg, setMsg] = useState({ text: "", type: "" });
   const [gameIds, setGameIds] = useState<string[]>([]);
+  const [teamName, setTeamName] = useState("");
   const [contactInfo, setContactInfo] = useState({ email: "", phone: "" });
+  const searchParams = useSearchParams();
+  const directId = searchParams.get("id");
 
   useEffect(() => {
     fetch("/api/tournaments?game=mlbb")
       .then((r) => r.json())
-      .then((d) => { if (d.success) setFormats(d.data); })
+      .then((d) => {
+        if (d.success) {
+          setFormats(d.data);
+          // Auto-open if direct ID provided
+          if (directId) {
+            const match = d.data.find((t: any) => t._id === directId);
+            if (match && match.status !== "ended") {
+              openRegister(match);
+            }
+          }
+        }
+      })
       .finally(() => setLoading(false));
 
     // Auto-fill from localStorage
@@ -55,7 +71,7 @@ export default function MLBBTournamentPage() {
       email: localStorage.getItem("email") || "",
       phone: localStorage.getItem("phone") || ""
     });
-  }, []);
+  }, [directId]);
 
   const active = formats.filter((t) => t.status !== "ended");
   const ended = formats.filter((t) => t.status === "ended");
@@ -69,9 +85,14 @@ export default function MLBBTournamentPage() {
     else if (t.format.toLowerCase().includes("4v4")) count = 4;
     else if (t.format.toLowerCase().includes("2v2")) count = 2;
     setGameIds(new Array(count).fill(""));
+    setTeamName("");
   };
 
   const handleRegister = async () => {
+    if (gameIds.length > 1 && !teamName.trim()) {
+      setMsg({ text: "Please enter a Team Name", type: "error" });
+      return;
+    }
     if (gameIds.some(id => !id.trim())) {
       setMsg({ text: "Please fill all Game IDs", type: "error" });
       return;
@@ -89,7 +110,8 @@ export default function MLBBTournamentPage() {
           tournamentId: registering?._id,
           contactEmail: contactInfo.email,
           contactPhone: contactInfo.phone,
-          gameIds: gameIds
+          gameIds: gameIds,
+          teamName: gameIds.length > 1 ? teamName : ""
         })
       });
       const data = await res.json();
@@ -222,10 +244,12 @@ export default function MLBBTournamentPage() {
 
             <button
               onClick={() => openRegister(fmt)}
-              disabled={displayStatus !== "open" && displayStatus !== "upcoming"}
+              disabled={displayStatus !== "open" && displayStatus !== "upcoming" && displayStatus !== "ongoing"}
               className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${
                 displayStatus === "upcoming"
                   ? "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-white"
+                  : displayStatus === "ongoing"
+                  ? "border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white"
                   : "border-[var(--accent)]/30 bg-[var(--accent)]/10 text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white"
               }`}
             >
@@ -233,6 +257,8 @@ export default function MLBBTournamentPage() {
                 <><FiLock size={13} /> Tournament Ended</>
               ) : displayStatus === "upcoming" ? (
                 <><FiClock size={13} /> Pre-Register<FiChevronRight size={11} /></>
+              ) : displayStatus === "ongoing" ? (
+                <><FiZap size={13} /> Tournament Live<FiChevronRight size={11} /></>
               ) : (
                 <><FiZap size={13} /> Join Tournament Now<FiChevronRight size={11} /></>
               )}
@@ -334,6 +360,22 @@ export default function MLBBTournamentPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Team Name (if > 1 player) */}
+                  {gameIds.length > 1 && (
+                    <div className="space-y-1.5">
+                      <label className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] ml-1">Team Name</label>
+                      <div className="relative">
+                        <FiUsers className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" size={12} />
+                        <input 
+                          placeholder="e.g. Team Legends"
+                          value={teamName}
+                          onChange={(e) => setTeamName(e.target.value)}
+                          className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl py-2.5 pl-9 pr-3 text-[10px] focus:border-[var(--accent)]/50 outline-none transition-all" 
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   {/* Game IDs */}
                   <div className="space-y-3">

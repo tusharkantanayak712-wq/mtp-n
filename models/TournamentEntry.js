@@ -26,6 +26,12 @@ const TournamentEntrySchema = new mongoose.Schema(
       enum: ["pending", "confirmed", "rejected"],
       default: "confirmed", // Auto-confirmed for now since coins are deducted
     },
+    currentRound: { type: Number, default: 1 },
+    isEliminated: { type: Boolean, default: false },
+    assignedRoomId: { type: String, default: "" },
+    assignedRoomPassword: { type: String, default: "" },
+    teamName: { type: String, default: "" },
+    isWinner: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

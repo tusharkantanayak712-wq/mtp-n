@@ -18,7 +18,7 @@ export async function POST(req) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
-    const { tournamentId, contactEmail, contactPhone, gameIds } = await req.json();
+    const { tournamentId, contactEmail, contactPhone, gameIds, teamName } = await req.json();
 
     if (!tournamentId || !gameIds || !gameIds.length) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
@@ -36,7 +36,7 @@ export async function POST(req) {
     }
 
     // Check Daily Free Limit for non-members
-    if (tournament.entryCoins === 0 && user.userType !== "member") {
+    if (tournament.entryCoins === 0 && user.userType !== "member" && user.userType !== "owner") {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -121,6 +121,7 @@ export async function POST(req) {
         contactEmail,
         contactPhone,
         gameIds,
+        teamName: teamName || "",
         coinsPaid: tournament.entryCoins,
         status: "confirmed"
       }], { session });

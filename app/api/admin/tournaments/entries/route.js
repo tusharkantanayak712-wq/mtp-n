@@ -41,3 +41,56 @@ export async function GET(req) {
     return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
   }
 }
+
+/* ── PATCH /api/admin/tournaments/entries — Update an entry ── */
+export async function PATCH(req) {
+  try {
+    await connectDB();
+    const auth = requireOwner(req);
+    if (auth.error)
+      return NextResponse.json({ success: false, message: auth.error }, { status: auth.status });
+
+    const body = await req.json();
+    const { entryId, action, roomId, roomPassword } = body; // action: "promote", "eliminate", "reset", "updateRoom", "winner"
+
+    if (!entryId) {
+      return NextResponse.json({ success: false, message: "Missing entryId" }, { status: 400 });
+    }
+
+    const entry = await TournamentEntry.findById(entryId);
+    if (!entry) {
+      return NextResponse.json({ success: false, message: "Entry not found" }, { status: 404 });
+    }
+
+    if (action === "promote") {
+      entry.currentRound += 1;
+      entry.isEliminated = false;
+    } else if (action === "demote") {
+      if (entry.currentRound > 1) entry.currentRound -= 1;
+      entry.isEliminated = false;
+    } else if (action === "eliminate") {
+      entry.isEliminated = true;
+      entry.isWinner = false;
+    } else if (action === "reset") {
+      entry.currentRound = 1;
+      entry.isEliminated = false;
+      entry.isWinner = false;
+      entry.assignedRoomId = "";
+      entry.assignedRoomPassword = "";
+    } else if (action === "updateRoom") {
+      entry.assignedRoomId = roomId || "";
+      entry.assignedRoomPassword = roomPassword || "";
+    } else if (action === "winner") {
+      entry.isWinner = !entry.isWinner;
+      if (entry.isWinner) entry.isEliminated = false;
+    } else {
+      return NextResponse.json({ success: false, message: "Invalid action" }, { status: 400 });
+    }
+
+    await entry.save();
+    return NextResponse.json({ success: true, data: entry });
+  } catch (err) {
+    console.error("Admin entry update error:", err);
+    return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+  }
+}

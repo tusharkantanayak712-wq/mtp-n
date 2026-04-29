@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FiPlus, FiTrash2, FiEdit2, FiX, FiCheck, FiLoader, FiUsers, FiAward } from "react-icons/fi";
 
 const GAMES = ["mlbb", "freefire", "codm", "honorkings", "other"];
-const STATUSES = ["upcoming", "open", "closed", "ended"];
+const STATUSES = ["upcoming", "open", "ongoing", "closed", "ended"];
 
 const emptyForm = {
   game: "mlbb",
@@ -23,6 +23,7 @@ const emptyForm = {
 
 const STATUS_COLOR = {
   open: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  ongoing: "text-blue-400 bg-blue-500/10 border-blue-500/20",
   upcoming: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
   closed: "text-red-400 bg-red-500/10 border-red-500/20",
   ended: "text-[var(--muted)] bg-[var(--border)]/20 border-[var(--border)]",
@@ -38,6 +39,8 @@ export default function TournamentsAdminTab() {
   const [msg, setMsg] = useState("");
   // Inline confirm state — { id, type: "end" | "delete" }
   const [confirmAction, setConfirmAction] = useState(null);
+  // Entry confirm state — { entryId, action }
+  const [confirmEntry, setConfirmEntry] = useState(null);
 
   const token = () => localStorage.getItem("token");
 
@@ -157,6 +160,23 @@ export default function TournamentsAdminTab() {
     setViewEntries(t);
     setEntries([]);
     fetchEntries(t._id);
+  };
+
+  const updateEntryProgress = async (entryId, action, extra = {}) => {
+    setConfirmEntry(null);
+    try {
+      const res = await fetch("/api/admin/tournaments/entries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ entryId, action, ...extra }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setEntries(prev => prev.map(e => e._id === entryId ? { ...e, ...data.data } : e));
+      }
+    } catch (err) {
+      console.error("Update entry failed:", err);
+    }
   };
 
   return (
@@ -428,19 +448,19 @@ export default function TournamentsAdminTab() {
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-[var(--border)] text-[var(--muted)]">
-                        <th className="px-4 py-3 font-bold uppercase tracking-widest">Player/User</th>
+                        <th className="px-4 py-3 font-bold uppercase tracking-widest">Team / Lead</th>
                         <th className="px-4 py-3 font-bold uppercase tracking-widest">Contact</th>
                         <th className="px-4 py-3 font-bold uppercase tracking-widest">Game IDs</th>
-                        <th className="px-4 py-3 font-bold uppercase tracking-widest">Status</th>
-                        <th className="px-4 py-3 font-bold uppercase tracking-widest text-right">Joined</th>
+                        <th className="px-4 py-3 font-bold uppercase tracking-widest">Progress</th>
+                        <th className="px-4 py-3 font-bold uppercase tracking-widest text-right">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--border)]">
                       {entries.map((e) => (
                         <tr key={e._id} className="hover:bg-[var(--foreground)]/[0.02]">
                           <td className="px-4 py-3">
-                            <div className="font-bold">{e.userId?.name || "N/A"}</div>
-                            <div className="text-[10px] text-[var(--muted)] uppercase">ID: {e.userId?.userId || "N/A"}</div>
+                            <div className="font-bold">{e.teamName ? `TEAM: ${e.teamName}` : (e.userId?.name || "N/A")}</div>
+                            <div className="text-[10px] text-[var(--muted)] uppercase">{e.teamName ? (e.userId?.name || "Lead") : `ID: ${e.userId?.userId || "N/A"}`}</div>
                           </td>
                           <td className="px-4 py-3">
                             <div>{e.contactEmail}</div>
@@ -454,10 +474,111 @@ export default function TournamentsAdminTab() {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[9px] font-bold uppercase tracking-widest">{e.status}</span>
+                            <div className="flex flex-col gap-1.5">
+                              <div className="flex items-center gap-2">
+                                <span className={`px-2 py-0.5 rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 font-bold text-[9px] uppercase`}>
+                                  Round {e.currentRound}
+                                </span>
+                                {e.isEliminated && (
+                                  <span className="px-2 py-0.5 rounded bg-red-500/10 text-red-500 border border-red-500/20 text-[9px] font-bold uppercase">Eliminated</span>
+                                )}
+                                {e.isWinner && (
+                                  <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[9px] font-bold uppercase flex items-center gap-1">
+                                    <FiAward size={10} /> Winner
+                                  </span>
+                                )}
+                              </div>
+                              {e.currentRound > 1 && !e.isEliminated && (
+                                <div className="flex flex-col gap-1">
+                                  <div className="flex gap-1">
+                                    <input 
+                                      placeholder="New Room ID"
+                                      defaultValue={e.assignedRoomId}
+                                      onBlur={(e_target) => updateEntryProgress(e._id, "updateRoom", { roomId: e_target.target.value, roomPassword: e.assignedRoomPassword })}
+                                      className="w-24 bg-[var(--card)] border border-[var(--border)] rounded px-1.5 py-0.5 text-[8px] outline-none focus:border-[var(--accent)]/40"
+                                    />
+                                    <input 
+                                      placeholder="Pass"
+                                      defaultValue={e.assignedRoomPassword}
+                                      onBlur={(e_target) => updateEntryProgress(e._id, "updateRoom", { roomId: e.assignedRoomId, roomPassword: e_target.target.value })}
+                                      className="w-16 bg-[var(--card)] border border-[var(--border)] rounded px-1.5 py-0.5 text-[8px] outline-none focus:border-[var(--accent)]/40"
+                                    />
+                                  </div>
+                                  <p className="text-[7px] text-[var(--muted)] italic">Room for next round</p>
+                                </div>
+                              )}
+                            </div>
                           </td>
-                          <td className="px-4 py-3 text-right text-[10px] text-[var(--muted)]">
-                            {new Date(e.createdAt).toLocaleString()}
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex items-center justify-end gap-1.5 flex-wrap">
+                              {confirmEntry?.entryId === e._id ? (
+                                <div className="flex items-center gap-1 bg-[var(--accent)]/5 border border-[var(--accent)]/20 p-1 rounded-lg">
+                                  <span className="text-[7px] font-black uppercase text-[var(--accent)] px-1">Sure?</span>
+                                  <button onClick={() => updateEntryProgress(e._id, confirmEntry.action)} className="px-2 py-1 rounded bg-[var(--accent)] text-white text-[8px] font-black uppercase">Yes</button>
+                                  <button onClick={() => setConfirmEntry(null)} className="px-2 py-1 rounded bg-[var(--border)] text-[var(--muted)] text-[8px] font-black uppercase">No</button>
+                                </div>
+                              ) : (
+                                <>
+                                  {!e.isEliminated && (
+                                    <>
+                                      <div className="flex flex-col items-center gap-1">
+                                        <button
+                                          onClick={() => setConfirmEntry({ entryId: e._id, action: "promote" })}
+                                          className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center hover:bg-emerald-500/20 transition-all"
+                                        >
+                                          <FiPlus size={14} />
+                                        </button>
+                                        <span className="text-[6px] font-black uppercase text-emerald-500/60 tracking-tighter">Promote</span>
+                                      </div>
+
+                                      {e.currentRound > 1 && (
+                                        <div className="flex flex-col items-center gap-1">
+                                          <button
+                                            onClick={() => setConfirmEntry({ entryId: e._id, action: "demote" })}
+                                            className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center hover:bg-blue-500/20 transition-all"
+                                          >
+                                            <div className="w-2.5 h-0.5 bg-current rounded-full" />
+                                          </button>
+                                          <span className="text-[6px] font-black uppercase text-blue-500/60 tracking-tighter">Demote</span>
+                                        </div>
+                                      )}
+
+                                      <div className="flex flex-col items-center gap-1">
+                                        <button
+                                          onClick={() => setConfirmEntry({ entryId: e._id, action: "eliminate" })}
+                                          className="w-7 h-7 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center hover:bg-red-500/20 transition-all"
+                                        >
+                                          <FiX size={14} />
+                                        </button>
+                                        <span className="text-[6px] font-black uppercase text-red-500/60 tracking-tighter">Kill</span>
+                                      </div>
+
+                                      <div className="flex flex-col items-center gap-1">
+                                        <button
+                                          onClick={() => setConfirmEntry({ entryId: e._id, action: "winner" })}
+                                          className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                                            e.isWinner 
+                                              ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20" 
+                                              : "bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20"
+                                          }`}
+                                        >
+                                          <FiAward size={14} />
+                                        </button>
+                                        <span className="text-[6px] font-black uppercase text-amber-500/60 tracking-tighter">Winner</span>
+                                      </div>
+                                    </>
+                                  )}
+                                  {e.isEliminated && (
+                                    <button
+                                      onClick={() => setConfirmEntry({ entryId: e._id, action: "reset" })}
+                                      className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[8px] font-black uppercase tracking-widest hover:bg-blue-500/20 transition-all"
+                                    >
+                                      Bring Back
+                                    </button>
+                                  )}
+                                </>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))}
