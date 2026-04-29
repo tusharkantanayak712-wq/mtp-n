@@ -32,7 +32,7 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'react-icons', 'framer-motion'],
     serverActions: {
-      bodySizeLimit: '100mb',
+      bodySizeLimit: '10mb',
     },
   },
 };

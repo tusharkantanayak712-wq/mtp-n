@@ -357,7 +357,6 @@ export default function CoinsTab() {
       if (resultAmount !== undefined && resultAmount !== 0) {
         setLastResult({ amount: resultAmount, id: Date.now() });
         setTimeout(() => setLastResult(null), 3000);
-        setTimeout(() => fetchData(), 1000);
       }
     } else if (typeof newVal === "string" && !isNaN(parseInt(newVal))) {
       const val = parseInt(newVal);
@@ -365,7 +364,6 @@ export default function CoinsTab() {
       if (resultAmount !== undefined && resultAmount !== 0) {
         setLastResult({ amount: resultAmount, id: Date.now() });
         setTimeout(() => setLastResult(null), 3000);
-        setTimeout(() => fetchData(), 1000);
       }
     }
   };
@@ -382,11 +380,17 @@ export default function CoinsTab() {
     if (!token) return;
 
     try {
+      const authHeader = { Authorization: `Bearer ${token}` };
+
+      // Fire both requests simultaneously
+      const [balRes, taskRes] = await Promise.all([
+        fetch(`/api/coins/balance?historyPage=${historyPage}`, { headers: authHeader }),
+        fetch(`/api/coins/tasks?page=${tasksPage}`, { headers: authHeader }),
+      ]);
+
+      const [bal, tData] = await Promise.all([balRes.json(), taskRes.json()]);
+
       // Balance & History
-      const balRes = await fetch(`/api/coins/balance?historyPage=${historyPage}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const bal = await balRes.json();
       if (bal.success) {
         updateCoins(bal.coins);
         setCheckedInToday(bal.checkedInToday);
@@ -394,7 +398,6 @@ export default function CoinsTab() {
         setNextReward(bal.nextReward || 5);
         setRewards(bal.rewards || [5, 7, 10, 15, 20, 25, 50]);
 
-        // Map ad rewards array to record
         const rewardMap: Record<string, string | null> = {};
         bal.adRewards?.forEach((r: any) => { rewardMap[r.id] = r.lastTime; });
         setAdRewardTimes(rewardMap);
@@ -404,10 +407,6 @@ export default function CoinsTab() {
       }
 
       // Tasks
-      const taskRes = await fetch(`/api/coins/tasks?page=${tasksPage}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const tData = await taskRes.json();
       if (tData.success) {
         setTasks(tData.tasks);
         setTasksPages(tData.pages);
@@ -679,7 +678,7 @@ export default function CoinsTab() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <FiTrendingUp className="text-emerald-400 text-sm" />
-                  <p className="text-[11px] font-black uppercase tracking-wide">Convert to Diamonds</p>
+                  <p className="text-[11px] font-black uppercase tracking-wide">Convert to Wallet ₹</p>
                 </div>
 
                 <div className="space-y-3">

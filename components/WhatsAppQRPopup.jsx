@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { QRCodeCanvas } from "qrcode.react";
-import { FiX, FiUsers, FiZap, FiCheck } from "react-icons/fi";
+import { FiX, FiUsers, FiZap } from "react-icons/fi";
 
 export default function WhatsAppCommunityPopup() {
   const [open, setOpen] = useState(false);

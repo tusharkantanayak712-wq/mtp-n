@@ -223,11 +223,19 @@ export default function MLBBTournamentPage() {
             <button
               onClick={() => openRegister(fmt)}
               disabled={displayStatus !== "open" && displayStatus !== "upcoming"}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--accent)]/30 bg-[var(--accent)]/10 text-[var(--accent)] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--accent)] hover:text-white transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${
+                displayStatus === "upcoming"
+                  ? "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-white"
+                  : "border-[var(--accent)]/30 bg-[var(--accent)]/10 text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white"
+              }`}
             >
-              <FiZap size={13} />
-              {displayStatus === "ended" ? "Tournament Ended" : "Join Tournament Now"}
-              <FiChevronRight size={11} />
+              {displayStatus === "ended" ? (
+                <><FiLock size={13} /> Tournament Ended</>
+              ) : displayStatus === "upcoming" ? (
+                <><FiClock size={13} /> Pre-Register<FiChevronRight size={11} /></>
+              ) : (
+                <><FiZap size={13} /> Join Tournament Now<FiChevronRight size={11} /></>
+              )}
             </button>
           </motion.div>
           );

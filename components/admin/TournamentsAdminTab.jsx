@@ -36,6 +36,8 @@ export default function TournamentsAdminTab() {
   const [saving, setSaving] = useState(false);
   const [editId, setEditId] = useState(null);
   const [msg, setMsg] = useState("");
+  // Inline confirm state — { id, type: "end" | "delete" }
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const token = () => localStorage.getItem("token");
 
@@ -89,23 +91,28 @@ export default function TournamentsAdminTab() {
   };
 
   /* ── End Tournament (quick status change) ── */
-  const endTournament = async (id) => {
-    if (!confirm("Mark this tournament as ENDED?")) return;
-    await fetch(`/api/tournaments/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
-      body: JSON.stringify({ status: "ended" }),
-    });
-    fetchAll();
-  };
+  const endTournament = (id) => setConfirmAction({ id, type: "end" });
 
   /* ── Delete ── */
-  const deleteTournament = async (id) => {
-    if (!confirm("Delete this tournament permanently?")) return;
-    await fetch(`/api/tournaments/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token()}` },
-    });
+  const deleteTournament = (id) => setConfirmAction({ id, type: "delete" });
+
+  /* ── Execute confirmed action ── */
+  const executeConfirm = async () => {
+    if (!confirmAction) return;
+    const { id, type } = confirmAction;
+    setConfirmAction(null);
+    if (type === "end") {
+      await fetch(`/api/tournaments/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ status: "ended" }),
+      });
+    } else {
+      await fetch(`/api/tournaments/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token()}` },
+      });
+    }
     fetchAll();
   };
 
@@ -304,60 +311,98 @@ export default function TournamentsAdminTab() {
         <div className="py-12 text-center text-[var(--muted)] text-xs">No tournaments yet. Create one above.</div>
       ) : (
         <div className="space-y-3">
-          {tournaments.map((t) => (
-            <div key={t._id} className="rounded-xl border border-[var(--border)] bg-[var(--card)]/40 p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
-                    {t.game}
-                  </span>
-                  <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${STATUS_COLOR[t.status] || STATUS_COLOR.ended}`}>
-                    {t.status}
-                  </span>
-                </div>
-                <p className="text-sm font-bold text-[var(--foreground)] truncate">{t.title}</p>
-                <p className="text-[10px] text-[var(--muted)]">{t.format} · Prize: {t.prize}</p>
-                <div className="flex items-center gap-3 mt-1 text-[9px] text-[var(--muted)]">
-                  <span className="flex items-center gap-1"><FiUsers size={10} /> {t.slotsFilled}/{t.slots} slots</span>
-                  <span className="flex items-center gap-1"><FiAward size={10} /> {t.entryCoins === 0 ? "Free" : `${t.entryCoins} coins`}</span>
-                </div>
-              </div>
+          {tournaments.map((t) => {
+            const isPending = confirmAction?.id === t._id;
+            return (
+              <div key={t._id} className="rounded-xl border border-[var(--border)] bg-[var(--card)]/40 overflow-hidden">
+                <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
+                        {t.game}
+                      </span>
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${STATUS_COLOR[t.status] || STATUS_COLOR.ended}`}>
+                        {t.status}
+                      </span>
+                    </div>
+                    <p className="text-sm font-bold text-[var(--foreground)] truncate">{t.title}</p>
+                    <p className="text-[10px] text-[var(--muted)]">{t.format} · Prize: {t.prize}</p>
+                    <div className="flex items-center gap-3 mt-1 text-[9px] text-[var(--muted)]">
+                      <span className="flex items-center gap-1"><FiUsers size={10} /> {t.slotsFilled}/{t.slots} slots</span>
+                      <span className="flex items-center gap-1"><FiAward size={10} /> {t.entryCoins === 0 ? "Free" : `${t.entryCoins} coins`}</span>
+                    </div>
+                  </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  onClick={() => openEntries(t)}
-                  className="px-3 py-1.5 rounded-lg border border-[var(--accent)]/20 bg-[var(--accent)]/5 text-[10px] font-bold text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors"
-                >
-                  View Entries
-                </button>
-                <button
-                  onClick={() => openEdit(t)}
-                  className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/30 transition-colors"
-                  title="Edit"
-                >
-                  <FiEdit2 size={13} />
-                </button>
-                {t.status !== "ended" && (
-                  <button
-                    onClick={() => endTournament(t._id)}
-                    className="px-3 py-1.5 rounded-lg border border-[var(--border)] text-[10px] font-bold text-[var(--muted)] hover:text-orange-400 hover:border-orange-400/30 transition-colors"
-                    title="End tournament"
-                  >
-                    End
-                  </button>
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => openEntries(t)}
+                      className="px-3 py-1.5 rounded-lg border border-[var(--accent)]/20 bg-[var(--accent)]/5 text-[10px] font-bold text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors"
+                    >
+                      View Entries
+                    </button>
+                    <button
+                      onClick={() => openEdit(t)}
+                      className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/30 transition-colors"
+                      title="Edit"
+                    >
+                      <FiEdit2 size={13} />
+                    </button>
+                    {t.status !== "ended" && (
+                      <button
+                        onClick={() => endTournament(t._id)}
+                        disabled={isPending}
+                        className="px-3 py-1.5 rounded-lg border border-[var(--border)] text-[10px] font-bold text-[var(--muted)] hover:text-orange-400 hover:border-orange-400/30 transition-colors disabled:opacity-40"
+                        title="End tournament"
+                      >
+                        End
+                      </button>
+                    )}
+                    <button
+                      onClick={() => deleteTournament(t._id)}
+                      disabled={isPending}
+                      className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-red-400 hover:border-red-400/30 transition-colors disabled:opacity-40"
+                      title="Delete"
+                    >
+                      <FiTrash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Inline confirm strip */}
+                {isPending && (
+                  <div className={`px-4 py-3 border-t flex items-center justify-between gap-3 text-[11px] font-bold ${
+                    confirmAction.type === "delete"
+                      ? "bg-red-500/5 border-red-500/20 text-red-400"
+                      : "bg-orange-500/5 border-orange-500/20 text-orange-400"
+                  }`}>
+                    <span className="uppercase tracking-wide">
+                      {confirmAction.type === "delete"
+                        ? "⚠️ Delete this tournament permanently?"
+                        : "Mark this tournament as ENDED?"}
+                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={executeConfirm}
+                        className={`px-3 py-1 rounded-lg text-white text-[10px] font-black uppercase tracking-widest ${
+                          confirmAction.type === "delete" ? "bg-red-500 hover:bg-red-400" : "bg-orange-500 hover:bg-orange-400"
+                        } transition-colors`}
+                      >
+                        Yes, {confirmAction.type === "delete" ? "Delete" : "End"}
+                      </button>
+                      <button
+                        onClick={() => setConfirmAction(null)}
+                        className="px-3 py-1 rounded-lg border border-[var(--border)] text-[10px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
                 )}
-                <button
-                  onClick={() => deleteTournament(t._id)}
-                  className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-red-400 hover:border-red-400/30 transition-colors"
-                  title="Delete"
-                >
-                  <FiTrash2 size={13} />
-                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

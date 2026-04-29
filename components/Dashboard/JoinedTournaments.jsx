@@ -12,6 +12,7 @@ export default function JoinedTournaments() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [copiedKey, setCopiedKey] = useState(null);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -48,9 +49,10 @@ export default function JoinedTournaments() {
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = entries.slice(indexOfFirstItem, indexOfLastItem);
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, key) => {
     navigator.clipboard.writeText(text);
-    // Simple feedback could be added here
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 1500);
   };
 
   if (loading) {
@@ -278,14 +280,30 @@ export default function JoinedTournaments() {
                         <span className="text-[7px] font-black uppercase text-[var(--muted)]">ID:</span>
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-mono font-bold text-[var(--accent)]">{selectedEntry.tournamentId.roomId}</span>
-                          <button onClick={() => copyToClipboard(selectedEntry.tournamentId.roomId)} className="text-[var(--muted)] hover:text-[var(--accent)]"><FiCopy size={10}/></button>
+                          <button
+                            onClick={() => copyToClipboard(selectedEntry.tournamentId.roomId, "roomId")}
+                            className="flex items-center gap-1 text-[7px] font-black uppercase transition-colors"
+                          >
+                            {copiedKey === "roomId"
+                              ? <><FiCheckCircle size={10} className="text-emerald-400" /><span className="text-emerald-400">Copied!</span></>
+                              : <FiCopy size={10} className="text-[var(--muted)] hover:text-[var(--accent)]" />}
+                          </button>
                         </div>
                       </div>
                       <div className="flex items-center justify-between bg-white/5 p-1.5 rounded-lg">
                         <span className="text-[7px] font-black uppercase text-[var(--muted)]">Pass:</span>
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-mono font-bold text-[var(--foreground)]">{selectedEntry.tournamentId.roomPassword || "None"}</span>
-                          {selectedEntry.tournamentId.roomPassword && <button onClick={() => copyToClipboard(selectedEntry.tournamentId.roomPassword)} className="text-[var(--muted)] hover:text-[var(--accent)]"><FiCopy size={10}/></button>}
+                          {selectedEntry.tournamentId.roomPassword && (
+                            <button
+                              onClick={() => copyToClipboard(selectedEntry.tournamentId.roomPassword, "roomPass")}
+                              className="flex items-center gap-1 text-[7px] font-black uppercase transition-colors"
+                            >
+                              {copiedKey === "roomPass"
+                                ? <><FiCheckCircle size={10} className="text-emerald-400" /><span className="text-emerald-400">Copied!</span></>
+                                : <FiCopy size={10} className="text-[var(--muted)] hover:text-[var(--accent)]" />}
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

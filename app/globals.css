@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "./Snow.css";
-@import "./valentine.css";
+/* Note: Snow.css and valentine.css are imported inside their respective
+   seasonal components (ChristmasPopup, ValentineEffect) only when active. */
 
 
 /* 🌍 Base Theme (Default Light) */

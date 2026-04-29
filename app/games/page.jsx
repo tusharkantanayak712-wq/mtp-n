@@ -14,7 +14,6 @@ export default function GamesPage() {
   const [category, setCategory] = useState([]);
   const [games, setGames] = useState([]);
 
-  const [featuredGames, setFeaturedGames] = useState([]);
   const [mlbbVeriant, setMlbbVeriant] = useState([]);
 
   const [otts, setOtts] = useState(null);
@@ -53,7 +52,6 @@ export default function GamesPage() {
         if (!mounted) return;
 
         let fetchedGames = json?.data?.games || [];
-        let fetchedFeatured = json?.data?.featuredGames || [];
         let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
 
         // Duplicate Weekly Pass (same slug)
@@ -82,7 +80,6 @@ export default function GamesPage() {
 
         setCategory(json?.data?.category || []);
         setGames(fetchedGames);
-        setFeaturedGames(fetchedFeatured);
         setMlbbVeriant(fetchedMlbbVariant);
 
         setOtts(json?.data?.otts || null);
@@ -119,10 +116,9 @@ export default function GamesPage() {
   }, [searchQuery, hideOOS, sort, isOutOfStock]);
 
   const processedGames = useMemo(() => processList(games), [games, processList]);
-  const processedFeaturedGames = useMemo(() => processList(featuredGames), [featuredGames, processList]);
   const processedMlbbGames = useMemo(() => processList(mlbbVeriant), [mlbbVeriant, processList]);
 
-  const isEmpty = processedGames.length === 0 && processedFeaturedGames.length === 0 && processedMlbbGames.length === 0;
+  const isEmpty = processedGames.length === 0 && processedMlbbGames.length === 0;
 
   /* ================= HANDLERS ================= */
   const clearFilters = () => {
