@@ -390,7 +390,6 @@ export default async function RootLayout({
         </Script>
 
       </body>
-      <GoogleAnalytics gaId="G-CKCKWLGJ9N" />
     </html>
   );
 }
