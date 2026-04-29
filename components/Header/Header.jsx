@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiUsers, FiKey, FiGift, FiSearch } from "react-icons/fi";
+import { FiChevronRight, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiUsers, FiKey, FiGift, FiSearch, FiAward } from "react-icons/fi";
 
 /* ================= CONFIG ================= */
 const HEADER_CONFIG = {
@@ -28,6 +28,8 @@ const HEADER_CONFIG = {
       { label: "Earn BBC", href: "/dashboard/coins", icon: <FiZap size={14} />, desc: "FREE Tasks, Check-in & Games" },
       { label: "Redeem Code", href: "/dashboard/redeem", icon: <FiGift size={14} />, desc: "Claim gift credits" },
       { label: "Refer & Earn", href: "/dashboard/referral", icon: <FiUsers size={14} />, desc: "Earn rewards" },
+      { label: "My Tournaments", href: "/dashboard/tournaments", icon: <FiAward size={14} />, desc: "View your joined scrims" },
+
       { label: "API Setup", href: "/dashboard/api-keys", icon: <FiKey size={14} />, desc: "Developer API Access" },
       { label: "Support", href: "/dashboard/support", icon: <FiMessageSquare size={14} />, desc: "Get help 24/7" },
     ],
@@ -146,13 +148,22 @@ export default function Header() {
   const [showLogoutToast, setShowLogoutToast] = useState(false);
 
   const handleLogout = () => {
-    ["token", "userName", "email", "userId", "phone", "userType", "pending_topup_order", "walletBalance", "mlbb_verified_players"].forEach(key => localStorage.removeItem(key));
+    ["token", "userName", "email", "userId", "phone", "userType", "avatar", "walletBalance", "pending_topup_order", "mlbb_verified_players"].forEach(key => localStorage.removeItem(key));
     setUser(null);
     setWalletBalance(0);
+    setUserMenuOpen(false);
     setShowLogoutToast(true);
     setTimeout(() => {
       window.location.href = "/";
     }, 2000);
+  };
+
+  const [idCopied, setIdCopied] = useState(false);
+  const copyId = (id) => {
+    if (!id) return;
+    navigator.clipboard.writeText(id);
+    setIdCopied(true);
+    setTimeout(() => setIdCopied(false), 2000);
   };
 
   /* ================= SCROLL ================= */
@@ -390,13 +401,22 @@ export default function Header() {
                             )}
                           </div>
                           <div className="flex flex-col min-w-0">
-                            <span className="text-sm font-bold text-[var(--foreground)] truncate max-w-[180px] leading-tight mb-0.5">{user.name}</span>
-                            <span className="text-[10px] text-[var(--muted)] truncate max-w-[180px] italic leading-tight">{user.email}</span>
-                            <div className="mt-1.5 flex">
-                              <span className="text-[7px] font-black uppercase px-2 py-0.5 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/10 italic tracking-widest">
+                            <div className="flex items-center gap-2 mb-0.5">
+                              <span className="text-sm font-bold text-[var(--foreground)] truncate max-w-[150px] leading-tight">{user.name}</span>
+                              <span className="text-[7px] font-black uppercase px-1.5 py-0.5 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/10 italic tracking-widest shrink-0">
                                 {user.userType === "owner" ? "owner" : user.userType === "admin" ? "reseller" : user.userType === "member" ? "member" : "user"}
                               </span>
                             </div>
+                            <span className="text-[10px] text-[var(--muted)] truncate max-w-[200px] italic leading-tight">{user.email}</span>
+                            <button
+                              onClick={() => copyId(user.userId)}
+                              className="w-fit flex items-center gap-1.5 mt-1 px-1.5 py-0.5 rounded-md bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/30 hover:bg-[var(--accent)]/5 transition-all group"
+                            >
+                              <span className="text-[8px] font-bold text-[var(--muted)] group-hover:text-[var(--accent)] tracking-tighter">ID: {user.userId}</span>
+                              <div className="w-3 h-3 rounded-sm flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)]">
+                                {idCopied ? <FiCheckCircle size={9} /> : <FiLayers size={9} />}
+                              </div>
+                            </button>
                           </div>
                         </>
                       ) : (
@@ -427,28 +447,44 @@ export default function Header() {
                       </div>
                     ) : (
                       <>
-                        <div className="grid grid-cols-3 gap-2 mb-4">
+                        <div className="grid grid-cols-3 gap-1.5 mb-3">
                           {HEADER_CONFIG.nav.map((item) => (
-                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all group">
-                              <span className="text-[var(--accent)] group-hover:text-white mb-0.5">{item.icon}</span>
-                              <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
+                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex flex-col items-center justify-center py-1 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all group">
+                              <span className="text-[var(--accent)] group-hover:text-white mb-0.5 scale-90">{item.icon}</span>
+                              <span className="text-[8px] font-black uppercase tracking-widest">{item.label}</span>
                             </Link>
                           ))}
                         </div>
 
                         <div className="space-y-1">
-                          {HEADER_CONFIG.userMenu.common.map((item) => (
-                            <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex items-center justify-between p-2 rounded-xl bg-[var(--foreground)]/[0.02] border border-transparent hover:border-[var(--accent)]/10 hover:bg-[var(--accent)]/5 transition-all group">
-                              <div className="flex items-center gap-2.5">
-                                <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-all">{item.icon}</div>
-                                <div className="flex flex-col">
-                                  <p className="text-[11px] font-bold text-[var(--foreground)] leading-tight">{item.label}</p>
-                                  <p className="text-[8px] text-[var(--muted)]">{item.desc}</p>
+                          {/* Main Row: Orders & Wallet side-by-side */}
+                          <div className="grid grid-cols-2 gap-1.5 mb-1.5">
+                            {HEADER_CONFIG.userMenu.common.slice(0, 2).map((item) => (
+                              <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 p-2 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:border-[var(--accent)]/30 hover:bg-[var(--accent)]/5 transition-all group">
+                                <div className="w-7 h-7 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] group-hover:scale-105 transition-transform shrink-0 scale-90">{item.icon}</div>
+                                <div className="min-w-0">
+                                  <p className="text-[9px] font-black uppercase tracking-tight text-[var(--foreground)] truncate">{item.label.replace("My ", "")}</p>
+                                  <p className="text-[7px] text-[var(--muted)] uppercase tracking-widest truncate opacity-60">{item.desc.split(",")[0].split("&")[0]}</p>
                                 </div>
-                              </div>
-                              <FiChevronRight size={12} className="text-[var(--muted)] opacity-20 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
-                            </Link>
-                          ))}
+                              </Link>
+                            ))}
+                          </div>
+
+                          {/* Remaining items list */}
+                          <div className="grid grid-cols-1 gap-1">
+                            {HEADER_CONFIG.userMenu.common.slice(2).map((item) => (
+                              <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="flex items-center justify-between py-1.5 px-2 rounded-xl bg-[var(--foreground)]/[0.01] border border-transparent hover:border-[var(--accent)]/10 hover:bg-[var(--accent)]/5 transition-all group">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-6 h-6 rounded-lg bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-all scale-90">{item.icon}</div>
+                                  <div className="flex flex-col">
+                                    <p className="text-[10px] font-bold text-[var(--foreground)] leading-tight">{item.label}</p>
+                                    <p className="text-[7px] text-[var(--muted)] opacity-60">{item.desc}</p>
+                                  </div>
+                                </div>
+                                <FiChevronRight size={10} className="text-[var(--muted)] opacity-20 group-hover:text-[var(--accent)] group-hover:translate-x-0.5 transition-all" />
+                              </Link>
+                            ))}
+                          </div>
                         </div>
 
                         {user?.userType === "owner" && (

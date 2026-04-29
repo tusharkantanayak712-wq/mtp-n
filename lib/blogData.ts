@@ -14,6 +14,19 @@ export interface BlogPost {
 
 export const BLOGS_DATA: BlogPost[] = [
   {
+    id: "23",
+    title: "Beatrix Best Build 2026: Master the Versatile Marksman",
+    slug: "heroes/beatrix-best-build-2026",
+    type: "Hero Guide",
+    excerpt: "Master Beatrix in 2026 with our ultimate build guide. Learn the best items, emblems, and weapon strategies to dominate the Land of Dawn.",
+    publishedAt: "2026-04-29",
+    readingTime: "12 min read",
+    image: "/blog/beatrix-build-2026.png",
+    featured: true,
+    game: "mlbb",
+    tags: ["beatrix", "marksman", "build", "2026"]
+  },
+  {
     id: "22",
     title: "Best MLBB Heroes for Rank Push in 2026: The Ultimate Meta Guide",
     slug: "best-mlbb-heroes-for-rank-push-2026",

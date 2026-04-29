@@ -200,46 +200,46 @@ export default function BlogPostLayout({
                 </section>
 
                 {/* RELATED ARTICLES */}
-                <section className="mt-20 max-w-5xl mx-auto">
-                    <div className="text-center mb-16">
-                        <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[var(--accent)] opacity-60 mb-4 block">Keep Reading</span>
-                        <h3 className="text-3xl md:text-5xl font-black italic tracking-tighter uppercase leading-none">
-                            Next Level <span className="text-[var(--accent)]">Strategies</span>
+                <section className="mt-8 max-w-4xl mx-auto">
+                    <div className="text-left mb-6">
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] opacity-60 mb-1 block uppercase">Read More</span>
+                        <h3 className="text-2xl md:text-4xl font-black italic tracking-tighter uppercase leading-none">
+                            More <span className="text-[var(--accent)]">Guides</span>
                         </h3>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {relatedArticles.map((blog) => (
                             <Link
                                 key={blog.id}
                                 href={`/blog/${blog.game}/${blog.slug}`}
-                                className="group relative flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-[2.5rem] overflow-hidden hover:border-[var(--accent)]/50 transition-all duration-500 shadow-xl hover:-translate-y-2"
+                                className="group relative flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden hover:border-[var(--accent)]/50 transition-all duration-300 shadow hover:-translate-y-0.5"
                             >
                                 <div className="aspect-video relative overflow-hidden">
                                     <img
                                         src={blog.image}
                                         alt={blog.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
-                                    <div className="absolute top-4 left-4">
-                                        <span className="px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-wider text-[var(--accent)] border border-[var(--accent)]/30">
+                                    <div className="absolute top-2 left-2">
+                                        <span className="px-1.5 py-0.5 bg-black/60 backdrop-blur-md rounded-md text-[6px] font-black uppercase tracking-wider text-[var(--accent)] border border-[var(--accent)]/10">
                                             {blog.type}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="p-6 flex flex-col flex-1">
-                                    <h4 className="text-lg font-black uppercase italic tracking-tighter leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-3 mb-4">
+                                <div className="p-3 flex flex-col flex-1">
+                                    <h4 className="text-[11px] font-black uppercase italic tracking-tight leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-2">
                                         {blog.title}
                                     </h4>
 
-                                    <div className="mt-auto pt-4 border-t border-[var(--border)]/50 flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-[var(--muted)] opacity-50">
-                                            <FiClock size={10} />
-                                            <span className="text-[9px] font-black uppercase tracking-widest">{blog.readingTime}</span>
+                                    <div className="mt-auto pt-2 border-t border-[var(--border)]/20 flex items-center justify-between">
+                                        <div className="flex items-center gap-1 text-[var(--muted)] opacity-50">
+                                            <FiClock size={8} />
+                                            <span className="text-[7px] font-bold uppercase tracking-tight">{blog.readingTime}</span>
                                         </div>
-                                        <div className="w-8 h-8 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
-                                            <FiArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                                        <div className="w-5 h-5 rounded-md bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
+                                            <FiArrowRight size={10} />
                                         </div>
                                     </div>
                                 </div>
@@ -248,21 +248,18 @@ export default function BlogPostLayout({
                     </div>
                 </section>
 
-
-
                 {/* SHARE SECTION */}
-                <footer className="max-w-3xl mx-auto mt-20 p-8 rounded-[3rem] bg-[var(--card)] border border-[var(--border)] flex flex-col items-center gap-6 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30" />
-                    <div className="text-center space-y-2">
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--muted)] opacity-60 italic">Community support</span>
-                        <h4 className="text-2xl font-black italic uppercase tracking-tight">Enjoyed this guide?</h4>
-                        <p className="text-sm text-[var(--muted)]">Share it with your squad and dominate the Rift together.</p>
+                <footer className="max-w-xl mx-auto mt-10 p-5 rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)] flex flex-col items-center gap-4 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30" />
+                    <div className="text-center">
+                        <h4 className="text-lg font-black italic uppercase tracking-tight">Liked this?</h4>
+                        <p className="text-[10px] text-[var(--muted)] opacity-60">Send it to your squad!</p>
                     </div>
-                    <div className="flex gap-6">
+                    <div className="flex gap-3">
                         {['Twitter', 'Facebook', 'Copy Link'].map((label, i) => (
                             <button
                                 key={i}
-                                className="group relative flex flex-col items-center gap-2"
+                                className="group flex flex-col items-center gap-1.5"
                                 onClick={() => {
                                     if (label === 'Copy Link') {
                                         navigator.clipboard.writeText(window.location.href);
@@ -270,10 +267,10 @@ export default function BlogPostLayout({
                                     }
                                 }}
                             >
-                                <div className="w-14 h-14 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/50 transition-all group-hover:scale-110 group-hover:rotate-6 shadow-lg shadow-black/20">
-                                    <FiShare2 size={24} />
+                                <div className="w-10 h-10 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/50 transition-all shadow-sm">
+                                    <FiShare2 size={16} />
                                 </div>
-                                <span className="text-[8px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">{label}</span>
+                                <span className="text-[6px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">{label}</span>
                             </button>
                         ))}
                     </div>

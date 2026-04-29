@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones, FiZap, FiLayers } from "react-icons/fi";
+import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones, FiZap, FiLayers, FiAward } from "react-icons/fi";
 
 
 const BottomNav = () => {
@@ -29,8 +29,8 @@ const BottomNav = () => {
         { label: "Home", icon: FiHome, path: "/", action: () => router.push("/") },
         { label: "Earn", icon: FiZap, path: "/dashboard/coins", isHome: true, action: () => router.push("/dashboard/coins") },
         { label: "Blog", icon: FiLayers, path: "/blog", action: () => router.push("/blog") },
+        { label: "Tourney", icon: FiAward, path: "/tournament", action: () => router.push("/tournament") },
         { label: "Orders", icon: FiShoppingBag, path: "/dashboard/orders", action: () => router.push("/dashboard/orders") },
-        { label: "Support", icon: FiHeadphones, path: "/dashboard/support", action: () => router.push("/dashboard/support") },
     ];
 
     return (

@@ -12,9 +12,9 @@ export default function SEOContent() {
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Main Title Section */}
-          <div 
+          <div
             className="lg:col-span-5 space-y-6 opacity-100 translate-x-0"
           >
             <div className="flex items-center gap-3">
@@ -29,7 +29,7 @@ export default function SEOContent() {
             <p className="text-sm text-[var(--muted)] leading-relaxed italic max-w-md">
               Blue Buff stands as the gold standard for <strong className="text-[var(--foreground)]">MLBB top up india instant</strong> services. We specialize in providing the <strong className="text-[var(--foreground)]">cheapest mlbb recharge website</strong> experience, ensuring every diamond is delivered with surgical precision and elite speed.
             </p>
-            
+
             <div className="flex flex-wrap gap-4 pt-4">
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] backdrop-blur-sm">
                 <FiShield className="text-[var(--accent)]" />
@@ -43,7 +43,7 @@ export default function SEOContent() {
           </div>
 
           {/* Details Grid */}
-          <div 
+          <div
             className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 opacity-100 translate-y-0"
           >
             {/* Box 1 */}
@@ -82,13 +82,7 @@ export default function SEOContent() {
         </div>
 
         {/* Bottom Banner */}
-        <div 
-          className="mt-16 p-6 rounded-3xl bg-[var(--card)]/30 border border-dashed border-[var(--border)] text-center opacity-100"
-        >
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--muted)] italic">
-            Elite Gaming Infrastructure • <span className="text-[var(--accent)]">Blue Buff India</span> • High Fidelity Automation
-          </p>
-        </div>
+
       </div>
     </section>
   );

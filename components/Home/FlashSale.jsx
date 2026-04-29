@@ -11,7 +11,7 @@ const flashSaleData = [
         name: "Weekly Pass",
         game: "MLBB",
         image: "/game-assets/weeklypass.jpg",
-        price: "₹147",
+        price: "₹148",
         originalPrice: "₹175",
         slug: "mobile-legends988?type=weekly-pass",
         badge: "Hot"
@@ -31,7 +31,7 @@ const flashSaleData = [
         name: "Starlight Card",
         game: "MLBB",
         image: "/game-assets/starkight.webp",
-        price: "₹225",
+        price: "₹230",
         originalPrice: "₹299",
         slug: "starlight-card-manual",
         badge: "New"
