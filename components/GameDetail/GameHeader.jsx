@@ -36,7 +36,7 @@ export default function GameHeader({ game }) {
           {/* Name & Origin Info */}
           <div className="flex flex-col">
             <div className="flex items-center gap-2 mb-0.5">
-              <h1 className="text-sm md:text-base font-black tracking-tight text-[var(--foreground)] leading-none line-clamp-1 uppercase">
+              <h1 className="text-sm md:text-base font-black tracking-tight text-[var(--foreground)] leading-tight line-clamp-2 uppercase">
                 {game.gameName}
               </h1>
               <FiCheckCircle className="text-[var(--accent)]" size={12} />

@@ -242,6 +242,82 @@ export const BannerSkeleton = () => (
   </div>
 );
 
+// 14. GAME DETAIL (SLUG) SKELETON
+export const GameSlugSkeleton = () => (
+  <div className="min-h-screen bg-[var(--background)] px-4 pb-10 pt-2 space-y-6">
+    {/* 1. GameSwitcher Skeleton */}
+    <div className="max-w-6xl mx-auto flex items-center gap-4 py-4 overflow-hidden">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="flex flex-col items-center gap-2 shrink-0">
+          <SkeletonCircle size="w-14 h-14 md:w-16 md:h-16" className="opacity-20" />
+          <div className="space-y-1">
+            <SkeletonText width="w-10" height="h-1.5" className="opacity-10" />
+            <SkeletonText width="w-8" height="h-1.5" className="opacity-10 mx-auto" />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* 2. GameHeader Skeleton */}
+    <div className="max-w-6xl mx-auto">
+      <div className="relative px-3 py-2 md:px-5 md:py-2 bg-[var(--card)]/40 border border-white/5 rounded-2xl md:rounded-3xl flex items-center justify-between gap-4 animate-pulse">
+        <div className="flex items-center gap-3 md:gap-4">
+          <SkeletonBox height="w-10 h-10 md:w-13 md:h-13" className="rounded-xl md:rounded-2xl opacity-30" />
+          <div className="space-y-1.5">
+            <SkeletonText width="w-32 md:w-48" height="h-3.5" />
+            <SkeletonText width="w-20 md:w-32" height="h-3.5" className="opacity-20" />
+            <SkeletonText width="w-16 md:w-24" height="h-2" className="opacity-10 mt-1" />
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <div className="w-16 h-8 rounded-xl bg-[var(--border)] opacity-20 hidden sm:block" />
+          <div className="w-16 h-8 rounded-xl bg-[var(--border)] opacity-20 hidden sm:block" />
+        </div>
+      </div>
+    </div>
+
+    {/* 3. PackageSelector Skeleton */}
+    <div className="max-w-6xl mx-auto space-y-4">
+      <div className="flex justify-between items-center px-2">
+        <SkeletonText width="w-24" height="h-4" />
+        <div className="flex gap-2">
+          <div className="w-8 h-8 rounded-lg bg-[var(--border)] opacity-20" />
+          <div className="w-8 h-8 rounded-lg bg-[var(--border)] opacity-20" />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} className="p-3 rounded-2xl bg-[var(--card)]/40 border border-white/5 space-y-3 animate-pulse">
+            <div className="w-full aspect-square rounded-xl bg-[var(--border)] opacity-20" />
+            <SkeletonText width="w-full" height="h-3" />
+            <SkeletonText width="w-1/2" height="h-4" />
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* 4. BuyPanel Skeleton (Sticky-like bottom or fixed) */}
+    <div className="max-w-4xl mx-auto">
+      <div className="p-4 rounded-2xl bg-[var(--card)]/80 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 animate-pulse">
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-[var(--border)] opacity-30" />
+          <div className="space-y-2">
+            <SkeletonText width="w-16" height="h-2" className="opacity-30" />
+            <SkeletonText width="w-32" height="h-4" />
+          </div>
+        </div>
+        <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto border-t md:border-t-0 border-white/5 pt-3 md:pt-0">
+          <div className="space-y-2">
+            <SkeletonText width="w-24" height="h-6" />
+            <SkeletonText width="w-16" height="h-2" className="opacity-20" />
+          </div>
+          <div className="w-32 h-11 md:h-12 rounded-xl bg-[var(--border)] opacity-40" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 /**
  * GRID WRAPPERS
  */

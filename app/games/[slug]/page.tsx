@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import Loader from "@/components/Loader/Loader";
+import { GameSlugSkeleton } from "@/components/Skeleton/Skeleton";
 import MLBBPurchaseGuide from "@/components/HelpImage/MLBBPurchaseGuide";
 
 import GameSwitcher from "@/components/GameDetail/GameSwitcher";
@@ -104,7 +105,7 @@ function GameDetailContent() {
   }, [game, isWeeklyPass]);
 
   if (loading) {
-    return <Loader />;
+    return <GameSlugSkeleton />;
   }
 
   if (error || !game || !activeItem) {
@@ -244,7 +245,7 @@ function GameDetailContent() {
 
 export default function GameDetailPage() {
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<GameSlugSkeleton />}>
       <GameDetailContent />
     </Suspense>
   );
