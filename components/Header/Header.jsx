@@ -214,8 +214,8 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14">
 
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="relative z-10 flex-shrink-0"
             onClick={() => {
               setUserMenuOpen(false);
