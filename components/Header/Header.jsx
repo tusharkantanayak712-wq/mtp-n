@@ -214,7 +214,14 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14">
 
-          <Link href="/" className="relative z-10 flex-shrink-0">
+          <Link 
+            href="/" 
+            className="relative z-10 flex-shrink-0"
+            onClick={() => {
+              setUserMenuOpen(false);
+              setActiveNav("/");
+            }}
+          >
             <div className="hover:scale-105 active:scale-95 transition-transform duration-300">
               <Image
                 src={HEADER_CONFIG.logo.src}
@@ -389,31 +396,31 @@ export default function Header() {
                   <div className="absolute inset-0 bg-[var(--foreground)]/[0.02] pointer-events-none" />
 
                   {/* Compact Profile Header */}
-                  <div className="relative z-10 p-5 flex items-center justify-between border-b border-[var(--border)]">
-                    <div className="flex items-center gap-3">
+                  <div className="relative z-10 p-5 flex items-center justify-between border-b border-[var(--border)] gap-4">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       {user ? (
                         <>
-                          <div className="w-10 h-10 rounded-xl overflow-hidden border border-[var(--border)] shadow-sm">
+                          <div className="w-10 h-10 rounded-xl overflow-hidden border border-[var(--border)] shadow-sm shrink-0">
                             {user?.avatar ? (
                               <Image src={user.avatar} alt="Avatar" width={40} height={40} className="object-cover" />
                             ) : (
                               <div className="w-full h-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] text-lg font-black">{user.name?.charAt(0)}</div>
                             )}
                           </div>
-                          <div className="flex flex-col min-w-0">
+                          <div className="flex flex-col min-w-0 flex-1">
                             <div className="flex items-center gap-2 mb-0.5">
-                              <span className="text-sm font-bold text-[var(--foreground)] truncate max-w-[150px] leading-tight">{user.name}</span>
+                              <span className="text-sm font-bold text-[var(--foreground)] truncate leading-tight">{user.name}</span>
                               <span className="text-[7px] font-black uppercase px-1.5 py-0.5 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/10 italic tracking-widest shrink-0">
                                 {user.userType === "owner" ? "owner" : user.userType === "admin" ? "reseller" : user.userType === "member" ? "member" : "user"}
                               </span>
                             </div>
-                            <span className="text-[10px] text-[var(--muted)] truncate max-w-[200px] italic leading-tight">{user.email}</span>
+                            <span className="text-[10px] text-[var(--muted)] truncate italic leading-tight">{user.email}</span>
                             <button
                               onClick={() => copyId(user.userId)}
                               className="w-fit flex items-center gap-1.5 mt-1 px-1.5 py-0.5 rounded-md bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/30 hover:bg-[var(--accent)]/5 transition-all group"
                             >
-                              <span className="text-[8px] font-bold text-[var(--muted)] group-hover:text-[var(--accent)] tracking-tighter">ID: {user.userId}</span>
-                              <div className="w-3 h-3 rounded-sm flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)]">
+                              <span className="text-[8px] font-bold text-[var(--muted)] group-hover:text-[var(--accent)] tracking-tighter truncate max-w-[100px]">ID: {user.userId}</span>
+                              <div className="w-3 h-3 rounded-sm flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] shrink-0">
                                 {idCopied ? <FiCheckCircle size={9} /> : <FiLayers size={9} />}
                               </div>
                             </button>
@@ -426,7 +433,7 @@ export default function Header() {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 shrink-0">
                       {user && (
                         <button onClick={handleLogout} className="w-9 h-9 rounded-full hover:bg-red-500/10 flex items-center justify-center text-red-500 transition-colors" title="Logout"><FiLogOut size={18} /></button>
                       )}
