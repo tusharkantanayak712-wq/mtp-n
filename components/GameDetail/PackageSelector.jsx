@@ -17,31 +17,42 @@ export default function PackageSelector({
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-0">
       {/* ================= HEADER & VIEW TOGGLE ================= */}
-      <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="mb-6 flex items-center justify-between gap-4 border-b border-white/5 pb-4">
+        <div className="flex flex-col gap-0.5">
           <h2 className="text-xl font-[1000] tracking-tighter text-[var(--foreground)] uppercase italic">
             Pick <span className="text-[var(--accent)] drop-shadow-[0_0_10px_rgba(var(--accent-rgb),0.3)]">Your Pack</span>
           </h2>
-          <span className="hidden sm:block w-4 h-[1px] bg-[var(--border)] opacity-20" />
-          <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40">
+          <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]/40 flex items-center gap-2">
+            <span className="w-4 h-[1px] bg-[var(--accent)]/30" />
             {items.length} items available
           </p>
         </div>
 
-        {/* Compact Glass Toggle */}
-        <div className="bg-[var(--card)]/30 backdrop-blur-xl p-0.5 rounded-xl border border-[var(--border)] flex relative w-max ring-1 ring-white/5 shadow-xl">
+        {/* Compact Icon-Only Toggle */}
+        <div className="relative bg-[var(--card)]/40 backdrop-blur-2xl p-1 rounded-xl border border-white/10 flex items-center shadow-xl overflow-hidden">
+          {/* Animated Background Slider */}
+          <div 
+            className="absolute h-[calc(100%-8px)] rounded-lg bg-gradient-to-r from-[var(--accent)] to-emerald-500 shadow-[0_4px_12px_rgba(var(--accent-rgb),0.3)] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+            style={{
+              width: "32px",
+              left: viewMode === "grid" ? "4px" : "calc(50% + 2px)",
+            }}
+          />
+
           <button
             onClick={() => setViewMode("grid")}
-            className={`relative z-10 px-4 py-1 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${viewMode === "grid" ? "bg-[var(--accent)] text-white rounded-[10px]" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
+            title="Grid View"
+            className={`relative z-10 w-8 h-8 flex items-center justify-center transition-colors duration-300 ${viewMode === "grid" ? "text-white" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
           >
-            <FiGrid size={11} /> Grid
+            <FiGrid size={15} />
           </button>
 
           <button
             onClick={() => setViewMode("slider")}
-            className={`relative z-10 px-4 py-1 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${viewMode === "slider" ? "bg-[var(--accent)] text-white rounded-[10px]" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
+            title="Slider View"
+            className={`relative z-10 w-8 h-8 flex items-center justify-center transition-colors duration-300 ${viewMode === "slider" ? "text-white" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
           >
-            <FiList size={11} /> Slider
+            <FiList size={15} />
           </button>
         </div>
       </div>
@@ -138,14 +149,14 @@ export default function PackageSelector({
                   <div
                     key={item.itemSlug}
                     onClick={() => scrollToItem(item)}
-                    className={`relative snap-center min-w-[200px] rounded-3xl p-6 cursor-pointer border flex flex-col justify-between overflow-hidden
+                    className={`relative snap-center min-w-[140px] rounded-xl p-3 cursor-pointer border flex flex-col justify-between overflow-hidden
                     ${isActive
-                        ? "border-[var(--accent)] bg-[var(--accent)]/[0.04] shadow-[0_20px_40px_-15px_rgba(var(--accent-rgb),0.3)] ring-1 ring-[var(--accent)]/30"
+                        ? "border-[var(--accent)] bg-[var(--accent)]/[0.04] shadow-[0_12px_24px_-8px_rgba(var(--accent-rgb),0.3)] ring-1 ring-[var(--accent)]/30"
                         : "border-[var(--border)] bg-[var(--card)]/40 opacity-70 hover:opacity-100 hover:border-[var(--accent)]/30"
                       }`}
                   >
-                    <div className="mb-8">
-                      <div className={`relative w-10 h-10 rounded-2xl overflow-hidden mb-4 ${isActive ? "shadow-xl shadow-[var(--accent)]/30 ring-1 ring-[var(--accent)]" : "bg-[var(--card)] border border-[var(--border)]"}`}>
+                    <div className="mb-2">
+                      <div className={`relative w-7 h-7 rounded-lg overflow-hidden mb-2 ${isActive ? "shadow-md shadow-[var(--accent)]/30 ring-1 ring-[var(--accent)]" : "bg-[var(--card)] border border-[var(--border)]"}`}>
                         <Image
                           src={item?.itemImageId?.image || item?.image || "/logo.png"}
                           alt={item.itemName}
@@ -154,7 +165,7 @@ export default function PackageSelector({
                           className={`object-cover ${item.itemAvailablity === false ? "grayscale opacity-50" : ""}`}
                         />
                       </div>
-                      <p className={`text-xs font-[900] tracking-tight ${isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"}`}>
+                      <p className={`text-[9px] font-[900] tracking-tight ${isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"}`}>
                         {item.itemName}
                       </p>
                     </div>
@@ -167,9 +178,9 @@ export default function PackageSelector({
                       </div>
                     )}
 
-                    <div className={`pt-4 border-t border-[var(--border)] ${item.itemAvailablity === false ? "opacity-30" : ""}`}>
-                      <div className="flex items-baseline gap-2">
-                        <p className={`text-3xl font-[1000] tracking-tighter ${isActive ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
+                    <div className={`pt-2 border-t border-[var(--border)] ${item.itemAvailablity === false ? "opacity-30" : ""}`}>
+                      <div className="flex items-baseline gap-1.5">
+                        <p className={`text-xl font-[1000] tracking-tighter ${isActive ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
                           ₹{item.sellingPrice}
                         </p>
                         {item.dummyPrice && (
