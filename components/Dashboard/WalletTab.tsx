@@ -16,6 +16,7 @@ import {
   FiRefreshCw,
   FiClock,
 } from "react-icons/fi";
+import { TransactionSkeleton } from "../Skeleton/Skeleton";
 
 interface WalletTabProps {
   walletBalance: number;
@@ -777,7 +778,6 @@ function TransactionHistory({ filter, onResumeUsdt }: { filter: string, onResume
         }
 
         // AUTO-VERIFY PENDING TRANSACTIONS
-        // If we find any 'pending' transaction in the list, let's proactively check it
         const pendingTxns = json.data.filter((t: any) => t.status === 'pending');
         if (pendingTxns.length > 0) {
           checkPendingStatuses(pendingTxns);
@@ -794,14 +794,11 @@ function TransactionHistory({ filter, onResumeUsdt }: { filter: string, onResume
     const token = localStorage.getItem("token");
     let updated = false;
 
-    // Check each pending txn (limit to first 3 to avoid spamming)
     const toCheck = txns.slice(0, 3);
     for (let i = 0; i < toCheck.length; i++) {
       const txn = toCheck[i];
       if (!txn.referenceId) continue;
       try {
-        // We reuse the existing check-status API usually meant for payment-complete page
-        // This API calls gateway and updates DB if success
         const res = await fetch("/api/wallet/check-status", {
           method: "POST",
           headers: {
@@ -818,29 +815,24 @@ function TransactionHistory({ filter, onResumeUsdt }: { filter: string, onResume
     }
 
     if (updated) {
-      // If any status changed to success effectively, reload history to show green
-      // prevent infinite loop by not calling fetchHistory directly here if possible, 
-      // but since we updated state, a re-fetch is needed.
-      // Let's just create a new fetch to update UI
-      const res = await fetch(`/api/wallet/history?page=${page}&limit=5`, {
+      const res = await fetch(`/api/wallet/history?page=${page}&limit=5&filter=${filter}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
       if (json.success) setHistory(json.data);
-
-      // Also update wallet balance
-      window.dispatchEvent(new Event("walletUpdated"));
     }
   };
 
   useEffect(() => {
     fetchHistory();
-  }, [page]);
+  }, [page, filter]);
 
-  if (loading && history.length === 0) {
+  if (loading) {
     return (
-      <div className="flex justify-center py-10">
-        <FiLoader className="animate-spin text-[var(--accent)]" size={24} />
+      <div className="space-y-1">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <TransactionSkeleton key={i} />
+        ))}
       </div>
     );
   }

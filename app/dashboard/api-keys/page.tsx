@@ -9,6 +9,7 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { useUser } from "../layout";
+import { ApiKeySkeleton } from "../../../components/Skeleton/Skeleton";
 
 interface ApiKey {
     _id: string;
@@ -275,7 +276,10 @@ export default function ApiKeysPage() {
 
             <div className="grid gap-6">
                 {loading ? (
-                    <div className="h-40 animate-pulse bg-white/5 rounded-2xl border border-white/5" />
+                    <div className="space-y-6">
+                        <ApiKeySkeleton />
+                        <ApiKeySkeleton />
+                    </div>
                 ) : keys.length === 0 ? (
                     <div className="p-12 text-center rounded-3xl border border-dashed border-white/10 opacity-40">
                         <FiKey className="mx-auto mb-4" size={32} />

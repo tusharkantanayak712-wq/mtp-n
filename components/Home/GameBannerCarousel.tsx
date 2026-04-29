@@ -6,6 +6,7 @@ import Link from "next/link";
 import logo from "@/public/logo.png";
 import Loader from "@/components/Loader/Loader";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BannerSkeleton } from "../Skeleton/Skeleton";
 
 export default function GameBannerCarousel() {
   const [banners, setBanners] = useState<any[]>([]);
@@ -38,7 +39,11 @@ export default function GameBannerCarousel() {
     setCurrent(nextPage);
   };
 
-  if (loading) return <Loader />;
+  if (loading) return (
+    <div className="max-w-7xl mx-auto px-4 mt-6">
+      <BannerSkeleton />
+    </div>
+  );
   if (!banners.length) return null;
 
   const currentBanner = banners[current];

@@ -17,6 +17,7 @@ import SlotMachineGame from "./SlotMachineGame";
 import NativeBanner from "@/components/Ads/NativeBanner";
 import CustomBanner1 from "@/components/Ads/CustomBanner1";
 import CustomBanner2 from "@/components/Ads/CustomBanner2";
+import { TaskSkeleton, TransactionSkeleton } from "../Skeleton/Skeleton";
 import { ADS_CONFIG } from "@/lib/adsConfig";
 import confetti from "canvas-confetti";
 
@@ -531,12 +532,19 @@ export default function CoinsTab() {
     adTimerRef.current = setTimeout(() => setAdTimer(t => (t ? t - 1 : 0)), 1000);
     return () => { if (adTimerRef.current) clearTimeout(adTimerRef.current); };
   }, [adTimer, activeAdTarget]);
-
   if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="relative">
-        <div className="w-12 h-12 rounded-full border-2 border-[var(--border)] border-t-[var(--accent)] animate-spin" />
-        <FiZap className="absolute inset-0 m-auto text-[var(--accent)] text-lg animate-pulse" />
+    <div className="max-w-3xl mx-auto space-y-4 px-2 py-4">
+      {/* Balance Skeleton */}
+      <div className="h-32 w-full bg-[var(--card)]/40 rounded-[1.5rem] animate-pulse border border-[var(--border)]" />
+      
+      {/* Tabs Skeleton */}
+      <div className="h-14 w-full bg-[var(--card)]/40 rounded-2xl animate-pulse border border-[var(--border)]" />
+      
+      {/* Content Skeleton */}
+      <div className="space-y-3">
+        {[1, 2, 3, 4].map(i => (
+          <TaskSkeleton key={i} />
+        ))}
       </div>
     </div>
   );

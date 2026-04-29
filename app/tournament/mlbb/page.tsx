@@ -9,6 +9,7 @@ import {
 import { GiTrophy } from "react-icons/gi";
 import Image from "next/image";
 import Link from "next/link";
+import { TournamentSkeleton, SkeletonGrid } from "@/components/Skeleton/Skeleton";
 
 // ── Types ──────────────────────────────────────────────────────────────
 interface Tournament {
@@ -141,11 +142,11 @@ export default function MLBBTournamentPage() {
           </div>
         </div>
 
-        {/* Loading */}
+        {/* Loading / Skeletons */}
         {loading && (
-          <div className="flex items-center justify-center py-16">
-            <FiLoader size={22} className="animate-spin text-[var(--muted)]" />
-          </div>
+          <SkeletonGrid count={3} cols="grid-cols-1" gap="gap-6">
+            <TournamentSkeleton />
+          </SkeletonGrid>
         )}
 
         {/* No tournaments */}

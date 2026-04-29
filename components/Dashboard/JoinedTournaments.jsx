@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FiAward, FiCalendar, FiUsers, FiLoader, FiChevronRight, FiClock, FiChevronLeft, FiLock, FiInfo, FiX, FiCheckCircle, FiCopy } from "react-icons/fi";
+import { TableRowSkeleton } from "@/components/Skeleton/Skeleton";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ITEMS_PER_PAGE = 5;
@@ -54,9 +55,22 @@ export default function JoinedTournaments() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-3 border border-dashed border-[var(--border)] rounded-3xl">
-        <FiLoader size={24} className="animate-spin text-[var(--accent)]" />
-        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">Syncing Scrims...</p>
+      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/30">
+        <table className="w-full text-left border-collapse table-fixed">
+          <thead>
+            <tr className="bg-[var(--foreground)]/[0.03] border-b border-[var(--border)]">
+              <th className="w-[35%] px-2 py-2 text-[7px] font-black uppercase tracking-wider text-[var(--muted)]">Tournament</th>
+              <th className="w-[15%] px-1 py-2 text-[7px] font-black uppercase tracking-wider text-[var(--muted)] text-center">Format</th>
+              <th className="w-[25%] px-1 py-2 text-[7px] font-black uppercase tracking-wider text-[var(--muted)] text-center">Time</th>
+              <th className="w-[25%] px-2 py-2 text-[7px] font-black uppercase tracking-wider text-[var(--muted)] text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[var(--border)]">
+            <TableRowSkeleton cols={4} />
+            <TableRowSkeleton cols={4} />
+            <TableRowSkeleton cols={4} />
+          </tbody>
+        </table>
       </div>
     );
   }

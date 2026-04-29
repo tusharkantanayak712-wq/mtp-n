@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiZap, FiClock, FiChevronRight } from "react-icons/fi";
 import { useEffect, useState } from "react";
+import { ProductCardSkeleton } from "../Skeleton/Skeleton";
 
 const flashSaleData = [
     {
@@ -61,6 +62,13 @@ const flashSaleData = [
 
 export default function FlashSale() {
     const [timeLeft, setTimeLeft] = useState({ hours: 12, minutes: 45, seconds: 30 });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Mock loading for premium feel
+        const timer = setTimeout(() => setLoading(false), 800);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -107,52 +115,60 @@ export default function FlashSale() {
                 {/* Compact Horizontal Slider */}
                 <div className="overflow-x-auto pb-2 custom-scrollbar-premium snap-x snap-mandatory">
                     <div className="flex gap-3 md:gap-4 px-1 md:justify-center min-w-max md:min-w-0">
-                        {flashSaleData.map((item, index) => (
-                            <div
-                                key={item.id}
-                                className="snap-start"
-                            >
-                                <Link
-                                    href={`/games/${item.slug}`}
-                                    className="group relative block w-[125px] sm:w-[150px] md:w-[200px] bg-[var(--card)]/40 backdrop-blur-lg border border-[var(--border)] rounded-[1rem] p-1.5 shadow-lg"
+                        {loading ? (
+                            [1, 2, 3, 4].map(i => (
+                                <div key={i} className="w-[125px] sm:w-[150px] md:w-[200px]">
+                                    <ProductCardSkeleton />
+                                </div>
+                            ))
+                        ) : (
+                            flashSaleData.map((item, index) => (
+                                <div
+                                    key={item.id}
+                                    className="snap-start"
                                 >
-                                    {/* Badge */}
-                                    <div className="absolute top-3 left-3 z-20">
-                                        <span className="text-[7px] md:text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500 text-black shadow-lg">
-                                            {item.badge}
-                                        </span>
-                                    </div>
-
-                                    {/* Image Container */}
-                                    <div className="relative aspect-square rounded-[0.8rem] overflow-hidden mb-1.5 ring-1 ring-[var(--border)] bg-[var(--foreground)]/[0.05]">
-                                        <Image
-                                            src={item.image}
-                                            alt={item.name}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 group-hover:opacity-60" />
-                                    </div>
-
-                                    {/* Compact Info */}
-                                    <div className="space-y-0.5">
-                                        <p className="text-[7px] md:text-[9px] font-bold text-amber-500/80 uppercase tracking-widest truncate">{item.game}</p>
-                                        <h3 className="text-[11px] md:text-[14px] font-black uppercase tracking-tight text-[var(--foreground)] truncate group-hover:text-amber-500">
-                                            {item.name}
-                                        </h3>
-
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-[14px] md:text-[16px] font-black italic text-[var(--foreground)]">
-                                                {item.price}
-                                            </span>
-                                            <span className="text-[9px] md:text-[11px] font-bold text-[var(--muted)] line-through opacity-50 decoration-red-500/50">
-                                                {item.originalPrice}
+                                    <Link
+                                        href={`/games/${item.slug}`}
+                                        className="group relative block w-[125px] sm:w-[150px] md:w-[200px] bg-[var(--card)]/40 backdrop-blur-lg border border-[var(--border)] rounded-[1rem] p-1.5 shadow-lg"
+                                    >
+                                        {/* Badge */}
+                                        <div className="absolute top-3 left-3 z-20">
+                                            <span className="text-[7px] md:text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500 text-black shadow-lg">
+                                                {item.badge}
                                             </span>
                                         </div>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
+
+                                        {/* Image Container */}
+                                        <div className="relative aspect-square rounded-[0.8rem] overflow-hidden mb-1.5 ring-1 ring-[var(--border)] bg-[var(--foreground)]/[0.05]">
+                                            <Image
+                                                src={item.image}
+                                                alt={item.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 group-hover:opacity-60" />
+                                        </div>
+
+                                        {/* Compact Info */}
+                                        <div className="space-y-0.5">
+                                            <p className="text-[7px] md:text-[9px] font-bold text-amber-500/80 uppercase tracking-widest truncate">{item.game}</p>
+                                            <h3 className="text-[11px] md:text-[14px] font-black uppercase tracking-tight text-[var(--foreground)] truncate group-hover:text-amber-500">
+                                                {item.name}
+                                            </h3>
+
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[14px] md:text-[16px] font-black italic text-[var(--foreground)]">
+                                                    {item.price}
+                                                </span>
+                                                <span className="text-[9px] md:text-[11px] font-bold text-[var(--muted)] line-through opacity-50 decoration-red-500/50">
+                                                    {item.originalPrice}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
 

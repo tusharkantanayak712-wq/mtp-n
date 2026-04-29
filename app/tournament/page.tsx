@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { FiAward, FiChevronRight, FiInfo, FiLoader, FiSearch } from "react-icons/fi";
 import Image from "next/image";
 import Link from "next/link";
+import { GameSelectSkeleton } from "@/components/Skeleton/Skeleton";
 
 // Known games with logos — extend as more games are added
 const GAME_META: Record<string, { name: string; tag: string; logo: string; href: string }> = {
@@ -58,8 +59,10 @@ export default function TournamentPage() {
 
         {/* Games Grid */}
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <FiLoader size={22} className="animate-spin text-[var(--muted)]" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <GameSelectSkeleton key={i} />
+            ))}
           </div>
         ) : games.length === 0 ? (
           <div className="py-20 flex flex-col items-center justify-center text-center space-y-4">

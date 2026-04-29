@@ -9,6 +9,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { FiChevronDown, FiChevronLeft, FiChevronRight, FiZap, FiTarget, FiMail, FiRefreshCw, FiClock, FiCheckCircle, FiAlertCircle, FiList } from "react-icons/fi";
+import { QuerySkeleton } from "../Skeleton/Skeleton";
 
 const SUPPORT_CONFIG = {
   header: {
@@ -282,9 +283,10 @@ export default function QueryTab() {
             >
               <div className="px-5 pb-5 space-y-3">
                 {loadingQueries ? (
-                  <div className="flex items-center justify-center py-8 gap-2 text-[var(--muted)]/40">
-                    <FiRefreshCw size={14} className="animate-spin" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Loading...</span>
+                  <div className="space-y-3">
+                    {[1, 2, 3].map((i) => (
+                      <QuerySkeleton key={i} />
+                    ))}
                   </div>
                 ) : myQueries.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-10 gap-2 text-[var(--muted)]/30">

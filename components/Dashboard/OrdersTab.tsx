@@ -11,6 +11,7 @@ import {
   FiLayers,
 } from "react-icons/fi";
 import OrderItem, { OrderType } from "./OrderItem";
+import { OrderSkeleton } from "../Skeleton/Skeleton";
 
 export default function OrdersTab() {
   const [orders, setOrders] = useState<OrderType[]>([]);
@@ -97,22 +98,10 @@ export default function OrdersTab() {
       {/* MISSION LIST */}
       <div className="min-h-[400px] relative">
         {loading ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-            <div className="relative w-12 h-12">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 border-2 border-[var(--accent)]/20 border-t-[var(--accent)] rounded-full"
-              />
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-2 bg-[var(--accent)]/10 rounded-full flex items-center justify-center text-[var(--accent)]"
-              >
-                <FiActivity size={16} />
-              </motion.div>
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] animate-pulse">Loading...</span>
+          <div className="space-y-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <OrderSkeleton key={i} />
+            ))}
           </div>
         ) : orders.length === 0 ? (
           <motion.div

@@ -7,6 +7,7 @@ import GameGrid from "@/components/Games/GameGrid";
 import GameList from "@/components/Games/GameList";
 import FilterModal from "@/components/Games/FilterModal";
 import ServiceGridSection from "@/components/Games/ServiceGridSection";
+import { ProductCardSkeleton } from "@/components/Skeleton/Skeleton";
 
 export default function GamesPage() {
   /* ================= STATE ================= */
@@ -25,6 +26,7 @@ export default function GamesPage() {
   const [viewMode, setViewMode] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   /* ================= CONFIG ================= */
   const WEEKLY_PASS_SLUG = "mobile-legends988";
@@ -90,7 +92,7 @@ export default function GamesPage() {
       }
     };
 
-    loadGames();
+    loadGames().finally(() => setLoading(false));
     return () => (mounted = false);
   }, []);
 
@@ -250,7 +252,13 @@ export default function GamesPage() {
 
         {/* ================= GAME CONTENT ================= */}
         <div className="space-y-20">
-          {isEmpty ? (
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : isEmpty ? (
             <div key="empty" className="py-20 text-center">
               <div className="w-24 h-24 bg-[var(--card)] border border-[var(--border)] rounded-full flex items-center justify-center mx-auto mb-6">
                 <FiX size={40} className="text-[var(--muted)]/30" />
