@@ -25,6 +25,7 @@ interface Tournament {
   status: "open" | "upcoming" | "ongoing" | "closed" | "ended";
   startsAt?: string;
   endsAt?: string;
+  winner?: string | null;
 }
 
 // Known games with logos
@@ -128,6 +129,7 @@ export default function TournamentHub() {
 
   // Filter Logic
   const active = useMemo(() => tournaments.filter(t => t.status !== "ended"), [tournaments]);
+  const ended = useMemo(() => tournaments.filter(t => t.status === "ended").slice(0, 5), [tournaments]);
   const featured = useMemo(() => active.slice(0, 5), [active]);
   const freeTourneys = useMemo(() => active.filter(t => t.entryCoins === 0).slice(0, 5), [active]);
   const gameGroups = useMemo(() => {
@@ -179,7 +181,7 @@ export default function TournamentHub() {
               <div className="w-6 h-[1.5px] bg-[var(--accent)]" />
               <span className="text-[8px] font-black uppercase tracking-[0.3em] text-[var(--accent)] italic">Blue Buff Esports</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-[900] italic tracking-tighter uppercase leading-[0.85]">
+            <h1 className="text-2xl md:text-3xl font-[900] italic tracking-tighter uppercase leading-[0.85]">
               ESPORTS<br />
               <span className="text-[var(--accent)]">ZONE</span>
             </h1>
@@ -279,7 +281,53 @@ export default function TournamentHub() {
               </div>
             </motion.section>
 
-            {/* 4. Trust Banner */}
+            {/* 4. Ended Tournaments Section */}
+            {ended.length > 0 && (
+              <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
+                <SectionHeader 
+                  title="Recently Ended" 
+                  subtitle="Hall of fame — See who dominated the arena" 
+                  icon={FiAward} 
+                  color="var(--muted)"
+                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 opacity-80">
+                  {ended.map((t, i) => {
+                    const meta = GAME_META[t.game] || { logo: "/logoBB.png" };
+                    return (
+                      <div key={t._id} className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)]/20 p-4 space-y-3 grayscale hover:grayscale-0 transition-all duration-500">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                             <div className="w-8 h-8 rounded-lg overflow-hidden border border-[var(--border)] shrink-0 opacity-50">
+                               <Image src={meta.logo} alt={t.game} width={32} height={32} className="object-cover" />
+                             </div>
+                             <div className="min-w-0">
+                               <p className="text-[9px] font-black uppercase italic tracking-tight truncate leading-none mb-1">{t.title}</p>
+                               <span className="text-[7px] text-[var(--muted)] uppercase tracking-widest">{t.game}</span>
+                             </div>
+                          </div>
+                          <span className="text-[6px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border border-[var(--border)] text-[var(--muted)]">Ended</span>
+                        </div>
+
+                        <div className="p-2 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/10 flex items-center justify-between">
+                           <div className="flex items-center gap-2">
+                             <div className="w-6 h-6 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+                               <FiAward size={12} />
+                             </div>
+                             <div className="flex flex-col">
+                               <span className="text-[6px] font-black uppercase text-[var(--muted)] tracking-widest">Champion</span>
+                               <span className="text-[9px] font-black uppercase italic text-amber-500">{t.winner || "TBA"}</span>
+                             </div>
+                           </div>
+                           <GiTrophy className="text-amber-500/20" size={20} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.section>
+            )}
+
+            {/* 5. Trust Banner */}
             <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-[var(--accent)]/10 to-transparent border border-[var(--accent)]/20 flex flex-col sm:flex-row items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-[var(--accent)] flex items-center justify-center text-white shadow-xl shadow-[var(--accent)]/20">
                 <FiShield size={32} />

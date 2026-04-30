@@ -28,7 +28,23 @@ export async function GET(req) {
     if (game) query.game = game;
 
     const tournaments = await Tournament.find(query).sort({ createdAt: -1 }).lean();
-    return NextResponse.json({ success: true, data: tournaments });
+
+    // Fetch winners for all tournaments
+    const TournamentEntry = (await import("@/models/TournamentEntry")).default;
+    const User = (await import("@/models/User")).default;
+
+    const dataWithWinners = await Promise.all(tournaments.map(async (t) => {
+      const winnerEntry = await TournamentEntry.findOne({ tournamentId: t._id, isWinner: true })
+        .populate({ path: "userId", select: "name", model: User })
+        .lean();
+      
+      return {
+        ...t,
+        winner: winnerEntry ? (winnerEntry.teamName || winnerEntry.userId?.name || "Anonymous") : null
+      };
+    }));
+
+    return NextResponse.json({ success: true, data: dataWithWinners });
   } catch (err) {
     console.error("GET /api/tournaments", err);
     return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });

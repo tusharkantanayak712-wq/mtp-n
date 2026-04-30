@@ -3,12 +3,30 @@
 import AuthGuard from "@/components/AuthGuard";
 import JoinedTournaments from "@/components/Dashboard/JoinedTournaments";
 import Link from "next/link";
-import { FiChevronLeft, FiAward } from "react-icons/fi";
+import { motion } from "framer-motion";
+import { FiChevronLeft, FiAward, FiMessageCircle } from "react-icons/fi";
 
 export default function MyTournamentsPage() {
   return (
     <AuthGuard>
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+        {/* Notice for Hosts/Sponsors */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between p-2 px-4 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/10"
+        >
+          <div className="flex items-center gap-2">
+            <FiMessageCircle className="text-[var(--accent)]" size={12} />
+            <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)]">
+              Want to <span className="text-[var(--accent)]">Host</span> or <span className="text-[var(--accent)]">Sponsor</span>?
+            </span>
+          </div>
+          <Link href="/dashboard/support" className="text-[8px] font-black uppercase tracking-widest text-[var(--foreground)] hover:text-[var(--accent)] underline underline-offset-4 decoration-[var(--accent)]/30 transition-colors">
+            Contact Support
+          </Link>
+        </motion.div>
+
         {/* Header */}
         <div className="flex flex-col gap-4">
           <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-colors w-fit">
