@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { connectDB } from "@/lib/mongodb";
+import PricingConfig from "@/models/PricingConfig";
 
 /* ================= IMAGES ================= */
 const MLBB_MAIN_IMAGE = "/game-assets/mlbbindia.jpg";
@@ -192,10 +194,16 @@ export async function GET() {
       "8ballpool498"
     ];
 
+    await connectDB();
+    const userPricing = await PricingConfig.findOne({ userType: "user" }).lean();
+    const outOfStockSlugs = (userPricing as any)?.gameConfigs
+      ?.filter((gc: any) => gc.isOutOfStock)
+      ?.map((gc: any) => gc.gameSlug) || [];
+
     const filteredGames =
       data?.data?.games
         ?.filter(
-          (game: any) => ALLOWED_SLUGS.includes(game.gameSlug)
+          (game: any) => ALLOWED_SLUGS.includes(game.gameSlug) && !outOfStockSlugs.includes(game.gameSlug)
         )
         ?.map(normalizeGame) || [];
 

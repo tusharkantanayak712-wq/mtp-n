@@ -103,7 +103,7 @@ export default function PackageSelector({
                           alt={item.itemName}
                           fill
                           unoptimized
-                          className={`object-cover ${item.itemAvailablity === false ? "grayscale opacity-50" : ""}`}
+                          className={`object-cover ${(item.itemAvailablity === false || item.isOutOfStock === true) ? "grayscale opacity-50" : ""}`}
                         />
                       </div>
                       <p className={`text-[10px] font-bold tracking-tight line-clamp-1 leading-none ${isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"}`}>
@@ -111,7 +111,7 @@ export default function PackageSelector({
                       </p>
                     </div>
 
-                    {item.itemAvailablity === false && (
+                    {(item.itemAvailablity === false || item.isOutOfStock === true) && (
                       <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
                         <span className="bg-rose-500/90 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-widest border border-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.4)]">
                           Out of Stock
@@ -119,7 +119,7 @@ export default function PackageSelector({
                       </div>
                     )}
 
-                    <div className={`flex items-baseline gap-1.5 border-t border-[var(--border)] pt-3 ${item.itemAvailablity === false ? "opacity-30" : ""}`}>
+                    <div className={`flex items-baseline gap-1.5 border-t border-[var(--border)] pt-3 ${(item.itemAvailablity === false || item.isOutOfStock === true) ? "opacity-30" : ""}`}>
                       <span className={`text-xl font-[1000] tracking-tighter leading-none ${isActive ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
                         ₹{item.sellingPrice}
                       </span>
@@ -189,7 +189,7 @@ export default function PackageSelector({
                           </p>
                         )}
                       </div>
-                      {discount > 0 && item.itemAvailablity !== false && (
+                      {discount > 0 && item.itemAvailablity !== false && item.isOutOfStock !== true && (
                         <p className="text-[8px] font-black text-[var(--accent)] uppercase tracking-[0.2em] mt-1">
                            {discount}% off
                         </p>

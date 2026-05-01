@@ -23,7 +23,7 @@ export default function BuyPanel({
     activeItem.dummyPrice
   );
 
-  const isUnavailable = gameAvailablity === false || activeItem.itemAvailablity === false;
+  const isUnavailable = gameAvailablity === false || activeItem.itemAvailablity === false || activeItem.isOutOfStock === true;
 
   return (
     <div
