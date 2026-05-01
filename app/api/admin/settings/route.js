@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import AppSettings from "@/models/AppSettings";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 
 /* ================= AUTH HELPERS ================= */
 const requireOwner = (req) => {
@@ -88,6 +88,7 @@ export async function PATCH(req) {
 
         await settings.save();
         revalidateTag("app-settings");
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,
