@@ -64,6 +64,14 @@ const storyData = [
   },
   {
     id: 6,
+    title: "Honour of Kings",
+    badge: "New",
+    color: "#22c55e", // Green
+    image: "/game-assets/hok.jpg",
+    link: "/games/honor-of-kings57",
+  },
+  {
+    id: 7,
     title: "Membership",
     badge: "VIP",
     color: "#ec4899", // Pink
