@@ -88,6 +88,7 @@ export async function GET(req) {
       data: {
         slabs: pricing?.slabs || [],
         overrides: pricing?.overrides || [],
+        gameConfigs: pricing?.gameConfigs || [],
       },
     });
   } catch (err) {
@@ -116,7 +117,7 @@ export async function PATCH(req) {
     }
 
     const body = await req.json();
-    let { userType, slabs = [], overrides = [] } = body;
+    let { userType, slabs = [], overrides = [], gameConfigs = [] } = body;
 
     if (!userType) {
       return NextResponse.json(
@@ -191,14 +192,30 @@ export async function PATCH(req) {
         gameSlug: o.gameSlug,
         itemSlug: o.itemSlug,
         fixedPrice: o.fixedPrice,
+        isEnabled: o.isEnabled ?? true,
+        isOutOfStock: o.isOutOfStock ?? false,
       });
     }
 
     const mergedOverrides = Array.from(overrideMap.values());
 
+    /* ================= MERGE GAME CONFIGS ================= */
+    const gameMap = new Map();
+    for (const g of existing.gameConfigs || []) {
+      gameMap.set(g.gameSlug, g);
+    }
+    for (const g of gameConfigs) {
+      gameMap.set(g.gameSlug, {
+        gameSlug: g.gameSlug,
+        isOutOfStock: g.isOutOfStock ?? false,
+      });
+    }
+    const mergedGameConfigs = Array.from(gameMap.values());
+
     /* ================= SAVE ================= */
     existing.slabs = slabs;
     existing.overrides = mergedOverrides;
+    existing.gameConfigs = mergedGameConfigs;
 
     try {
       await existing.save();

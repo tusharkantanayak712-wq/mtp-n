@@ -77,6 +77,7 @@ export default function AdminPanalPage() {
   const [pricingType, setPricingType] = useState("admin");
   const [slabs, setSlabs] = useState([{ min: 0, max: 100, percent: 0 }]);
   const [overrides, setOverrides] = useState([]);
+  const [gameConfigs, setGameConfigs] = useState([]);
   const [savingPricing, setSavingPricing] = useState(false);
 
   /* ================= HELPERS ================= */
@@ -130,6 +131,7 @@ export default function AdminPanalPage() {
           : [{ min: 0, max: 0, percent: 0 }]
       );
       setOverrides(data.data?.overrides || []);
+      setGameConfigs(data.data?.gameConfigs || []);
     }
   };
 
@@ -149,6 +151,7 @@ export default function AdminPanalPage() {
           userType: pricingType,
           slabs: normalizeSlabs(slabs),
           overrides,
+          gameConfigs,
         }),
       });
 
@@ -344,6 +347,8 @@ export default function AdminPanalPage() {
                 setSlabs={setSlabs}
                 overrides={overrides}
                 setOverrides={setOverrides}
+                gameConfigs={gameConfigs}
+                setGameConfigs={setGameConfigs}
                 savingPricing={savingPricing}
                 onSave={savePricing}
               />

@@ -35,6 +35,29 @@ const PricingConfigSchema = new mongoose.Schema(
           required: true,
           min: 0,
         },
+        isEnabled: {
+          type: Boolean,
+          default: true,
+        },
+        isOutOfStock: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
+
+    /* ================= GAME SETTINGS ================= */
+    gameConfigs: [
+      {
+        gameSlug: {
+          type: String,
+          required: true,
+          index: true,
+        },
+        isOutOfStock: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
   },
