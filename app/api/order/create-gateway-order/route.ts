@@ -136,23 +136,42 @@ async function resolvePrice(
 
   let price = Number(baseItem.sellingPrice) * multiplier;
 
-  if (userType !== "owner") {
-    await connectDB();
-    const pricingConfig = await PricingConfig.findOne({ userType }).lean();
+  // For pricing, treat 'owner' as 'user' so they can test the system
+  const effectiveUserType = userType === "owner" ? "user" : userType;
 
-    if (pricingConfig) {
-      const fixed = pricingConfig.overrides?.find(
-        (o: any) =>
-          o.gameSlug === gameSlug && o.itemSlug === itemSlug
+  await connectDB();
+  // 1. Resolve Pricing Config (Role-specific or Fallback to User)
+  let pricingConfig = await PricingConfig.findOne({ userType: effectiveUserType }).lean();
+  let userPricingConfig = await PricingConfig.findOne({ userType: "user" }).lean();
+
+  // If no role config exists at all, use user config
+  if (!pricingConfig) {
+    pricingConfig = userPricingConfig;
+  }
+
+  if (pricingConfig) {
+    // A. Check for Override first
+    const override = pricingConfig.overrides?.find(
+      (o: any) => o.gameSlug === gameSlug && o.itemSlug === itemSlug
+    );
+
+    if (override && override.isEnabled !== false && override.fixedPrice != null) {
+      price = Number(override.fixedPrice);
+    } else {
+      // B. Apply Slabs (check role-specific first, then fallback to user global markup)
+      let matchedSlab = pricingConfig.slabs?.find(
+        (s: any) => price >= Number(s.min) && price < Number(s.max)
       );
 
-      if (fixed?.fixedPrice != null) {
-        price = Number(fixed.fixedPrice);
-      } else if (pricingConfig.slabs?.length) {
-        const slab = pricingConfig.slabs.find(
-          (s: any) => price >= s.min && price < s.max
+      // Fallback to 'user' slabs if role-specific lookup failed
+      if (!matchedSlab && pricingConfig.userType !== "user" && userPricingConfig?.slabs?.length) {
+        matchedSlab = userPricingConfig.slabs.find(
+          (s: any) => price >= Number(s.min) && price < Number(s.max)
         );
-        if (slab) price = price * (1 + slab.percent / 100);
+      }
+
+      if (matchedSlab) {
+        price = price * (1 + Number(matchedSlab.percent) / 100);
       }
     }
   }

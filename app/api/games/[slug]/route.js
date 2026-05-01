@@ -470,7 +470,7 @@ export async function GET(req, { params }) {
     // 2. Check global stock status (using 'user' role as source of truth for stock)
     const userPricing = await PricingConfig.findOne({ userType: "user" }).lean();
     const gameConfig = userPricing?.gameConfigs?.find(gc => gc.gameSlug === gameSlug);
-    
+
     if (gameConfig?.isOutOfStock) {
       data.data.gameAvailablity = false;
       data.data.isOutOfStock = true;
