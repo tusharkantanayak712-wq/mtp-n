@@ -123,7 +123,7 @@ export default function Header() {
   /* ================= GAME SEARCH LOGIC ================= */
   const fetchSearchData = async () => {
     if (allGames.length > 0) return; // Already fetched
-    
+
     try {
       const res = await fetch("/api/games");
       const data = await res.json();
@@ -542,6 +542,13 @@ export default function Header() {
                         )}
                       </>
                     )}
+                  </div>
+
+                  {/* Drawer Footer */}
+                  <div className="relative z-10 p-4 border-t border-[var(--border)] bg-[var(--foreground)]/[0.02]">
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)]/40 text-center italic">
+                      Crafted with love ❤️ by <a href="https://wa.me/919178521537?text=hello big fan big fan" target="_blank" rel="noopener noreferrer" className="text-violet-500 hover:text-violet-400 transition-colors">Tk</a>
+                    </p>
                   </div>
                 </div>
               </>
