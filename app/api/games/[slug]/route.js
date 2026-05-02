@@ -205,6 +205,111 @@ const OTTS = {
   },
 };
 
+/* ================= VOUCHER CONFIG ================= */
+const VOUCHERS = {
+  "unipin-voucher": {
+    gameName: "UniPin Voucher",
+    gameFrom: "UniPin",
+    gameImageId: {
+      image: "/game-assets/unipin.png",
+    },
+    gameDescription: "Premium UniPin game vouchers. Codes shared via SMS & Email.",
+    inputFieldOne: "WhatsApp Number",
+    inputFieldTwo: "Email Address",
+    isValidationRequired: false,
+    gameAvailablity: false,
+    itemId: [
+      {
+        itemName: "UniPin Voucher ₹75",
+        itemSlug: "unipin-75",
+        sellingPrice: 73,
+        dummyPrice: 75,
+        itemAvailablity: true,
+        index: 1,
+        itemImageId: {
+          image: "/game-assets/unipin.png",
+        },
+      },
+      {
+        itemName: "UniPin Voucher ₹380",
+        itemSlug: "unipin-380",
+        sellingPrice: 375,
+        dummyPrice: 380,
+        itemAvailablity: true,
+        index: 2,
+        itemImageId: {
+          image: "/game-assets/unipin.png",
+        },
+      },
+      {
+        itemName: "UniPin Voucher ₹500",
+        itemSlug: "unipin-500",
+        sellingPrice: 490,
+        dummyPrice: 500,
+        itemAvailablity: true,
+        index: 3,
+        itemImageId: {
+          image: "/game-assets/unipin.png",
+        },
+      },
+    ],
+  },
+};
+
+/* ================= SERVICE CONFIG ================= */
+const SERVICES = {
+  "rank-boost": {
+    gameName: "MLBB Rank Boost",
+    gameFrom: "Premium Boosters",
+    gameImageId: {
+      image: "/game-assets/rankboost.jpg",
+    },
+    gameDescription: "Premium MLBB Rank Boosting Service. High win-rate guaranteed.",
+    inputFieldOne: "MLBB User ID",
+    inputFieldTwo: "Server ID",
+    isValidationRequired: false,
+    gameAvailablity: false,
+    itemId: [
+      {
+        itemName: "Epic to Legend",
+        itemSlug: "epic-legend",
+        sellingPrice: 300,
+        dummyPrice: 350,
+        itemAvailablity: true,
+        index: 1,
+        itemDescription: "Estimated time: 2 days approx",
+        itemImageId: {
+          image: "/game-assets/rankboost.jpg",
+        },
+      },
+      {
+        itemName: "Epic to Mythic",
+        itemSlug: "epic-mythic",
+        sellingPrice: 500,
+        dummyPrice: 600,
+        itemAvailablity: true,
+        index: 2,
+        itemDescription: "Estimated time: 4 days approx",
+        itemImageId: {
+          image: "/game-assets/rankboost.jpg",
+        },
+      },
+      {
+        itemName: "Epic to Honor",
+        itemSlug: "epic-honor",
+        sellingPrice: 800,
+        dummyPrice: 950,
+        itemAvailablity: true,
+        index: 3,
+        itemDescription: "Estimated time: 7 days approx",
+        itemImageId: {
+          image: "/game-assets/rankboost.jpg",
+        },
+      },
+    ],
+  },
+};
+
 /* ================= COC CONFIG ================= */
 const COC_CONFIG = {
   gameName: "Clash of Clans",
@@ -281,7 +386,7 @@ const STARLIGHT_CONFIG = {
       itemSlug: "starlight-normal",
       sellingPrice: 230,
       dummyPrice: 299,
-      itemAvailablity: false,
+      itemAvailablity: true,
       index: 1,
       itemImageId: {
         image: "/game-assets/starkight.webp",
@@ -312,7 +417,7 @@ const BGMI_CONFIG = {
   inputFieldOne: "Character ID",
   inputFieldTwo: "Mobile Number",
   isValidationRequired: false,
-  gameAvailablity: true,
+  gameAvailablity: false,
   itemId: [
     {
       itemName: "60 UC",
@@ -399,6 +504,20 @@ export async function GET(req, { params }) {
       return NextResponse.json({
         success: true,
         data: { gameSlug: slug, ...OTTS[slug] },
+      });
+    }
+
+    if (VOUCHERS[slug]) {
+      return NextResponse.json({
+        success: true,
+        data: { gameSlug: slug, ...VOUCHERS[slug] },
+      });
+    }
+
+    if (SERVICES[slug]) {
+      return NextResponse.json({
+        success: true,
+        data: { gameSlug: slug, ...SERVICES[slug] },
       });
     }
 

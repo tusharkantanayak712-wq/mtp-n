@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { FiFilter, FiX, FiSearch, FiGrid, FiList, FiTrendingUp, FiZap, FiPackage, FiTv } from "react-icons/fi";
 
 import GameGrid from "@/components/Games/GameGrid";
@@ -18,13 +19,17 @@ export default function GamesPage() {
 
   const [otts, setOtts] = useState(null);
   const [memberships, setMemberships] = useState(null);
+  const [vouchers, setVouchers] = useState(null);
+  const [services, setServices] = useState(null);
 
   const [showFilter, setShowFilter] = useState(false);
   const [sort, setSort] = useState("az");
   const [hideOOS, setHideOOS] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") || "all";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [loading, setLoading] = useState(true);
 
   /* ================= CONFIG ================= */
@@ -84,6 +89,8 @@ export default function GamesPage() {
 
         setOtts(json?.data?.otts || null);
         setMemberships(json?.data?.memberships || null);
+        setVouchers(json?.data?.vouchers || null);
+        setServices(json?.data?.services || null);
       } catch (err) {
         console.error("Failed to load games:", err);
       }
@@ -102,7 +109,10 @@ export default function GamesPage() {
     let result = [...list];
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      result = result.filter((g) => g.gameName.toLowerCase().includes(q));
+      result = result.filter((g) => {
+        const name = (g.gameName || g.name || "").toLowerCase();
+        return name.includes(q);
+      });
     }
     if (hideOOS) {
       result = result.filter((g) => !isOutOfStock(g.gameName));
@@ -118,7 +128,18 @@ export default function GamesPage() {
   const processedGames = useMemo(() => processList(games), [games, processList]);
   const processedMlbbGames = useMemo(() => processList(mlbbVeriant), [mlbbVeriant, processList]);
 
-  const isEmpty = processedGames.length === 0 && processedMlbbGames.length === 0;
+  const processedOtts = useMemo(() => otts?.items ? processList(otts.items) : [], [otts, processList]);
+  const processedMemberships = useMemo(() => memberships?.items ? processList(memberships.items) : [], [memberships, processList]);
+  const processedVouchers = useMemo(() => vouchers?.items ? processList(vouchers.items) : [], [vouchers, processList]);
+  const processedServices = useMemo(() => services?.items ? processList(services.items) : [], [services, processList]);
+
+  const isEmpty = 
+    processedGames.length === 0 && 
+    processedMlbbGames.length === 0 &&
+    processedOtts.length === 0 &&
+    processedMemberships.length === 0 &&
+    processedVouchers.length === 0 &&
+    processedServices.length === 0;
 
   /* ================= HANDLERS ================= */
   const clearFilters = () => {
@@ -241,8 +262,8 @@ export default function GamesPage() {
             <TabButton id="all" label="All" icon={FiGrid} />
             <TabButton id="mlbb" label="MLBB" icon={FiZap} />
             <TabButton id="others" label="Others" icon={FiPackage} />
-            <TabButton id="streaming" label="Stream" icon={FiTv} />
-            <TabButton id="memberships" label="Members" icon={FiTrendingUp} />
+            <TabButton id="vouchers" label="Vouchers" icon={FiPackage} />
+            <TabButton id="services" label="Services" icon={FiZap} />
           </div>
         </div>
 
@@ -302,40 +323,38 @@ export default function GamesPage() {
                 </div>
               )}
 
-              {/* 4. OTT SECTION */}
-              {(activeTab === "all" || activeTab === "streaming") && otts?.items?.length > 0 && !searchQuery && (
+              {/* 6. VOUCHERS SECTION */}
+              {(activeTab === "all" || activeTab === "vouchers") && processedVouchers.length > 0 && (
                 <div className="mb-10 border-t border-[var(--border)] pt-10">
                   <SectionHeader
-                    title="Streaming Assets"
-                    icon={FiTv}
-                    count={otts.items.length}
-                    gradient="from-purple-500 to-indigo-600"
+                    title="Premium Vouchers"
+                    icon={FiPackage}
+                    count={processedVouchers.length}
+                    gradient="from-amber-400 to-orange-600"
                   />
                   <ServiceGridSection
                     title={null}
-                    total={otts.total}
-                    items={otts.items}
-                    hrefPrefix="/games/ott"
+                    total={processedVouchers.length}
+                    items={processedVouchers}
+                    hrefPrefix="/games"
                   />
                 </div>
               )}
 
-              {/* 5. MEMBERSHIP SECTION */}
-              {(activeTab === "all" || activeTab === "memberships") && memberships?.items?.length > 0 && !searchQuery && (
+              {/* 7. SERVICES SECTION */}
+              {(activeTab === "all" || activeTab === "services") && processedServices.length > 0 && (
                 <div className="mb-10 border-t border-[var(--border)] pt-10">
                   <SectionHeader
-                    title="Elite Memberships"
-                    icon={FiPackage}
-                    count={memberships.items.length}
-                    gradient="from-amber-500 to-yellow-600"
+                    title="Premium Services"
+                    icon={FiZap}
+                    count={processedServices.length}
+                    gradient="from-blue-400 to-indigo-600"
                   />
                   <ServiceGridSection
                     title={null}
-                    total={memberships.total}
-                    items={memberships.items}
-                    hrefPrefix="/games/membership"
-                    showCategory={false}
-                    ctaText="Join the Elite →"
+                    total={processedServices.length}
+                    items={processedServices}
+                    hrefPrefix="/games"
                   />
                 </div>
               )}

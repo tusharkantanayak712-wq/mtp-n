@@ -14,7 +14,8 @@ import {
   Wallet,
   Users,
   Zap,
-  Gift
+  Gift,
+  Ticket
 } from "lucide-react";
 
 /* ===================== CONFIG ===================== */
@@ -30,6 +31,7 @@ const topRow = [
 
 const bottomRow = [
   { title: "Orders", href: "/dashboard/orders", icon: Inbox, color: "#64748b" },
+  { title: "Vouchers", href: "/games?tab=vouchers", icon: Ticket, color: "#f59e0b" },
   { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
   { title: "Earn", href: "/dashboard/coins", icon: Zap, color: "#a855f7", isHighlight: true },
   { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },

@@ -23,6 +23,8 @@ const GENSIN_IMAGE = "/game-assets/genshin.jpg";
 const COC_IMAGE = "/game-assets/coc_logo.png";
 const STARLIGHT_IMAGE = "/game-assets/starkight.webp";
 const WEEKLY_MONTHLY_IMAGE = "/game-assets/weekly-monthly-bundle.jpg";
+const UNIPIN_IMAGE = "/game-assets/unipin.png";
+const RANK_BOOST_IMAGE = "/game-assets/rankboost.jpg";
 
 
 /* ================= OTT SECTION ================= */
@@ -63,15 +65,31 @@ const MEMBERSHIPS = [
     available: true,
     isManual: true,
   },
-  // {
-  //   name: "Reseller Membership",
-  //   slug: "reseller-membership",
-  //   image: "/membership/reseller-m.png",
-  //   type: "reseller",
-  //   category: "Membership",
-  //   available: true,
-  //   isManual: true,
   // },
+];
+
+/* ================= VOUCHER SECTION ================= */
+const VOUCHERS = [
+  {
+    name: "UniPin Voucher",
+    slug: "unipin-voucher",
+    image: UNIPIN_IMAGE,
+    category: "Voucher",
+    available: true,
+    isManual: true,
+  },
+];
+
+/* ================= SERVICE SECTION ================= */
+const SERVICES = [
+  {
+    name: "MLBB Rank Boost",
+    slug: "rank-boost",
+    image: RANK_BOOST_IMAGE,
+    category: "Service",
+    available: true,
+    isManual: true,
+  },
 ];
 
 
@@ -288,6 +306,20 @@ export async function GET() {
         //   items: MEMBERSHIPS.filter((m) => m.available),
         //   total: MEMBERSHIPS.filter((m) => m.available).length,
         // },
+
+        // 🔥 VOUCHER SECTION
+        vouchers: {
+          title: "Premium Vouchers",
+          items: VOUCHERS.filter((v) => v.available),
+          total: VOUCHERS.filter((v) => v.available).length,
+        },
+
+        // 🔥 SERVICE SECTION
+        services: {
+          title: "Premium Services",
+          items: SERVICES.filter((s) => s.available),
+          total: SERVICES.filter((s) => s.available).length,
+        },
 
       },
     }, {

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { FiArrowRight, FiShield } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function BuyPanel({
   activeItem,
@@ -24,6 +25,8 @@ export default function BuyPanel({
   );
 
   const isUnavailable = gameAvailablity === false || activeItem.itemAvailablity === false || activeItem.isOutOfStock === true;
+
+  const supportUrl = `https://wa.me/919178521537?text=Hi, I want to buy ${activeItem.itemName} for ₹${activeItem.sellingPrice}`;
 
   return (
     <div
@@ -88,31 +91,59 @@ export default function BuyPanel({
                 </div>
               </div>
 
-              <button
-                onClick={() => goBuy(activeItem)}
-                disabled={redirecting || isUnavailable}
-                className={`
-                  relative group/btn h-11 md:h-12 px-6 rounded-xl overflow-hidden flex items-center justify-center gap-2
-                  ${redirecting || isUnavailable
-                    ? 'bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed border border-white/5'
-                    : 'bg-[var(--foreground)] text-[var(--background)] font-[1000] uppercase tracking-tighter text-xs'
-                  }
-                `}
-              >
-                {redirecting ? (
-                  <div className="w-4 h-4 border-2 border-[var(--background)] border-t-transparent rounded-full animate-spin" />
-                ) : isUnavailable ? (
-                  <span>{gameAvailablity === false ? "Not Available" : "Out of Stock"}</span>
-                ) : (
-                  <>
-                    <span>Order Now</span>
-                    <FiArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
+              {isUnavailable ? (
+                <a
+                  href={supportUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative group/btn h-11 md:h-12 px-6 rounded-xl overflow-hidden flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all duration-300 font-[1000] uppercase tracking-tighter text-[10px] md:text-xs text-center"
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-2">
+                      <FaWhatsapp size={14} />
+                      <span className="hidden md:inline">Contact Support</span>
+                      <span className="md:hidden">Contact Support</span>
+                    </div>
+                  </div>
+                </a>
+              ) : (
+                <button
+                  onClick={() => goBuy(activeItem)}
+                  disabled={redirecting}
+                  className={`
+                    relative group/btn h-11 md:h-12 px-6 rounded-xl overflow-hidden flex items-center justify-center gap-2
+                    ${redirecting
+                      ? 'bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed border border-white/5'
+                      : 'bg-[var(--foreground)] text-[var(--background)] font-[1000] uppercase tracking-tighter text-xs'
+                    }
+                  `}
+                >
+                  {redirecting ? (
+                    <div className="w-4 h-4 border-2 border-[var(--background)] border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <span>Order Now</span>
+                      <FiArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              )}
             </div>
 
           </div>
+          {isUnavailable && (
+            <div className="mt-3 text-center border-t border-[var(--border)] pt-3">
+              <a 
+                href={supportUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500 italic hover:text-amber-400 transition-colors flex items-center justify-center gap-2"
+              >
+                <FaWhatsapp size={10} />
+                Contact customer support to buy
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
