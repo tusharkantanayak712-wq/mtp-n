@@ -57,7 +57,7 @@ export default function ServiceGridSection({
               <div className="relative w-full aspect-square sm:aspect-video overflow-hidden">
                 <Image
                   src={item.image}
-                  alt={item.name}
+                  alt={item.gameName || item.name}
                   fill
                   sizes="(max-width: 768px) 33vw, 25vw"
                   className="object-cover"
@@ -95,16 +95,14 @@ export default function ServiceGridSection({
               <div className="p-2 sm:p-2.5 relative">
                 <div className="mb-1 flex items-start justify-between gap-2">
                   <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-tight italic leading-tight line-clamp-2 text-[var(--foreground)] group-hover:text-[var(--accent)]">
-                    {item.name}
+                    {item.gameName || item.name}
                   </h3>
                   <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)]" size={14} />
                 </div>
 
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]/40 group-hover:bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
-                  <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-tight text-[var(--muted)]">
-                    {ctaText}
-                  </p>
+
                   {item.isManual && (
                     <span className="flex-1 text-right text-[7px] font-black text-amber-500 uppercase tracking-widest opacity-80 group-hover:opacity-100">
                       • Manual

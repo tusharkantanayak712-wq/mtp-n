@@ -30,25 +30,28 @@ const RANK_BOOST_IMAGE = "/game-assets/rankboost.jpg";
 /* ================= OTT SECTION ================= */
 const OTTS = [
   {
-    name: "YouTube Premium",
+    gameName: "YouTube Premium",
     slug: "youtube-premium",
     image: "/ott/youtube.webp",
+    gameFrom: "Google",
     category: "OTT",
     available: true,
     isManual: true,
   },
   {
-    name: "Netflix",
+    gameName: "Netflix",
     slug: "netflix",
     image: "/ott/netflix.webp",
+    gameFrom: "Netflix Inc.",
     category: "OTT",
     available: true,
     isManual: true,
   },
   {
-    name: "Spotify Premium",
+    gameName: "Spotify Premium",
     slug: "spotify",
     image: "/ott/spotify.webp",
+    gameFrom: "Spotify",
     category: "OTT",
     available: false,
     isManual: true,
@@ -57,9 +60,10 @@ const OTTS = [
 /* ================= MEMBERSHIP SECTION ================= */
 const MEMBERSHIPS = [
   {
-    name: "Silver Membership",
+    gameName: "Silver Membership",
     slug: "silver-membership",
     image: "/membership/silver-m.png",
+    gameFrom: "BlueBuff",
     type: "silver",
     category: "Membership",
     available: true,
@@ -71,9 +75,10 @@ const MEMBERSHIPS = [
 /* ================= VOUCHER SECTION ================= */
 const VOUCHERS = [
   {
-    name: "UniPin Voucher",
+    gameName: "UniPin Voucher",
     slug: "unipin-voucher",
     image: UNIPIN_IMAGE,
+    gameFrom: "UniPin",
     category: "Voucher",
     available: true,
     isManual: true,
@@ -83,9 +88,19 @@ const VOUCHERS = [
 /* ================= SERVICE SECTION ================= */
 const SERVICES = [
   {
-    name: "MLBB Rank Boost",
+    gameName: "MLBB Rank Boost",
     slug: "rank-boost",
     image: RANK_BOOST_IMAGE,
+    gameFrom: "Elite Boosters",
+    category: "Service",
+    available: true,
+    isManual: true,
+  },
+  {
+    gameName: "Starlight Card",
+    slug: "starlight-card-manual",
+    image: STARLIGHT_IMAGE,
+    gameFrom: "Moonton",
     category: "Service",
     available: true,
     isManual: true,

@@ -55,7 +55,7 @@ const storyData = [
   },
 
   {
-    id: 7,
+    id: 5,
     title: "Starlight",
     badge: "Hot",
     color: "#06b6d4", // Cyan

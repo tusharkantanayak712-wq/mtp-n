@@ -118,9 +118,9 @@ export default function GamesPage() {
       result = result.filter((g) => !isOutOfStock(g.gameName));
     }
     if (sort === "az") {
-      result.sort((a, b) => a.gameName.localeCompare(b.gameName));
+      result.sort((a, b) => (a.gameName || "").localeCompare(b.gameName || ""));
     } else if (sort === "za") {
-      result.sort((a, b) => b.gameName.localeCompare(a.gameName));
+      result.sort((a, b) => (b.gameName || "").localeCompare(a.gameName || ""));
     }
     return result;
   }, [searchQuery, hideOOS, sort, isOutOfStock]);
