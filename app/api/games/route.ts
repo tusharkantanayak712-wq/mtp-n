@@ -216,6 +216,7 @@ export async function GET() {
       "pubg-mobile138",
       "mlbbtr112",
       "mlbbglobal202",
+      "mlbbbr178",
 
       "genshin-impact742",
       "honor-of-kings57",
