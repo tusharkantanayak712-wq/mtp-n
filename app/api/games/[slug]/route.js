@@ -576,6 +576,11 @@ export async function GET(req, { params }) {
     const data = await response.json();
     if (!data?.data?.itemId) return NextResponse.json(data);
 
+    // Force validation for MLBB variants if not already set
+    if (slug.includes("mlbb") || slug.includes("mobile-legends") || slug.includes("legends988")) {
+      data.data.isValidationRequired = true;
+    }
+
     /* ===== FETCH PRICING ===== */
     await connectDB();
     const gameSlug = data.data.gameSlug;

@@ -126,7 +126,11 @@ function BuyFlowContent() {
 
     setLoading(true);
 
-    if (game?.isValidationRequired === false) {
+    // Determine if MLBB based on slug and name
+    const name = game?.gameName?.toLowerCase() || "";
+    const isMLBB = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988") || slug.includes("weeklymonthly-bundle");
+
+    if (game?.isValidationRequired === false && !isMLBB) {
       setReviewData({
         userName: game?.gameName || "Player",
         region: "Global",
@@ -138,17 +142,16 @@ function BuyFlowContent() {
       return;
     }
 
-    // Determine if MLBB based on slug and name
-    const name = game?.gameName?.toLowerCase() || "";
-    const isMLBB = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988") || slug.includes("weeklymonthly-bundle");
-
     try {
       let username = "Unknown";
       let region = "Global";
       let isValid = false;
 
       // 1. Always check name for ALL games (including MLBB)
-      const productId = `${game?.gameId || slug}_${item?.itemId || itemSlug}`;
+      // For MLBB variants, we use a standard gameId to ensure name check works across all regions
+      const baseGameId = isMLBB ? "mobile-legends988" : (game?.gameId || slug);
+      const productId = `${baseGameId}_${item?.itemId || itemSlug}`;
+
       const nameRes = await fetch("/api/check-region/namecheck", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -168,35 +171,6 @@ function BuyFlowContent() {
         username = nameData?.data?.username || nameData?.data?.name || "Unknown";
         region = nameData?.data?.region || "Global";
         isValid = true;
-      }
-
-      // 2. Extra check for MLBB to verify region
-      if (isMLBB) {
-        // If namecheck returned data: null, the player ID is invalid — stop here
-        if (nameData?.data === null) {
-          setError(nameData?.message || "Invalid player ID or server ID. Please check and try again.");
-          setLoading(false);
-          return;
-        }
-
-        const regionRes = await fetch("/api/check-region", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: playerId, zone: zoneId }),
-        });
-        const regionData = await regionRes.json();
-
-        if (regionData?.success === 200 && (regionData?.data?.username || regionData?.data?.region)) {
-          region = regionData.data.region || region;
-          username = regionData.data.username || username;
-          isValid = true; // Even if namecheck fails, if region check succeeds it counts
-        } else if (!isValid) {
-          // If namecheck failed AND region check failed, it's truly invalid
-          const serverMsg = regionData?.message || nameData?.message || "Player not found";
-          setError(serverMsg.toLowerCase().includes("success") ? "Player not found. Check your ID." : serverMsg);
-          setLoading(false);
-          return;
-        }
       }
 
       if (isValid) {
