@@ -150,7 +150,7 @@ export default function TopupComplete() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--background)] relative overflow-hidden px-4 py-8">
+    <div className="min-h-screen flex items-start justify-center bg-[var(--background)] relative overflow-hidden px-4 pt-16 sm:pt-24 pb-8">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--accent)]/5 rounded-full blur-[100px]" />
@@ -167,227 +167,214 @@ export default function TopupComplete() {
         animate="visible"
         className="w-full max-w-md z-10"
       >
-        <div className="relative group">
-          {/* Card Glow Effect */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
-
-          <div className="relative border border-[var(--border)] bg-[var(--card)]/80 backdrop-blur-xl rounded-2xl shadow-2xl p-5 sm:p-6 overflow-hidden">
-            <AnimatePresence mode="wait">
-              {/* --- CHECKING STATE --- */}
-              {status === "checking" && (
-                <motion.div
-                  key="checking"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  className="flex flex-col items-center text-center py-4"
-                >
-                  <div className="relative mb-6">
-                    {/* Tactical Radar Effect */}
-                    <div className="w-20 h-20 rounded-full border-2 border-[var(--accent)]/20 flex items-center justify-center relative">
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 rounded-full border-t-2 border-[var(--accent)]"
-                      />
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="w-14 h-14 rounded-full bg-[var(--accent)]/10 flex items-center justify-center"
-                      >
-                        <FaSpinner className="text-2xl animate-spin text-[var(--accent)]" />
-                      </motion.div>
-                    </div>
-                  </div>
-
-                  <motion.h1 variants={itemVariants} className="text-xl font-black italic uppercase tracking-tight mb-2">
-                    {message}
-                  </motion.h1>
-                  <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs mb-6 px-4">
-                   Don't close this page. We are checking your payment.
-                  </motion.p>
-
-                  <div className="w-full max-w-[280px]">
-                    <div className="flex justify-between items-end mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">Checking...</span>
-                      <span className="text-[10px] font-mono text-[var(--muted)]">{timeLeft}s left</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: "100%" }}
-                        animate={{ width: `${(timeLeft / 90) * 100}%` }}
-                        transition={{ duration: 1, ease: "linear" }}
-                        className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-hover)]"
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* --- SUCCESS STATE --- */}
-              {status === "success" && (
-                <motion.div
-                  key="success"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0 }}
-                  className="flex flex-col items-center"
-                >
-                  {/* Success Header */}
-                  <div className="flex flex-col items-center text-center mb-6">
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            {/* --- CHECKING STATE --- */}
+            {status === "checking" && (
+              <motion.div
+                key="checking"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, scale: 1.05 }}
+                className="flex flex-col items-center text-center py-4"
+              >
+                <div className="relative mb-6">
+                  {/* Tactical Radar Effect */}
+                  <div className="w-20 h-20 rounded-full border-2 border-[var(--accent)]/20 flex items-center justify-center relative">
                     <motion.div
-                      initial={{ scale: 0, rotate: -45 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
-                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/20 mb-3"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="absolute inset-0 rounded-full border-t-2 border-[var(--accent)]"
+                    />
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="w-14 h-14 rounded-full bg-[var(--accent)]/10 flex items-center justify-center"
                     >
-                      <FaCheckCircle className="text-3xl text-white" />
+                      <FaSpinner className="text-2xl animate-spin text-[var(--accent)]" />
                     </motion.div>
-                    <motion.h1 variants={itemVariants} className="text-2xl font-black italic uppercase tracking-tighter text-emerald-500 mb-1">
-                      TOP-UP DONE!
-                    </motion.h1>
-                    <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs">
-                       Your order is complete. Diamonds have been sent!
-                    </motion.p>
+                  </div>
+                </div>
+
+                <h1 className="text-xl font-black italic uppercase tracking-tight mb-2">
+                  {message}
+                </h1>
+                <p className="text-[var(--muted)] text-xs mb-6 px-4">
+                  Don't close this page. We are checking your payment.
+                </p>
+
+                <div className="w-full max-w-[280px]">
+                  <div className="flex justify-between items-end mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">Checking...</span>
+                    <span className="text-[10px] font-mono text-[var(--muted)]">{timeLeft}s left</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: "100%" }}
+                      animate={{ width: `${(timeLeft / 90) * 100}%` }}
+                      transition={{ duration: 1, ease: "linear" }}
+                      className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-hover)]"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* --- SUCCESS STATE --- */}
+            {status === "success" && (
+              <motion.div
+                key="success"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center"
+              >
+                {/* Success Header */}
+                <div className="flex flex-col items-center text-center mb-6">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -45 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
+                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/20 mb-3"
+                  >
+                    <FaCheckCircle className="text-3xl text-white" />
+                  </motion.div>
+                  <h1 className="text-2xl font-black italic uppercase tracking-tighter text-emerald-500 mb-1">
+                    TOP-UP DONE!
+                  </h1>
+                  <p className="text-[var(--muted)] text-xs">
+                    Your order is complete. Diamonds have been sent!
+                  </p>
+                </div>
+
+                {/* Order Details Panel */}
+                <div
+                  className="w-full py-4 mb-6 space-y-3 border-y border-[var(--border)]/10"
+                >
+                  <div className="flex justify-between items-center text-[10px]">
+                    <span className="text-[var(--muted)] font-medium uppercase tracking-wider">Your Order</span>
+                    <span className="bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded font-mono">DONE</span>
                   </div>
 
-                  {/* Order Details Panel */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-0.5">
+                      <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Order ID</p>
+                      <p className="text-xs font-mono truncate">{orderId || "---"}</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Item</p>
+                      <p className="text-xs font-bold truncate">{orderData?.itemName || "Digital Product"}</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Player ID</p>
+                      <p className="text-xs font-mono">{orderData?.playerId || "---"}</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">You Paid</p>
+                      <p className="text-xs font-black text-[var(--accent)]">₹{orderData?.price || "---"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="w-full space-y-2">
+                  <button
+                    onClick={() => (window.location.href = "/dashboard")}
+                    className="w-fit px-10 mx-auto group rounded-xl bg-[var(--accent)] py-2.5 font-black italic uppercase tracking-wide !text-white hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20"
+                  >
+                    <FaHistory className="text-sm" />
+                    See My Orders
+                    <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <button
+                    onClick={() => (window.location.href = "/")}
+                    className="w-fit px-10 mx-auto rounded-xl border border-[var(--border)] py-2.5 font-bold text-[var(--foreground)] text-sm hover:bg-[var(--muted)]/5 transition flex items-center justify-center gap-2"
+                  >
+                    <FaHome className="text-sm" />
+                    Home
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* --- FAILED / PENDING STATE --- */}
+            {status === "failed" && (
+              <motion.div
+                key="failed"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center"
+              >
+                <div className="flex flex-col items-center text-center mb-6">
                   <motion.div
                     variants={itemVariants}
-                    className="w-full bg-[var(--muted)]/5 border border-[var(--border)] rounded-xl p-4 mb-6 space-y-3"
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-16 h-16 rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-3"
                   >
-                    <div className="flex justify-between items-center text-[10px]">
-                       <span className="text-[var(--muted)] font-medium uppercase tracking-wider">Your Order</span>
-                       <span className="bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded font-mono">DONE</span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-0.5">
-                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Order ID</p>
-                        <p className="text-xs font-mono truncate">{orderId || "---"}</p>
-                      </div>
-                      <div className="space-y-0.5">
-                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Item</p>
-                        <p className="text-xs font-bold truncate">{orderData?.itemName || "Digital Product"}</p>
-                      </div>
-                      <div className="space-y-0.5">
-                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">Player ID</p>
-                        <p className="text-xs font-mono">{orderData?.playerId || "---"}</p>
-                      </div>
-                      <div className="space-y-0.5">
-                        <p className="text-[9px] text-[var(--muted)] uppercase font-bold tracking-widest">You Paid</p>
-                        <p className="text-xs font-black text-[var(--accent)]">₹{orderData?.price || "---"}</p>
-                      </div>
-                    </div>
+                    <FaExclamationTriangle className="text-3xl text-yellow-500" />
                   </motion.div>
+                  <h1 className="text-xl font-black italic uppercase tracking-tighter text-yellow-500 mb-1">
+                    {message === "Order not found" ? "ORDER NOT FOUND" : "STILL CHECKING..."}
+                  </h1>
+                  <p className="text-[var(--muted)] text-xs max-w-[280px]">
+                    {message === "Order not found"
+                      ? "We could not find this order. Please contact support."
+                      : "This is taking longer than usual. Don't worry, your money is safe."}
+                  </p>
+                </div>
 
-                  {/* Actions */}
-                  <div className="w-full space-y-2">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => (window.location.href = "/dashboard")}
-                      className="w-full group rounded-xl bg-[var(--accent)] py-3 font-black italic uppercase tracking-wide text-white hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20"
-                    >
-                      <FaHistory className="text-sm" />
-                       See My Orders
-                      <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
-                    </motion.button>
-
-                    <button
-                      onClick={() => (window.location.href = "/")}
-                      className="w-full rounded-xl border border-[var(--border)] py-3 font-bold text-[var(--muted)] text-sm hover:bg-[var(--muted)]/5 transition flex items-center justify-center gap-2"
-                    >
-                      <FaHome className="text-sm" />
-                      Home
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* --- FAILED / PENDING STATE --- */}
-              {status === "failed" && (
-                <motion.div
-                  key="failed"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0 }}
-                  className="flex flex-col items-center"
+                {/* Support Notice Box */}
+                <div
+                  className="w-full py-4 mb-6 border-y border-yellow-500/10"
                 >
-                  <div className="flex flex-col items-center text-center mb-6">
-                    <motion.div
-                      variants={itemVariants}
-                      animate={{ y: [0, -4, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      className="w-16 h-16 rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-3"
-                    >
-                      <FaExclamationTriangle className="text-3xl text-yellow-500" />
-                    </motion.div>
-                    <motion.h1 variants={itemVariants} className="text-xl font-black italic uppercase tracking-tighter text-yellow-500 mb-1">
-                      {message === "Order not found" ? "ORDER NOT FOUND" : "STILL CHECKING..."}
-                    </motion.h1>
-                    <motion.p variants={itemVariants} className="text-[var(--muted)] text-xs max-w-[280px]">
-                      {message === "Order not found"
-                        ? "We could not find this order. Please contact support."
-                        : "This is taking longer than usual. Don't worry, your money is safe."}
-                    </motion.p>
-                  </div>
-
-                  {/* Support Notice Box */}
-                  <motion.div
-                    variants={itemVariants}
-                    className="w-full bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4 mb-6"
-                  >
-                    <div className="flex items-start gap-3 text-[11px]">
-                      <div className="mt-0.5 w-4 h-4 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
-                        <span className="text-[9px] font-bold text-yellow-500">i</span>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-[var(--foreground)] leading-relaxed">
-                           Your top-up will be done within <strong className="text-yellow-500">10–15 mins</strong>. If not, we will refund the money to your wallet.
-                        </p>
-                        <p className="text-[var(--muted)] font-mono text-[9px]">
-                          REF: {orderId || "N/A"}
-                        </p>
-                      </div>
+                  <div className="flex items-start gap-3 text-[11px]">
+                    <div className="mt-0.5 w-4 h-4 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
+                      <span className="text-[9px] font-bold text-yellow-500">i</span>
                     </div>
-                  </motion.div>
-
-                  {/* Actions */}
-                  <div className="w-full space-y-2">
-                    <motion.a
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      href={`https://wa.me/919178521537?text=Hi, my order ${orderId} is pending. Please check.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full rounded-xl bg-[#25D366] py-3 font-black italic uppercase tracking-wide text-white flex items-center justify-center gap-2 shadow-lg shadow-green-600/20"
-                    >
-                      <FaWhatsapp className="text-lg" />
-                       Chat on WhatsApp
-                    </motion.a>
-
-                    <button
-                      onClick={() => (window.location.href = "/")}
-                      className="w-full rounded-xl border border-[var(--border)] py-3 font-bold text-[var(--muted)] text-sm hover:bg-[var(--muted)]/5 transition flex items-center justify-center gap-2"
-                    >
-                      <FaHome className="text-sm" />
-                      Home
-                    </button>
+                    <div className="space-y-2">
+                      <p className="text-[var(--foreground)] leading-relaxed">
+                        Your top-up will be done within <strong className="text-yellow-500">10–15 mins</strong>. If not, we will refund the money to your wallet.
+                      </p>
+                      <p className="text-[var(--muted)] font-mono text-[9px]">
+                        REF: {orderId || "N/A"}
+                      </p>
+                    </div>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                </div>
+
+                {/* Actions */}
+                <div className="w-full space-y-2">
+                  <a
+                    href={`https://wa.me/919178521537?text=Hi, my order ${orderId} is pending. Please check.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-fit px-10 mx-auto rounded-xl bg-[#128C7E] py-2.5 font-black italic uppercase tracking-wide !text-white flex items-center justify-center gap-2 shadow-lg shadow-green-900/20"
+                  >
+                    <FaWhatsapp className="text-lg" />
+                    Chat on WhatsApp
+                  </a>
+
+                  <button
+                    onClick={() => (window.location.href = "/")}
+                    className="w-fit px-10 mx-auto rounded-xl border border-[var(--border)] py-2.5 font-bold text-[var(--foreground)] text-sm hover:bg-[var(--muted)]/5 transition flex items-center justify-center gap-2"
+                  >
+                    <FaHome className="text-sm" />
+                    Home
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
 
           {/* Bottom Footer Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
+          <div
             className="mt-6 flex justify-center items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--muted)]"
           >
             <div className="flex items-center gap-1.5 focus:outline-none cursor-pointer hover:text-[var(--accent)] transition-colors"
@@ -395,14 +382,14 @@ export default function TopupComplete() {
                 if (orderId) navigator.clipboard.writeText(orderId);
               }}>
               <FaRegClipboard className="text-xs" />
-               Copy Order ID
+              Copy Order ID
             </div>
             <div className="w-1.5 h-1.5 rounded-full bg-[var(--border)]" />
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-               Safe & Secure
+              Safe & Secure
             </div>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </div>
