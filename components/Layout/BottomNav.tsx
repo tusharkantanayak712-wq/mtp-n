@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones, FiZap, FiLayers, FiAward } from "react-icons/fi";
+import { FiHome, FiCreditCard, FiShoppingBag, FiGrid, FiTarget, FiGift, FiHeadphones, FiZap, FiLayers, FiAward, FiShoppingCart } from "react-icons/fi";
 
 
 const BottomNav = () => {
@@ -22,20 +22,22 @@ const BottomNav = () => {
     const hideOnRoutes = ["/admin", "/owner", "/blog", "/login", "/register"];
     if (hideOnRoutes.some(route => pathname?.startsWith(route))) return null;
 
-    // Retained 7 items, preserving symmetry around the Home button
+    // Center item is Trade, all 9 items kept for symmetry
     const navItems = [
-        { label: "Wallet", icon: FiCreditCard, path: "/dashboard/wallet", action: () => router.push("/dashboard/wallet") },
-        { label: "Games", icon: FiGrid, path: "/games", action: () => router.push("/games") },
         { label: "Home", icon: FiHome, path: "/", action: () => router.push("/") },
-        { label: "Earn", icon: FiZap, path: "/dashboard/coins", isHome: true, action: () => router.push("/dashboard/coins") },
+        { label: "Games", icon: FiGrid, path: "/games", action: () => router.push("/games") },
+        { label: "Wallet", icon: FiCreditCard, path: "/dashboard/wallet", action: () => router.push("/dashboard/wallet") },
+        { label: "Earn", icon: FiZap, path: "/dashboard/coins", action: () => router.push("/dashboard/coins") },
+        { label: "Trade", icon: FiShoppingCart, path: "/trade", isProminent: true, action: () => router.push("/trade") },
         { label: "Blog", icon: FiLayers, path: "/blog", action: () => router.push("/blog") },
         { label: "Tourney", icon: FiAward, path: "/tournament", action: () => router.push("/tournament") },
         { label: "Orders", icon: FiShoppingBag, path: "/dashboard/orders", action: () => router.push("/dashboard/orders") },
+        { label: "Support", icon: FiHeadphones, path: "/dashboard/support", action: () => router.push("/dashboard/support") },
     ];
 
     return (
         <div className="md:hidden fixed bottom-1 left-1/2 -translate-x-1/2 z-[100] pointer-events-none w-full flex justify-center px-1">
-            <div className={`relative flex items-center justify-between gap-0.5 sm:gap-1.5 px-1.5 py-0.5 rounded-[1.25rem] transition-all duration-500 pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] ${scrolled ? 'bg-[var(--card)]/80 backdrop-blur-2xl border border-[var(--border)]/70' : 'bg-[var(--card)]/95 backdrop-blur-2xl border border-[var(--border)] shadow-2xl'}`}>
+            <div className={`relative flex items-center justify-between gap-0 sm:gap-1 px-1.5 py-0.5 rounded-[1.25rem] transition-all duration-500 pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] ${scrolled ? 'bg-[var(--card)]/80 backdrop-blur-2xl border border-[var(--border)]/70' : 'bg-[var(--card)]/95 backdrop-blur-2xl border border-[var(--border)] shadow-2xl'}`}>
 
                 {/* Ambient glow behind dock */}
                 <div className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-r from-[var(--accent)]/10 via-[var(--foreground)]/5 to-[var(--accent)]/10 blur-xl z-[-1] opacity-50"></div>
@@ -43,13 +45,13 @@ const BottomNav = () => {
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--foreground)]/10 to-transparent"></div>
 
                 {navItems.map((item, idx) => {
-                    const isActive = item.isHome
-                        ? (pathname === "/" || pathname === "/home")
+                    const isActive = item.path === "/" 
+                        ? pathname === "/" 
                         : (item.path && (pathname === item.path || pathname.startsWith(item.path + "/")));
 
                     const Icon = item.icon;
 
-                    if (item.isHome) {
+                    if (item.isProminent) {
                         return (
                             <button
                                 key={idx}

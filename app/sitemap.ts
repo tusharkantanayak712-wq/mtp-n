@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/leaderboard`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${baseUrl}/blog/mlbb`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 },
+    { url: `${baseUrl}/trade`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 },
   ];
 
   // 2. Dynamic Blog Routes from BLOGS_DATA

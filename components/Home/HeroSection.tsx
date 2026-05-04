@@ -9,6 +9,7 @@ import FlashSale from "./FlashSale";
 import ScrollingNoticeBand from "./ScrollingNoticeBand";
 import StorySlider from "./StorySlider";
 import HomeQuickActions from "./HomeQuickActions";
+import TradeMarketplaceBanner from "./TradeMarketplaceBanner";
 import HomeReferralStats from "./HomeReferralStats";
 import PromoBanner from "./PromoBanner";
 import HomeEarnPromotion from "./HomeEarnPromotion";
@@ -20,7 +21,8 @@ export default function HeroSection() {
   return (
     <>
       {/* <TopNoticeBanner /> */}
-      <HomeEarnPromotion />
+      {/* <HomeEarnPromotion /> */}
+      <TradeMarketplaceBanner />
 
       <GameBannerCarousel />
 
@@ -29,6 +31,7 @@ export default function HeroSection() {
 
         <FlashSale />
       </div>
+
 
       {/* <PromoBanner /> */}
 
