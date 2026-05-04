@@ -24,7 +24,7 @@ const topRow = [
   { title: "Region", href: "/region", icon: Globe, color: "#3b82f6" },
   { title: "Games", href: "/games", icon: Gamepad2, color: "#22c55e" },
   { title: "Services", href: "/services", icon: Layers, color: "#a855f7" },
-  { title: "Blogs", href: "/blog", icon: BookOpen, color: "#eab308" },
+  { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
   { title: "Top List", href: "/leaderboard", icon: Trophy, color: "#f97316" },
   { title: "Wallet", href: "/dashboard/wallet", icon: Wallet, color: "#10b981" },
 ];
@@ -32,7 +32,7 @@ const topRow = [
 const bottomRow = [
   { title: "Orders", href: "/dashboard/orders", icon: Inbox, color: "#64748b" },
   { title: "Vouchers", href: "/games?tab=vouchers", icon: Ticket, color: "#f59e0b" },
-  { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
+  { title: "Blog", href: "/blog", icon: BookOpen, color: "#eab308", isHighlight: true },
   { title: "Earn", href: "/dashboard/coins", icon: Zap, color: "#a855f7", isHighlight: true },
   { title: "Reseller", href: "/games/membership/reseller-membership", icon: Crown, color: "#fbbf24" },
   { title: "Redeem", href: "/dashboard/redeem", icon: Gift, color: "#ec4899" },
@@ -60,6 +60,7 @@ export default function HomeQuickActions() {
     const Icon = item.icon;
     const isColorful = item.isColorful;
     const isHighlight = item.isHighlight;
+    const highlightColor = item.color || "#a855f7";
 
     return (
       <div className="flex-1 opacity-100 translate-y-0">
@@ -80,7 +81,13 @@ export default function HomeQuickActions() {
 
             {isHighlight && (
               <>
-                <div className="absolute inset-0 bg-gradient-to-br from-[#a855f7] to-indigo-600 rounded-xl shadow-[0_0_15px_rgba(168,85,247,0.4)]" />
+                <div
+                  className="absolute inset-0 rounded-xl shadow-lg opacity-80"
+                  style={{
+                    background: `linear-gradient(to bottom right, ${highlightColor}, ${highlightColor}CC)`,
+                    boxShadow: `0 0 15px ${highlightColor}66`
+                  }}
+                />
                 <div className="absolute inset-0 border border-white/20 rounded-xl" />
               </>
             )}
@@ -124,9 +131,10 @@ export default function HomeQuickActions() {
             className={`
               mt-1 text-[8px] sm:text-[9px] font-black tracking-[0.05em] uppercase transition-all duration-300
               ${isColorful ? "text-rose-500 scale-105" :
-                isHighlight ? "text-[#a855f7] scale-105 font-black" :
+                isHighlight ? "scale-105 font-black" :
                 "text-[var(--muted)] group-hover:text-[var(--foreground)]"}
             `}
+            style={{ color: isHighlight ? highlightColor : undefined }}
           >
             {item.title}
           </span>
@@ -134,10 +142,10 @@ export default function HomeQuickActions() {
           {/* Status Bar */}
           <div className={`mt-1.5 h-[1.5px] transition-all duration-500 rounded-full ${
             isColorful ? "w-4 bg-rose-500 opacity-60" :
-            isHighlight ? "w-5 bg-[#a855f7] opacity-80" :
+            isHighlight ? "w-5 opacity-80" :
             "w-0 group-hover:w-3 opacity-40"
             }`}
-            style={{ backgroundColor: (isColorful || isHighlight) ? undefined : item.color }}
+            style={{ backgroundColor: isColorful ? undefined : highlightColor }}
           />
         </Link>
       </div>

@@ -38,7 +38,7 @@ export default function WhatsAppCommunityPopup() {
             className="relative w-full max-w-[280px]"
           >
             {/* Clean Minimalist Frame */}
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.3)] p-6">
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.3)] px-6 py-10">
               
               {/* Subtle Gradient Accent */}
               <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[var(--accent)]/50 via-[var(--accent)] to-[var(--accent)]/50" />
@@ -54,7 +54,7 @@ export default function WhatsAppCommunityPopup() {
               <div className="relative z-10 flex flex-col items-center text-center">
                 
                 {/* Header Icon & Title Group */}
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
                     <FiUsers size={20} />
                   </div>
@@ -69,7 +69,7 @@ export default function WhatsAppCommunityPopup() {
                 </div>
 
                 {/* QR Section */}
-                <div className="relative mb-6 p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
+                <div className="relative mb-8 p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
                   <QRCodeCanvas
                     value="https://whatsapp.com/channel/0029Vb87jgR17En1n5PKy129"
                     size={110}

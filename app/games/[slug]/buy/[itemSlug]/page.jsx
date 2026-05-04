@@ -247,7 +247,7 @@ function BuyFlowContent() {
 
           {/* ================= HEADER & PROGRESS ================= */}
           <div className="mb-6 relative">
-            <div className="max-w-md mx-auto px-6 sm:px-12">
+            <div className="max-w-[340px] mx-auto px-4">
               <div className="flex items-center justify-between relative text-center">
                 {/* Progress Line Background */}
                 <div className="absolute top-[20px] left-0 w-full h-[1.5px] bg-[var(--border)]/10 -z-10" />
@@ -272,7 +272,7 @@ function BuyFlowContent() {
                   const isCompleted = step > s.id;
 
                   return (
-                    <div key={s.id} className="flex flex-col items-center gap-2">
+                    <div key={s.id} className="flex flex-col items-center gap-1.5">
                       <div className="relative">
                         {isActive && (
                           <div className="absolute -inset-1.5 bg-[var(--accent)]/15 blur-md rounded-full" />
@@ -296,7 +296,7 @@ function BuyFlowContent() {
                         </div>
                       </div>
 
-                      <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${isActive || isCompleted ? "text-[var(--foreground)] opacity-100" : "text-[var(--muted)] opacity-20"}`}>
+                      <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${isActive || isCompleted ? "text-[var(--foreground)] opacity-100" : "text-[var(--muted)] opacity-20"}`}>
                         {s.id}. {s.label}
                       </span>
                     </div>

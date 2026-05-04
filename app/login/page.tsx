@@ -18,34 +18,7 @@ import { useSearchParams } from "next/navigation";
 
 import { Suspense, useRef } from "react";
 
-function ParticleBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          animate={{
-            y: [0, -100, 0],
-            x: [0, Math.random() * 50 - 25, 0],
-            opacity: [0.1, 0.3, 0.1],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 10 + Math.random() * 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.5,
-          }}
-          className="absolute w-1 h-1 bg-[var(--accent)] rounded-full"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+
 
 function AuthContent() {
   const [loading, setLoading] = useState(false);
@@ -193,16 +166,11 @@ function AuthContent() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center pt-8 sm:pt-20 px-4 overflow-hidden bg-[var(--background)]">
+    <section className="relative min-h-screen flex flex-col items-center pt-4 sm:pt-12 px-4 overflow-hidden bg-[var(--background)]">
       {/* AMBIENT BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(var(--accent-rgb),0.15),transparent_70%)]"
-        />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(var(--accent-rgb),0.15),transparent_70%)] opacity-40" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)] opacity-20" />
-        <ParticleBackground />
       </div>
 
       <motion.div
@@ -219,20 +187,19 @@ function AuthContent() {
             className="px-6 pb-4 sm:px-8 sm:pb-4"
           >
             {/* HEADER */}
-            <div className="flex flex-col items-center text-center mb-4">
+            <div className="flex flex-col items-center text-center mb-2">
               <motion.div
                 variants={itemVariants}
-                className="relative mb-6"
+                className="relative mb-4"
               >
-                <div className="absolute inset-0 bg-[var(--accent)] blur-2xl opacity-20 animate-pulse" />
+                <div className="absolute inset-0 bg-[var(--accent)] blur-2xl opacity-10" />
                 <div className="relative p-1 rounded-full overflow-hidden">
-                  <div className="absolute inset-0 animate-rotate-gradient bg-[conic-gradient(from_0deg,transparent,var(--accent),transparent)] opacity-40" />
                   <div className="relative bg-[var(--background)] p-2 rounded-full border border-[var(--border)] shadow-xl">
                     <Image
                       src="/logoBB.png"
                       alt="Logo"
-                      width={64}
-                      height={64}
+                      width={56}
+                      height={56}
                       className="relative z-10"
                     />
                   </div>
@@ -240,7 +207,7 @@ function AuthContent() {
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-2">
-                <h1 className="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[var(--foreground)] to-[var(--foreground)]/60 drop-shadow-sm">
+                <h1 className="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[var(--foreground)] to-[var(--foreground)]/60 drop-shadow-sm">
                   {showOtpField ? "Enter Your Code" : "Login"}
                 </h1>
                 <p className="text-xs font-medium text-[var(--muted)]/80 tracking-wide uppercase">
@@ -288,7 +255,7 @@ function AuthContent() {
 
             {/* ACTION AREA */}
             {success !== "done" && (
-              <motion.div variants={containerVariants} className="space-y-6">
+              <motion.div variants={containerVariants} className="space-y-4">
 
                 {/* GMAIL OTP SECTION */}
                 <motion.form
@@ -308,7 +275,7 @@ function AuthContent() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         disabled={showOtpField}
-                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-3.5 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
+                        className={`w-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
                       />
                       {showOtpField && (
                         <button
@@ -365,9 +332,8 @@ function AuthContent() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest py-3.5 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
+                      className="w-full relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest py-3 rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)]"
                     >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite]" />
                     {loading ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
@@ -376,7 +342,7 @@ function AuthContent() {
                           {showOtpField ? (
                             <>Verify & Login <FiCheckCircle className="text-lg" /></>
                           ) : (
-                            <>Send Code to Email <FiZap className="text-lg" /></>
+                            <>Send OTP <FiZap className="text-lg" /></>
                           )}
                         </span>
                       </>
@@ -410,14 +376,14 @@ function AuthContent() {
                 </motion.div>
 
                 {/* TRUST FOOTER */}
-                <motion.div variants={itemVariants} className="pt-8 space-y-6">
+                <motion.div variants={itemVariants} className="pt-4 space-y-4">
                   <div className="grid grid-cols-3 gap-3">
                     <Feature icon={FiShield} label="Encrypted" />
                     <Feature icon={FiZap} label="Instant" />
                     <Feature icon={FiActivity} label="Monitoring" />
                   </div>
 
-                  <div className="text-center space-y-3">
+                  <div className="text-center space-y-2">
                     <p className="text-[9px] font-bold text-[var(--muted)]/50 uppercase tracking-widest leading-relaxed">
                       By continuing you agree to our <a href="/terms" className="text-[var(--accent)] hover:underline">Terms</a>
                     </p>
@@ -432,7 +398,7 @@ function AuthContent() {
                       >
                         Support: +91 9178521537
                       </a>
-                      <p className="text-[7px] text-[var(--muted)]/30 uppercase tracking-[0.2em] animate-pulse">Need help? Call us anytime</p>
+                      <p className="text-[7px] text-[var(--muted)]/30 uppercase tracking-[0.2em]">Need help? Call us anytime</p>
                     </div>
                   </div>
                 </motion.div>
