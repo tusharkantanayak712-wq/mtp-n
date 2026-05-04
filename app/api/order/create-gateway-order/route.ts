@@ -232,7 +232,6 @@ export async function POST(req: Request) {
       !gameSlug ||
       !itemSlug ||
       !playerId ||
-      !zoneId ||
       !paymentMethod
     ) {
       return NextResponse.json({
